@@ -9,6 +9,10 @@ body {
 }
 .navbar-header{
 }
+.header-navbar{
+    float:right !important;
+    margin-right:15px;
+}
 .header-navbar > li.active > a {
     color: #fff !important;
     background-color: #ea8220 !important;
@@ -76,6 +80,9 @@ body {
 .sidebar > .menubar > li:hover{
   border-left:2px solid #ea8220;
 }
+.sidebar > .menubar > li > a{
+  font-size:16px;
+}
 .sidebar > .menubar > li > a:hover{
   text-decoration: none;
 }
@@ -85,4 +92,18 @@ body {
 .content_col{
   padding-left:50px;
   padding-right:50px;
+}
+.content_col > .navigation-row{
+  margin-top:25px;
+
+}
+.content_col > .navigation-row > p{
+  font-size:16px;
+}
+.content_col > .navigation-row > p > a{
+  color:#4f5d75;
+}
+.content_col > .navigation-row > p > a:hover{
+  color:#023042;
+  text-decoration: none;
 }
