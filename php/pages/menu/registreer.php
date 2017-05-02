@@ -1,7 +1,7 @@
 
     <div class="container">
       <div class="row">
-        <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 loginscherm">
+        <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 loginscherm">
           <h1>Registreren</h1>
           <p>Welkom op de beste veilingsite van Nederland</p>
 
@@ -14,6 +14,7 @@
 
                   <div class="input-group">
                       <div class="input-group-addon "><span class="glyphicon glyphicon-user" aria-hidden="true" background="#f0f0f0"></span></div>
+                      <input type="text" class="form-control" id="Tel" placeholder="Gebruikersnaam">
                       <input type="text" class="form-control" id="Voornaam" placeholder="Voornaam">
                       <input type="text" class="form-control" id="Achternaam" placeholder="Achternaam">
                       <!--<input type="text" style="max-width:30%" class="form-control" id="Datum" placeholder="Dag">-->
@@ -43,8 +44,23 @@
                       </select>
                       <!--<input type="text" style="max-width:30%" class="form-control" id="Datum" placeholder="Maand">
                       <input type="text" style="max-width:40%" class="form-control" id="Datum" placeholder="Jaar">-->
+                      
+                  </div>
+                
+           
+                  <div class="input-group">
+                      <div class="input-group-addon"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></div>
+                      <input style="max-width:58%" type="adres" class="form-control" id="Adres" placeholder="Adres">
+                      <input style="max-width:20%" type="Number" class="form-control" id="Nummer" placeholder="Nr.">
+                      <input style="max-width:22%" type="text" class="form-control" id="Nummer" placeholder="Toev.">
+                      <input type="" class="form-control" id="Postcode" placeholder="Postcode" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}">
                   </div>
 
+                  <div class="input-group">
+                      <div class="input-group-addon"><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span></div>
+                      <input type="" class="form-control" id="Tel" placeholder="Telefoonnummer">
+                  </div>
+                
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-envelope" aria-hidden="true" background="#f0f0f0"></span></div>
                       <input type="email" class="form-control" id="inputEmail" placeholder="Email">
@@ -55,16 +71,7 @@
                       <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
                       <input type="password" class="form-control" id="inputPassword" placeholder="Wachtwoord">
                     <input type="password" class="form-control" id="inputPassword" placeholder="Bevestig wachtwoord">
-
                   </div>
-
-                  <div class="input-group">
-                      <div class="input-group-addon"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></div>
-                      <input style="max-width:60%" type="adres" class="form-control" id="Adres" placeholder="Adres">
-                      <input style="max-width:40%" type="Number" class="form-control" id="Nummer" placeholder="Nummer">
-                      <input type="" class="form-control" id="Postcode" placeholder="Postcode" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}">
-                  </div>
-
 
 
 
