@@ -195,11 +195,13 @@ p{
     color: #fff;
     background-color: #ea8220;
     border-color: #ea8220;
+    border:3px solid transparent;
 }
 .btn-orange:hover {
     color: #fff;
     background-color: #ea8220;
     border-color: #ea8220;
+    border:3px solid #ea8220;
 }
 .btn-orange:active {
     color: #fff;
