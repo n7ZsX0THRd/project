@@ -1,0 +1,18 @@
+.user {
+  margin-bottom: 10px;
+}
+.user > img {
+ width: 200px;
+ height: 200px;
+}
+.user > button {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.user-content{
+  border-top:5px solid #ea8220;
+  background:#efefef;
+  border-radius: 20px;
+  padding: 20px;
+}
