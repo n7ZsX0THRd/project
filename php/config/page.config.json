@@ -1,0 +1,14 @@
+{
+    "pages": {
+        "home" : {
+          "menu" : true,
+          "menu_name" : "Home",
+          "file" : "home.php"
+        },
+        "login" : {
+          "menu" : true,
+          "menu_name" : "Login",
+          "file" : "login.php"
+        }
+    }
+}
