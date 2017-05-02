@@ -35,7 +35,7 @@
               </div>
               <div class="row">
                 <div class="col-lg-12">
-                  <p class="sub-text-register">Nog geen account? <a href="registreer.php">Registreer dan hier</a></p>
+                  <p class="sub-text-register">Nog geen account? <a href="index.php?page=registreer">Registreer dan hier</a></p>
                 </div>
               </div>
             </form>

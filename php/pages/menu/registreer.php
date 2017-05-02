@@ -1,40 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="bootstrap/favicon.ico">
-
-    <title>Normal Page</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="bootstrap/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="bootstrap/assets/js/ie-emulation-modes-warning.js"></script>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <link href="stylesheet.css" rel="stylesheet">
-    <link href="css/login.css" rel="stylesheet">
-  </head>
-
-  <body>
-    <?php include 'php/includes/header.php' ?>
 
     <div class="container">
       <div class="row">
@@ -48,16 +11,40 @@
 
 
             <div class="login">
-                
+
                   <div class="input-group">
                       <div class="input-group-addon "><span class="glyphicon glyphicon-user" aria-hidden="true" background="#f0f0f0"></span></div>
                       <input type="text" class="form-control" id="Voornaam" placeholder="Voornaam">
                       <input type="text" class="form-control" id="Achternaam" placeholder="Achternaam">
-                      <input type="text" class="form-control datepickerbootstrap" id="Datum" placeholder="Geboortedatum">
-                
+                      <!--<input type="text" style="max-width:30%" class="form-control" id="Datum" placeholder="Dag">-->
+                      <select class="form-control" style="max-width:30%">
+                        <option selected disabled>Dag</option>
+                        <?php for ($i = 1; $i <= 31; $i++) { ?>
+                            <option><?php echo $i; ?></option>
+                        <?php } ?>
+                      </select>
+                      <select class="form-control" style="max-width:30%">
+                        <option selected disabled>Maand</option>
+                        <?php
+                        $months = array("januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december");
+                        foreach ($months as &$value)
+                        {
+                          ?>
+                            <option><?php echo $value; ?></option>
+                        <?php
+                        }
+                        ?>
+                      </select>
+                      <select class="form-control" style="max-width:40%">
+                        <option selected disabled>Jaar</option>
+                        <?php for ($i = date("Y"); $i >= 1900; $i--) { ?>
+                            <option><?php echo $i; ?></option>
+                        <?php } ?>
+                      </select>
+                      <!--<input type="text" style="max-width:30%" class="form-control" id="Datum" placeholder="Maand">
+                      <input type="text" style="max-width:40%" class="form-control" id="Datum" placeholder="Jaar">-->
+                  </div>
 
-                  </div>                
-                
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-envelope" aria-hidden="true" background="#f0f0f0"></span></div>
                       <input type="email" class="form-control" id="inputEmail" placeholder="Email">
@@ -77,7 +64,7 @@
                       <input style="max-width:40%" type="Number" class="form-control" id="Nummer" placeholder="Nummer">
                       <input type="" class="form-control" id="Postcode" placeholder="Postcode" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}">
                   </div>
-               
+
 
 
 
@@ -95,6 +82,7 @@
               </div>
               <div class="row">
                 <div class="col-lg-12">
+                  <p class="sub-text-register">Al een account? <a href="index.php?page=login">Log dan hier in</a></p>
                 </div>
               </div>
             </form>
@@ -103,28 +91,3 @@
       </div>
 
     </div>
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
-    <script>
-    /*
-    $("li.toggle-sub").click(function(evt) {
-
-      evt.preventDefault();
-      $(this).children("span").toggleClass('glyphicon-menu-right');
-      $(this).children("span").toggleClass('glyphicon-menu-down');
-      $(this).children(".sub").toggle();
-    });
-    */
-    $('.datepickerbootstrap').datepicker({
-    });
-    </script>
-  </body>
-</html>

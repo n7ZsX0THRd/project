@@ -66,6 +66,7 @@
       $(this).children(".sub").toggle();
     });
     */
+    $('.datepickerbootstrap').datepicker({});
     </script>
   </body>
 </html>
