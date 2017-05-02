@@ -52,17 +52,14 @@
                       <div class="input-group-addon"><span class="glyphicon glyphicon-envelope" aria-hidden="true" background="#f0f0f0"></span></div>
                       <input type="email" class="form-control" id="inputEmail" placeholder="Email">
                   </div>
-                  <div class="input-group">
-                      <input type="email" class="form-control" id="inputEmail" placeholder="Bevestig email">
-                  </div>
+                  <input type="email" class="form-control row-fix" id="inputEmail" placeholder="Bevestig email">
+
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
                       <input type="password" class="form-control" id="inputPassword" placeholder="Wachtwoord">
                   </div>
-                  <div class="input-group">
-                      <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
-                      <input type="password" class="form-control" id="inputPassword" placeholder="Herhaal wachtwoord">
-                  </div>
+                  <input type="password" class="form-control row-fix" id="inputPassword" placeholder="Bevestig wachtwoord">
+
 
 
 

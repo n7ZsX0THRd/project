@@ -37,3 +37,10 @@
   margin-top:10px;
   text-align:center;
 }
+.row-fix{
+  width:calc(100% - 39px);
+  border-radius: 4px;
+  margin-bottom:15px;
+  margin-top:-5px;
+  margin-left:39px;
+}
