@@ -38,49 +38,40 @@
     <div class="container">
       <div class="row">
         <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 loginscherm">
-          <h1>Eenmaal Andermaal</h1>
+          <h1>Inloggen</h1>
           <p>Welkom op de beste veilingsite van Nederland</p>
             
             <div>
             <form class="form-horizontal">
               
-              <div class="login">
-  
+            <div class="login">
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-envelope" aria-hidden="true" background="#f0f0f0"></span></div>
                       <input type="email" class="form-control" id="inputEmail" placeholder="Email">
                   </div>
-                  
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
                       <input type="password" class="form-control" id="inputPassword" placeholder="Password">
-                  </div>
-                  
-  
-                  
-                  
-                  
-                  
+                  </div>    
+            </div>
+
+              <div class="bevestig">
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <input  type="checkbox" class="padding-top"> Remember me
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <button type="submit" class="btn btn-orange align-right" >Sign in</button>  
+                    </div>
                 </div>
-              <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                  <div class="checkbox">
-                    <label>
-                      <input type="checkbox"> Remember me
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                  <button type="submit" class="btn btn-orange">Sign in</button>
-                </div>
-              </div>
+              </div>  
+                
             </form>
-          </div>
-            
-        </div>
+            </div>
+            registreer
+            </div>
       </div>
+        
     </div>
    
 
