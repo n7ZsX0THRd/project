@@ -34,22 +34,7 @@
 
   <body>
 
-    <nav class="navbar navbar-inverse navbar-fixed-top header-style">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#"><img src="images/logo.png" width="80">Eenmaal Andermaal</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <?php include 'php/includes/menu.php' ?>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+    <?php include 'php/includes/header.php' ?>
     <div class="container">
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12 home-header">
@@ -95,40 +80,13 @@
         </div>
         <div class="col-md-8 col-lg-10 col-sm-8">
           <div class="container-fluid content_col">
-
-            <div class="row">
-              <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
-                <div class="container-fixed">
-                  <div class="row">
-                    <div class="col-lg-4">
-                      <h1>Voorbeeld</h1>
-                      <p>
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                      </p>
-                    </div>
-                    <div class="col-lg-4">
-                      <h1>Voorbeeld</h1>
-                      <p>
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                      </p>
-                    </div>
-                    <div class="col-lg-4">
-                      <h1>Voorbeeld</h1>
-                      <p>
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
             <div class="row">
               <div class="col-lg-12 remove-margin">
-                <h1>Voorbeeld</h1>
+                <h1>Boeken</h1>
               <div>
               <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
                 <div class="container-fixed">
-                  <div class="row">
+                  <div class="row item-row">
                     <div class="col-lg-4">
                       <div class="item-card">
                         <div class="container-fluid">
@@ -182,76 +140,6 @@
                                 <div class="btn-group card-options" role="group" aria-label="...">
                                   <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
                                   <button type="button" class="btn btn-orange">Bekijk</button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-4">
-                      <div class="item-card">
-                        <div class="container-fluid">
-                          <div class="row">
-                            <div class="col-xs-12">
-                              <h2>Vliegtuig</h2>
-                              <img src="images/vliegtuig.png">
-                            </div>
-                            <div class="col-xs-12">
-                              <div class="text-right">
-                                <div class="btn-group card-options" role="group" aria-label="...">
-                                  <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
-                                  <button type="button" class="btn btn-orange">Bekijk</button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-4">
-                      <div class="item-card">
-                        <div class="container-fluid">
-                          <div class="row">
-                            <div class="col-xs-12">
-                              <h2>Vliegtuig</h2>
-                              <img src="images/vliegtuig.png">
-                            </div>
-                            <div class="col-xs-12">
-                              <div class="text-right">
-                                <div class="btn-group card-options" role="group" aria-label="...">
-                                  <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
-                                  <button type="button" class="btn btn-orange">Bekijk</button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-4">
-                      <div class="item-card">
-                        <div class="container-fluid">
-                          <div class="row">
-                            <div class="col-xs-12">
-                              <h2>Vliegtuig</h2>
-                              <img src="images/vliegtuig.png">
-                            </div>
-                            <div class="col-xs-12">
-                              <div class="text-right">
-                                <div class="btn-group card-options" role="group" aria-label="...">
-                                  <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
-                                  <button type="button" class="btn btn-orange">Bekijk</button>
-                                </div>
-                                <div class="input-group input-group-lg" style="margin-top:5px;">
-                                  <span class="input-group-addon"><span class="glyphicon glyphicon-euro"></span></span>
-                                  <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                                  <span class="input-group-addon">,-</span>
-                                  <span class="input-group-btn">
-                                    <button class="btn btn-orange" type="button"><img src="images/hamerwit.png" class="auction-hammer"></button>
-                                  </span>
                                 </div>
                               </div>
                             </div>
@@ -264,29 +152,168 @@
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-lg-12 remove-margin">
-                <h1>Voorbeeld</h1>
-                <p>
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                </p>
-                <p>
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                </p>
-                <p>
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                </p>
-                <p>
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                </p>
-              <div>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 remove-margin">
+              <h1>Sport & Vrije tijd</h1>
+            <div>
+            <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
+              <div class="container-fixed">
+                <div class="row item-row">
+                  <div class="col-lg-4">
+                    <div class="item-card">
+                      <div class="container-fluid">
+                        <div class="row">
+                          <div class="col-xs-12">
+                            <h2>Vliegtuig</h2>
+                            <img src="images/vliegtuig.png">
+                          </div>
+                          <div class="col-xs-12">
+                            <div class="text-right">
+                              <div class="btn-group card-options" role="group" aria-label="...">
+                                <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
+                                <button type="button" class="btn btn-orange">Bekijk</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="item-card">
+                      <div class="container-fluid">
+                        <div class="row">
+                          <div class="col-xs-12">
+                            <h2>Vliegtuig</h2>
+                            <img src="images/vliegtuig.png">
+                          </div>
+                          <div class="col-xs-12">
+                            <div class="text-right">
+                              <div class="btn-group card-options" role="group" aria-label="...">
+                                <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
+                                <button type="button" class="btn btn-orange">Bekijk</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="item-card">
+                      <div class="container-fluid">
+                        <div class="row">
+                          <div class="col-xs-12">
+                            <h2>Vliegtuig</h2>
+                            <img src="images/vliegtuig.png">
+                          </div>
+                          <div class="col-xs-12">
+                            <div class="text-right">
+                              <div class="btn-group card-options" role="group" aria-label="...">
+                                <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
+                                <button type="button" class="btn btn-orange">Bekijk</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
             </div>
           </div>
         </div>
       </div>
+      <div class="row">
+            <div class="col-lg-12 remove-margin">
+              <h1>Speelgoed & Hobby</h1>
+            <div>
+            <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
+              <div class="container-fixed">
+                <div class="row item-row">
+                  <div class="col-lg-4">
+                    <div class="item-card">
+                      <div class="container-fluid">
+                        <div class="row">
+                          <div class="col-xs-12">
+                            <h2>Vliegtuig</h2>
+                            <img src="images/vliegtuig.png">
+                          </div>
+                          <div class="col-xs-12">
+                            <div class="text-right">
+                              <div class="btn-group card-options" role="group" aria-label="...">
+                                <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
+                                <button type="button" class="btn btn-orange">Bekijk</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="item-card">
+                      <div class="container-fluid">
+                        <div class="row">
+                          <div class="col-xs-12">
+                            <h2>Vliegtuig</h2>
+                            <img src="images/vliegtuig.png">
+                          </div>
+                          <div class="col-xs-12">
+                            <div class="text-right">
+                              <div class="btn-group card-options" role="group" aria-label="...">
+                                <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
+                                <button type="button" class="btn btn-orange">Bekijk</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="item-card">
+                      <div class="container-fluid">
+                        <div class="row">
+                          <div class="col-xs-12">
+                            <h2>Vliegtuig</h2>
+                            <img src="images/vliegtuig.png">
+                          </div>
+                          <div class="col-xs-12">
+                            <div class="text-right">
+                              <div class="btn-group card-options" role="group" aria-label="...">
+                                <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
+                                <button type="button" class="btn btn-orange">Bekijk</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-    </div><!-- /.container -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
 
+    </div>
+  </div>
+</div>
+    <div class="footer">
+      <div class="container">
+        <p>Algemene voorwaarden Privacy Cookies Beste webwinkel 2016   Thuiswinkel waarborg
+© 1999-2017 bol.com b.v.
+Beoordeling door klanten: 7.9 / 10 - 6980 beoordelingen</p>
+      </div>
+    </div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

@@ -170,10 +170,14 @@ p{
                                   supported by Chrome and Opera */
 }
 .item-card{
-  border:1px solid #DFDFDF;
+
   padding:5px;
   margin-left:-15px;
   margin-right:-15px;
+}
+.item-row{
+  background-color: #EFEFEF;
+  border-radius: 5px;
 }
 .item-card > h2{
   margin-top:0px;
@@ -227,4 +231,13 @@ p{
   margin-top:-5px;
   width:27px;
   height:27px;
+}
+.footer{
+  width:100%;
+  height:auto;
+  margin-top:30px;
+  background-color:#5484a4;
+}
+.footer > div >  p{
+  color:white;
 }
