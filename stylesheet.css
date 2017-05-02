@@ -194,14 +194,10 @@ p{
 .btn-orange {
     color: #fff;
     background-color: #ea8220;
-    border-color: #ea8220;
-    border:3px solid transparent;
 }
 .btn-orange:hover {
     color: #fff;
-    background-color: #ea8220;
-    border-color: #ea8220;
-    border:3px solid #ea8220;
+    opacity:0.8;
 }
 .btn-orange:active {
     color: #fff;
@@ -216,8 +212,7 @@ p{
 }
 .btn-niagara:hover {
     color: #fff;
-    background-color: #5484a4;
-    border-color: #5484a4;
+    opacity:0.8;
 }
 .btn-niagara:active {
     color: #fff;
