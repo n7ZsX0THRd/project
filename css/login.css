@@ -1,5 +1,5 @@
 .loginscherm{
-   background-color:#efefef; 
+   background-color:#efefef;
    padding-top: 2px;
    border-top:5px solid #ea8220;
    border-radius: 10px;
@@ -8,10 +8,16 @@
 .loginscherm>div{
     margin-left:auto;
     margin-right:auto;
-    
+
 }
 .login{
-    margin-top:50px;
+    margin-top:30px;
+}
+.login > .input-group{
+  margin-bottom:10px;
+}
+.login > p{
+  padding:5px;
 }
 
 .bevestig{
@@ -24,11 +30,9 @@
 }
 
 .padding-top{
-    position: absolute
-    top: 50%;
-    transform: translateY(-50%);
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -o-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
+    margin-top:5px;
+}
+.sub-text-register{
+  margin-top:10px;
+  text-align:center;
 }
