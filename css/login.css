@@ -1,0 +1,12 @@
+.loginscherm{
+   background-color:#efefef; 
+    
+}
+.loginscherm>div{
+    margin-left:auto;
+    margin-right:auto;
+    
+}
+.login{
+    margin-top:50px;
+}
