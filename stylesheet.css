@@ -71,7 +71,6 @@ body {
   border-radius: 3px;
 }
 .sidebar > .menubar{
-  padding-top:15px;
   padding-bottom:15px;
 }
 .sidebar > .menubar > li{
@@ -149,4 +148,63 @@ body {
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
+}
+.item-card{
+  border:1px solid #DFDFDF;
+  padding:5px;
+  margin-left:-15px;
+  margin-right:-15px;
+}
+.item-card > h2{
+  margin-top:0px;
+}
+.item-card > div > div > div > img{
+  width:100%;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.group-right{
+  text-align:right;
+}
+.btn-orange {
+    color: #fff;
+    background-color: #ea8220;
+    border-color: #ea8220;
+}
+.btn-orange:hover {
+    color: #fff;
+    background-color: #ea8220;
+    border-color: #ea8220;
+}
+.btn-orange:active {
+    color: #fff;
+}
+.btn-orange:focus {
+    color: #fff;
+}
+.btn-niagara {
+    color: #fff;
+    background-color: #5484a4;
+    border-color: #5484a4;
+}
+.btn-niagara:hover {
+    color: #fff;
+    background-color: #5484a4;
+    border-color: #5484a4;
+}
+.btn-niagara:active {
+    color: #fff;
+}
+.btn-niagara:focus {
+    color: #fff;
+}
+.card-options > button{
+  margin-top:5px;
+  font-size:18px;
+}
+.auction-hammer{
+  margin-top:-5px;
+  width:27px;
+  height:27px;
 }
