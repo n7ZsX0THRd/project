@@ -48,27 +48,36 @@
 
 
             <div class="login">
+                
+                  <div class="input-group">
+                      <div class="input-group-addon "><span class="glyphicon glyphicon-user" aria-hidden="true" background="#f0f0f0"></span></div>
+                      <input type="text" class="form-control" id="Voornaam" placeholder="Voornaam">
+                      <input type="text" class="form-control" id="Achternaam" placeholder="Achternaam">
+                      <input type="text" class="form-control datepickerbootstrap" id="Datum" placeholder="Geboortedatum">
+                
+
+                  </div>                
+                
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-envelope" aria-hidden="true" background="#f0f0f0"></span></div>
                       <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                      <input type="email" class="form-control" id="inputEmail" placeholder="Bevestig email">
                   </div>
-                  <input type="email" class="form-control row-fix" id="inputEmail" placeholder="Bevestig email">
 
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
                       <input type="password" class="form-control" id="inputPassword" placeholder="Wachtwoord">
+                    <input type="password" class="form-control" id="inputPassword" placeholder="Bevestig wachtwoord">
+
                   </div>
-                  <input type="password" class="form-control row-fix" id="inputPassword" placeholder="Bevestig wachtwoord">
 
-
-
-
-
-
-
-
-
-
+                  <div class="input-group">
+                      <div class="input-group-addon"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></div>
+                      <input style="max-width:60%" type="adres" class="form-control" id="Adres" placeholder="Adres">
+                      <input style="max-width:40%" type="Number" class="form-control" id="Nummer" placeholder="Nummer">
+                      <input type="" class="form-control" id="Postcode" placeholder="Postcode" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}">
+                  </div>
+               
 
 
 
@@ -114,6 +123,8 @@
       $(this).children(".sub").toggle();
     });
     */
+    $('.datepickerbootstrap').datepicker({
+    });
     </script>
   </body>
 </html>
