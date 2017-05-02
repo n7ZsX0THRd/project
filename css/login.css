@@ -1,6 +1,9 @@
 .loginscherm{
    background-color:#efefef; 
-    
+   padding-top: 2px;
+   border-top:5px solid #ea8220;
+   border-radius: 10px;
+
 }
 .loginscherm>div{
     margin-left:auto;
@@ -9,4 +12,17 @@
 }
 .login{
     margin-top:50px;
+}
+
+.bevestig{
+    margin-top:10px;
+    padding: auto;
+}
+
+.align-right{
+    float:right;
+}
+
+.padding-top{
+    padding-top: 10px;
 }
