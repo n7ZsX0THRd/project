@@ -11,7 +11,7 @@ p{
 .header-style{
   background-color:#5484a4;
   border-bottom:#4f5d75 1px solid;
-  height:90px;
+  height:70px;
 }
 .home-header{
   padding-top:50px;
@@ -39,17 +39,17 @@ p{
 }
 .header-navbar > li > a {
     color: #fff !important;
-    height:90px !important;
+    height:70px !important;
     min-width:120px !important;
     text-align:center;
     padding:0px 15px !important;
     font-size:16px;
-    line-height:90px;
+    line-height:70px;
 }
 .navbar-brand{
   color:#fff !important;
   height:auto !important;
-  line-height:90px;
+  line-height:70px;
   padding:0px 10px !important;
   font-size:20px;
 }
