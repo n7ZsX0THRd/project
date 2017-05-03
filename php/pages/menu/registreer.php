@@ -1,5 +1,5 @@
 
-<?php
+<?php /* 
 $servername = "mssql2.iproject.icasites.nl";
 $username = "iproject2";
 $password = "PHd1LgMs";
@@ -13,8 +13,8 @@ try {
     }
 catch(PDOException $e)
     {
-    echo "Connection failed: " . $e->getMessage();
-    }
+    echo "Connection failed: " . $e->getMessage(); 
+    } */
 ?>
 
 
