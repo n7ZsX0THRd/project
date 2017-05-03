@@ -1,23 +1,4 @@
-<?php
-$servername = "mssql2.iproject.icasites.nl";
-$username = "iproject2";
-$password = "PHd1LgMs";
-
-try {
-    $conn = new PDO("mysql:host=$servername;dbname=iproject2", $username, $password);
-    // set the PDO error mode to exception
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Connected successfully"; 
-    }
-catch(PDOException $e)
-    {
-    echo "Connection failed: " . $e->getMessage();
-    }
-?>
-    
-
-
-    <div class="container">
+<div class="container">
       <div class="row">
         <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 loginscherm">
           <h1>Registreren</h1>
@@ -25,7 +6,7 @@ catch(PDOException $e)
             <div>
             <form class="form-horizontal">
             <div class="login">
-                
+
                   <!-- Gebruiker gegevens -->
                   <div class="input-group">
                       <div class="input-group-addon "><span class="glyphicon glyphicon-user" aria-hidden="true" background="#f0f0f0"></span></div>
@@ -57,10 +38,10 @@ catch(PDOException $e)
                             <option><?php echo $i; ?></option>
                         <?php } ?>
                       </select>
-                  </div>                 
+                  </div>
                   <!-- Einde gebruiker gegevens -->
 
-                
+
                   <!-- Adres gegevens -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></div>
@@ -68,9 +49,9 @@ catch(PDOException $e)
                       <input style="max-width:20%" type="Number" class="form-control" id="Nummer" placeholder="Nr.">
                       <input style="max-width:22%" type="text" class="form-control" id="Nummer" placeholder="Toev.">
                       <input type="" class="form-control" id="Postcode" placeholder="Postcode" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}">
-                  </div>                  
+                  </div>
                   <!-- einde adres gegevens -->
-                
+
                   <!-- Telefoonnummer -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span></div>
@@ -104,7 +85,7 @@ catch(PDOException $e)
                   </div>
                   <!-- Einde geheime vraag -->
             </div>
-                
+
             <div class="bevestig">
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="position:relative;"></div>

@@ -132,7 +132,13 @@ p{
 .sidebar > .menubar > li > a:hover{
   text-decoration: none;
 }
-.sidebar > .menubar > li > .sub > li{
+.sidebar > .menubar > .sub{
+  padding-left:0px;
+  padding-top:2px;
+  padding-bottom:2px;
+  margin-left:-20px;
+}
+.sidebar > .menubar > .sub > li{
   list-style-type: none;
 }
 .content_col{
@@ -261,4 +267,16 @@ p{
 }
 .footer > div >  p{
   color:white;
+}
+.square-image-fix{
+    position:relative;
+    overflow:hidden;
+    padding-bottom:100%;
+    border-radius:50%;
+}
+.square-image-fix img{
+  position: absolute;
+}
+.content_top_offset{
+  margin-top:20px;
 }
