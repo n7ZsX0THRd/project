@@ -1,3 +1,4 @@
+
 <?php
 $servername = "mssql2.iproject.icasites.nl";
 $username = "iproject2";
@@ -15,7 +16,6 @@ catch(PDOException $e)
     echo "Connection failed: " . $e->getMessage();
     }
 ?>
-    
 
 
     <div class="container">
