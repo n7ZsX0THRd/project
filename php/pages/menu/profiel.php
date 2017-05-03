@@ -45,10 +45,10 @@
             </p>
         </div>
         <div class="row content_top_offset">
-          <div class="col-lg-6">
+          <div class="col-lg-6" style="border-right:1px solid #e7e7e7;">
             <form>
               <div class="form-group">
-                <label for="exampleInputEmail1">Gebruikersnaam</label>
+                <label for="exampleInputEmail1">Email</label>
                 <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
               </div>
               <div class="form-group">
@@ -66,7 +66,7 @@
               <div class="form-group">
                 <div class="row">
                   <div class="col-lg-4">
-                    <label for="exampleInputEmail1">Voornaam</label>
+                    <label for="exampleInputEmail1">Dag</label>
                     <select class="form-control">
                       <option selected disabled>Dag</option>
                       <?php for ($i = 1; $i <= 31; $i++) { ?>
@@ -75,7 +75,7 @@
                     </select>
                   </div>
                   <div class="col-lg-4">
-                    <label for="exampleInputEmail1">Achternaam</label>
+                    <label for="exampleInputEmail1">Maand</label>
                     <select class="form-control">
                       <option selected disabled>Maand</option>
                       <?php
@@ -90,7 +90,7 @@
                     </select>
                   </div>
                   <div class="col-lg-4">
-                    <label for="exampleInputEmail1">Achternaam</label>
+                    <label for="exampleInputEmail1">Jaar</label>
                     <select class="form-control">
                       <option selected disabled>Jaar</option>
                       <?php for ($i = date("Y"); $i >= 1900; $i--) { ?>
@@ -117,28 +117,21 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="exampleInputEmail1">Voornaam</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+                <label for="exampleInputEmail1">Telefoonnummer</label>
+                <input type="" class="form-control" id="exampleInputEmail1" placeholder="Telefoonnummer.">
               </div>
+              <hr>
               <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
+                <label for="exampleInputPassword1">Bevestig je wachtwoord</label>
                 <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
               </div>
-              <div class="form-group">
-                <label for="exampleInputFile">File input</label>
-                <input type="file" id="exampleInputFile">
-                <p class="help-block">Example block-level help text here.</p>
+              <div class="text-right">
+                <a type="submit" class="btn btn-orange">Wijzigingen opslaan</a>
               </div>
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox"> Check me out
-                </label>
-              </div>
-              <button type="submit" class="btn btn-default">Submit</button>
             </form>
           </div>
           <div class="col-lg-6">
-
+            
           </div>
         </div>
       </div>
