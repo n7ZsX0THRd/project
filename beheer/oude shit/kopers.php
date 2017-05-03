@@ -35,21 +35,8 @@
 
   <body>
  
-    <?php 
-    include '../php/includes/header.php'              
-    require_once('../php/database.php'); 
-    pdo_connect();
-    $search_results= array();
+    <?php include '../php/includes/header.php' ?>
 
-    $data = $db->prepare("SELECT count(*) FROM Gebruiker");
-                            $data->execute();
-                            $rows_found= $data->fetchColumn(); 
-
-                            $data = $db->prepare("SELECT * FROM Gebruiker");
-                            $data->execute();
-    print_r($data);
-    
-    ?>
 
     <main class="container">
     <h1> Beheer </h1>
