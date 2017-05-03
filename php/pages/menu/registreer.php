@@ -44,10 +44,10 @@
                       </select>
                       <!--<input type="text" style="max-width:30%" class="form-control" id="Datum" placeholder="Maand">
                       <input type="text" style="max-width:40%" class="form-control" id="Datum" placeholder="Jaar">-->
-                      
+
                   </div>
-                
-           
+
+
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></div>
                       <input style="max-width:58%" type="adres" class="form-control" id="Adres" placeholder="Adres">
@@ -60,7 +60,7 @@
                       <div class="input-group-addon"><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span></div>
                       <input type="" class="form-control" id="Tel" placeholder="Telefoonnummer">
                   </div>
-                
+
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-envelope" aria-hidden="true" background="#f0f0f0"></span></div>
                       <input type="email" class="form-control" id="inputEmail" placeholder="Email">

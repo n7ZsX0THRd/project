@@ -132,7 +132,13 @@ p{
 .sidebar > .menubar > li > a:hover{
   text-decoration: none;
 }
-.sidebar > .menubar > li > .sub > li{
+.sidebar > .menubar > .sub{
+  padding-left:0px;
+  padding-top:2px;
+  padding-bottom:2px;
+  margin-left:-20px;
+}
+.sidebar > .menubar > .sub > li{
   list-style-type: none;
 }
 .content_col{
