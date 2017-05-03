@@ -30,6 +30,7 @@
     <![endif]-->
 
     <link href="../stylesheet.css" rel="stylesheet">
+    <link href="../css/dashboard.css" rel="stylesheet">
   </head>
 
   <body>
@@ -38,8 +39,37 @@
 
 
     <main class="container">
-        <section class="row"> 
-            <h1> Beheer </h1>
+    <h1> Beheer </h1>
+        <section class="row">
+    <aside class="col-md-4 col-lg-2 col-sm-4 sidebar">
+      <h3>Selectie</h3>
+  <div class="form-check" >
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input" checked>
+      ID
+    </label>
+    <label class="form-check-label selectie">
+      <input type="checkbox" class="form-check-input" checked>
+      Voornaam
+    </label>
+    <label class="form-check-label selectie">
+      <input type="checkbox" class="form-check-input" checked>
+      Achternaam
+    </label>
+    <label class="form-check-label selectie">
+      <input type="checkbox" class="form-check-input" checked>
+      Email
+    </label>
+    <label class="form-check-label selectie">
+      <input type="checkbox" class="form-check-input" checked>
+      Beoordeling
+    </label>
+    <label class="form-check-label selectie">
+      <input type="checkbox" class="form-check-input" checked>
+      Status
+    </label>
+  </div>
+    </aside>
             <article class="col-md-8">
                 <h2> Kopers </h2>
                 <table class="table table-hover">

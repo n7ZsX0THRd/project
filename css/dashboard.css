@@ -1,0 +1,26 @@
+.dashboard{
+    border-radius: 20px;
+    background: #4f5d75;
+    padding: 0px;
+}
+
+.dashboard-header{
+    border-top: #ea8220 3px solid;
+    background:#efefef;
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 0px;
+}
+
+.dashboard-content{
+    margin: 10px auto;
+}
+
+.dashboard-content > button{
+    margin-bottom: 10px;
+}
+
+
+.selectie{
+    min-width: 100% !important; 
+}

@@ -30,6 +30,7 @@
     <![endif]-->
 
     <link href="../stylesheet.css" rel="stylesheet">
+    <link href="../css/dashboard.css" rel="stylesheet">
   </head>
 
   <body>
@@ -40,10 +41,59 @@
     <main class="container">
         <section class="row"> 
             <h1> Beheer </h1>
-            <article class="col-md-8">
-                <h2> Gebruikers </h2>
-                <button type="button" class="btn btn-primary btn-lg">Kopers</button>
-                <button type="button" class="btn btn-primary btn-lg">Verkopers</button>
+            <article class="col-md-4">
+              <div class="dashboard">
+                <h2 class="dashboard-header"> Gebruikers </h2>
+                <div class="dashboard-content col-lg-1 col-centered">
+                  <button type="button" class="btn btn-primary btn-lg btn-niagara">Kopers</button>
+                  <button type="button" class="btn btn-primary btn-lg btn-niagara">Verkopers</button>
+                </div>
+              </div>
+            </article>
+            <article class="col-md-4">
+              <div class="dashboard">
+                <h2 class="dashboard-header"> Gebruikers </h2>
+                <div class="dashboard-content col-lg-1 col-centered">
+                  <button type="button" class="btn btn-primary btn-lg btn-niagara">Kopers</button>
+                  <button type="button" class="btn btn-primary btn-lg btn-niagara">Verkopers</button>
+                </div>
+              </div>
+            </article>
+            <article class="col-md-4">
+              <div class="dashboard">
+                <h2 class="dashboard-header"> Gebruikers </h2>
+                <div class="dashboard-content col-lg-1 col-centered">
+                  <button type="button" class="btn btn-primary btn-lg btn-niagara">Kopers</button>
+                  <button type="button" class="btn btn-primary btn-lg btn-niagara">Verkopers</button>
+                </div>
+              </div>
+            </article>
+            <article class="col-md-4">
+              <div class="dashboard">
+                <h2 class="dashboard-header"> Gebruikers </h2>
+                <div class="dashboard-content col-lg-1 col-centered">
+                  <button type="button" class="btn btn-primary btn-lg btn-niagara">Kopers</button>
+                  <button type="button" class="btn btn-primary btn-lg btn-niagara">Verkopers</button>
+                </div>
+              </div>
+            </article>
+            <article class="col-md-4">
+              <div class="dashboard">
+                <h2 class="dashboard-header"> Gebruikers </h2>
+                <div class="dashboard-content col-lg-1 col-centered">
+                  <button type="button" class="btn btn-primary btn-lg btn-niagara">Kopers</button>
+                  <button type="button" class="btn btn-primary btn-lg btn-niagara">Verkopers</button>
+                </div>
+              </div>
+            </article>
+            <article class="col-md-4">
+              <div class="dashboard">
+                <h2 class="dashboard-header"> Gebruikers </h2>
+                <div class="dashboard-content col-lg-1 col-centered">
+                  <button type="button" class="btn btn-primary btn-lg btn-niagara">Kopers</button>
+                  <button type="button" class="btn btn-primary btn-lg btn-niagara">Verkopers</button>
+                </div>
+              </div>
             </article>
         </section>
     </main>

@@ -44,14 +44,14 @@
                 <aside class="profile-sidebar">       
                     <div class="user">
                         <h2>John Doe</h2>
-                        <img class="img-circle" src="../images/users/JohnDoe.jpg" alt="John Doe face">
+                        <img class="img-responsive img-circle" src="../images/users/JohnDoe.jpg" alt="John Doe face">
                         <button class="btn btn-niagara" type="button" name="Bericht" > 
                             <i class="glyphicon glyphicon-envelope"></i>
                             Bericht 
                         </button>
                         <div class="btn-group" data-toggle="buttons">
                             <button class="btn btn-orange" type="button" name="Verwijder" >
-                                <i class="glyphicon glyphicon-pencil"></i>
+                                <i class="glyphicon glyphicon-edit"></i>
                                 Bewerken
                             </button>
                             <button class="btn btn-danger" type="button" name="Verwijder" >
@@ -78,6 +78,11 @@
                                 <a href="#" target="_blank">
                                 <i class="glyphicon glyphicon-eur"></i>
                                 Betalingen </a>
+                            </li>
+                            <li>
+                                <a href="#" target="_blank">
+                                <i class="glyphicon glyphicon-star"></i>
+                                Beoordelingen </a>
                             </li>
                         </ul>
                     </div>
