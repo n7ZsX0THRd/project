@@ -277,6 +277,10 @@ p{
     padding-bottom:100%;
     border-radius:50%;
     border:5px solid #EFEFEF;
+    cursor:pointer;
+}
+.square-image-fix:hover{
+  opacity:0.8;
 }
 .square-image-fix img{
   position: absolute;
@@ -291,4 +295,21 @@ p{
 .form-group > .row > div{
   padding-left:0px !important;
   padding-right:0px !important;
+}
+.edit-user-icon{
+  position:absolute;
+  right:0px;
+  top:0px;
+  font-size:25px;
+  padding:0px;
+  padding-top:15px;
+  padding-left:10px;
+  color:black;
+  z-index:100;
+  background-color:#EFEFEF;
+  width:55px;
+  height:55px;
+  display:block;
+  border-bottom-left-radius: 50%;
+  color:#ea8220;
 }

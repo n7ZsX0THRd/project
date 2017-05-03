@@ -120,14 +120,6 @@
                 <label for="exampleInputEmail1">Telefoonnummer</label>
                 <input type="" class="form-control" id="exampleInputEmail1" placeholder="Telefoonnummer.">
               </div>
-              <hr>
-              <div class="form-group">
-                <label for="exampleInputPassword1">Bevestig je wachtwoord</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-              </div>
-              <div class="text-right">
-                <a type="submit" class="btn btn-orange">Wijzigingen opslaan</a>
-              </div>
             </form>
           </div>
           <div class="col-lg-6">
@@ -139,11 +131,11 @@
                     <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Adres">
                   </div>
                   <div class="col-lg-1">
-                    <button type="button" class="btn btn-primary" >Small modal</button>
                   </div>
                   <div class="col-lg-4">
-                    <div class="square-image-fix">
-                      <img src="images/users/johndoe.jpg" id="showImageModal" data-toggle="modal" data-target="#myModal" class="img-responsive img-circle">
+                    <div class="square-image-fix" data-toggle="modal" data-target="#myModal">
+                      <div class="edit-user-icon"><span class="glyphicon glyphicon-edit"></span></div>
+                      <img src="images/users/johndoe.jpg" id="showImageModal" class="img-responsive img-circle">
                     </div>
                   </div>
                   <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal">
@@ -168,8 +160,34 @@
                      </div>
                   </div>
                 </div>
+
+                <div class="row">
+                  <div class="col-lg-12">
+                     <div class="form-group">
+                      <label for="exampleInputFile">Biografie</label>
+                      <textarea class="form-control" rows="3" style="max-width:100%;" placeholder="Biografie"></textarea>
+                     </div>
+                  </div>
+                </div>
               </div>
             </form>
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col-lg-12">
+            <hr>
+          </div>
+          <div class="col-lg-6 col-lg-offset-6">
+
+            <div class="form-group">
+              <label for="exampleInputPassword1">Bevestig je wachtwoord</label>
+              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Wachtwoord">
+            </div>
+            <div class="text-right">
+              <a type="submit" class="btn btn-orange">Wijzigingen opslaan</a>
+            </div>
           </div>
         </div>
       </div>

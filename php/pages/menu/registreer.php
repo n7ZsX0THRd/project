@@ -1,21 +1,24 @@
+<?php
+$dsn = "sqlsrv:Server=mssql2.iproject.icasites.nl,1433;Database=iproject2";
+try
+{
+                $conn = new PDO($dsn, "iproject2", "PHd1LgMs");
+                $conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 
-<?php /* 
-$servername = "mssql2.iproject.icasites.nl";
-$username = "iproject2";
-$password = "PHd1LgMs";
-$dbname = "iproject2";
+                $sql = "SELECT * FROM Information_Schema.Tables";
 
-try {
-    $conn = new PDO("dblib:dbname=$dbname;host=$servername, $username, $password");
-    // set the PDO error mode to exception
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Connected successfully"; 
-    }
+                foreach ($conn->query($sql) as $row)
+                {
+                               print_r($row);
+                }
+                print_r('Done');
+}
 catch(PDOException $e)
-    {
-    echo "Connection failed: " . $e->getMessage(); 
-    } */
+{
+    print_r($e->getMessage());
+}
 ?>
+
 
 
     <div class="container">
@@ -26,7 +29,7 @@ catch(PDOException $e)
             <div>
             <form class="form-horizontal">
             <div class="login">
-                
+
                   <!-- Gebruiker gegevens -->
                   <div class="input-group">
                       <div class="input-group-addon "><span class="glyphicon glyphicon-user" aria-hidden="true" background="#f0f0f0"></span></div>
@@ -58,10 +61,10 @@ catch(PDOException $e)
                             <option><?php echo $i; ?></option>
                         <?php } ?>
                       </select>
-                  </div>                 
+                  </div>
                   <!-- Einde gebruiker gegevens -->
 
-                
+
                   <!-- Adres gegevens -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></div>
@@ -69,9 +72,9 @@ catch(PDOException $e)
                       <input style="max-width:20%" type="Number" class="form-control" id="Nummer" placeholder="Nr.">
                       <input style="max-width:22%" type="text" class="form-control" id="Nummer" placeholder="Toev.">
                       <input type="" class="form-control" id="Postcode" placeholder="Postcode" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}">
-                  </div>                  
+                  </div>
                   <!-- einde adres gegevens -->
-                
+
                   <!-- Telefoonnummer -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span></div>
@@ -105,14 +108,14 @@ catch(PDOException $e)
                   </div>
                   <!-- Einde geheime vraag -->
             </div>
-                
+
             <div class="bevestig">
                 <div class="row">
                     <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="position:relative;">
                         <label for="accept"  class="padding-top"><input id="accept" name="accept" type="checkbox"> Akkoord met voorwaarden</label>
                     </div>
                     <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                            
+
                         <button type="submit" class="btn btn-orange align-right" >Registreer</button>
                     </div>
                 </div>
