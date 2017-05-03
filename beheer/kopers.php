@@ -36,7 +36,7 @@
   <body>
  
     <?php 
-    include '../php/includes/header.php'              
+    include '../php/includes/header.php';            
     require_once('../php/database.php'); 
     pdo_connect();
     $search_results= array();
