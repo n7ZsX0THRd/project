@@ -9,7 +9,6 @@
             <form class="form-horizontal">
 
 
-
             <div class="login">
               <p class="bg-warning">Gebruiker niet gevonden</p>
               <p class="bg-danger">Informatie onjuist</p>

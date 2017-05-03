@@ -2,9 +2,10 @@
 $servername = "mssql2.iproject.icasites.nl";
 $username = "iproject2";
 $password = "PHd1LgMs";
+$dbname = "iproject2";
 
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=iproject2", $username, $password);
+    $conn = new PDO("dblib:dbname=$dbname;host=$servername, $username, $password");
     // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "Connected successfully"; 
@@ -107,8 +108,11 @@ catch(PDOException $e)
                 
             <div class="bevestig">
                 <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="position:relative;"></div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="position:relative;">
+                        <label for="accept"  class="padding-top"><input id="accept" name="accept" type="checkbox"> Akkoord met voorwaarden</label>
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            
                         <button type="submit" class="btn btn-orange align-right" >Registreer</button>
                     </div>
                 </div>
@@ -123,3 +127,5 @@ catch(PDOException $e)
         </div>
       </div>
     </div>
+
+<?php include 'php/includes/footer.php' ?>
