@@ -131,7 +131,45 @@
             </form>
           </div>
           <div class="col-lg-6">
-            
+            <form>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-lg-7">
+                    <label for="exampleInputEmail1">Adres</label>
+                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Adres">
+                  </div>
+                  <div class="col-lg-1">
+                    <button type="button" class="btn btn-primary" >Small modal</button>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="square-image-fix">
+                      <img src="images/users/johndoe.jpg" id="showImageModal" data-toggle="modal" data-target="#myModal" class="img-responsive img-circle">
+                    </div>
+                  </div>
+                  <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal">
+                    <div class="modal-dialog" role="document">
+                       <div class="modal-content">
+                         <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                           <h4 class="modal-title" id="myModalLabel">Verander profielfoto</h4>
+                         </div>
+                         <div class="modal-body">
+                           <div class="form-group">
+                             <label for="exampleInputFile">Upload een foto</label>
+                             <input type="file" id="exampleInputFile">
+                             <p class="help-block">Upload alleen bestanden met png of jpg als bestandstype.</p>
+                           </div>
+                         </div>
+                         <div class="modal-footer">
+                           <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
+                           <button type="button" class="btn btn-primary">Opslaan</button>
+                         </div>
+                       </div>
+                     </div>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
