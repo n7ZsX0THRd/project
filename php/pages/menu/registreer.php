@@ -1,17 +1,32 @@
+<?php
+$servername = "mssql2.iproject.icasites.nl";
+$username = "iproject2";
+$password = "PHd1LgMs";
+
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=EADB", $username, $password);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    echo "Connected successfully"; 
+    }
+catch(PDOException $e)
+    {
+    echo "Connection failed: " . $e->getMessage();
+    }
+?>
+    
+
 
     <div class="container">
       <div class="row">
         <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 loginscherm">
           <h1>Registreren</h1>
           <p>Welkom op de beste veilingsite van Nederland</p>
-
             <div>
             <form class="form-horizontal">
-
-
-
             <div class="login">
-
+                
+                  <!-- Gebruiker gegevens -->
                   <div class="input-group">
                       <div class="input-group-addon "><span class="glyphicon glyphicon-user" aria-hidden="true" background="#f0f0f0"></span></div>
                       <input type="text" class="form-control" id="Tel" placeholder="Gebruikersnaam">
@@ -42,59 +57,69 @@
                             <option><?php echo $i; ?></option>
                         <?php } ?>
                       </select>
-                      <!--<input type="text" style="max-width:30%" class="form-control" id="Datum" placeholder="Maand">
-                      <input type="text" style="max-width:40%" class="form-control" id="Datum" placeholder="Jaar">-->
-                      
-                  </div>
+                  </div>                 
+                  <!-- Einde gebruiker gegevens -->
+
                 
-           
+                  <!-- Adres gegevens -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></div>
                       <input style="max-width:58%" type="adres" class="form-control" id="Adres" placeholder="Adres">
                       <input style="max-width:20%" type="Number" class="form-control" id="Nummer" placeholder="Nr.">
                       <input style="max-width:22%" type="text" class="form-control" id="Nummer" placeholder="Toev.">
                       <input type="" class="form-control" id="Postcode" placeholder="Postcode" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}">
-                  </div>
-
+                  </div>                  
+                  <!-- einde adres gegevens -->
+                
+                  <!-- Telefoonnummer -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span></div>
                       <input type="" class="form-control" id="Tel" placeholder="Telefoonnummer">
                   </div>
-                
+                  <!-- Einde telefoonnummer -->
+
+                  <!-- Email -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-envelope" aria-hidden="true" background="#f0f0f0"></span></div>
                       <input type="email" class="form-control" id="inputEmail" placeholder="Email">
                       <input type="email" class="form-control" id="inputEmail" placeholder="Bevestig email">
                   </div>
+                  <!-- Einde email -->
 
+                  <!-- Wachtwoord -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
                       <input type="password" class="form-control" id="inputPassword" placeholder="Wachtwoord">
                     <input type="password" class="form-control" id="inputPassword" placeholder="Bevestig wachtwoord">
                   </div>
+                  <!-- Einde wachtwoord -->
 
-
-
-
+                  <!-- Geheime vraag -->
+                  <div class="input-group">
+                      <div class="input-group-addon"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></div>
+                      <select class="form-control">
+                        <option selected disabled>Geheime vraag</option>
+                      </select>
+                    <input type="text" class="form-control" id="Antwoord" placeholder="Antwoord">
+                  </div>
+                  <!-- Einde geheime vraag -->
             </div>
-
-              <div class="bevestig">
+                
+            <div class="bevestig">
                 <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="position:relative;">
-                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="position:relative;"></div>
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <button type="submit" class="btn btn-orange align-right" >Registreer</button>
                     </div>
                 </div>
-              </div>
-              <div class="row">
+            </div>
+            <div class="row">
                 <div class="col-lg-12">
                   <p class="sub-text-register">Al een account? <a href="index.php?page=login">Log dan hier in</a></p>
                 </div>
-              </div>
-            </form>
             </div>
-            </div>
+        </form>
+        </div>
+        </div>
       </div>
-
     </div>
