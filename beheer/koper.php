@@ -6,7 +6,7 @@ pdo_connect();
       $gebruikersnaam = htmlspecialchars($_GET['gebruikersnaam']);
     }
     else {
-      $gebruikersnaam = 'basvds123';
+      $gebruikersnaam = 'gebruiker niet gevonden';
     }
   }
 
@@ -64,7 +64,6 @@ pdo_connect();
                             <i class="glyphicon glyphicon-envelope"></i>
                             Bericht
                         </button>
-
                         <div class="btn-group" data-toggle="buttons">
                             <button class="btn btn-orange" type="button" name="Bewerken" >
                                 <i class="glyphicon glyphicon-edit"></i>
