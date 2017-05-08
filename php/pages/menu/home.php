@@ -6,9 +6,11 @@
     </div>
   </div>
 </div>
-<div class="container">
+<div class="row">
+<div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
+<div class="container-fluid">
   <div class="row">
-    <div class="col-md-4 col-lg-2 col-sm-4 sidebar">
+    <div class="col-md-3 col-lg-2 col-sm-3 sidebar">
       <h3>Categorieën</h3>
       <ul class="menubar">
         <li>
@@ -41,7 +43,7 @@
         </li>
       </ul>
     </div>
-    <div class="col-md-8 col-lg-10 col-sm-8">
+    <div class="col-md-9 col-lg-10 col-sm-9">
       <div class="container-fluid content_col">
         <div class="row">
           <div class="col-lg-12 remove-margin">
@@ -50,63 +52,43 @@
           <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
             <div class="container-fixed">
               <div class="row item-row">
-                <div class="col-lg-4">
-                  <div class="item-card">
-                    <div class="container-fluid">
-                      <div class="row">
-                        <div class="col-xs-12">
-                          <h2>Vliegtuig</h2>
-                          <img src="images/vliegtuig.png">
-                        </div>
-                        <div class="col-xs-12">
-                          <div class="text-right">
-                            <div class="btn-group card-options" role="group" aria-label="...">
-                              <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
-                              <button type="button" class="btn btn-orange">Bekijk</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                  <div class="thumbnail">
+                    <img src="images/vliegtuig.png" alt="...">
+                    <div class="caption">
+                      <h3>Thumbnail label</h3>
+                      <p>...</p>
+                      <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-4">
-                  <div class="item-card">
-                    <div class="container-fluid">
-                      <div class="row">
-                        <div class="col-xs-12">
-                          <h2>Vliegtuig</h2>
-                          <img src="images/vliegtuig.png">
-                        </div>
-                        <div class="col-xs-12">
-                          <div class="text-right">
-                            <div class="btn-group card-options" role="group" aria-label="...">
-                              <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
-                              <button type="button" class="btn btn-orange">Bekijk</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                  <div class="thumbnail">
+                    <img src="images/vliegtuig.png" alt="...">
+                    <div class="caption">
+                      <h3>Thumbnail label</h3>
+                      <p>...</p>
+                      <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-4">
-                  <div class="item-card">
-                    <div class="container-fluid">
-                      <div class="row">
-                        <div class="col-xs-12">
-                          <h2>Vliegtuig</h2>
-                          <img src="images/vliegtuig.png">
-                        </div>
-                        <div class="col-xs-12">
-                          <div class="text-right">
-                            <div class="btn-group card-options" role="group" aria-label="...">
-                              <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
-                              <button type="button" class="btn btn-orange">Bekijk</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                  <div class="thumbnail">
+                    <img src="images/vliegtuig.png" alt="...">
+                    <div class="caption">
+                      <h3>Thumbnail label</h3>
+                      <p>...</p>
+                      <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                  <div class="thumbnail">
+                    <img src="images/vliegtuig.png" alt="...">
+                    <div class="caption">
+                      <h3>Thumbnail label</h3>
+                      <p>...</p>
+                      <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
                     </div>
                   </div>
                 </div>
@@ -118,156 +100,118 @@
       </div>
     </div>
     <div class="row">
-        <div class="col-lg-12 remove-margin">
-          <h1>Sport & Vrije tijd</h1>
-        <div>
-        <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
-          <div class="container-fixed">
-            <div class="row item-row">
-              <div class="col-lg-4">
-                <div class="item-card">
-                  <div class="container-fluid">
-                    <div class="row">
-                      <div class="col-xs-12">
-                        <h2>Vliegtuig</h2>
-                        <img src="images/vliegtuig.png">
-                      </div>
-                      <div class="col-xs-12">
-                        <div class="text-right">
-                          <div class="btn-group card-options" role="group" aria-label="...">
-                            <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
-                            <button type="button" class="btn btn-orange">Bekijk</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="item-card">
-                  <div class="container-fluid">
-                    <div class="row">
-                      <div class="col-xs-12">
-                        <h2>Vliegtuig</h2>
-                        <img src="images/vliegtuig.png">
-                      </div>
-                      <div class="col-xs-12">
-                        <div class="text-right">
-                          <div class="btn-group card-options" role="group" aria-label="...">
-                            <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
-                            <button type="button" class="btn btn-orange">Bekijk</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="item-card">
-                  <div class="container-fluid">
-                    <div class="row">
-                      <div class="col-xs-12">
-                        <h2>Vliegtuig</h2>
-                        <img src="images/vliegtuig.png">
-                      </div>
-                      <div class="col-xs-12">
-                        <div class="text-right">
-                          <div class="btn-group card-options" role="group" aria-label="...">
-                            <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
-                            <button type="button" class="btn btn-orange">Bekijk</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+      <div class="col-lg-12 remove-margin">
+        <h1>Boeken</h1>
+      <div>
+      <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
+        <div class="container-fixed">
+          <div class="row item-row">
+            <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+              <div class="thumbnail">
+                <img src="images/vliegtuig.png" alt="...">
+                <div class="caption">
+                  <h3>Thumbnail label</h3>
+                  <p>...</p>
+                  <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
                 </div>
               </div>
             </div>
-
+            <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+              <div class="thumbnail">
+                <img src="images/vliegtuig.png" alt="...">
+                <div class="caption">
+                  <h3>Thumbnail label</h3>
+                  <p>...</p>
+                  <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+              <div class="thumbnail">
+                <img src="images/vliegtuig.png" alt="...">
+                <div class="caption">
+                  <h3>Thumbnail label</h3>
+                  <p>...</p>
+                  <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+              <div class="thumbnail">
+                <img src="images/vliegtuig.png" alt="...">
+                <div class="caption">
+                  <h3>Thumbnail label</h3>
+                  <p>...</p>
+                  <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                </div>
+              </div>
+            </div>
           </div>
+
         </div>
       </div>
     </div>
   </div>
-  <div class="row">
-        <div class="col-lg-12 remove-margin">
-          <h1>Speelgoed & Hobby</h1>
-        <div>
-        <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
-          <div class="container-fixed">
-            <div class="row item-row">
-              <div class="col-lg-4">
-                <div class="item-card">
-                  <div class="container-fluid">
-                    <div class="row">
-                      <div class="col-xs-12">
-                        <h2>Vliegtuig</h2>
-                        <img src="images/vliegtuig.png">
-                      </div>
-                      <div class="col-xs-12">
-                        <div class="text-right">
-                          <div class="btn-group card-options" role="group" aria-label="...">
-                            <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
-                            <button type="button" class="btn btn-orange">Bekijk</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="item-card">
-                  <div class="container-fluid">
-                    <div class="row">
-                      <div class="col-xs-12">
-                        <h2>Vliegtuig</h2>
-                        <img src="images/vliegtuig.png">
-                      </div>
-                      <div class="col-xs-12">
-                        <div class="text-right">
-                          <div class="btn-group card-options" role="group" aria-label="...">
-                            <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
-                            <button type="button" class="btn btn-orange">Bekijk</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="item-card">
-                  <div class="container-fluid">
-                    <div class="row">
-                      <div class="col-xs-12">
-                        <h2>Vliegtuig</h2>
-                        <img src="images/vliegtuig.png">
-                      </div>
-                      <div class="col-xs-12">
-                        <div class="text-right">
-                          <div class="btn-group card-options" role="group" aria-label="...">
-                            <button type="button" class="btn btn-niagara"><span class="glyphicon glyphicon-heart"></span></button>
-                            <button type="button" class="btn btn-orange">Bekijk</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+</div>
+<div class="row">
+  <div class="col-lg-12 remove-margin">
+    <h1>Boeken</h1>
+  <div>
+  <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
+    <div class="container-fixed">
+      <div class="row item-row">
+        <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+          <div class="thumbnail">
+            <img src="images/vliegtuig.png" alt="...">
+            <div class="caption">
+              <h3>Thumbnail label</h3>
+              <p>...</p>
+              <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
             </div>
-
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+          <div class="thumbnail">
+            <img src="images/vliegtuig.png" alt="...">
+            <div class="caption">
+              <h3>Thumbnail label</h3>
+              <p>...</p>
+              <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+          <div class="thumbnail">
+            <img src="images/vliegtuig.png" alt="...">
+            <div class="caption">
+              <h3>Thumbnail label</h3>
+              <p>...</p>
+              <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+          <div class="thumbnail">
+            <img src="images/vliegtuig.png" alt="...">
+            <div class="caption">
+              <h3>Thumbnail label</h3>
+              <p>...</p>
+              <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+            </div>
           </div>
         </div>
       </div>
+
     </div>
   </div>
+</div>
+</div>
+</div>
   </div>
 
 </div>
 </div>
 </div>
 <?php include 'php/includes/footer.php' ?>
+</div>
+</div>

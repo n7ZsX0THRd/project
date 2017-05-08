@@ -1,6 +1,7 @@
 body {
   padding-top: 90px;
   background-color:#fff;
+  overflow-x:hidden;
 }
 h1 ,h2,h3,h4,h5,h6{
   color:#5484a4;
@@ -10,8 +11,11 @@ p{
 }
 .header-style{
   background-color:#5484a4;
-  border-bottom:#4f5d75 1px solid;
+  -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.4);
   height:70px;
+  border-bottom:none;
 }
 .home-header{
   padding-top:50px;
