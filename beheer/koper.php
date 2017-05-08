@@ -1,4 +1,6 @@
 <?php
+include('../php/database.php');
+pdo_connect();
   if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!empty($_GET)) {
       $gebruikersnaam = htmlspecialchars($_GET['gebruikersnaam']);
@@ -81,7 +83,7 @@
                            </div>
                            <div class="modal-footer">
                              <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
-                             <button type="button" class="btn btn-primary" onclick="document.location="../php/scripts/delete_user.php?gebruikersnaam="<?php echo $gebruikersnaam ?>">Verwijderen</button>
+                             <button type="button" class="btn btn-primary" action="delete_user('Cooper')">Verwijderen</button>
                            </div>
                          </div>
                        </div>
