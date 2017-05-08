@@ -1,8 +1,8 @@
 <?php
   include('../php/database.php');
   pdo_connect();
-  echo var_dump($_POST);
-  if($_POST['action'] == 'delete') {
-    echo delete_user($_POST['data'],$db);
+
+  if($_POST['action'][0] == 'delete') {
+    echo delete_user($_POST['action'][1],$db);
   }
 ?>

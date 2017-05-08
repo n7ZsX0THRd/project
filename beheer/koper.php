@@ -6,7 +6,7 @@ pdo_connect();
       $gebruikersnaam = htmlspecialchars($_GET['gebruikersnaam']);
     }
     else {
-      $gebruikersnaam = 'Ali';
+      $gebruikersnaam = 'basvds123';
     }
   }
 
