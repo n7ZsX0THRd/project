@@ -42,51 +42,54 @@
 
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if (!empty($_GET)) {
-        if(!empty($_GET['sorteerOp'])){
-            $sorteerOp = htmlspecialchars($_GET['sorteerOp']); 
-        }else{
-            $sorteerOp='';
-        }
-        if(!empty($_GET['pagina'])){
-            $pagina = htmlspecialchars($_GET['pagina']);  
-        }else{
-            $pagina=0;
-        }
-        if(!empty($_GET['selectVoornaam'])){
-         $selectVoornaam= ($_GET['selectVoornaam'] === 'true');
-        }else{
-            $max_speelduur=420;
-        }
-        if(isset($_GET['actor'])){
-            $actor = htmlspecialchars($_GET['actor']); 
-        }else{
-            $actor='';
-        }
-        if(isset($_GET['regiseur'])){
-            $regiseur = htmlspecialchars($_GET['regiseur']);  
-        }else{
-            $regiseur='';
-        }
-        if(!empty($_GET['role'])){
-            $role = htmlspecialchars($_GET['role']); 
-        }else{
-            $role='[^Director]';
-        if(!empty($_GET['regiseur'])){
-            $role ='Director';
-            }
-        }
-        if(!empty($_GET['min_release_date'])){
-            $min_release_date = htmlspecialchars($_GET['min_release_date']);  
-        }else{
-            $min_release_date=1940;
-        }
-        if(!empty($_GET['max_release_date'])){
-            $max_release_date = htmlspecialchars($_GET['max_release_date']);  
-        }else{
-            $max_release_date=date("Y");
-        }
-    
+      if (!empty($_GET)) {
+          if(!empty($_GET['sorteerOp'])){
+              $sorteerOp = htmlspecialchars($_GET['sorteerOp']); 
+          }else{
+              $sorteerOp='';
+          }
+          if(!empty($_GET['pagina'])){
+              $pagina = htmlspecialchars($_GET['pagina']);  
+          }else{
+              $pagina=0;
+          }
+          if(!empty($_GET['selectVoornaam'])){
+          $selectVoornaam= ($_GET['selectVoornaam'] === 'true');
+          }else{
+            $selectVoornaam = false;
+          }
+          if(!empty($_GET['selectAchternaam'])){
+          $selectAchternaam= ($_GET['selectAchternaam'] === 'true');
+          }else{
+            $selectAchternaam = false;
+          }
+          if(!empty($_GET['selectAdresregel1'])){
+          $selectAdresregel1 = ($_GET['selectAdresregel1'] === 'true');
+          }else{
+            $selectAdresregel1 = false;
+          }
+          if(!empty($_GET['selectAdresregel2'])){
+            $selectAdresregel2 = ($_GET['selectAdresregel2'] === 'true');
+          }else{
+            $selectAdresregel2 = false;
+          }
+          if(!empty($_GET['selectPostcode'])){
+            $selectPostcode = ($_GET['selectPostcode'] === 'true');
+          }else{
+            $selectPostcode = false;
+          }
+          if(!empty($_GET['selectPlaatsnaam'])){
+            $selectPlaatsnaam = ($_GET['selectPlaatsnaam'] === 'true');
+          }else{
+            $selectPlaatsnaam = false;
+          }
+          if(!empty($_GET['selectLand'])){
+            $selectPlaatsnaam = ($_GET['selectLand'] === 'true');
+          }else{
+            $selectPlaatsnaam = false;
+          }
+      }
+    }
     ?>
 
     <main class="container">
@@ -143,7 +146,7 @@
                         $data = $db->query("SELECT gebruikersnaam, voornaam, achternaam, Accountstatussen.omschrijving AS status 
                                             FROM Gebruikers
                                             INNER JOIN Accountstatussen 
-                                              ON Gebruiker.statusID=Accountstatussen.ID");
+                                              ON Gebruikers.statusID=Accountstatussen.ID");
 
                         while ($row = $data->fetch()){
                           echo "<tr onclick=\"document.location='koper.php' \" >"; //fix this
