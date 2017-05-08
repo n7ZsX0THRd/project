@@ -10,12 +10,13 @@ $required_register_fields = Array (
   'r_username' => 'Gebruikersnaam',
   'r_firstname' => 'Voornaam',
   'r_lastname' => 'Achternaam',
-  'r_birthday' => 'Geboortdag',
-  'r_birthyear' => 'Geboortejaar',
+  'r_birthday' => 'Geboortedag',
   'r_birthmonth' => 'Geboortemaand',
+  'r_birthyear' => 'Geboortejaar',
   'r_street_name' => 'Straat',
   'r_street_nr' => 'Huisnummer',
   'r_zipcode' => 'Postcode',
+  'r_city' => 'Plaats',
   'r_phonenumber' => 'Telefoonnummer',
   'r_email' => 'Email',
   'r_email_confirm' => 'Email bevestiging',
@@ -61,7 +62,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
         else
         {
-
+            if(create_user($_POST,$db))
+            {
+              print 'Account gemaakt!';
+            }
         }
       }
     }
@@ -153,6 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                       <input style="max-width:20%" type="Number" class="form-control" id="Nummer" name="r_street_nr" value="<?php if(isset($_POST['r_street_nr'])){ echo $_POST['r_street_nr']; } ?>" placeholder="Nr.">
                       <input style="max-width:22%" type="text" class="form-control" id="Nummer" name="r_street_addition" value="<?php if(isset($_POST['r_street_addition'])){ echo $_POST['r_street_addition']; } ?>" placeholder="Toev.">
                       <input type="" class="form-control" id="Postcode" placeholder="Postcode" name="r_zipcode" value="<?php if(isset($_POST['r_zipcode'])){ echo $_POST['r_zipcode']; } ?>" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}">
+                      <input type="text" class="form-control" id="City" placeholder="Plaats" name="r_city" value="<?php if(isset($_POST['r_city'])){ echo $_POST['r_city']; } ?>">
                   </div>
                   <!-- einde adres gegevens -->
 
