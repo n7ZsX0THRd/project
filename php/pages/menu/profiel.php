@@ -16,7 +16,7 @@ $query="SELECT TOP(1) * FROM Gebruikers WHERE emailadres = '$email'";
   print_r($row);
 }
 */
-$result = $db->query($query).fetchall()[0];
+$result = $db->query($query)->fetchall()[0];
 
 ?>
 
