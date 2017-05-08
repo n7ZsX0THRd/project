@@ -15,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
   $result = $data->fetchAll();
   $Totaal = count($result);
 
-
       if($Totaal == 1)
       {
         if(password_verify($wachtwoord, $result[0]['wachtwoord']))

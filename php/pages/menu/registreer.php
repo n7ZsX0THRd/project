@@ -52,6 +52,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     {
       if($_POST['r_email'] !== $_POST['r_email_confirm'])
       {
+         /*
+         $to = $_POST['r_email'];
+         $subject = "Confirmation for $username";
+         $header = "Confirmation from";
+         $message = "Please click the link below to verify and activate your account. rn";
+         $message .= "http://www.yourname.com/confirm.php?passkey=$com_code";
+
+          $sentmail = mail($to,$subject,$message,$header);
+          print $sentmail;
+          */
+
         $_SESSION['warning']['incorrect_email'] = true;
       }
       else
@@ -64,8 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         {
             if(create_user($_POST,$db))
             {
-            $_SESSION['email'] = $_POST['r_email'];
-            header('location: index.php?page=home');
+              $_SESSION['email'] = $_POST['r_email'];
+              header('location: index.php?page=home');
             }
         }
       }
