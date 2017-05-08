@@ -15,11 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
   $result = $data->fetchAll();
   $Totaal = count($result);
 
-  var_dump($result);
-  
+
       if($Totaal == 1)
       {
-        if(password_verify($wachtwoord, $hashed_password))
+        if(password_verify($wachtwoord, $result[0]['wachtwoord']))
         {
           $_SESSION['email'] = $email;
           header('location: index.php?page=home');
