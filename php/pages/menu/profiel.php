@@ -10,19 +10,19 @@ if (!(isset($_SESSION['email']) != '')) {
 
 $email = $_SESSION['email'];
 $query="SELECT TOP(1) * FROM Gebruikers WHERE emailadres = '$email'";
-
-/*foreach ($db->query($query) as $row)
-{
-  print_r($row);
-}
-*/
 $result = $db->query($query)->fetchall()[0];
 
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+  if(update_user($_POST,$db))
+  {
+  $_SESSION['email'] = $_POST['r_email'];
+  header('location: index.php?page=home');
+  }
+}
+
 ?>
-
-
-
-
 
 
 <div class="container">
@@ -76,20 +76,20 @@ $result = $db->query($query)->fetchall()[0];
         </div>
         <div class="row content_top_offset">
           <div class="col-lg-6" style="border-right:1px solid #e7e7e7;">
-            <form>
+            <form method="post" enctype="multipart/form-data" action="">
               <div class="form-group">
                 <label for="exampleInputEmail1">Email</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" value="<?php echo $result['emailadres']?>">
               </div>
               <div class="form-group">
                 <div class="row">
                   <div class="col-lg-5">
                     <label for="exampleInputEmail1">Voornaam</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Voornaam" value="<?php echo $result['voornaam'] ?>">
+                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Voornaam" value="<?php echo $result['voornaam']?>">
                   </div>
                   <div class="col-lg-7">
                     <label for="exampleInputEmail1">Achternaam</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Achternaam">
+                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Achternaam" value="<?php echo $result['achternaam']?>">
                   </div>
                 </div>
               </div>
@@ -134,26 +134,18 @@ $result = $db->query($query)->fetchall()[0];
                 <div class="row">
                   <div class="col-lg-7">
                     <label for="exampleInputEmail1">Adres</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Adres">
-                  </div>
-                  <div class="col-lg-2">
-                    <label for="exampleInputEmail1">Nr.</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Nr.">
-                  </div>
-                  <div class="col-lg-3">
-                      <label for="exampleInputEmail1">Toev.</label>
-                      <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Toev.">
+                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Adres" value="<?php echo $result['adresregel1']?>">
                   </div>
                 </div>
               </div>
               <div class="form-group">
                 <label for="exampleInputEmail1">Telefoonnummer</label>
-                <input type="" class="form-control" id="exampleInputEmail1" placeholder="Telefoonnummer.">
+                <input type="" class="form-control" id="exampleInputEmail1" placeholder="Telefoonnummer." >
               </div>
-            </form>
+
           </div>
           <div class="col-lg-6">
-            <form>
+
               <div class="form-group">
                 <div class="row">
                   <div class="col-lg-7">
@@ -200,7 +192,7 @@ $result = $db->query($query)->fetchall()[0];
                   </div>
                 </div>
               </div>
-            </form>
+
           </div>
 
         </div>
@@ -216,8 +208,9 @@ $result = $db->query($query)->fetchall()[0];
               <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Wachtwoord">
             </div>
             <div class="text-right">
-              <a type="submit" class="btn btn-orange">Wijzigingen opslaan</a>
+              <button type="submit" class="btn btn-orange">Wijzigingen opslaan</button>
             </div>
+              </form>
           </div>
         </div>
       </div>

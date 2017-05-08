@@ -45,4 +45,27 @@ function create_user($data,$db){
       return $e;
   }
 }
+function update_user($data,$db){
+  try {
+      $dbs = $db->prepare(" UPDATE Gebruikers SET (gebruikersnaam,voornaam,achternaam,adresregel1,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst) WHERE emailadres=$email
+      VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+      $dbs->execute(array(
+          $data['r_username'],
+          $data['r_firstname'],
+          $data['r_lastname'],
+          $data['r_street_name'].' '.$data['r_street_nr'].' '.$data['r_street_addition'],
+          $data['r_zipcode'],
+          $data['r_city'],
+          $data['r_birthday'].'-'.$data['r_birthmonth'].'-'.$data['r_birthyear'],
+          $data['r_email'],
+          password_hash($data['r_password'], PASSWORD_DEFAULT),
+          $data['r_secret_question'],
+          $data['r_secret_question_answer']
+        )
+      );
+      return true;
+  } catch (PDOException $e) {
+      return $e;
+  }
+}
 ?>
