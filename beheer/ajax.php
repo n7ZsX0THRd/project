@@ -1,5 +1,5 @@
 <?php
   include('../php/database.php');
   pdo_connect();
-  delete_user('Cooper');
+  echo delete_user('A_usernameB',$db);
 ?>
