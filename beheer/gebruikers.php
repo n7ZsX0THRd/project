@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../bootstrap/favicon.ico">
 
-    <title>Normal Page</title>
+    <title>Gebruikers</title>
 
     <!-- Bootstrap core CSS -->
     <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -39,15 +39,6 @@
     include '../php/includes/header.php';            
     require_once('../php/database.php'); 
     pdo_connect();
-    $search_results= array();
-
-    $data = $db->prepare("SELECT count(*) FROM Gebruiker");
-                            $data->execute();
-                            $rows_found= $data->fetchColumn(); 
-
-                            $data = $db->prepare("SELECT * FROM Gebruiker");
-                            $data->execute();
-    print_r($data);
     
     ?>
 
@@ -57,6 +48,12 @@
     <aside class="col-md-4 col-lg-2 col-sm-4 sidebar">
       <h3>Selectie</h3>
   <div class="form-check" >
+  <h4>Soort </h4>
+  <input type="radio" name="user-type" value="Buyer" checked> Kopers<br>
+  <input type="radio" name="user-type" value="Seller"> Verkopers<br>
+  <input type="radio" name="user-type" value="Both"> Alle
+
+  <h4>Kolommen </h4>
     <label class="form-check-label">
       <input type="checkbox" class="form-check-input" checked>
       ID
@@ -81,47 +78,38 @@
       <input type="checkbox" class="form-check-input" checked>
       Status
     </label>
+    <button class="btn btn-orange" type="button" name="Accept" >
+    <i class="glyphicon glyphicon-ok"></i>
+    Pas toe
+    </button>
   </div>
     </aside>
             <article class="col-md-8">
-                <h2> Kopers </h2>
+                <h2> Gebruikers </h2>
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th># ID</td>
+                        <th>Gebruikersnaam</td>
                         <th>Voornaam</th>
                         <th>Achternaam</th>
-                        <th>Email</th>
-                        <th>Beoordeling</th>
                         <th>Status</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr onclick="document.location = 'koper.php';">
-                        <td>1234</td>
-                        <td>John</td>
-                        <td>Doe</td>
-                        <td>john@example.com</td>
-                        <td>95.7 %</td>
-                        <td>Actief</td>
-                    </tr>
-                    <tr onclick="document.location = 'koper.php';">
-                        <td>1337</td>
-                        <td>Mary</td>
-                        <td>Moe</td>
-                        <td>mary@example.com</td>
-                        <td>81.3 %</td>
-                        <td>In-actief</td>
-                    </tr>
-                    <a href="http://example.com">
-                    <tr onclick="document.location = 'koper.php';">
-                        <td>2417</td>
-                        <td>July</td>
-                        <td>Dooley</td>
-                        <td>july@example.com</td>
-                        <td>98.8 %</td>
-                        <td>Actief</td>
-                    </tr>
+                      <?php
+                        $data = $db->query("SELECT gebruikersnaam, voornaam, achternaam, Accountstatussen.omschrijving AS status FROM Gebruiker 
+                                            INNER JOIN Accountstatussen 
+                                              ON Gebruiker.statusID=Accountstatussen.ID");
+
+                        while ($row = $data->fetch()){
+                          echo "<tr onclick='document.location = 'koper.php';'>"; //fix this
+                          echo "<td>$row[gebruikersnaam]</td>";
+                          echo "<td>$row[voornaam]</td>";
+                          echo "<td>$row[achternaam]</td>";
+                          echo "<td>$row[status]</td>";
+                          echo "</tr>";
+                        }
+                      ?>
                     </tbody>
                 </table>
             </article>
