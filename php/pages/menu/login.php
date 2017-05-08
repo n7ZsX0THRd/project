@@ -1,4 +1,5 @@
 <?php
+session_start();
 include ('php/database.php');
 pdo_connect();
 
@@ -15,9 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
       if($Totaal == 1)
       {
-      session_start();
       $_SESSION['email'] = $email;
-      header('location: index.php?page=profiel');
+      header('location: index.php?page=home');
       }
       else
       {

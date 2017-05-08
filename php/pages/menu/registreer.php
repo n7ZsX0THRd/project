@@ -64,7 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         {
             if(create_user($_POST,$db))
             {
-              print 'Account gemaakt!';
+            $_SESSION['email'] = $_POST['r_email'];
+            header('location: index.php?page=home');
             }
         }
       }
