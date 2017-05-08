@@ -39,6 +39,53 @@
     include '../php/includes/header.php';            
     require_once('../php/database.php'); 
     pdo_connect();
+
+
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if (!empty($_GET)) {
+        if(!empty($_GET['sorteerOp'])){
+            $sorteerOp = htmlspecialchars($_GET['sorteerOp']); 
+        }else{
+            $sorteerOp='';
+        }
+        if(!empty($_GET['pagina'])){
+            $pagina = htmlspecialchars($_GET['pagina']);  
+        }else{
+            $pagina=0;
+        }
+        if(!empty($_GET['selectVoornaam'])){
+         $selectVoornaam= ($_GET['selectVoornaam'] === 'true');
+        }else{
+            $max_speelduur=420;
+        }
+        if(isset($_GET['actor'])){
+            $actor = htmlspecialchars($_GET['actor']); 
+        }else{
+            $actor='';
+        }
+        if(isset($_GET['regiseur'])){
+            $regiseur = htmlspecialchars($_GET['regiseur']);  
+        }else{
+            $regiseur='';
+        }
+        if(!empty($_GET['role'])){
+            $role = htmlspecialchars($_GET['role']); 
+        }else{
+            $role='[^Director]';
+        if(!empty($_GET['regiseur'])){
+            $role ='Director';
+            }
+        }
+        if(!empty($_GET['min_release_date'])){
+            $min_release_date = htmlspecialchars($_GET['min_release_date']);  
+        }else{
+            $min_release_date=1940;
+        }
+        if(!empty($_GET['max_release_date'])){
+            $max_release_date = htmlspecialchars($_GET['max_release_date']);  
+        }else{
+            $max_release_date=date("Y");
+        }
     
     ?>
 
@@ -54,10 +101,6 @@
   <input type="radio" name="user-type" value="Both"> Alle
 
   <h4>Kolommen </h4>
-    <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" checked>
-      ID
-    </label>
     <label class="form-check-label selectie">
       <input type="checkbox" class="form-check-input" checked>
       Voornaam
@@ -97,12 +140,13 @@
                     </thead>
                     <tbody>
                       <?php
-                        $data = $db->query("SELECT gebruikersnaam, voornaam, achternaam, Accountstatussen.omschrijving AS status FROM Gebruiker 
+                        $data = $db->query("SELECT gebruikersnaam, voornaam, achternaam, Accountstatussen.omschrijving AS status 
+                                            FROM Gebruikers
                                             INNER JOIN Accountstatussen 
                                               ON Gebruiker.statusID=Accountstatussen.ID");
 
                         while ($row = $data->fetch()){
-                          echo "<tr onclick='document.location = 'koper.php';'>"; //fix this
+                          echo "<tr onclick=\"document.location='koper.php' \" >"; //fix this
                           echo "<td>$row[gebruikersnaam]</td>";
                           echo "<td>$row[voornaam]</td>";
                           echo "<td>$row[achternaam]</td>";
