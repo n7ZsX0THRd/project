@@ -1,3 +1,13 @@
+<?PHP
+session_start();
+
+if (!(isset($_SESSION['email']) != '')) {
+  session_destroy();
+  header ("Location: index.php?page=login");
+}
+?>
+
+
 
 <div class="container">
   <div class="row">
@@ -28,6 +38,10 @@
           <li>
             <a href="">Instellingen</a>
           </li>
+          <li>
+            <a href="php/logout.php">Log uit</a>
+          </li>
+
         </ul>
       </ul>
     </div>
