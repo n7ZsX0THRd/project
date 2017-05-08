@@ -40,7 +40,7 @@
     require_once('../php/database.php'); 
     pdo_connect();
 
-    $sorteerOp = "gebruikersnaam";
+    $sorteerOp = "2"; //IT DOESNT WORK
     $pagina = 0;
     $selectVoornaam = false;
     $selectAchternaam = false;
@@ -241,10 +241,18 @@
                     </thead>
                     <tbody>
                       <?php
-                        $data = $db->query("SELECT voornaam, achternaam, gebruikersnaam, emailadres, typegebruiker, /* beoordeling, Not yet implented*/Accountstatussen.omschrijving AS status, land, plaatsnaam, postcode, adresregel1, adresregel2 
-                                            FROM Gebruikers
-                                            INNER JOIN Accountstatussen 
-                                              ON Gebruikers.statusID=Accountstatussen.ID");
+                        $data = $db->prepare("SELECT voornaam, achternaam, gebruikersnaam, emailadres, typegebruiker, /* beoordeling, Not yet implented*/Accountstatussen.omschrijving AS status, land, plaatsnaam, postcode, adresregel1, adresregel2 
+                                                        FROM Gebruikers
+                                                        INNER JOIN Accountstatussen 
+                                                          ON Gebruikers.statusID=Accountstatussen.ID
+                                                        ORDER BY 
+                                                        CASE ?
+                                                        WHEN 1 THEN voornaam
+                                                        WHEN 2 THEN achternaam
+                                                        END");
+                        $data->execute(array($sorteerOp));  
+                        $count=$data->rowCount();
+                        print(" $count rows.\n");           
 
                         while ($row = $data->fetch()){
                           $gebruikersnaam ="$row[gebruikersnaam]";
