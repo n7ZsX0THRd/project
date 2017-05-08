@@ -5,6 +5,9 @@ pdo_connect();
     if (!empty($_GET)) {
       $gebruikersnaam = htmlspecialchars($_GET['gebruikersnaam']);
     }
+    else {
+      $gebruikersnaam = 'gebruiker niet gevonden';
+    }
   }
 
 
