@@ -86,7 +86,7 @@ pdo_connect();
                            </div>
                            <div class="modal-footer">
                              <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
-                             <button type="button" class="btn btn-primary" action="delete_user('Cooper')">Verwijderen</button>
+                             <button type="button" class="btn btn-primary" onclick="myAjax()">Verwijderen</button>
                            </div>
                          </div>
                        </div>
@@ -139,5 +139,15 @@ pdo_connect();
     <script src="../bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script>function myAjax() {
+          $.ajax({
+               type: "POST",
+               url: 'ajax.php',
+               data:{action:'delete'},
+               success:function(html) {
+                 alert(html);
+               }
+          });
+     } </script>
   </body>
 </html>
