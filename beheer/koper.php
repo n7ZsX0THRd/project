@@ -1,7 +1,12 @@
+<?php
+  if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if (!empty($_GET)) {
+      $gebruikersnaam = htmlspecialchars($_GET['gebruikersnaam']);
+    }
+  }
 
 
-
-
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -48,7 +53,7 @@
             <article class="col-md-3">
                 <aside class="profile-sidebar">
                     <div class="user">
-                        <h2></h2>
+                        <h2><?php echo $gebruikersnaam ?></h2>
                         <img class="img-responsive img-circle" src="../images/users/JohnDoe.jpg" alt="John Doe face">
                         <button class="btn btn-niagara" type="button" name="Bericht" >
                             <i class="glyphicon glyphicon-envelope"></i>
@@ -76,7 +81,7 @@
                            </div>
                            <div class="modal-footer">
                              <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
-                             <button type="button" class="btn btn-primary">Verwijderen</button>
+                             <button type="button" class="btn btn-primary" onclick="document.location="../php/scripts/delete_user.php?gebruikersnaam="<?php echo $gebruikersnaam ?>">Verwijderen</button>
                            </div>
                          </div>
                        </div>
@@ -112,7 +117,7 @@
 
             <article class="col-md-9">
                 <div class="user-content">
-                    <h2>Over John Doe</h2>
+                    <h2>Over <?php echo $gebruikersnaam ?></h2>
                 </div>
 		</article>
 
