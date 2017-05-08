@@ -10,18 +10,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
   $email = $_POST['l_naam'];
   $wachtwoord = $_POST['l_wachtwoord'];
 
-  $data=$db ->query("SELECT * FROM Gebruikers WHERE emailadres='$email' and wachtwoord='$wachtwoord'");
+  $data= $db->query("SELECT TOP(1) wachtwoord FROM Gebruikers WHERE emailadres='$email'");
 
-  $Totaal = $number_of_rows = count($data->fetchAll());
+  $result = $data->fetchAll();
+  $Totaal = count($result);
 
+  var_dump($result);
+  
       if($Totaal == 1)
       {
-      $_SESSION['email'] = $email;
-      header('location: index.php?page=home');
+        if(password_verify($wachtwoord, $hashed_password))
+        {
+          $_SESSION['email'] = $email;
+          header('location: index.php?page=home');
+        }
+        $error = 1;
       }
       else
       {
-      $error = 1;
+        $error = 1;
       }
   }
 ?>

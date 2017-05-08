@@ -35,7 +35,7 @@ function create_user($data,$db){
           $data['r_city'],
           $data['r_birthday'].'-'.$data['r_birthmonth'].'-'.$data['r_birthyear'],
           $data['r_email'],
-          $data['r_password'],
+          password_hash($data['r_password'], PASSWORD_DEFAULT),
           $data['r_secret_question'],
           $data['r_secret_question_answer']
         )

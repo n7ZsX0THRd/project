@@ -86,7 +86,7 @@ pdo_connect();
                            </div>
                            <div class="modal-footer">
                              <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
-                             <button type="button" class="btn btn-primary" onclick="myAjax(array('action' => 'delete','data' => '<?php echo $gebruikersnaam ?>'))">Verwijderen</button>
+                             <button type="button" class="btn btn-primary" onclick="myAjax(['delete','<?php echo $gebruikersnaam ?>'])">Verwijderen</button>
                            </div>
                          </div>
                        </div>
