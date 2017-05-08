@@ -177,11 +177,11 @@
         <?php if($selectGeboortedatum){ echo 'checked';} ?> >
         Geboortedatum
       </label>
-      <label class="form-check-label selectie">
+      <!--<label class="form-check-label selectie">
         <input type="checkbox" name="selectBeoordeling" value="true" class="form-check-input" 
-        <?php if($selectBeoordeling){ echo 'checked';} ?> >
+        <?php// if($selectBeoordeling){ echo 'checked';} ?> >
         Beoordeling
-      </label>
+      </label>-->
       <label class="form-check-label selectie">
         <input type="checkbox" name="selectStatus" value="true" class="form-check-input" 
         <?php if($selectStatus){ echo 'checked';} ?> >
@@ -229,7 +229,7 @@
                     if($selectGebruikersnaam){ echo '<th>Gebruikersnaam</th>';}
                     if($selectEmail){ echo '<th>Email</th>';}
                     if($selectAccountType){ echo '<th>Account type</th>';}
-                    if($selectBeoordeling){ echo '<th>Beoordeling</th>';}
+                    //if($selectBeoordeling){ echo '<th>Beoordeling</th>';}
                     if($selectStatus){ echo '<th>Status</th>';}
                     if($selectLand){ echo '<th>Land</th>';}
                     if($selectPlaatsnaam){ echo '<th>Plaatsnaam</th>';}
@@ -241,18 +241,26 @@
                     </thead>
                     <tbody>
                       <?php
-                        $data = $db->query("SELECT gebruikersnaam, voornaam, achternaam, Accountstatussen.omschrijving AS status 
+                        $data = $db->query("SELECT voornaam, achternaam, gebruikersnaam, emailadres, typegebruiker, /* beoordeling, Not yet implented*/Accountstatussen.omschrijving AS status, land, plaatsnaam, postcode, adresregel1, adresregel2 
                                             FROM Gebruikers
                                             INNER JOIN Accountstatussen 
                                               ON Gebruikers.statusID=Accountstatussen.ID");
 
                         while ($row = $data->fetch()){
                           $gebruikersnaam ="$row[gebruikersnaam]";
-                          echo "<tr onclick=\"document.location='koper.php?gebruikersnaam=".$gebruikersnaam."' \" >"; //fix this
-                          echo "<td>$gebruikersnaam</td>";
-                          echo "<td>$row[voornaam]</td>";
-                          echo "<td>$row[achternaam]</td>";
-                          echo "<td>$row[status]</td>";
+                          echo "<tr onclick=\"document.location='koper.php?gebruikersnaam=".$gebruikersnaam."' \" >";
+                          if($selectVoornaam){ echo "<td>$row[voornaam]</te>";}
+                          if($selectAchternaam){ echo "<td>$row[achternaam]</td>";}
+                          if($selectGebruikersnaam){ echo "<td>".$gebruikersnaam."</td>";}
+                          if($selectEmail){ echo "<td>$row[emailadres]</td>";}
+                          if($selectAccountType){ echo "<td>$row[typegebruiker]</td>";}
+                          //if($selectBeoordeling){ echo '<td>Beoordeling</td>';}
+                          if($selectStatus){ echo "<td>$row[status]</td>";}
+                          if($selectLand){ echo "<td>$row[land]</td>";}
+                          if($selectPlaatsnaam){ echo "<td>$row[plaatsnaam]</td>";}
+                          if($selectPostcode){ echo "<td>$row[postcode]</td>";}
+                          if($selectAdresregel1){ echo "<td>$row[adresregel1]</td>";}
+                          if($selectAdresregel2){ echo "<td>$row[adresregel2]</td>";}
                           echo "</tr>";
                         }
                       ?>
