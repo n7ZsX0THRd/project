@@ -1,3 +1,8 @@
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -34,32 +39,47 @@
   </head>
 
   <body>
- 
+
     <?php include '../php/includes/header.php' ?>
 
     <main class="container">
         <h1> Beheer gebruiker</h1>
-        <section class="row profile"> 
+        <section class="row profile">
             <article class="col-md-3">
-                <aside class="profile-sidebar">       
+                <aside class="profile-sidebar">
                     <div class="user">
-                        <h2>John Doe</h2>
+                        <h2></h2>
                         <img class="img-responsive img-circle" src="../images/users/JohnDoe.jpg" alt="John Doe face">
-                        <button class="btn btn-niagara" type="button" name="Bericht" > 
+                        <button class="btn btn-niagara" type="button" name="Bericht" >
                             <i class="glyphicon glyphicon-envelope"></i>
-                            Bericht 
+                            Bericht
                         </button>
+
                         <div class="btn-group" data-toggle="buttons">
-                            <button class="btn btn-orange" type="button" name="Verwijder" >
+                            <button class="btn btn-orange" type="button" name="Bewerken" >
                                 <i class="glyphicon glyphicon-edit"></i>
                                 Bewerken
                             </button>
-                            <button class="btn btn-danger" type="button" name="Verwijder" >
-                                    <i class="glyphicon glyphicon-trash"></i>
-                                    Verwijder
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#myModal" >
+                                <i class="glyphicon glyphicon-trash"></i>
+                                Verwijder
                             </button>
                         </div>
+                    </div>
 
+                    <div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal">
+                      <div class="modal-dialog modal-sm" role="document">
+                         <div class="modal-content">
+                           <div class="modal-header">
+                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                             <h4 class="modal-title" id="myModalLabel">Weet u zeker dat u deze gebruiker wil verwijderen?</h4>
+                           </div>
+                           <div class="modal-footer">
+                             <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
+                             <button type="button" class="btn btn-primary">Verwijderen</button>
+                           </div>
+                         </div>
+                       </div>
                     </div>
 
                     <div class="profile-usermenu">
