@@ -42,7 +42,7 @@ function create_user($data){
   */
   try {
       $db = $pdo->prepare(" INSERT INTO Gebruikers
-      VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+      VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
       $db->execute($data);
   } catch (PDOException $e) {
       echo "Could not insert user, ".$e->getMessage();
