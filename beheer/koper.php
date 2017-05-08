@@ -69,14 +69,14 @@ pdo_connect();
                                 <i class="glyphicon glyphicon-edit"></i>
                                 Bewerken
                             </button>
-                            <button class="btn btn-danger" data-toggle="modal" data-target="#myModal" >
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#myModalDelete" >
                                 <i class="glyphicon glyphicon-trash"></i>
                                 Verwijder
                             </button>
                         </div>
                     </div>
 
-                    <div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal">
+                    <div class="modal fade bs-example-modal-sm" id="myModalDelete" tabindex="-1" role="dialog" aria-labelledby="myModalDelete">
                       <div class="modal-dialog modal-sm" role="document">
                          <div class="modal-content">
                            <div class="modal-header">
