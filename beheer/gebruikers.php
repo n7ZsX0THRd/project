@@ -36,35 +36,58 @@
   <body>
  
     <?php 
-    include '../php/includes/header.php';            
+    //include '../php/includes/header.php';            
     require_once('../php/database.php'); 
     pdo_connect();
+
+    $sorteerOp = "gebruikersnaam";
+    $pagina = 0;
+    $selectVoornaam = false;
+    $selectAchternaam = false;
+    $selectGebruikersnaam = false;
+    $selectGeboortedatum = false;
+    $selectBeoordeling = false;
+    $selectStatus = false;
+    $selectAccountType = false;
+    $selectEmail = false;
+    $selectAdresregel1 = false;
+    $selectAdresregel2 = false;
+    $selectPostcode = false;
+    $selectPlaatsnaam = false;
+    $selectLand = false;
+
+
 
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (!empty($_GET)) {
           if(!empty($_GET['sorteerOp'])){
-              $sorteerOp = htmlspecialchars($_GET['sorteerOp']); 
+            $sorteerOp = htmlspecialchars($_GET['sorteerOp']); 
           }else{
-              $sorteerOp='';
+            $sorteerOp='';
           }
           if(!empty($_GET['pagina'])){
-              $pagina = htmlspecialchars($_GET['pagina']);  
-          }else{
-              $pagina=0;
+            $pagina = htmlspecialchars($_GET['pagina']);  
+          } else {
+            $pagina = 0;
           }
           if(!empty($_GET['selectVoornaam'])){
-          $selectVoornaam= ($_GET['selectVoornaam'] === 'true');
-          }else{
+            $selectVoornaam = ($_GET['selectVoornaam'] === 'true');
+          } else {
             $selectVoornaam = false;
           }
           if(!empty($_GET['selectAchternaam'])){
-          $selectAchternaam= ($_GET['selectAchternaam'] === 'true');
+            $selectAchternaam= ($_GET['selectAchternaam'] === 'true');
           }else{
             $selectAchternaam = false;
           }
+          if(!empty($_GET['selectGebruikersnaam'])){
+            $selectGebruikersnaam = ($_GET['selectGebruikersnaam'] === 'true');
+          }else{
+            $selectGebruikersnaam = false;
+          }
           if(!empty($_GET['selectAdresregel1'])){
-          $selectAdresregel1 = ($_GET['selectAdresregel1'] === 'true');
+            $selectAdresregel1 = ($_GET['selectAdresregel1'] === 'true');
           }else{
             $selectAdresregel1 = false;
           }
@@ -84,9 +107,34 @@
             $selectPlaatsnaam = false;
           }
           if(!empty($_GET['selectLand'])){
-            $selectPlaatsnaam = ($_GET['selectLand'] === 'true');
+            $selectLand = ($_GET['selectLand'] === 'true');
           }else{
-            $selectPlaatsnaam = false;
+            $selectLand = false;
+          }
+          if(!empty($_GET['selectGeboortedatum'])){
+            $selectGeboortedatum = ($_GET['selectGeboortedatum'] === 'true');
+          }else{
+            $selectGeboortedatum = false;
+          }
+          if(!empty($_GET['selectEmail'])){
+            $selectEmail = ($_GET['selectEmail'] === 'true');
+          }else{
+            $selectEmail = false;
+          }
+          if(!empty($_GET['selectAccountType'])){
+            $selectAccountType = ($_GET['selectAccountType'] === 'true');
+          }else{
+            $selectAccountType = false;
+          }
+          if(!empty($_GET['selectBeoordeling'])){
+            $selectBeoordeling = ($_GET['selectBeoordeling'] === 'true');
+          }else{
+            $selectBeoordeling = false;
+          }
+          if(!empty($_GET['selectStatus'])){
+            $selectStatus = ($_GET['selectStatus'] === 'true');
+          }else{
+            $selectStatus = false;
           }
       }
     }
@@ -97,48 +145,98 @@
         <section class="row">
     <aside class="col-md-4 col-lg-2 col-sm-4 sidebar">
       <h3>Selectie</h3>
-  <div class="form-check" >
-  <h4>Soort </h4>
-  <input type="radio" name="user-type" value="Buyer" checked> Kopers<br>
-  <input type="radio" name="user-type" value="Seller"> Verkopers<br>
-  <input type="radio" name="user-type" value="Both"> Alle
+  <form action="gebruikers.php" method="get" class="form-check" >
+    <h4>Soort </h4>
+    <input type="radio" name="user-type" value="Buyer" checked> Kopers<br>
+    <input type="radio" name="user-type" value="Seller"> Verkopers<br>
+    <input type="radio" name="user-type" value="Both"> Alle
 
-  <h4>Kolommen </h4>
-    <label class="form-check-label selectie">
-      <input type="checkbox" class="form-check-input" checked>
-      Voornaam
-    </label>
-    <label class="form-check-label selectie">
-      <input type="checkbox" class="form-check-input" checked>
-      Achternaam
-    </label>
-    <label class="form-check-label selectie">
-      <input type="checkbox" class="form-check-input" checked>
-      Email
-    </label>
-    <label class="form-check-label selectie">
-      <input type="checkbox" class="form-check-input" checked>
-      Beoordeling
-    </label>
-    <label class="form-check-label selectie">
-      <input type="checkbox" class="form-check-input" checked>
-      Status
-    </label>
-    <button class="btn btn-orange" type="button" name="Accept" >
-    <i class="glyphicon glyphicon-ok"></i>
-    Pas toe
-    </button>
-  </div>
+    <h4>Kolommen </h4>
+      <label class="form-check-label selectie">
+        <input type="checkbox" name="selectVoornaam" value="true" class="form-check-input"
+        <?php if($selectVoornaam){ echo 'checked';} ?> >
+        Voornaam
+      </label>
+      <label class="form-check-label selectie">
+        <input type="checkbox" name="selectAchternaam" value="true" class="form-check-input"
+        <?php if($selectAchternaam){ echo 'checked';} ?> >
+        Achternaam
+      </label>
+      <label class="form-check-label selectie">
+        <input type="checkbox" name="selectGebruikersnaam" value="true" class="form-check-input"
+        <?php if($selectGebruikersnaam){ echo 'checked';} ?> >
+        Gebruikersnaam
+      </label>
+      <label class="form-check-label selectie">
+        <input type="checkbox" name="selectEmail" value="true" class="form-check-input" 
+        <?php if($selectEmail){ echo 'checked';} ?> >
+        Email
+      </label>
+      <label class="form-check-label selectie">
+        <input type="checkbox" name="selectGeboortedatum" value="true" class="form-check-input"
+        <?php if($selectGeboortedatum){ echo 'checked';} ?> >
+        Geboortedatum
+      </label>
+      <label class="form-check-label selectie">
+        <input type="checkbox" name="selectBeoordeling" value="true" class="form-check-input" 
+        <?php if($selectBeoordeling){ echo 'checked';} ?> >
+        Beoordeling
+      </label>
+      <label class="form-check-label selectie">
+        <input type="checkbox" name="selectStatus" value="true" class="form-check-input" 
+        <?php if($selectStatus){ echo 'checked';} ?> >
+        Status
+      </label>
+      <label class="form-check-label selectie">
+        <input type="checkbox" name="selectPostcode" value="true" class="form-check-input" 
+        <?php if($selectPostcode){ echo 'checked';} ?> >
+        Postcode
+      </label>
+      <label class="form-check-label selectie">
+        <input type="checkbox" name="selectAdresregel1" value="true" class="form-check-input" 
+        <?php if($selectAdresregel1){ echo 'checked';} ?> >
+        Adres regel 1
+      </label>
+      <label class="form-check-label selectie">
+        <input type="checkbox" name="selectAdresregel2" value="true" class="form-check-input" 
+        <?php if($selectAdresregel2){ echo 'checked';} ?> >
+        Adres regel 2
+      </label>
+      <label class="form-check-label selectie">
+        <input type="checkbox" name="selectPlaatsnaam" value="true" class="form-check-input" 
+        <?php if($selectPlaatsnaam){ echo 'checked';} ?> >
+        Plaatsnaam
+      </label>
+      <label class="form-check-label selectie">
+        <input type="checkbox" name="selectLand" value="true" class="form-check-input" 
+        <?php if($selectLand){ echo 'checked';} ?> >
+        Land
+      </label>
+      <button class="btn btn-orange" type="submit"  name="Accept" >
+      <i class="glyphicon glyphicon-ok"></i>
+      Pas toe
+      </button>
+  </form>
     </aside>
             <article class="col-md-8">
                 <h2> Gebruikers </h2>
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th>Gebruikersnaam</td>
-                        <th>Voornaam</th>
-                        <th>Achternaam</th>
-                        <th>Status</th>
+                    <?php 
+                    if($selectVoornaam){ echo '<th>Voornaam</th>';}
+                    if($selectAchternaam){ echo '<th>Achternaam</th>';}
+                    if($selectGebruikersnaam){ echo '<th>Gebruikersnaam</th>';}
+                    if($selectEmail){ echo '<th>Email</th>';}
+                    if($selectAccountType){ echo '<th>Account type</th>';}
+                    if($selectBeoordeling){ echo '<th>Beoordeling</th>';}
+                    if($selectStatus){ echo '<th>Status</th>';}
+                    if($selectLand){ echo '<th>Land</th>';}
+                    if($selectPlaatsnaam){ echo '<th>Plaatsnaam</th>';}
+                    if($selectPostcode){ echo '<th>Postcode</th>';}
+                    if($selectAdresregel1){ echo '<th>Adres regel 1</th>';}
+                    if($selectAdresregel2){ echo '<th>Adres regel 2</th>';}
+                    ?>
                     </tr>
                     </thead>
                     <tbody>
@@ -149,8 +247,7 @@
                                               ON Gebruikers.statusID=Accountstatussen.ID");
 
                         while ($row = $data->fetch()){
-                          echo "<tr onclick=\"document.location='koper.php' \" >"; //fix this
-                          echo "<td>$row[gebruikersnaam]</td>";
+                          echo "<td>$gebruikersnaam</td>";
                           echo "<td>$row[voornaam]</td>";
                           echo "<td>$row[achternaam]</td>";
                           echo "<td>$row[status]</td>";
