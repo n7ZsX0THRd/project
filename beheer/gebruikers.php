@@ -247,6 +247,8 @@
                                               ON Gebruikers.statusID=Accountstatussen.ID");
 
                         while ($row = $data->fetch()){
+                          $gebruikersnaam ="$row[gebruikersnaam]";
+                          echo "<tr onclick=\"document.location='koper.php?gebruikersnaam=".$gebruikersnaam."' \" >"; //fix this
                           echo "<td>$gebruikersnaam</td>";
                           echo "<td>$row[voornaam]</td>";
                           echo "<td>$row[achternaam]</td>";
