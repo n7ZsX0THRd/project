@@ -1,11 +1,27 @@
 <?PHP
 session_start();
+include ('php/database.php');
+pdo_connect();
 
 if (!(isset($_SESSION['email']) != '')) {
   session_destroy();
   header ("Location: index.php?page=login");
 }
+
+$email = $_SESSION['email'];
+$query="SELECT TOP(1) * FROM Gebruikers WHERE emailadres = '$email'";
+
+/*foreach ($db->query($query) as $row)
+{
+  print_r($row);
+}
+*/
+$result = $db->query($query).fetchall()[0];
+
 ?>
+
+
+
 
 
 
@@ -69,7 +85,7 @@ if (!(isset($_SESSION['email']) != '')) {
                 <div class="row">
                   <div class="col-lg-5">
                     <label for="exampleInputEmail1">Voornaam</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Voornaam">
+                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Voornaam" value="<?php echo $result['voornaam'] ?>">
                   </div>
                   <div class="col-lg-7">
                     <label for="exampleInputEmail1">Achternaam</label>
