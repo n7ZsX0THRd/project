@@ -41,6 +41,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $_SESSION['warning']['show_required_fields_warning'] = true;
     $_SESSION['warning']['missing_fields'] = $missing;
   }
+  else
+  {
+    if($_POST['r_password'] !== $_POST['r_password_confirm'])
+    {
+      $_SESSION['warning']['incorrect_passwords'] = true;
+    }
+    else
+    {
+      if($_POST['r_email'] !== $_POST['r_email_confirm'])
+      {
+        $_SESSION['warning']['incorrect_email'] = true;
+      }
+      else
+      {
+        if(checkdate(intval($_POST['r_birthmonth']), intval($_POST['r_birthday']), intval($_POST['r_birthyear'])) === false)
+        {
+          $_SESSION['warning']['invalid_birthdate'] = true;
+        }
+        else
+        {
+
+        }
+      }
+    }
+  }
 }
 ?>
 <div class="container">
@@ -52,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             <form class="form-horizontal" method="post" enctype="multipart/form-data" action="">
             <div class="login">
                   <?php
-                    if($_SESSION['warning']['show_required_fields_warning'] === true){
+                    if(isset($_SESSION['warning']['show_required_fields_warning']) && $_SESSION['warning']['show_required_fields_warning'] === true){
                   ?>
                     <div class="bg-danger" style="padding:5px;margin-bottom:5px;">Je mist een aantal velden:
                       <ul>
@@ -65,36 +90,56 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                       </ul>
                     </div>
                   <?php
-                    }
-                  ?>
+                }
+                else if(isset($_SESSION['warning']['incorrect_passwords']) && $_SESSION['warning']['incorrect_passwords'] === true)
+                {
+                ?>
+                  <p class="bg-danger">De opgegeven wachtwoorden voldoen niet aan de eisen of komen niet overeen</p>
+                <?php
+                }
+                else if(isset($_SESSION['warning']['incorrect_email']) && $_SESSION['warning']['incorrect_email'] === true)
+                {
+                ?>
+                  <p class="bg-danger">De opgegeven emailadressen voldoen niet aan de eisen of komen niet overeen</p>
+                <?php
+                }
+                else if(isset($_SESSION['warning']['invalid_birthdate']) && $_SESSION['warning']['invalid_birthdate'] === true)
+                {
+                ?>
+                  <p class="bg-danger">De opgegeven geboortedatum is ongeldig</p>
+                <?php
+                }
+                ?>
                   <!-- Gebruiker gegevens -->
                   <div class="input-group">
                       <div class="input-group-addon "><span class="glyphicon glyphicon-user" aria-hidden="true" background="#f0f0f0"></span></div>
-                      <input type="text" class="form-control" id="Tel" name="r_username" placeholder="Gebruikersnaam">
-                      <input type="text" class="form-control" id="Voornaam" name="r_firstname" placeholder="Voornaam">
-                      <input type="text" class="form-control" id="Achternaam" name="r_lastname" placeholder="Achternaam">
+                      <input type="text" class="form-control" id="Tel" name="r_username" value="<?php if(isset($_POST['r_username'])){ echo $_POST['r_username']; } ?>" placeholder="Gebruikersnaam">
+                      <input type="text" class="form-control" id="Voornaam" name="r_firstname" value="<?php if(isset($_POST['r_firstname'])){ echo $_POST['r_firstname']; } ?>" placeholder="Voornaam">
+                      <input type="text" class="form-control" id="Achternaam" name="r_lastname" value="<?php if(isset($_POST['r_lastname'])){ echo $_POST['r_lastname']; } ?>" placeholder="Achternaam">
                       <select class="form-control" style="max-width:30%" name="r_birthday">
-                        <option selected disabled>Dag</option>
+                        <option <?php if(isset($_POST['r_birthday']) === false){ echo 'selected'; } ?> disabled>Dag</option>
                         <?php for ($i = 1; $i <= 31; $i++) { ?>
-                            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                            <option value="<?php echo $i; ?>" <?php if(isset($_POST['r_birthday']) && $_POST['r_birthday'] == $i){  echo 'selected'; } ?>><?php echo $i; ?></option>
                         <?php } ?>
                       </select>
                       <select class="form-control" style="max-width:30%" name="r_birthmonth">
-                        <option selected disabled>Maand</option>
+                        <option <?php if(isset($_POST['r_birthmonth']) === false){ echo 'selected'; } ?> disabled>Maand</option>
                         <?php
                         $months = array("januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december");
-                        foreach ($months as &$value)
+                        $index = 1;
+                        foreach ($months as $value)
                         {
                           ?>
-                            <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
+                            <option value="<?php echo $index; ?>" <?php if(isset($_POST['r_birthmonth']) && $_POST['r_birthmonth'] == $index){  echo 'selected'; } ?>><?php echo $value; ?></option>
                         <?php
+                          $index++;
                         }
                         ?>
                       </select>
                       <select class="form-control" style="max-width:40%" name="r_birthyear">
-                        <option selected disabled>Jaar</option>
+                        <option <?php if(isset($_POST['r_birthyear']) === false){ echo 'selected'; } ?> disabled>Jaar</option>
                         <?php for ($i = date("Y"); $i >= 1900; $i--) { ?>
-                            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                            <option value="<?php echo $i; ?>" <?php if(isset($_POST['r_birthyear']) && $_POST['r_birthyear'] == $i){  echo 'selected'; } ?>><?php echo $i; ?></option>
                         <?php } ?>
                       </select>
                   </div>
@@ -104,25 +149,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <!-- Adres gegevens -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></div>
-                      <input style="max-width:58%" type="adres" class="form-control" id="Adres" name="r_street_name" placeholder="Straat">
-                      <input style="max-width:20%" type="Number" class="form-control" id="Nummer" name="r_street_nr" placeholder="Nr.">
-                      <input style="max-width:22%" type="text" class="form-control" id="Nummer" name="r_street_addition" placeholder="Toev.">
-                      <input type="" class="form-control" id="Postcode" placeholder="Postcode" name="r_zipcode" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}">
+                      <input style="max-width:58%" type="adres" class="form-control" id="Adres" name="r_street_name" value="<?php if(isset($_POST['r_street_name'])){ echo $_POST['r_street_name']; } ?>" placeholder="Straat">
+                      <input style="max-width:20%" type="Number" class="form-control" id="Nummer" name="r_street_nr" value="<?php if(isset($_POST['r_street_nr'])){ echo $_POST['r_street_nr']; } ?>" placeholder="Nr.">
+                      <input style="max-width:22%" type="text" class="form-control" id="Nummer" name="r_street_addition" value="<?php if(isset($_POST['r_street_addition'])){ echo $_POST['r_street_addition']; } ?>" placeholder="Toev.">
+                      <input type="" class="form-control" id="Postcode" placeholder="Postcode" name="r_zipcode" value="<?php if(isset($_POST['r_zipcode'])){ echo $_POST['r_zipcode']; } ?>" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}">
                   </div>
                   <!-- einde adres gegevens -->
 
                   <!-- Telefoonnummer -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span></div>
-                      <input type="" class="form-control" id="Tel" name="r_phonenumber" placeholder="Telefoonnummer">
+                      <input type="" class="form-control" id="Tel" name="r_phonenumber" value="<?php if(isset($_POST['r_phonenumber'])){ echo $_POST['r_phonenumber']; } ?>" placeholder="Telefoonnummer">
                   </div>
                   <!-- Einde telefoonnummer -->
 
                   <!-- Email -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-envelope" aria-hidden="true" background="#f0f0f0"></span></div>
-                      <input type="email" class="form-control" id="inputEmail" name="r_email" placeholder="Email">
-                      <input type="email" class="form-control" id="inputEmail" name="r_email_confirm" placeholder="Bevestig email">
+                      <input type="email" class="form-control" id="inputEmail" name="r_email" value="<?php if(isset($_POST['r_email'])){ echo $_POST['r_email']; } ?>" placeholder="Email">
+                      <input type="email" class="form-control" id="inputEmail" name="r_email_confirm" value="<?php if(isset($_POST['r_email_confirm'])){ echo $_POST['r_email_confirm']; } ?>" placeholder="Bevestig email">
                   </div>
                   <!-- Einde email -->
 
@@ -138,16 +183,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></div>
                       <select class="form-control" name="r_secret_question">
-                        <option selected disabled>Geheime vraag</option>
+                        <option <?php if(isset($_POST['r_secret_question']) === false){ echo 'selected'; } ?> disabled>Geheime vraag</option>
                         <?php
                           while ($row = $secret_questions->fetch()){
                         ?>
-                          <option value="<?php echo $row['ID'];?>"><?php echo $row['vraag'];?></option>
+                          <option value="<?php echo $row['ID'];?>" <?php if(isset($_POST['r_secret_question']) && $_POST['r_secret_question'] == $row['ID']){  echo 'selected'; } ?>><?php echo $row['vraag'];?></option>
                         <?php
                           }
                         ?>
                       </select>
-                    <input type="text" class="form-control" id="Antwoord" name="r_secret_question_answer" placeholder="Antwoord">
+                    <input type="text" class="form-control" id="Antwoord" name="r_secret_question_answer" value="<?php if(isset($_POST['r_secret_question_answer'])){ echo $_POST['r_secret_question_answer']; } ?>" placeholder="Antwoord">
                   </div>
                   <!-- Einde geheime vraag -->
             </div>
@@ -155,7 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             <div class="bevestig">
                 <div class="row">
                     <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="position:relative;">
-                        <label for="accept"  class="padding-top"><input id="accept" name="r_terms_of_use" type="checkbox"> Akkoord met voorwaarden</label>
+                        <label for="accept"  class="padding-top"><input id="accept" name="r_terms_of_use" type="checkbox" <?php if(isset($_POST['r_terms_of_use']) && $_POST['r_terms_of_use'] === 'on'){ echo 'checked'; } ?>> Akkoord met voorwaarden</label>
                     </div>
                     <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <button type="submit" class="btn btn-orange align-right" >Registreer</button>
@@ -174,3 +219,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     </div>
 
 <?php include 'php/includes/footer.php' ?>
+<?php
+$_SESSION['warning'] = null;
+?>

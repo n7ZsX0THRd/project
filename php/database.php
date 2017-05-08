@@ -20,4 +20,31 @@ function delete_user($gebruikersnaam) {
         echo "Could not delete user, ".$e->getMessage();
     }
 }
+function create_user($data){
+  /*
+  'r_username' => 'Gebruikersnaam',
+  'r_firstname' => 'Voornaam',
+  'r_lastname' => 'Achternaam',
+  'r_birthday' => 'Geboortdag',
+  'r_birthyear' => 'Geboortejaar',
+  'r_birthmonth' => 'Geboortemaand',
+  'r_street_name' => 'Straat',
+  'r_street_nr' => 'Huisnummer',
+  'r_zipcode' => 'Postcode',
+  'r_phonenumber' => 'Telefoonnummer',
+  'r_email' => 'Email',
+  'r_email_confirm' => 'Email bevestiging',
+  'r_password' => 'Wachtwoord',
+  'r_password_confirm' => 'Wachtwoord bevestiging',
+  'r_secret_question' => 'Geheime vraag',
+  'r_secret_question_answer' => 'Geheime vraag antwoord',
+  'r_terms_of_use' => 'Gebruikersvoorwaarden'
+  */
+  try {
+      $db = $pdo->prepare(" DELETE FROM Gebruikers WHERE gebruikersnaam = ? ");
+      $db->execute(array($gebruikersnaam));
+  } catch (PDOException $e) {
+      echo "Could not delete user, ".$e->getMessage();
+  }
+}
 ?>
