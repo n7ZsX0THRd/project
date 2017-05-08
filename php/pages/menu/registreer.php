@@ -1,64 +1,100 @@
 <?php
-$dsn = "sqlsrv:Server=mssql2.iproject.icasites.nl,1433;Database=iproject2";
-try
-{
-                $conn = new PDO($dsn, "iproject2", "PHd1LgMs");
-                $conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+session_start();
 
-                $sql = "SELECT * FROM Information_Schema.Tables";
+include ('php/database.php');
+pdo_connect();
 
-                foreach ($conn->query($sql) as $row)
-                {
-                               print_r($row);
-                }
-                print_r('Done');
-}
-catch(PDOException $e)
-{
-    print_r($e->getMessage());
+$secret_questions = $db->query("SELECT ID,vraag FROM GeheimeVragen ORDER BY vraag ASC");
+
+$required_register_fields = Array (
+  'r_username' => 'Gebruikersnaam',
+  'r_firstname' => 'Voornaam',
+  'r_lastname' => 'Achternaam',
+  'r_birthday' => 'Geboortdag',
+  'r_birthyear' => 'Geboortejaar',
+  'r_birthmonth' => 'Geboortemaand',
+  'r_street_name' => 'Straat',
+  'r_street_nr' => 'Huisnummer',
+  'r_zipcode' => 'Postcode',
+  'r_phonenumber' => 'Telefoonnummer',
+  'r_email' => 'Email',
+  'r_email_confirm' => 'Email bevestiging',
+  'r_password' => 'Wachtwoord',
+  'r_password_confirm' => 'Wachtwoord bevestiging',
+  'r_secret_question' => 'Geheime vraag',
+  'r_secret_question_answer' => 'Geheime vraag antwoord',
+  'r_terms_of_use' => 'Gebruikersvoorwaarden'
+);
+
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+  $missing = array();
+
+  foreach($required_register_fields as $key => $value)
+  {
+    if(isset($_POST[$key]) === false || empty($_POST[$key]))
+      array_push($missing, $value);
+  }
+  if(count($missing) > 0)
+  {
+    $_SESSION['warning']['show_required_fields_warning'] = true;
+    $_SESSION['warning']['missing_fields'] = $missing;
+  }
 }
 ?>
-
-
-
-    <div class="container">
+<div class="container">
       <div class="row">
         <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 loginscherm">
           <h1>Registreren</h1>
           <p>Welkom op de beste veilingsite van Nederland</p>
             <div>
-            <form class="form-horizontal">
+            <form class="form-horizontal" method="post" enctype="multipart/form-data" action="">
             <div class="login">
-
+                  <?php
+                    if($_SESSION['warning']['show_required_fields_warning'] === true){
+                  ?>
+                    <div class="bg-danger" style="padding:5px;margin-bottom:5px;">Je mist een aantal velden:
+                      <ul>
+                      <?php
+                        foreach($_SESSION['warning']['missing_fields'] as $value)
+                        {
+                          echo '<li>'.$value.'</li>';
+                        }
+                      ?>
+                      </ul>
+                    </div>
+                  <?php
+                    }
+                  ?>
                   <!-- Gebruiker gegevens -->
                   <div class="input-group">
                       <div class="input-group-addon "><span class="glyphicon glyphicon-user" aria-hidden="true" background="#f0f0f0"></span></div>
-                      <input type="text" class="form-control" id="Tel" placeholder="Gebruikersnaam">
-                      <input type="text" class="form-control" id="Voornaam" placeholder="Voornaam">
-                      <input type="text" class="form-control" id="Achternaam" placeholder="Achternaam">
-                      <!--<input type="text" style="max-width:30%" class="form-control" id="Datum" placeholder="Dag">-->
-                      <select class="form-control" style="max-width:30%">
+                      <input type="text" class="form-control" id="Tel" name="r_username" placeholder="Gebruikersnaam">
+                      <input type="text" class="form-control" id="Voornaam" name="r_firstname" placeholder="Voornaam">
+                      <input type="text" class="form-control" id="Achternaam" name="r_lastname" placeholder="Achternaam">
+                      <select class="form-control" style="max-width:30%" name="r_birthday">
                         <option selected disabled>Dag</option>
                         <?php for ($i = 1; $i <= 31; $i++) { ?>
-                            <option><?php echo $i; ?></option>
+                            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                         <?php } ?>
                       </select>
-                      <select class="form-control" style="max-width:30%">
+                      <select class="form-control" style="max-width:30%" name="r_birthmonth">
                         <option selected disabled>Maand</option>
                         <?php
                         $months = array("januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december");
                         foreach ($months as &$value)
                         {
                           ?>
-                            <option><?php echo $value; ?></option>
+                            <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
                         <?php
                         }
                         ?>
                       </select>
-                      <select class="form-control" style="max-width:40%">
+                      <select class="form-control" style="max-width:40%" name="r_birthyear">
                         <option selected disabled>Jaar</option>
                         <?php for ($i = date("Y"); $i >= 1900; $i--) { ?>
-                            <option><?php echo $i; ?></option>
+                            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                         <?php } ?>
                       </select>
                   </div>
@@ -68,43 +104,50 @@ catch(PDOException $e)
                   <!-- Adres gegevens -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></div>
-                      <input style="max-width:58%" type="adres" class="form-control" id="Adres" placeholder="Adres">
-                      <input style="max-width:20%" type="Number" class="form-control" id="Nummer" placeholder="Nr.">
-                      <input style="max-width:22%" type="text" class="form-control" id="Nummer" placeholder="Toev.">
-                      <input type="" class="form-control" id="Postcode" placeholder="Postcode" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}">
+                      <input style="max-width:58%" type="adres" class="form-control" id="Adres" name="r_street_name" placeholder="Straat">
+                      <input style="max-width:20%" type="Number" class="form-control" id="Nummer" name="r_street_nr" placeholder="Nr.">
+                      <input style="max-width:22%" type="text" class="form-control" id="Nummer" name="r_street_addition" placeholder="Toev.">
+                      <input type="" class="form-control" id="Postcode" placeholder="Postcode" name="r_zipcode" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}">
                   </div>
                   <!-- einde adres gegevens -->
 
                   <!-- Telefoonnummer -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span></div>
-                      <input type="" class="form-control" id="Tel" placeholder="Telefoonnummer">
+                      <input type="" class="form-control" id="Tel" name="r_phonenumber" placeholder="Telefoonnummer">
                   </div>
                   <!-- Einde telefoonnummer -->
 
                   <!-- Email -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-envelope" aria-hidden="true" background="#f0f0f0"></span></div>
-                      <input type="email" class="form-control" id="inputEmail" placeholder="Email">
-                      <input type="email" class="form-control" id="inputEmail" placeholder="Bevestig email">
+                      <input type="email" class="form-control" id="inputEmail" name="r_email" placeholder="Email">
+                      <input type="email" class="form-control" id="inputEmail" name="r_email_confirm" placeholder="Bevestig email">
                   </div>
                   <!-- Einde email -->
 
                   <!-- Wachtwoord -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
-                      <input type="password" class="form-control" id="inputPassword" placeholder="Wachtwoord">
-                    <input type="password" class="form-control" id="inputPassword" placeholder="Bevestig wachtwoord">
+                      <input type="password" class="form-control" id="inputPassword" name="r_password" placeholder="Wachtwoord">
+                    <input type="password" class="form-control" id="inputPassword" name="r_password_confirm" placeholder="Bevestig wachtwoord">
                   </div>
                   <!-- Einde wachtwoord -->
 
                   <!-- Geheime vraag -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></div>
-                      <select class="form-control">
+                      <select class="form-control" name="r_secret_question">
                         <option selected disabled>Geheime vraag</option>
+                        <?php
+                          while ($row = $secret_questions->fetch()){
+                        ?>
+                          <option value="<?php echo $row['ID'];?>"><?php echo $row['vraag'];?></option>
+                        <?php
+                          }
+                        ?>
                       </select>
-                    <input type="text" class="form-control" id="Antwoord" placeholder="Antwoord">
+                    <input type="text" class="form-control" id="Antwoord" name="r_secret_question_answer" placeholder="Antwoord">
                   </div>
                   <!-- Einde geheime vraag -->
             </div>
@@ -112,10 +155,9 @@ catch(PDOException $e)
             <div class="bevestig">
                 <div class="row">
                     <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="position:relative;">
-                        <label for="accept"  class="padding-top"><input id="accept" name="accept" type="checkbox"> Akkoord met voorwaarden</label>
+                        <label for="accept"  class="padding-top"><input id="accept" name="r_terms_of_use" type="checkbox"> Akkoord met voorwaarden</label>
                     </div>
                     <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-
                         <button type="submit" class="btn btn-orange align-right" >Registreer</button>
                     </div>
                 </div>
