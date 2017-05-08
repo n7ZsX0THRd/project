@@ -145,6 +145,7 @@ pdo_connect();
                url: 'ajax.php',
                data:{action:actionvar},
                success:function(html) {
+                 window.location.href = "gebruikers.php";
                  alert(html);
                }
           });
