@@ -41,10 +41,11 @@ function create_user($data){
   'r_terms_of_use' => 'Gebruikersvoorwaarden'
   */
   try {
-      $db = $pdo->prepare(" DELETE FROM Gebruikers WHERE gebruikersnaam = ? ");
-      $db->execute(array($gebruikersnaam));
+      $db = $pdo->prepare(" INSERT INTO Gebruikers
+      VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+      $db->execute($data);
   } catch (PDOException $e) {
-      echo "Could not delete user, ".$e->getMessage();
+      echo "Could not insert user, ".$e->getMessage();
   }
 }
 ?>
