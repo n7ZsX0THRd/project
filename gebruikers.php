@@ -36,13 +36,13 @@
   <body>
  
     <?php 
-    //include '../php/includes/header.php';            
+    //include 'php/includes/header.php';            
     require_once('php/database.php'); 
     pdo_connect();
 
   
     $selectie = array(
-      "sorteerOp" => "Achternaam",
+      "sorteerOp" => "achternaam",
       "pagina" => 0,
       "selectVoornaam" => false,
       "selectAchternaam" => false,
@@ -64,7 +64,7 @@
           if(!empty($_GET['sorteerOp'])){
             $selectie["sorteerOp"] = htmlspecialchars($_GET['sorteerOp']); 
           }else{
-            $selectie["sorteerOp"] = 'Achternaam';
+            $selectie["sorteerOp"] = 'achternaam';
           }
           if(!empty($_GET['pagina'])){
             $selectie["pagina"] = htmlspecialchars($_GET['pagina']);  
@@ -139,7 +139,7 @@
       }
     }
 
-    echo http_build_query($selectie) . "\n";
+    //echo http_build_query($selectie) . "\n";
     
     ?>
 
@@ -264,8 +264,8 @@
                       ?> 
                       <th>
                         <label class="header">
-                        <input type="radio" name="sorteerOp" value="email" 
-                        <?php if($selectie["sorteerOp"]=="email"){ echo 'checked';} ?> >
+                        <input type="radio" name="sorteerOp" value="emailadres" 
+                        <?php if($selectie["sorteerOp"]=="emailadres"){ echo 'checked';} ?> >
                         <span>Email</span>
                         </label>
                       </th>
@@ -377,7 +377,21 @@
                         $result=$data->fetchAll();
 
                         $count=count($result);
-                        echo $count;    
+                        $sorteerOp=$selectie["sorteerOp"];
+                        global $sorteerOp;
+                        $sorteerOp=$selectie["sorteerOp"];
+                        echo $count;
+                        
+                          sort($result);
+                          function cmp($a, $b)
+                          {
+                            global $sorteerOp;
+                              return strcmp($a[$sorteerOp], $b[$sorteerOp]);
+                          }
+
+                          usort($result, "cmp");
+                          
+                          //array_multisort($sort['event_type'], SORT_DESC, $sort['title'], SORT_ASC,$mylist);
 
                        foreach($result as $row){
                           $gebruikersnaam ="$row[gebruikersnaam]";
