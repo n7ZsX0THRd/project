@@ -4,7 +4,7 @@ if(isset($_POST['register']))
 {
 	$email_id=$_POST['email'];
 	$pass=$_POST['password'];
-	$code=substr(md5(mt_rand()),0,15);
+	$code= rand(100000,999999);
 //	mysql_connect('localhost','root','');
 //	mysql_select_db('sample');
 //	
@@ -14,7 +14,7 @@ if(isset($_POST['register']))
 	$message = "Your Activation Code is ".$code."";
     $to=$email_id;
     $subject="Activation Code For EenmaalAndermaal";
-    $from = 'noreply@eenmaalandermaal.nl';
+    $from = 'noreply@iproject2.icasites.nl';
     $body='Your Activation Code is '.$code.' Please Click On This link http://iproject2.icasites.nl to activate your account.';
     $headers = "From:".$from;
     mail($to,$subject,$body,$headers);
