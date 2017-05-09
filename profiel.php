@@ -32,7 +32,7 @@ $query="SELECT TOP(1)
       ,[statusID]
       ,[bestandsnaam]FROM Gebruikers WHERE emailadres = '$email'";
 $result = $db->query($query)->fetchall()[0];
-
+$image = $result['bestandsnaam'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
@@ -210,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="col-lg-4">
                     <div class="square-image-fix" data-toggle="modal" data-target="#myModal">
                       <div class="edit-user-icon"><span class="glyphicon glyphicon-edit"></span></div>
-                      <img src="images/users/johndoe.jpg" id="showImageModal" class="img-responsive img-circle">
+                      <img src="images/users/<?php echo $image ?>" id="showImageModal" class="img-responsive img-circle">
                     </div>
                   </div>
                   <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal">
