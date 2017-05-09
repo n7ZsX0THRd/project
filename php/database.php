@@ -65,22 +65,22 @@ function create_verification_for_user($data,$db){
 }
 function update_user($data,$db){
   try {
-      $dbs = $db->prepare(" UPDATE Gebruikers SET (gebruikersnaam,voornaam,achternaam,adresregel1,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst) WHERE emailadres=$email
-      VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-      $dbs->execute(array(
-          $data['r_username'],
-          $data['r_firstname'],
-          $data['r_lastname'],
-          $data['r_street_name'].' '.$data['r_street_nr'].' '.$data['r_street_addition'],
-          $data['r_zipcode'],
-          $data['r_city'],
-          $data['r_birthday'].'-'.$data['r_birthmonth'].'-'.$data['r_birthyear'],
-          $data['r_email'],
-          password_hash($data['r_password'], PASSWORD_DEFAULT),
-          $data['r_secret_question'],
-          $data['r_secret_question_answer']
-        )
+      $db->query(" UPDATE Gebruikers SET
+
+      gebruikersnaam=$data['r_username'],
+      voornaam=$data['r_firstname'],achternaam =$data['r_lastname'],
+      adresregel1=$data['r_street_name'].' '.$data['r_street_nr'].' '.$data['r_street_addition'],
+      postcode=$data['r_zipcode'],
+      plaatsnaam=$data['r_city'],
+      geboortedatum=$data['r_birthday'].'-'.$data['r_birthmonth'].'-'.$data['r_birthyear'],
+      emailadres=$data['r_email'],
+      wachtwoord=password_hash($data['r_password'], PASSWORD_DEFAULT),
+      vraag=  $data['r_secret_question'],
+      antwoordtekst=$data['r_secret_question_answer'])
+
+      WHERE gebruikersnaam = $data['r_username']"
       );
+
       return true;
   } catch (PDOException $e) {
       return $e;

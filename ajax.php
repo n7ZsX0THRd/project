@@ -8,7 +8,7 @@
     }
   }
   if($_POST['action'][0] == 'savechanges') {
-    if((block_user($_POST['action'][1],$db))==1) {
+    if((update_user($_POST['action'][1],$db))==1) {
       echo 'Veranderingen opgeslagen';
     }
   }
