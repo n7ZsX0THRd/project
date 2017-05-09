@@ -213,8 +213,11 @@ p{
   margin-right:-15px;
 }
 .item-row{
-  background-color: #EFEFEF;
-  border-radius: 5px;
+  margin-left:-30px;
+  margin-right:-30px;
+}
+.thumbnail{
+
 }
 .item-card > h2{
   margin-top:0px;

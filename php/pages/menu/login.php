@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         if(password_verify($wachtwoord, $result[0]['wachtwoord']))
         {
           $_SESSION['email'] = $email;
-          header('location: index.php?page=home');
+          header('location: index.php');
         }
         $error = 1;
       }

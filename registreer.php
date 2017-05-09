@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             if(create_user($_POST,$db))
             {
               $_SESSION['email'] = $_POST['r_email'];
-              header('location: index.php?page=home');
+              header('location: index.php');
             }
         }
       }
@@ -84,6 +84,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
   }
 }
 ?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+        <?php include 'php/includes/default_header.php'; ?>
+
+        <title>Registreren - Eenmaal Andermaal</title>
+
+        <link href="css/login.css" rel="stylesheet">
+  </head>
+  <body>
+
+    <?php include 'php/includes/header.php' ?>
 <div class="container">
       <div class="row">
         <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 loginscherm">
@@ -226,7 +239,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                  <p class="sub-text-register">Al een account? <a href="index.php?page=login">Log dan hier in</a></p>
+                  <p class="sub-text-register">Al een account? <a href="login.php">Log dan hier in</a></p>
                 </div>
             </div>
         </form>
@@ -236,6 +249,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     </div>
 
 <?php include 'php/includes/footer.php' ?>
+</div>
+</div>
+
+
+
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
+<script>
+/*
+$("li.toggle-sub").click(function(evt) {
+
+  evt.preventDefault();
+  $(this).children("span").toggleClass('glyphicon-menu-right');
+  $(this).children("span").toggleClass('glyphicon-menu-down');
+  $(this).children(".sub").toggle();
+});
+*/
+</script>
+</body>
+</html>
 <?php
 $_SESSION['warning'] = null;
 ?>

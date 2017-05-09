@@ -1,49 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="bootstrap/favicon.ico">
 
-    <title>Normal Page</title>
+        <?php include 'php/includes/default_header.php'; ?>
 
-    <!-- Bootstrap core CSS -->
-    <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="bootstrap/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="bootstrap/assets/js/ie-emulation-modes-warning.js"></script>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <link href="stylesheet.css" rel="stylesheet">
-    <link href="css/login.css" rel="stylesheet">
+        <title>Veilingsite - Eenmaal Andermaal</title>
   </head>
 
   <body>
 
     <?php include 'php/includes/header.php' ?>
 
-    <?php
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12 home-header">
+          <h1>Eenmaal Andermaal</h1>
+          <p>Welkom op de beste veilingsite van Nederland</p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+    <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-3 col-lg-2 col-sm-3 sidebar">
+          <h3>Categorieën</h3>
+          <ul class="menubar">
+            <li>
+              <a href="">Menu Item</a>
+            </li>
+            <li class="toggle-sub">
+              <a href="">Menu Item</a>
+            </li>
+            <ul class="sub">
+              <li>
+                <a href="">Sub Item</a>
+              </li>
+              <li>
+                <a href="">Sub Item</a>
+              </li>
+            </ul>
+            <li class="toggle-sub">
+              <a href="">Menu Item</a>
+            </li>
+            <ul class="sub">
+              <li>
+                <a href="">Sub Item</a>
+              </li>
+              <li>
+                <a href="">Sub Item</a>
+              </li>
+            </ul>
+            <li>
+              <a href="">Menu Item</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-9 col-lg-10 col-sm-9">
+          <div class="container-fluid content_col">
+            <div class="row">
+              <div class="col-lg-12 remove-margin">
+                <h1>Boeken</h1>
+              <div>
+              <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
+                <div class="container-fixed">
+                  <div class="row item-row">
+                    <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                      <div class="thumbnail">
+                        <img src="images/vliegtuig.png" alt="...">
+                        <div class="caption">
+                          <h3>Thumbnail label</h3>
+                          <p>...</p>
+                          <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                      <div class="thumbnail">
+                        <img src="images/vliegtuig.png" alt="...">
+                        <div class="caption">
+                          <h3>Thumbnail label</h3>
+                          <p>...</p>
+                          <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                      <div class="thumbnail">
+                        <img src="images/vliegtuig.png" alt="...">
+                        <div class="caption">
+                          <h3>Thumbnail label</h3>
+                          <p>...</p>
+                          <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                      <div class="thumbnail">
+                        <img src="images/vliegtuig.png" alt="...">
+                        <div class="caption">
+                          <h3>Thumbnail label</h3>
+                          <p>...</p>
+                          <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-      if(isset($_GET['page']) && empty($_GET['page']) == false)
-        include 'php/pages/menu/'.$_GET['page'].'.php';
-      else
-        include 'php/pages/menu/home.php';
-    ?>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 remove-margin">
+            <h1>Boeken</h1>
+          <div>
+          <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
+            <div class="container-fixed">
+              <div class="row item-row">
+                <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                  <div class="thumbnail">
+                    <img src="images/vliegtuig.png" alt="...">
+                    <div class="caption">
+                      <h3>Thumbnail label</h3>
+                      <p>...</p>
+                      <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                  <div class="thumbnail">
+                    <img src="images/vliegtuig.png" alt="...">
+                    <div class="caption">
+                      <h3>Thumbnail label</h3>
+                      <p>...</p>
+                      <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                  <div class="thumbnail">
+                    <img src="images/vliegtuig.png" alt="...">
+                    <div class="caption">
+                      <h3>Thumbnail label</h3>
+                      <p>...</p>
+                      <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                  <div class="thumbnail">
+                    <img src="images/vliegtuig.png" alt="...">
+                    <div class="caption">
+                      <h3>Thumbnail label</h3>
+                      <p>...</p>
+                      <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 remove-margin">
+        <h1>Boeken</h1>
+      <div>
+      <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
+        <div class="container-fixed">
+          <div class="row item-row">
+            <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+              <div class="thumbnail">
+                <img src="images/vliegtuig.png" alt="...">
+                <div class="caption">
+                  <h3>Thumbnail label</h3>
+                  <p>...</p>
+                  <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+              <div class="thumbnail">
+                <img src="images/vliegtuig.png" alt="...">
+                <div class="caption">
+                  <h3>Thumbnail label</h3>
+                  <p>...</p>
+                  <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+              <div class="thumbnail">
+                <img src="images/vliegtuig.png" alt="...">
+                <div class="caption">
+                  <h3>Thumbnail label</h3>
+                  <p>...</p>
+                  <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+              <div class="thumbnail">
+                <img src="images/vliegtuig.png" alt="...">
+                <div class="caption">
+                  <h3>Thumbnail label</h3>
+                  <p>...</p>
+                  <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+      </div>
+
+    </div>
+    </div>
+    </div>
+    <?php include 'php/includes/footer.php' ?>
+    </div>
+    </div>
+
 
 
 
@@ -66,7 +251,6 @@
       $(this).children(".sub").toggle();
     });
     */
-    $('.datepickerbootstrap').datepicker({});
     </script>
   </body>
 </html>

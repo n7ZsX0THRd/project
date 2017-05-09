@@ -5,7 +5,7 @@ pdo_connect();
 
 if (!(isset($_SESSION['email']) != '')) {
   session_destroy();
-  header ("Location: index.php?page=login");
+  header ("Location: login.php");
 }
 
 $email = $_SESSION['email'];
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
   if(update_user($_POST,$db))
   {
   $_SESSION['email'] = $_POST['r_email'];
-  header('location: index.php?page=home');
+  header('location: index.php');
   }
 }
 
