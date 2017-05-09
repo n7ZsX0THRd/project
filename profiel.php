@@ -5,14 +5,32 @@ include ('php/database.php');
 include ('php/user.php');
 pdo_connect();
 
-
+/*
 if (!(isset($_SESSION['email']) != '')) {
   session_destroy();
   header ("Location: login.php");
 }
-
+*/
 $email = $_SESSION['email'];
-$query="SELECT TOP(1) * FROM Gebruikers WHERE emailadres = '$email'";
+$query="SELECT TOP(1)
+       [gebruikersnaam]
+      ,[voornaam]
+      ,[achternaam]
+      ,[adresregel1]
+      ,[adresregel2]
+      ,[postcode]
+      ,[plaatsnaam]
+      ,[land]
+      ,datepart(month,[geboortedatum]) AS geboortedag
+	    ,datepart(day,[geboortedatum]) AS geboortemaand
+	    ,datepart(year,[geboortedatum]) AS geboortejaar
+      ,[emailadres]
+      ,[wachtwoord]
+      ,[vraag]
+      ,[antwoordtekst]
+      ,[typegebruiker]
+      ,[statusID]
+      ,[bestandsnaam]FROM Gebruikers WHERE emailadres = '$email'";
 $result = $db->query($query)->fetchall()[0];
 
 
@@ -98,11 +116,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               </div>
               <div class="form-group">
                 <div class="row">
-                  <div class="col-lg-5">
+                  <div class="col-lg-4">
                     <label for="exampleInputEmail1">Voornaam</label>
                     <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Voornaam" value="<?php echo $result['voornaam']?>">
                   </div>
-                  <div class="col-lg-7">
+                  <div class="col-lg-8">
                     <label for="exampleInputEmail1">Achternaam</label>
                     <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Achternaam" value="<?php echo $result['achternaam']?>">
                   </div>
@@ -115,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                     <select class="form-control">
                       <option selected disabled>Dag</option>
                       <?php for ($i = 1; $i <= 31; $i++) { ?>
-                          <option><?php echo $i; ?></option>
+                          <option value="<?php echo $i; ?>" <?php if($result['geboortedag'] == $i){  echo 'selected'; } ?>><?php echo $i; ?></option>
                       <?php } ?>
                     </select>
                   </div>
@@ -124,12 +142,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                     <select class="form-control">
                       <option selected disabled>Maand</option>
                       <?php
+                      $index = 1;
                       $months = array("januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december");
-                      foreach ($months as &$value)
+                      foreach ($months as $value)
                       {
-                        ?>
-                          <option><?php echo $value; ?></option>
+                      ?>
+                      <option value="<?php echo $value; ?>" <?php if($result['geboortemaand'] == $index){  echo 'selected'; } ?>><?php echo $value; ?></option>
+
                       <?php
+                      $index++;
                       }
                       ?>
                     </select>
@@ -139,6 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                     <select class="form-control">
                       <option selected disabled>Jaar</option>
                       <?php for ($i = date("Y"); $i >= 1900; $i--) { ?>
+                          <option value="<?php echo $i; ?>" <?php if($result['geboortejaar'] == $i){  echo 'selected'; } ?>><?php echo $i; ?></option>
                           <option><?php echo $i; ?></option>
                       <?php } ?>
                     </select>
@@ -147,9 +169,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               </div>
               <div class="form-group">
                 <div class="row">
-                  <div class="col-lg-7">
-                    <label for="exampleInputEmail1">Adres</label>
+                  <div class="col-lg-8">
+                    <label for="exampleInputEmail1">Adres + Huisnr.</label>
                     <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Adres" value="<?php echo $result['adresregel1']?>">
+                  </div>
+                  <div class="col-lg-4">
+                    <label for="exampleInputEmail1">Postcode</label>
+                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Postcode" value="<?php echo $result['postcode']?>">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-lg-8">
+                    <label for="exampleInputEmail1">Woonplaats</label>
+                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Adres" value="<?php echo $result['plaatsnaam']?>">
+                  </div>
+                  <div class="col-lg-4">
+                    <label for="exampleInputEmail1">Landcode</label>
+                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Postcode" value="<?php echo $result['land']?>">
                   </div>
                 </div>
               </div>
@@ -202,7 +240,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="col-lg-12">
                      <div class="form-group">
                       <label for="exampleInputFile">Biografie</label>
-                      <textarea class="form-control" rows="3" style="max-width:100%;" placeholder="Biografie"></textarea>
+                      <textarea class="form-control" rows="10" style="max-width:100%;" placeholder="Biografie"></textarea>
                      </div>
                   </div>
                 </div>
