@@ -9,11 +9,16 @@
         $gebruikersnaam = htmlspecialchars($_GET['gebruikersnaam']);
         $query="SELECT TOP(1) * FROM Gebruikers WHERE gebruikersnaam = '$gebruikersnaam'";
         $result = $db->query($query)->fetchall()[0];
-        $image = $result['bestandsnaam'];
+        if(!empty($result['bestandsnaam'])) {
+          $image = $result['bestandsnaam'];
+        }
+        else {
+          $image = "geenfoto/geenfoto.png";
+        }
       }
       else {
         $gebruikersnaam = 'gebruiker niet gevonden';
-        $image = "images/users/geenfoto/geenfoto.png";
+        $image = "geenfoto/geenfoto.png";
       }
   }
 
