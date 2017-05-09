@@ -56,16 +56,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     {
       if($_POST['r_email'] !== $_POST['r_email_confirm'])
       {
-         /*
+         $code= rand(100000,999999);
          $to = $_POST['r_email'];
-         $subject = "Confirmation for $username";
-         $header = "Confirmation from";
-         $message = "Please click the link below to verify and activate your account. rn";
-         $message .= "http://www.yourname.com/confirm.php?passkey=$com_code";
-
-          $sentmail = mail($to,$subject,$message,$header);
-          print $sentmail;
-          */
+         $subject = "Activatie code voor EenmaalAndermaal";
+         $message= '
+         
+         Bedankt voor het aanmelden!
+         
+         Je account is aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.
+         
+         --------------------
+         Gebruikersnaam: '.$r_username.'
+         Wachtwoord: '.$password.' 
+         --------------------
+         
+         Klik op deze link om je account te activeren:
+         http://www.iproject2.icasites.nl/verify.php?email='.$r_email.'&hash='.$code.'
+         
+         '; //Bovenstaand bericht is de email die gebruikers ontvangen.
+          
+          $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
+          mail($to, $subject, $message, $headers);
 
         $_SESSION['warning']['incorrect_email'] = true;
       }
