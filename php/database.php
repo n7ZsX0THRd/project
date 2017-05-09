@@ -45,6 +45,24 @@ function create_user($data,$db){
       return $e;
   }
 }
+function create_verification_for_user($data,$db){
+  try {
+      $dbs = $db->prepare("SELECT COUNT(gebruikersnaam) as count FROM Activatiecodes WHERE gebruikersnaam=?");
+      $dbs->execute(array($data['gebruikersnaam']));
+      $count = $dbs->fetchAll()[0]['count'];
+
+      if($count == 0){
+        $dbs = $db->prepare("INSERT INTO Activatiecodes (gebruikersnaam,activatiecode) VALUES (?,?)");
+        $dbs->execute(array($data['gebruikersnaam'],$data['verificatiecode']));
+
+        return $data['verificatiecode'];
+      }
+
+      return true;
+  } catch (PDOException $e) {
+      return $e;
+  }
+}
 function update_user($data,$db){
   try {
       $dbs = $db->prepare(" UPDATE Gebruikers SET (gebruikersnaam,voornaam,achternaam,adresregel1,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst) WHERE emailadres=$email

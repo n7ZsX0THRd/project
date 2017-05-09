@@ -33,8 +33,8 @@ pdo_connect();
       </div>
     </div>
     <?php }} ?>
-    <div class="container-fluid"  style="width:100%;">
-      <div class="row">
+    <div class="container-fluid fullwidth-container-fix">
+      <div class="row fullwidth-width-row">
         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
           <div id="myCarousel" class="carousel slide" data-ride="carousel">
             <!-- Indicators -->
@@ -47,7 +47,7 @@ pdo_connect();
             <!-- Wrapper for slides -->
             <div class="carousel-inner">
               <div class="item active">
-                      <p>Dick Advocaat blijft tot en met het WK bondscoach als hij er met het Nederlands elftal in slaagt kwalificatie af te dwingen voor het eindtoernooi volgend jaar in Rusland. "Als Advocaat het met succes oppakt, is het logisch dat hij ook tijdens het WK de bondscoach is", zei Jean-Paul Decossaux dinsdag op een persconferentie in Zeist waar hij de aanstelling van Advocaat en diens assistent Ruud Gullit bevestigde. In eerste instantie maken Advocaat en Gullit alleen de kwalificatiereeks af en daarin moet Nederland nog vol aan de bak om het WK te halen. Door de nederlaag eind maart in Bulgarije, die Danny Blind zijn baan kostte als bondscoach, zakte Oranje naar de vierde plaats in kwalificatiegroep A, maar Decossaux geeft Nederland nog een goede kans om Rusland te halen. "We verwachten dat het duo Advocaat en Gullit het vuur bij Oranje weer kan aansteken, waardoor de kwalificatiereeks met succes vervolgd kan worden."</p>
+                    <p>Dick Advocaat blijft tot en met het WK bondscoach als hij er met het Nederlands elftal in slaagt kwalificatie af te dwingen voor het eindtoernooi volgend jaar in Rusland. "Als Advocaat het met succes oppakt, is het logisch dat hij ook tijdens het WK de bondscoach is", zei Jean-Paul Decossaux dinsdag op een persconferentie in Zeist waar hij de aanstelling van Advocaat en diens assistent Ruud Gullit bevestigde. In eerste instantie maken Advocaat en Gullit alleen de kwalificatiereeks af en daarin moet Nederland nog vol aan de bak om het WK te halen. Door de nederlaag eind maart in Bulgarije, die Danny Blind zijn baan kostte als bondscoach, zakte Oranje naar de vierde plaats in kwalificatiegroep A, maar Decossaux geeft Nederland nog een goede kans om Rusland te halen. "We verwachten dat het duo Advocaat en Gullit het vuur bij Oranje weer kan aansteken, waardoor de kwalificatiereeks met succes vervolgd kan worden."</p>
               </div>
 
               <div class="item">
@@ -61,12 +61,6 @@ pdo_connect();
 
             <!-- Left and right controls -->
           </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12 home-header">
-          <h1>Eenmaal Andermaal</h1>
-          <p>Welkom op de beste veilingsite van Nederland</p>
         </div>
       </div>
     </div>
