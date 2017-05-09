@@ -320,3 +320,14 @@ p{
   border-bottom-left-radius: 50%;
   color:#ea8220;
 }
+.carousel-inner > .item{
+  max-height:500px;
+  height:500px;
+  width:100%;
+  background-color:white;
+}
+.banner-top{
+  padding:15px 10px;
+  text-align:center;
+  border:1px solid #D3D0C0;
+}
