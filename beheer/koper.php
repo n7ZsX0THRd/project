@@ -1,9 +1,12 @@
 <?php
 include('../php/database.php');
 pdo_connect();
+
   if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!empty($_GET)) {
       $gebruikersnaam = htmlspecialchars($_GET['gebruikersnaam']);
+      $query="SELECT TOP(1) * FROM Gebruikers WHERE gebruikersnaam = '$gebruikersnaam'";
+      $result = $db->query($query)->fetchall()[0];
     }
     else {
       $gebruikersnaam = 'gebruiker niet gevonden';
