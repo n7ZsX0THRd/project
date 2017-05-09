@@ -19,20 +19,7 @@ pdo_connect();
 
     <?php include 'php/includes/header.php' ?>
 
-    <?php if (isUserLoggedIn()){
-        $user = getLoggedInUser($db);
-        if($user['statusID'] == 1){
-    ?>
-    <div class="container">
-      <div class="row">
-        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-          <p class="bg-warning banner-top">
-            <strong>Hey</strong>, <?php echo $user['voornaam']; ?> je hebt jouw account nog niet geverifieerd. Doe dat nu <strong><a href="verifieer.php">hier</a></strong>
-          </p>
-        </div>
-      </div>
-    </div>
-    <?php }} ?>
+
     <div class="container-fluid fullwidth-container-fix">
       <div class="row fullwidth-width-row">
         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
@@ -64,6 +51,20 @@ pdo_connect();
         </div>
       </div>
     </div>
+    <?php if (isUserLoggedIn()){
+        $user = getLoggedInUser($db);
+        if($user['statusID'] == 1){
+    ?>
+    <div class="container banner-top-container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+          <p class="bg-warning banner-top">
+            <strong>Hey</strong>, <?php echo $user['voornaam']; ?> je hebt jouw account nog niet geverifieerd. Doe dat nu <strong><a href="verifieer.php">hier</a></strong>
+          </p>
+        </div>
+      </div>
+    </div>
+    <?php }} ?>
     <div class="row">
     <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
     <div class="container-fluid">
