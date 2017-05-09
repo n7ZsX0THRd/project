@@ -47,20 +47,18 @@ function create_user($data,$db){
 }
 function update_user($data,$db){
   try {
-      $dbs = $db->prepare(" UPDATE Gebruikers SET (gebruikersnaam,voornaam,achternaam,adresregel1,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst) WHERE emailadres=$email
+      $dbs = $db->prepare(" UPDATE Gebruikers SET gebruikersnaam =,voornaam,achternaam,adresregel1,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst) WHERE emailadres=$email
       VALUES (?,?,?,?,?,?,?,?,?,?,?)");
       $dbs->execute(array(
-          $data['r_username'],
-          $data['r_firstname'],
-          $data['r_lastname'],
-          $data['r_street_name'].' '.$data['r_street_nr'].' '.$data['r_street_addition'],
-          $data['r_zipcode'],
-          $data['r_city'],
-          $data['r_birthday'].'-'.$data['r_birthmonth'].'-'.$data['r_birthyear'],
-          $data['r_email'],
+          $data['p_username'],
+          $data['p_firstname'],
+          $data['p_lastname'],
+          $data['p_street_name'].' '.$data['p_street_nr'].' '.$data['p_street_addition'],
+          $data['p_zipcode'],
+          $data['p_city'],
+          $data['p_birthday'].'-'.$data['p_birthmonth'].'-'.$data['p_birthyear'],
+          $data['p_email'],
           password_hash($data['r_password'], PASSWORD_DEFAULT),
-          $data['r_secret_question'],
-          $data['r_secret_question_answer']
         )
       );
       return true;
