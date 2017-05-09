@@ -6,6 +6,8 @@ if(isset($_GET['r_username']) && !empty($_GET['r_username']) && isset($_GET['cod
 }else{
     // Invalid approach
         echo 'Invalid approach, please use the link that has been send to your email.';
+        $code = rand(100000,999999);
+        echo $code;
 
 }
 ?>

@@ -58,9 +58,9 @@ function create_verification_for_user($data,$db){
         return $data['verificatiecode'];
       }
 
-      return true;
+      return 0;
   } catch (PDOException $e) {
-      return $e;
+      return 0;
   }
 }
 

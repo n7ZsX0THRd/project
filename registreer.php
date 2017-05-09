@@ -68,7 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         {
             if(create_user($_POST,$db))
             {
-              $code = create_verification_for_user(array('gebruikersnaam' => $_POST['r_gebruikersnaam'],'verificatiecode' => rand(100000,999999)), $db);
+              $random = rand(100000,999999);  
+              $code = create_verification_for_user(array('gebruikersnaam' => $_POST['r_gebruikersnaam'],'verificatiecode' => $random), $db);
               if($code['verificatiecode'] != 0) {
                 $to = $_POST['r_email'];
                 $subject = "Activatie code voor EenmaalAndermaal";
