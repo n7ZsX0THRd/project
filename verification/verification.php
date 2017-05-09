@@ -1,88 +1,62 @@
-<!DOCTYPE html>
- 
-<html>
-<head>
-    <title>EenmaalAndermaal > Sign up</title>
-    <link href="verification.css" type="text/css" rel="stylesheet" />
-</head>
-<body>
-    <!-- start header div -->
-    <div id="header">
-        <h3>EenmaalAndermaal > Sign up</h3>
-    </div>
-    <!-- end header div -->  
-     
-    <!-- start wrap div -->  
-    <div id="wrap">
-         
-        <!-- start php code -->
-        <?php
- 
-            if(isset($_POST['name']) && !empty($_POST['name']) AND isset($_POST['email']) && !empty($_POST['email'])){
-            // Form Submited
-        }    
-            if(isset($_POST['name']) && !empty($_POST['name']) AND isset($_POST['email']) && !empty($_POST['email'])){
-                $name = $_POST['name']; // Turn our post into a local variable
-                $email = $_POST['email']; // Turn our post into a local variable
-                
-                if(!eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$", $email)){
-                    // Return Error - Invalid Email
-                    $msg = 'The email you have entered is invalid, please try again.';
-                }else{
-                    // Return Success - Valid Email
-                    $msg = 'Your account has been made, <br /> please verify it by clicking the activation link that has been send to your email.';
-                    
-                    $hash = md5(rand(0, 1000)); //random 32 character snippet.
-                    
-                    $password = rand(1000, 5000); //random nummer tussen 1000 en 5000. Bijvoorbeeld 4568.
-                    
-                    $to = $email; //Send email to user
-                    $subject = 'Signup | Verification'; //Email subject
-                    $message = '
-                    
-                    Thanks for Signing up!
-                    
-                    Your account has been created, you can login with the following credentials after you have activated your account by pressing the url below.
-                    
-                    -----------------------
-                    Username: '.$name.'
-                    Password: '.$password.'
-                    -----------------------
-                    
-                    Please click this link to activate your account:
-                    http://www.iproject2.icasites.nl/verifaction/verify.php?email='.$email.'$hash='.$hash.'
-                    
-                    ';//Message including the link
-                    
-                    $headers = 'From:noreply@EenmaalAndermaal.nl' . "\r\n"; //Set form headers
-                    mail($to, $subject, $message, $headers); //Send e-mail
-                }
-                }
-        ?>
-        <!-- stop php code -->
-     
-        <!-- title and description -->   
-        <h3>Signup Form</h3>
-        <p>Please enter your name and email addres to create your account</p>
-        
-        <?php 
-            if(isset($msg)){  // Check if $msg is not empty
-            echo '<div class="statusmsg">'.$msg.'</div>'; // Display our message and wrap it with a div with the class "statusmsg".
-            } 
-        ?>
-        
-        <!-- start sign up form -->  
-        <form action="" method="post">
-            <label for="name">Name:</label>
-            <input type="text" name="name" value="" />
-            <label for="email">Email:</label>
-            <input type="text" name="email" value="" />
-             
-            <input type="submit" class="submit_button" value="Sign up" />
-        </form>
-        <!-- end sign up form -->
-         
-    </div>
-    <!-- end wrap div -->
-</body>
-</html>
+<?php
+
+// Table Scheme for Verify Table
+CREATE TABLE `verify` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `email` text NOT NULL,
+ `password` text NOT NULL,
+ `code` text NOT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1
+
+// Table Scheme for verified_user table
+CREATE TABLE `verified_user` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `email` text NOT NULL,
+ `password` text NOT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1
+
+
+if(isset($_POST['register']))
+{
+	$email_id=$_POST['email'];
+	$pass=$_POST['password'];
+	$code=substr(md5(mt_rand()),0,15);
+	mysql_connect('localhost','root','');
+	mysql_select_db('sample');
+	
+	$insert=mysql_query("insert into verify values('','$email','$pass','$code')");
+	$db_id=mysql_insert_id();
+
+	$message = "Your Activation Code is ".$code."";
+    $to=$email;
+    $subject="Activation Code For Talkerscode.com";
+    $from = 'your email';
+    $body='Your Activation Code is '.$code.' Please Click On This link <a href="verification.php">Verify.php?id='.$db_id.'&code='.$code.'</a>to activate your account.';
+    $headers = "From:".$from;
+    mail($to,$subject,$body,$headers);
+	
+	echo "An Activation Code Is Sent To You Check You Emails";
+}
+
+if(isset($_GET['id']) && isset($_GET['code']))
+{
+	$id=$_GET['id'];
+	$code=$_GET['id'];
+	mysql_connect('localhost','root','');
+	mysql_select_db('sample');
+	$select=mysql_query("select email,password from verify where id='$id' and code='$code'");
+	if(mysql_num_rows($select)==1)
+	{
+		while($row=mysql_fetch_array($select))
+		{
+			$email=$row['email'];
+			$password=$row['password'];
+		}
+		$insert_user=mysql_query("insert into verified_user values('','$email','$password')");
+		$delete=mysql_query("delete from verify where id='$id' and code='$code'");
+	}
+}
+
+?>
