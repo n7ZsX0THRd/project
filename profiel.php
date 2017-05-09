@@ -11,6 +11,8 @@ if (!(isset($_SESSION['email']) != '')) {
   header ("Location: login.php");
 }
 */
+$wijzig = 0;
+$landcodes = $db->query("SELECT lnd_code FROM Landen ORDER BY lnd_code ASC");
 $email = $_SESSION['email'];
 $query="SELECT TOP(1)
        [gebruikersnaam]
@@ -32,14 +34,21 @@ $query="SELECT TOP(1)
       ,[statusID]
       ,[bestandsnaam]FROM Gebruikers WHERE emailadres = '$email'";
 $result = $db->query($query)->fetchall()[0];
-$image = $result['bestandsnaam'];
+
+if(!empty($result['bestandsnaam'])) {
+  $image = $result['bestandsnaam'];
+}
+else {
+  $image = "geenfoto/geenfoto.png";
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
   if(update_user($_POST,$db))
   {
   $_SESSION['email'] = $_POST['r_email'];
-  header('location: index.php');
+  header('location: profiel.php');
   }
 }
 
@@ -53,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         <title>Profiel - Eenmaal Andermaal</title>
 
         <link href="css/login.css" rel="stylesheet">
+        <link href="css/profilestyle.css" rel="stylesheet">
   </head>
   <body>
 
@@ -107,56 +117,94 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               <a href="">Instellingen</a>
             </p>
         </div>
+
         <div class="row content_top_offset">
           <div class="col-lg-6" style="border-right:1px solid #e7e7e7;">
             <form method="post" enctype="multipart/form-data" action="">
+
+              <!-- email -->
               <div class="form-group">
                 <label for="exampleInputEmail1">Email</label>
+                <?php if (isset($_GET['wijzig'])==true){  ?>
                 <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" value="<?php echo $result['emailadres']?>">
+                <?php }else{ ?>
+                  <div class="pflijn">
+                      <?php echo $result['emailadres']?>
+                  </div>
+                <?php } ?>
               </div>
+
+              <!-- Voornaam en achternaam -->
               <div class="form-group">
                 <div class="row">
                   <div class="col-lg-4">
                     <label for="exampleInputEmail1">Voornaam</label>
+                    <?php if (isset($_GET['wijzig'])==true){  ?>
                     <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Voornaam" value="<?php echo $result['voornaam']?>">
+                    <?php }else{ ?>
+                      <div class="pflijn">
+                          <?php echo $result['voornaam']?>
+                      </div>
+                    <?php } ?>
                   </div>
                   <div class="col-lg-8">
                     <label for="exampleInputEmail1">Achternaam</label>
+                    <?php if (isset($_GET['wijzig'])==true){  ?>
                     <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Achternaam" value="<?php echo $result['achternaam']?>">
+                    <?php }else{ ?>
+                      <div class="pflijn">
+                          <?php echo $result['achternaam']?>
+                      </div>
+                    <?php } ?>
                   </div>
                 </div>
               </div>
+
+              <!-- geboortedatum -->
               <div class="form-group">
                 <div class="row">
                   <div class="col-lg-4">
                     <label for="exampleInputEmail1">Dag</label>
+                    <?php if (isset($_GET['wijzig'])==true){  ?>
                     <select class="form-control">
                       <option selected disabled>Dag</option>
                       <?php for ($i = 1; $i <= 31; $i++) { ?>
                           <option value="<?php echo $i; ?>" <?php if($result['geboortedag'] == $i){  echo 'selected'; } ?>><?php echo $i; ?></option>
                       <?php } ?>
                     </select>
+                    <?php }else{ ?>
+                      <div class="pflijn">
+                          <?php echo $result['geboortedag']?>
+                      </div>
+                    <?php } ?>
                   </div>
                   <div class="col-lg-4">
                     <label for="exampleInputEmail1">Maand</label>
-                    <select class="form-control">
-                      <option selected disabled>Maand</option>
-                      <?php
-                      $index = 1;
-                      $months = array("januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december");
-                      foreach ($months as $value)
-                      {
-                      ?>
-                      <option value="<?php echo $value; ?>" <?php if($result['geboortemaand'] == $index){  echo 'selected'; } ?>><?php echo $value; ?></option>
+                      <?php if (isset($_GET['wijzig'])==true){  ?>
+                      <select class="form-control">
+                        <option selected disabled>Maand</option>
+                        <?php
+                        $index = 1;
+                        $months = array("januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december");
+                        foreach ($months as $value)
+                        {
+                        ?>
+                        <option value="<?php echo $value; ?>" <?php if($result['geboortemaand'] == $index){  echo 'selected'; } ?>><?php echo $value; ?></option>
 
-                      <?php
-                      $index++;
-                      }
-                      ?>
-                    </select>
+                        <?php
+                        $index++;
+                        }
+                        ?>
+                      </select>
+                      <?php }else{ ?>
+                        <div class="pflijn">
+                            <?php echo $result['geboortemaand']?>
+                        </div>
+                      <?php } ?>
                   </div>
                   <div class="col-lg-4">
                     <label for="exampleInputEmail1">Jaar</label>
+                    <?php if (isset($_GET['wijzig'])==true){  ?>
                     <select class="form-control">
                       <option selected disabled>Jaar</option>
                       <?php for ($i = date("Y"); $i >= 1900; $i--) { ?>
@@ -164,18 +212,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                           <option><?php echo $i; ?></option>
                       <?php } ?>
                     </select>
+                    <?php }else{ ?>
+                      <div class="pflijn">
+                          <?php echo $result['geboortejaar']?>
+                      </div>
+                    <?php } ?>
                   </div>
                 </div>
               </div>
+
+              <!-- adresgegevens -->
               <div class="form-group">
                 <div class="row">
                   <div class="col-lg-8">
                     <label for="exampleInputEmail1">Adres + Huisnr.</label>
+                    <?php if (isset($_GET['wijzig'])==true){  ?>
                     <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Adres" value="<?php echo $result['adresregel1']?>">
+                    <?php }else{ ?>
+                      <div class="pflijn">
+                          <?php echo $result['adresregel1']?>
+                      </div>
+                    <?php } ?>
                   </div>
                   <div class="col-lg-4">
                     <label for="exampleInputEmail1">Postcode</label>
+                    <?php if (isset($_GET['wijzig'])==true){  ?>
                     <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Postcode" value="<?php echo $result['postcode']?>">
+                    <?php }else{ ?>
+                      <div class="pflijn">
+                          <?php echo $result['postcode']?>
+                      </div>
+                    <?php } ?>
                   </div>
                 </div>
               </div>
@@ -183,17 +250,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 <div class="row">
                   <div class="col-lg-8">
                     <label for="exampleInputEmail1">Woonplaats</label>
+                    <?php if (isset($_GET['wijzig'])==true){  ?>
                     <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Adres" value="<?php echo $result['plaatsnaam']?>">
+                    <?php }else{ ?>
+                      <div class="pflijn">
+                          <?php echo $result['plaatsnaam']?>
+                      </div>
+                    <?php } ?>
                   </div>
                   <div class="col-lg-4">
                     <label for="exampleInputEmail1">Landcode</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Postcode" value="<?php echo $result['land']?>">
+                    <?php if (isset($_GET['wijzig'])==true){  ?>
+                    <select class="form-control" name="r_secret_question">
+                      <option disabled>Land</option>
+                      <?php
+                        while ($row = $landcodes->fetch()){
+                      ?>
+                        <option value="<?php echo $row['ID'];?>" <?php if(($result['land']) == $row['lnd_code']){  echo 'selected'; } ?>><?php echo $row['lnd_code'];?></option>
+                      <?php
+                        }
+                      ?>
+                    </select>
+                    <?php }else{ ?>
+                      <div class="pflijn">
+                          <?php echo $result['land']?>
+                      </div>
+                    <?php } ?>
                   </div>
                 </div>
               </div>
+
+              <!-- Telefoonnummer -->
               <div class="form-group">
                 <label for="exampleInputEmail1">Telefoonnummer</label>
+                <?php if (isset($_GET['wijzig'])==true){  ?>
                 <input type="" class="form-control" id="exampleInputEmail1" placeholder="Telefoonnummer." >
+                <?php }else{ ?>
+                <div class="pflijn">
+                    <?php echo $result['plaatsnaam']?>
+                </div>
+                <?php } ?>
               </div>
 
           </div>
@@ -202,8 +298,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               <div class="form-group">
                 <div class="row">
                   <div class="col-lg-7">
-                    <label for="exampleInputEmail1">Adres</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Adres">
+                    <label for="exampleInputEmail1">Gebruikersnaam</label>
+                    <div class="pflijn">
+                        <?php echo $result['gebruikersnaam']?>
+                    </div>
                   </div>
                   <div class="col-lg-1">
                   </div>
@@ -261,17 +359,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Wachtwoord">
             </div>
             <div class="text-right">
+              <?php if (isset($_GET['wijzig'])==false){  ?>
+              <a href="?wijzig" type="submit" class="btn btn-orange">Wijzig gegevens</a>
+              <?php }else{ ?>
               <button type="submit" class="btn btn-orange">Wijzigingen opslaan</button>
+              <?php } ?>
+
+              <?php include 'php/includes/footer.php' ?>
             </div>
-              </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<?php include 'php/includes/footer.php' ?>
-</div>
 </div>
 
 

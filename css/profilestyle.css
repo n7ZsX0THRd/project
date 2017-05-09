@@ -16,3 +16,10 @@
   border-radius: 20px;
   padding: 20px;
 }
+
+.pflijn{
+  border: 1.5px solid;
+  border-radius: 4px;
+  padding: 3px;
+  border-color: #efefef;
+}
