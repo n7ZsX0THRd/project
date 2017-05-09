@@ -56,28 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     {
       if($_POST['r_email'] !== $_POST['r_email_confirm'])
       {
-         $code= rand(100000,999999);
-         $to = $_POST['r_email'];
-         $subject = "Activatie code voor EenmaalAndermaal";
-         $message= '
-         
-         Bedankt voor het aanmelden!
-         
-         Je account is aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.
-         
-         --------------------
-         Gebruikersnaam: '.$_POST['r_username'].'
-         Wachtwoord: '.$_POST['r_password'].'
-         --------------------
-         
-         Klik op deze link om je account te activeren:
-         http://www.iproject2.icasites.nl/verify.php?email='.$_POST['r_email'].'&hash='.$code.'
-         
-         '; //Bovenstaand bericht is de email die gebruikers ontvangen.
-          
-          $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
-          mail($to, $subject, $message, $headers);
-
         $_SESSION['warning']['incorrect_email'] = true;
       }
       else
@@ -90,6 +68,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         {
             if(create_user($_POST,$db))
             {
+              $code = create_verification_for_user(array('gebruikersnaam' => $_POST['r_gebruikersnaam'],'verificatiecode' => rand(100000,999999)), $db);
+              if($code != 0) {
+                $to = $_POST['r_email'];
+                $subject = "Activatie code voor EenmaalAndermaal";
+                $message= '
+         
+                Bedankt voor het aanmelden!
+         
+                Je account is aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.
+         
+                --------------------
+                Gebruikersnaam: '.$_POST['r_username'].'
+                Wachtwoord: '.$_POST['r_password'].'
+                --------------------
+         
+                Klik op deze link om je account te activeren:
+                http://www.iproject2.icasites.nl/verify.php?email='.$_POST['r_email'].'&hash='.$code.'
+         
+                '; //Bovenstaand bericht is de email die gebruikers ontvangen.
+          
+                $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
+                mail($to, $subject, $message, $headers);
+              }
               $_SESSION['email'] = $_POST['r_email'];
               header('location: index.php');
             }
@@ -264,8 +265,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     </div>
 
 <?php include 'php/includes/footer.php' ?>
-</div>
-</div>
 
 
 
