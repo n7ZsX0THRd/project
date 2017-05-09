@@ -260,6 +260,11 @@ p{
 .btn-niagara:focus {
     color: #fff;
 }
+.profielbutton-group {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .card-options > button{
   margin-top:5px;
   font-size:18px;

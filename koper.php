@@ -72,20 +72,18 @@
                     <div class="user">
                         <h2><?php echo $gebruikersnaam ?></h2>
                         <img class="img-responsive img-circle" src= "images/users/<?php echo $image ?>" alt="Profile picture">
-                        <button class="btn btn-niagara" type="button" name="Bericht" >
-                            <i class="glyphicon glyphicon-envelope"></i>
-                            Bericht
-                        </button>
-                        <div class="btn-group" data-toggle="buttons">
-                            <button class="btn btn-orange" type="button" name="Bewerken" >
-                                <i class="glyphicon glyphicon-edit"></i>
-                                Bewerken
-                            </button>
-                            <button class="btn btn-danger" data-toggle="modal" data-target="#myModalBlock" >
-                                <i class="glyphicon glyphicon-ban-circle"></i>
-                                Blokkeer
-                            </button>
-                        </div>
+                        <div class="profielbutton-group">
+                          <div class="btn-group" data-toggle="buttons">
+                              <button class="btn btn-danger" data-toggle="modal" data-target="#myModalBlock" >
+                                  <i class="glyphicon glyphicon-ban-circle"></i>
+                                  Blokkeer
+                              </button>
+                              <button class="btn btn-niagara" type="button" name="Bericht" >
+                                  <i class="glyphicon glyphicon-envelope"></i>
+                                  Stuur bericht
+                              </button>
+                          </div>
+                        </div>  
                     </div>
 
                     <div class="modal fade bs-example-modal-sm" id="myModalBlock" tabindex="-1" role="dialog" aria-labelledby="myModalBlock">
