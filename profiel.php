@@ -11,7 +11,7 @@ if (!(isset($_SESSION['email']) != '')) {
   header ("Location: login.php");
 }
 */
-$wijzig = 0;
+
 $landcodes = $db->query("SELECT lnd_code FROM Landen ORDER BY lnd_code ASC");
 $email = $_SESSION['email'];
 $query="SELECT TOP(1)
@@ -47,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
   if(update_user($_POST,$db))
   {
-  $_SESSION['email'] = $_POST['r_email'];
   header('location: profiel.php');
   }
 }
@@ -100,8 +99,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
           <li>
             <a href="php/logout.php">Log uit</a>
           </li>
-
         </ul>
+        <?php if($result['typegebruiker'] ==3){?>
+        <li class="toggle-sub">
+          <a href="gebruikers.php">Beheerpanel</a>
+        </li>
+        <?php } ?>
       </ul>
     </div>
     <div class="col-md-8 col-lg-10 col-sm-8">
@@ -364,9 +367,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               <?php }else{ ?>
               <button type="submit" class="btn btn-orange">Wijzigingen opslaan</button>
               <?php } ?>
-
-              <?php include 'php/includes/footer.php' ?>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <?php include 'php/includes/footer.php' ?>
+
 </div>
 
 
