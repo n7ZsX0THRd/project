@@ -365,7 +365,7 @@ if(update_user($_POST,$db))
               <?php if (isset($_GET['wijzig'])==false){  ?>
               <a href="?wijzig" type="submit" class="btn btn-orange">Wijzig gegevens</a>
               <?php }else{ ?>
-              <button type="submit" class="btn btn-orange">Wijzigingen opslaan</button>
+              <button type="submit" onclick="myAjax(['savechanges','<?php $changestosave ?>'])" class="btn btn-orange">Wijzigingen opslaan</button>
               <?php } ?>
             </div>
           </div>
@@ -401,5 +401,16 @@ $("li.toggle-sub").click(function(evt) {
 });
 */
 </script>
+<script>function myAjax(actionvar) {
+      $.ajax({
+           type: "POST",
+           url: 'ajax.php',
+           data:{action:actionvar},
+           success:function(html) {
+             window.location.href = "profiel.php";
+             alert(html);
+           }
+      });
+ } </script>
 </body>
 </html>
