@@ -230,8 +230,10 @@
                     if($selectie["selectVoornaam"]){ 
                       ?> 
                       <th>
-                        <label class="form-check-label">Voornaam
-                        <input type="radio" name="sorteerOp" value="voornaam" >
+                        <label class="header">
+                          <input type="radio" name="sorteerOp" id="voornaam" value="voornaam" 
+                          <?php if($selectie["sorteerOp"]=="voornaam"){ echo 'checked';} ?> >
+                          <span>Voornaam</span>
                         </label>
                       </th>
                       <?php
@@ -239,8 +241,10 @@
                     if($selectie["selectAchternaam"]){ 
                       ?> 
                       <th>
-                        <label class="form-check-label">Achternaam
-                        <input type="radio" name="sorteerOp" value="achternaam" checked> <!-- checked nog in php checken-->
+                        <label class="header">
+                        <input type="radio" name="sorteerOp" value="achternaam" 
+                        <?php if($selectie["sorteerOp"]=="achternaam"){ echo 'checked';} ?> >
+                        <span>Achternaam</span>
                         </label>
                       </th>
                       <?php
@@ -248,8 +252,10 @@
                     if($selectie["selectGebruikersnaam"]){ 
                       ?> 
                       <th>
-                        <label class="form-check-label">Gebruiker
-                        <input type="radio" name="sorteerOp" value="gebruikersnaam" >
+                        <label class="header">
+                        <input type="radio" name="sorteerOp" value="gebruikersnaam" 
+                        <?php if($selectie["sorteerOp"]=="gebruikersnaam"){ echo 'checked';} ?> >
+                        <span>Gebruiker</span>
                         </label>
                       </th>
                       <?php
@@ -257,8 +263,10 @@
                     if($selectie["selectEmail"]){ 
                       ?> 
                       <th>
-                        <label class="form-check-label">Email
-                        <input type="radio" name="sorteerOp" value="email" >
+                        <label class="header">
+                        <input type="radio" name="sorteerOp" value="email" 
+                        <?php if($selectie["sorteerOp"]=="email"){ echo 'checked';} ?> >
+                        <span>Email</span>
                         </label>
                       </th>
                       <?php
@@ -266,8 +274,10 @@
                     if($selectie["selectGeboortedatum"]){ 
                       ?> 
                       <th>
-                        <label class="form-check-label">Geboortedatum
-                        <input type="radio" name="sorteerOp" value="geboortedatum" >
+                        <label class="header">
+                        <input type="radio" name="sorteerOp" value="geboortedatum"
+                        <?php if($selectie["sorteerOp"]=="geboortedatum"){ echo 'checked';} ?> >
+                        <span>Geboortedatum</span>
                         </label>
                       </th>
                       <?php
@@ -275,8 +285,10 @@
                     if($selectie["selectAccountType"]){ 
                       ?> 
                       <th>
-                        <label class="form-check-label">Type account
-                        <input type="radio" name="sorteerOp" value="accountType" >
+                        <label class="header">
+                        <input type="radio" name="sorteerOp" value="accountType"
+                        <?php if($selectie["sorteerOp"]=="accountType"){ echo 'checked';} ?> >
+                        <span>Type account</span>
                         </label>
                       </th>
                       <?php
@@ -287,8 +299,10 @@
                     if($selectie["selectStatus"]){ 
                       ?> 
                       <th>
-                        <label class="form-check-label">Status
-                        <input type="radio" name="sorteerOp" value="status" >
+                        <label class="header">
+                        <input type="radio" name="sorteerOp" value="status" 
+                        <?php if($selectie["sorteerOp"]=="status"){ echo 'checked';} ?> >
+                        <span>Status</span>
                         </label>
                       </th>
                       <?php
@@ -296,8 +310,10 @@
                     if($selectie["selectLand"]){ 
                       ?> 
                       <th>
-                        <label class="form-check-label">Land
-                        <input type="radio" name="sorteerOp" value="land" >
+                        <label class="header">
+                        <input type="radio" name="sorteerOp" value="land" 
+                        <?php if($selectie["sorteerOp"]=="land"){ echo 'checked';} ?> >
+                        <span>Land</span>
                         </label>
                       </th>
                       <?php
@@ -305,8 +321,10 @@
                     if($selectie["selectPlaatsnaam"]){ 
                       ?> 
                       <th>
-                        <label class="form-check-label">Plaats
-                        <input type="radio" name="sorteerOp" value="plaatsnaam" >
+                        <label class="header">
+                        <input type="radio" name="sorteerOp" value="plaatsnaam" 
+                        <?php if($selectie["sorteerOp"]=="plaatsnaam"){ echo 'checked';} ?> >
+                        <span>Plaats</span>
                         </label>
                       </th>
                       <?php
@@ -314,8 +332,10 @@
                     if($selectie["selectPostcode"]){ 
                       ?> 
                       <th>
-                        <label class="form-check-label">Postcode
-                        <input type="radio" name="sorteerOp" value="postcode" >
+                        <label class="header">
+                        <input type="radio" name="sorteerOp" value="postcode" 
+                        <?php if($selectie["sorteerOp"]=="postcode"){ echo 'checked';} ?> >
+                        <span>Postcode</span>
                         </label>
                       </th>
                       <?php
@@ -323,8 +343,10 @@
                     if($selectie["selectAdresregel1"]){ 
                       ?> 
                       <th>
-                        <label class="form-check-label">Adres regel 1
-                        <input type="radio" name="sorteerOp" value="adresregel1" >
+                        <label class="header">
+                        <input type="radio" name="sorteerOp" value="adresregel1" 
+                        <?php if($selectie["sorteerOp"]=="adresregel1"){ echo 'checked';} ?> >
+                        <span>Adres regel 1</span>
                         </label>
                       </th>
                       <?php
@@ -332,8 +354,10 @@
                     if($selectie["selectAdresregel2"]){ 
                       ?> 
                       <th>
-                        <label class="form-check-label">Adres regel 2
-                        <input type="radio" name="sorteerOp" value="adresregel2" >
+                        <label class="header">
+                        <input type="radio" name="sorteerOp" value="adresregel2" 
+                        <?php if($selectie["sorteerOp"]=="adresregel2"){ echo 'checked';} ?> >
+                        <span>Adres regel 2</span>
                         </label>
                       </th>
                       <?php
@@ -357,7 +381,7 @@
 
                        foreach($result as $row){
                           $gebruikersnaam ="$row[gebruikersnaam]";
-                          echo "<tr onclick=\"document.location='koper.php?gebruikersnaam=".$gebruikersnaam."' \" >";
+                          echo "<tr onclick=\"document.location='gebruiker.php?gebruikersnaam=".$gebruikersnaam."' \" >";
                           if($selectie["selectVoornaam"]){ echo "<td>$row[voornaam]</te>";}
                           if($selectie["selectAchternaam"]){ echo "<td>$row[achternaam]</td>";}
                           if($selectie["selectGebruikersnaam"]){ echo "<td>".$gebruikersnaam."</td>";}

@@ -24,3 +24,33 @@
 .selectie{
     min-width: 100% !important; 
 }
+
+.header input[type="radio"] {
+  display: none;
+}
+
+.header label {
+  display: inline-block;
+  background-color: #ddd;
+  padding: 4px 11px;
+  font-size: 16px;
+  cursor: pointer;
+}
+label {
+    display: inline-block;
+    width: 200px;
+    padding: 5px;
+}
+
+th:hover {
+    background:#efefef;
+    cursor:pointer;
+}
+
+.header input[type="radio"]:checked{
+    background: black;
+}
+
+:checked + span {
+    color:#ea8220;
+}
