@@ -1,7 +1,12 @@
 <?php
 session_start();
+
 include ('php/database.php');
+include ('php/user.php');
 pdo_connect();
+
+if(isUserLoggedIn())
+  header('location: index.php');
 
 $error = 0;
 
@@ -72,10 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
           <div class="bevestig">
             <div class="row">
               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="position:relative;">
-                <label for="remember"  class="padding-top"><input id="remember" name="remember" type="checkbox"> Remember me</label>
+                <!--<label for="remember"  class="padding-top"><input id="remember" name="remember" type="checkbox"> Remember me</label>-->
               </div>
               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <button type="submit" class="btn btn-orange align-right" >Sign in</button>
+                <button type="submit" class="btn btn-orange align-right">Inloggen</button>
               </div>
             </div>
           </div>

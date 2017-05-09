@@ -11,7 +11,7 @@
           <a class="navbar-brand" href="#"><img src="images/logo.png" width="65"><span style="padding-left:20px;">Eenmaal Andermaal</span></a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
-          <?php include 'php/includes/menu.php' ?>
+          <?php include 'menu.php' ?>
         </div><!--/.nav-collapse -->
       </div>
     </nav>

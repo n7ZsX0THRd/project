@@ -1,7 +1,10 @@
 <?PHP
 session_start();
+
 include ('php/database.php');
+include ('php/user.php');
 pdo_connect();
+
 
 if (!(isset($_SESSION['email']) != '')) {
   session_destroy();

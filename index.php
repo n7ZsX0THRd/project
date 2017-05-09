@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+include ('php/database.php');
+include ('php/user.php');
+pdo_connect();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
