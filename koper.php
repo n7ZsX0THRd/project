@@ -1,16 +1,20 @@
 <?php
-include('php/database.php');
-pdo_connect();
+  session_start();
+  include ('php/database.php');
+  include ('php/user.php');
+  pdo_connect();
 
   if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if (!empty($_GET)) {
-      $gebruikersnaam = htmlspecialchars($_GET['gebruikersnaam']);
-      $query="SELECT TOP(1) * FROM Gebruikers WHERE gebruikersnaam = '$gebruikersnaam'";
-      $result = $db->query($query)->fetchall()[0];
-    }
-    else {
-      $gebruikersnaam = 'gebruiker niet gevonden';
-    }
+      if (!empty($_GET)) {
+        $gebruikersnaam = htmlspecialchars($_GET['gebruikersnaam']);
+        $query="SELECT TOP(1) * FROM Gebruikers WHERE gebruikersnaam = '$gebruikersnaam'";
+        $result = $db->query($query)->fetchall()[0];
+        $image = $result['bestandsnaam'];
+      }
+      else {
+        $gebruikersnaam = 'gebruiker niet gevonden';
+        $image = "images/users/geenfoto/geenfoto.png";
+      }
   }
 
 
@@ -62,7 +66,7 @@ pdo_connect();
                 <aside class="profile-sidebar">
                     <div class="user">
                         <h2><?php echo $gebruikersnaam ?></h2>
-                        <img class="img-responsive img-circle" src="images/users/JohnDoe.jpg" alt="John Doe face">
+                        <img class="img-responsive img-circle" src= "images/users/<?php echo $image ?>" alt="Profile picture">
                         <button class="btn btn-niagara" type="button" name="Bericht" >
                             <i class="glyphicon glyphicon-envelope"></i>
                             Bericht
@@ -137,10 +141,10 @@ pdo_connect();
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="../bootstrap/dist/js/bootstrap.min.js"></script>
+    <script>window.jQuery || document.write('<script src="bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
     <script>function myAjax(actionvar) {
           $.ajax({
                type: "POST",
