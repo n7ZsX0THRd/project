@@ -44,8 +44,9 @@ else {
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+$_POST['p_username']=$result['gebruikersnaam'];
 
-  if(update_user($_POST,$db))
+if(update_user($_POST,$db))
   {
   header('location: profiel.php');
   }
@@ -129,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               <div class="form-group">
                 <label for="exampleInputEmail1">Email</label>
                 <?php if (isset($_GET['wijzig'])==true){  ?>
-                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" value="<?php echo $result['emailadres']?>">
+                <input type="email" name="p_username" class="form-control" id="exampleInputEmail1" placeholder="Email" value="<?php echo $result['emailadres']?>">
                 <?php }else{ ?>
                   <div class="pflijn">
                       <?php echo $result['emailadres']?>
@@ -143,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="col-lg-4">
                     <label for="exampleInputEmail1">Voornaam</label>
                     <?php if (isset($_GET['wijzig'])==true){  ?>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Voornaam" value="<?php echo $result['voornaam']?>">
+                    <input type="text" class="form-control" name="p_firstname" id="exampleInputEmail1" placeholder="Voornaam" value="<?php echo $result['voornaam']?>">
                     <?php }else{ ?>
                       <div class="pflijn">
                           <?php echo $result['voornaam']?>
@@ -153,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="col-lg-8">
                     <label for="exampleInputEmail1">Achternaam</label>
                     <?php if (isset($_GET['wijzig'])==true){  ?>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Achternaam" value="<?php echo $result['achternaam']?>">
+                    <input type="text" name="p_lastname" class="form-control" id="exampleInputEmail1" placeholder="Achternaam" value="<?php echo $result['achternaam']?>">
                     <?php }else{ ?>
                       <div class="pflijn">
                           <?php echo $result['achternaam']?>
@@ -169,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="col-lg-4">
                     <label for="exampleInputEmail1">Dag</label>
                     <?php if (isset($_GET['wijzig'])==true){  ?>
-                    <select class="form-control">
+                    <select name="p_birthday" class="form-control">
                       <option selected disabled>Dag</option>
                       <?php for ($i = 1; $i <= 31; $i++) { ?>
                           <option value="<?php echo $i; ?>" <?php if($result['geboortedag'] == $i){  echo 'selected'; } ?>><?php echo $i; ?></option>
@@ -184,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="col-lg-4">
                     <label for="exampleInputEmail1">Maand</label>
                       <?php if (isset($_GET['wijzig'])==true){  ?>
-                      <select class="form-control">
+                      <select name="p_birthmonth" class="form-control">
                         <option selected disabled>Maand</option>
                         <?php
                         $index = 1;
@@ -208,11 +209,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="col-lg-4">
                     <label for="exampleInputEmail1">Jaar</label>
                     <?php if (isset($_GET['wijzig'])==true){  ?>
-                    <select class="form-control">
+                    <select name="p_birthyear" class="form-control">
                       <option selected disabled>Jaar</option>
                       <?php for ($i = date("Y"); $i >= 1900; $i--) { ?>
                           <option value="<?php echo $i; ?>" <?php if($result['geboortejaar'] == $i){  echo 'selected'; } ?>><?php echo $i; ?></option>
-                          <option><?php echo $i; ?></option>
                       <?php } ?>
                     </select>
                     <?php }else{ ?>
@@ -230,7 +230,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="col-lg-8">
                     <label for="exampleInputEmail1">Adres + Huisnr.</label>
                     <?php if (isset($_GET['wijzig'])==true){  ?>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Adres" value="<?php echo $result['adresregel1']?>">
+                    <input name="p_adres" type="text" class="form-control" id="exampleInputEmail1" placeholder="Adres" value="<?php echo $result['adresregel1']?>">
                     <?php }else{ ?>
                       <div class="pflijn">
                           <?php echo $result['adresregel1']?>
@@ -240,7 +240,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="col-lg-4">
                     <label for="exampleInputEmail1">Postcode</label>
                     <?php if (isset($_GET['wijzig'])==true){  ?>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Postcode" value="<?php echo $result['postcode']?>">
+                    <input name="p_zipcode" type="text" class="form-control" id="exampleInputEmail1" placeholder="Postcode" value="<?php echo $result['postcode']?>">
                     <?php }else{ ?>
                       <div class="pflijn">
                           <?php echo $result['postcode']?>
@@ -254,7 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="col-lg-8">
                     <label for="exampleInputEmail1">Woonplaats</label>
                     <?php if (isset($_GET['wijzig'])==true){  ?>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Adres" value="<?php echo $result['plaatsnaam']?>">
+                    <input name="p_city" type="text" class="form-control" id="exampleInputEmail1" placeholder="Adres" value="<?php echo $result['plaatsnaam']?>">
                     <?php }else{ ?>
                       <div class="pflijn">
                           <?php echo $result['plaatsnaam']?>
@@ -264,7 +264,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="col-lg-4">
                     <label for="exampleInputEmail1">Landcode</label>
                     <?php if (isset($_GET['wijzig'])==true){  ?>
-                    <select class="form-control" name="r_secret_question">
+                    <select class="form-control" name="p_land">
                       <option disabled>Land</option>
                       <?php
                         while ($row = $landcodes->fetch()){
@@ -287,7 +287,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               <div class="form-group">
                 <label for="exampleInputEmail1">Telefoonnummer</label>
                 <?php if (isset($_GET['wijzig'])==true){  ?>
-                <input type="" class="form-control" id="exampleInputEmail1" placeholder="Telefoonnummer." >
+                <input type="" name="p_tel" class="form-control" id="exampleInputEmail1" placeholder="Telefoonnummer." >
                 <?php }else{ ?>
                 <div class="pflijn">
                     <?php echo $result['plaatsnaam']?>

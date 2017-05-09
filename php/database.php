@@ -63,23 +63,20 @@ function create_verification_for_user($data,$db){
       return $e;
   }
 }
+
 function update_user($data,$db){
   try {
       $db->query(" UPDATE Gebruikers SET
 
-      gebruikersnaam=$data['r_username'],
-      voornaam=$data['r_firstname'],achternaam =$data['r_lastname'],
-      adresregel1=$data['r_street_name'].' '.$data['r_street_nr'].' '.$data['r_street_addition'],
-      postcode=$data['r_zipcode'],
-      plaatsnaam=$data['r_city'],
-      geboortedatum=$data['r_birthday'].'-'.$data['r_birthmonth'].'-'.$data['r_birthyear'],
-      emailadres=$data['r_email'],
-      wachtwoord=password_hash($data['r_password'], PASSWORD_DEFAULT),
-      vraag=  $data['r_secret_question'],
-      antwoordtekst=$data['r_secret_question_answer'])
-
-      WHERE gebruikersnaam = $data['r_username']"
-      );
+      gebruikersnaam=$data['p_username'],
+      voornaam=$data['p_firstname'],achternaam =$data['p_lastname'],
+      adresregel1=$data['p_adres'],
+      postcode=$data['p_zipcode'],
+      plaatsnaam=$data['p_city'],
+      geboortedatum=$data['p_birthday'].'-'.$data['p_birthmonth'].'-'.$data['p_birthyear'],
+      emailadres=$data['p_email'],
+      wachtwoord=password_hash($data['p_password'], PASSWORD_DEFAULT),
+      WHERE gebruikersnaam = $data['p_username']");
 
       return true;
   } catch (PDOException $e) {
