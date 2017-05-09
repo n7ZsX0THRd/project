@@ -1,5 +1,5 @@
 <?php
-include('../php/database.php');
+include('php/database.php');
 pdo_connect();
 
   if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -30,16 +30,16 @@ pdo_connect();
     <title>Normal Page</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="../bootstrap/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="bootstrap/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="../bootstrap/assets/js/ie-emulation-modes-warning.js"></script>
+    <script src="bootstrap/assets/js/ie-emulation-modes-warning.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -47,13 +47,13 @@ pdo_connect();
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <link href="../css/stylesheet.css" rel="stylesheet">
-    <link href="../css/profilestyle.css" rel="stylesheet">
+    <link href="css/stylesheet.css" rel="stylesheet">
+    <link href="css/profilestyle.css" rel="stylesheet">
   </head>
 
   <body>
 
-    <?php include '../php/includes/header.php' ?>
+    <?php include 'php/includes/header.php' ?>
 
     <main class="container">
         <h1> Beheer gebruiker</h1>
@@ -62,7 +62,7 @@ pdo_connect();
                 <aside class="profile-sidebar">
                     <div class="user">
                         <h2><?php echo $gebruikersnaam ?></h2>
-                        <img class="img-responsive img-circle" src="../images/users/JohnDoe.jpg" alt="John Doe face">
+                        <img class="img-responsive img-circle" src="images/users/JohnDoe.jpg" alt="John Doe face">
                         <button class="btn btn-niagara" type="button" name="Bericht" >
                             <i class="glyphicon glyphicon-envelope"></i>
                             Bericht
