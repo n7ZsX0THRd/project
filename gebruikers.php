@@ -219,7 +219,7 @@
       <i class="glyphicon glyphicon-ok"></i>
       Pas toe
       </button>
-  </form>
+  
     </aside>
             <article class="col-md-8">
                 <h2> Gebruikers </h2>
@@ -227,22 +227,121 @@
                     <thead>
                     <tr>
                     <?php 
-                    if($selectie["selectVoornaam"]){ echo '<th>Voornaam</th>';}
-                    if($selectie["selectAchternaam"]){ echo '<th>Achternaam</th>';}
-                    if($selectie["selectGebruikersnaam"]){ echo '<th>Gebruikersnaam</th>';}
-                    if($selectie["selectEmail"]){ echo '<th>Email</th>';}
-                    if($selectie["selectGeboortedatum"]){ echo '<th>Geboorte datum</th>';}
-                    if($selectie["selectAccountType"]){ echo '<th>Account type</th>';}
-                    //if($selectBeoordeling){ echo '<th>Beoordeling</th>';}
-                    if($selectie["selectStatus"]){ echo '<th>Status</th>';}
-                    if($selectie["selectLand"]){ echo '<th>Land</th>';}
-                    if($selectie["selectPlaatsnaam"]){ echo '<th>Plaatsnaam</th>';}
-                    if($selectie["selectPostcode"]){ echo '<th>Postcode</th>';}
-                    if($selectie["selectAdresregel1"]){ echo '<th>Adres regel 1</th>';}
-                    if($selectie["selectAdresregel2"]){ echo '<th>Adres regel 2</th>';}
+                    if($selectie["selectVoornaam"]){ 
+                      ?> 
+                      <th>
+                        <label class="form-check-label">Voornaam
+                        <input type="radio" name="sorteerOp" value="voornaam" >
+                        </label>
+                      </th>
+                      <?php
+                    }
+                    if($selectie["selectAchternaam"]){ 
+                      ?> 
+                      <th>
+                        <label class="form-check-label">Achternaam
+                        <input type="radio" name="sorteerOp" value="achternaam" checked> <!-- checked nog in php checken-->
+                        </label>
+                      </th>
+                      <?php
+                    }
+                    if($selectie["selectGebruikersnaam"]){ 
+                      ?> 
+                      <th>
+                        <label class="form-check-label">Gebruiker
+                        <input type="radio" name="sorteerOp" value="gebruikersnaam" >
+                        </label>
+                      </th>
+                      <?php
+                    }
+                    if($selectie["selectEmail"]){ 
+                      ?> 
+                      <th>
+                        <label class="form-check-label">Email
+                        <input type="radio" name="sorteerOp" value="email" >
+                        </label>
+                      </th>
+                      <?php
+                    }
+                    if($selectie["selectGeboortedatum"]){ 
+                      ?> 
+                      <th>
+                        <label class="form-check-label">Geboortedatum
+                        <input type="radio" name="sorteerOp" value="geboortedatum" >
+                        </label>
+                      </th>
+                      <?php
+                    }
+                    if($selectie["selectAccountType"]){ 
+                      ?> 
+                      <th>
+                        <label class="form-check-label">Type account
+                        <input type="radio" name="sorteerOp" value="accountType" >
+                        </label>
+                      </th>
+                      <?php
+                    }
+                    /*if($selectie["selectBeoordeling"]){ 
+                     
+                    }*/
+                    if($selectie["selectStatus"]){ 
+                      ?> 
+                      <th>
+                        <label class="form-check-label">Status
+                        <input type="radio" name="sorteerOp" value="status" >
+                        </label>
+                      </th>
+                      <?php
+                    }
+                    if($selectie["selectLand"]){ 
+                      ?> 
+                      <th>
+                        <label class="form-check-label">Land
+                        <input type="radio" name="sorteerOp" value="land" >
+                        </label>
+                      </th>
+                      <?php
+                    }
+                    if($selectie["selectPlaatsnaam"]){ 
+                      ?> 
+                      <th>
+                        <label class="form-check-label">Plaats
+                        <input type="radio" name="sorteerOp" value="plaatsnaam" >
+                        </label>
+                      </th>
+                      <?php
+                    }
+                    if($selectie["selectPostcode"]{ 
+                      ?> 
+                      <th>
+                        <label class="form-check-label">Postcode
+                        <input type="radio" name="sorteerOp" value="postcode" >
+                        </label>
+                      </th>
+                      <?php
+                    }
+                    if($selectie["selectAdresregel1"]){ 
+                      ?> 
+                      <th>
+                        <label class="form-check-label">Adres regel 1
+                        <input type="radio" name="sorteerOp" value="adresregel1" >
+                        </label>
+                      </th>
+                      <?php
+                    }
+                    if($selectie["selectAdresregel2"]){ 
+                      ?> 
+                      <th>
+                        <label class="form-check-label">Adres regel 2
+                        <input type="radio" name="sorteerOp" value="adresregel2" >
+                        </label>
+                      </th>
+                      <?php
+                    }
                     ?>
                     </tr>
                     </thead>
+                    </form>
                     <tbody>
                       <?php
                         $data = $db->prepare("SELECT voornaam, achternaam, gebruikersnaam, emailadres, geboortedatum, typegebruiker, /* beoordeling, Not yet implented*/Accountstatussen.omschrijving AS status, land, plaatsnaam, postcode, adresregel1, adresregel2 
