@@ -66,12 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
          Je account is aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.
          
          --------------------
-         Gebruikersnaam: '.$r_username.'
-         Wachtwoord: '.$password.' 
+         Gebruikersnaam: '.$_POST['r_username'].'
+         Wachtwoord: '.$_POST['r_password'].'
          --------------------
          
          Klik op deze link om je account te activeren:
-         http://www.iproject2.icasites.nl/verify.php?email='.$r_email.'&hash='.$code.'
+         http://www.iproject2.icasites.nl/verify.php?email='.$_POST['r_email'].'&hash='.$code.'
          
          '; //Bovenstaand bericht is de email die gebruikers ontvangen.
           
