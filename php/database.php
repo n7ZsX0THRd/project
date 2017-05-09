@@ -58,8 +58,14 @@ function create_verification_for_user($data,$db){
         return $data['verificatiecode'];
       }
 
-      return 0;
   } catch (PDOException $e) {
+      $to = 'casper.plate@hotmail.com';
+                $subject = "PDOexception eenmaalandermaal";
+                $message= '
+                '.$e.'
+                ';
+                $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
+                mail($to, $subject, $message, $headers);
       return 0;
   }
 }

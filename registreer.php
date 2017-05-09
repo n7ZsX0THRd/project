@@ -69,8 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             if(create_user($_POST,$db))
             {
               $random = rand(100000,999999);  
-              $code = create_verification_for_user(array('gebruikersnaam' => $_POST['r_gebruikersnaam'],'verificatiecode' => $random), $db);
-              if($code['verificatiecode'] != 0) {
+              $code = create_verification_for_user(array('gebruikersnaam' => $_POST['r_username'],'verificatiecode' => $random), $db);
+              if($code != 0) {
                 $to = $_POST['r_email'];
                 $subject = "Activatie code voor EenmaalAndermaal";
                 $message= '
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 Je account is aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.
          
                 --------------------
-                Gebruikersnaam: '.$_POST['r_username'].'
+                Gebruikersnaam: '.$_POST['r_email'].'
                 Wachtwoord: '.$_POST['r_password'].'
                 --------------------
          
