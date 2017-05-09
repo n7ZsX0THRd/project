@@ -66,17 +66,21 @@ function create_verification_for_user($data,$db){
 
 function update_user($data,$db){
   try {
-      $db->query(" UPDATE Gebruikers SET
+      $dbs = $db->prepare(" UPDATE Gebruikers SET
+      gebruikersnaam=?,
+      voornaam=?,
+      achternaam =?,
+      adresregel1=?,
+      postcode=?,
+      plaatsnaam=?,
+      geboortedatum=?,
+      emailadres=?,
+      wachtwoord=?,
+      WHERE gebruikersnaam = ?");
 
-      gebruikersnaam=$data['p_username'],
-      voornaam=$data['p_firstname'],achternaam =$data['p_lastname'],
-      adresregel1=$data['p_adres'],
-      postcode=$data['p_zipcode'],
-      plaatsnaam=$data['p_city'],
-      geboortedatum=$data['p_birthday'].'-'.$data['p_birthmonth'].'-'.$data['p_birthyear'],
-      emailadres=$data['p_email'],
-      wachtwoord=password_hash($data['p_password'], PASSWORD_DEFAULT),
-      WHERE gebruikersnaam = $data['p_username']");
+      $dbs->execute(array($data['p_username'],$data['p_firstname'],$data['p_lastname'],$data['p_adres'],
+      $data['p_zipcode'],$data['p_city'],$data['p_birthday'].'-'.$data['p_birthmonth'].'-'.$data['p_birthyear'],
+      $data['p_email'],password_hash($data['p_password'], PASSWORD_DEFAULT),$data['p_username']));
 
       return true;
   } catch (PDOException $e) {
