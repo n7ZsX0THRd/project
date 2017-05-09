@@ -46,6 +46,7 @@ else {
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 $_POST['p_username']=$result['gebruikersnaam'];
 
+  var_dump($_POST);
 if(update_user($_POST,$db))
   {
   header('location: profiel.php');
@@ -365,9 +366,10 @@ if(update_user($_POST,$db))
               <?php if (isset($_GET['wijzig'])==false){  ?>
               <a href="?wijzig" type="submit" class="btn btn-orange">Wijzig gegevens</a>
               <?php }else{ ?>
-              <button type="submit" onclick="myAjax(['savechanges','<?php $changestosave ?>'])" class="btn btn-orange">Wijzigingen opslaan</button>
+              <button type="submit" class="btn btn-orange">Wijzigingen opslaan</button>
               <?php } ?>
             </div>
+          </form>
           </div>
         </div>
       </div>
