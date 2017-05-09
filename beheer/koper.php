@@ -47,7 +47,7 @@ pdo_connect();
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <link href="../stylesheet.css" rel="stylesheet">
+    <link href="../css/stylesheet.css" rel="stylesheet">
     <link href="../css/profilestyle.css" rel="stylesheet">
   </head>
 
