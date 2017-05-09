@@ -20,19 +20,7 @@
  
             if(isset($_POST['name']) && !empty($_POST['name']) AND isset($_POST['email']) && !empty($_POST['email'])){
             // Form Submited
-        }
-            if(  ){ // If statement is true run code between brackets
- 
-            }
- 
-            isset($_POST['name']) // Is the name field being posted; it does not matter whether it's empty or filled.
-            && // This is the same as the AND in our statement; it allows you to check multiple statements.
-            !empty($_POST['name']) // Verify if the field name is not empty
- 
-            isset($_POST['email']) // Is the email field being posted; it does not matter if it's empty or filled.
-            && // This is the same as the AND in our statement; it allows you to check multiple statements.
-            !empty($_POST['email']) // Verify if the field email is not empty
-            
+        }    
             if(isset($_POST['name']) && !empty($_POST['name']) AND isset($_POST['email']) && !empty($_POST['email'])){
                 $name = $_POST['name']; // Turn our post into a local variable
                 $email = $_POST['email']; // Turn our post into a local variable
@@ -43,6 +31,31 @@
                 }else{
                     // Return Success - Valid Email
                     $msg = 'Your account has been made, <br /> please verify it by clicking the activation link that has been send to your email.';
+                    
+                    $hash = md5(rand(0, 1000)); //random 32 character snippet.
+                    
+                    $password = rand(1000, 5000); //random nummer tussen 1000 en 5000. Bijvoorbeeld 4568.
+                    
+                    $to = $email; //Send email to user
+                    $subject = 'Signup | Verification'; //Email subject
+                    $message = '
+                    
+                    Thanks for Signing up!
+                    
+                    Your account has been created, you can login with the following credentials after you have activated your account by pressing the url below.
+                    
+                    -----------------------
+                    Username: '.$name.'
+                    Password: '.$password.'
+                    -----------------------
+                    
+                    Please click this link to activate your account:
+                    http://www.iproject2.icasites.nl/verifaction/verify.php?email='.$email.'$hash='.$hash.'
+                    
+                    ';//Message including the link
+                    
+                    $headers = 'From:noreply@EenmaalAndermaal.nl' . "\r\n"; //Set form headers
+                    mail($to, $subject, $message, $headers); //Send e-mail
                 }
                 }
         ?>
