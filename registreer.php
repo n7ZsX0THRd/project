@@ -69,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             if(create_user($_POST,$db))
             {
               $code = create_verification_for_user(array('gebruikersnaam' => $_POST['r_gebruikersnaam'],'verificatiecode' => rand(100000,999999)), $db);
+              if($code['verificatiecode'] != 0) {
                 $to = $_POST['r_email'];
                 $subject = "Activatie code voor EenmaalAndermaal";
                 $message= '
@@ -89,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
           
                 $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
                 mail($to, $subject, $message, $headers);
+              }
               $_SESSION['email'] = $_POST['r_email'];
               header('location: index.php');
             }
