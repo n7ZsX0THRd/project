@@ -12,13 +12,13 @@ function pdo_connect() {
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
 
-function delete_user($gebruikersnaam,$db) {
+function block_user($gebruikersnaam,$db) {
     try {
-        $dbs = $db->prepare(" DELETE FROM Gebruikers WHERE gebruikersnaam = ? ");
+        $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = 3 WHERE gebruikersnaam = ? ");
         $dbs->execute(array($gebruikersnaam));
         return true;
     } catch (PDOException $e) {
-        echo "Could not delete user, ".$e->getMessage();
+        echo "Could not block user, ".$e->getMessage();
         return false;
     }
 }

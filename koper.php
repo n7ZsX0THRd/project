@@ -81,23 +81,23 @@
                                 <i class="glyphicon glyphicon-edit"></i>
                                 Bewerken
                             </button>
-                            <button class="btn btn-danger" data-toggle="modal" data-target="#myModalDelete" >
-                                <i class="glyphicon glyphicon-trash"></i>
-                                Verwijder
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#myModalBlock" >
+                                <i class="glyphicon glyphicon-ban-circle"></i>
+                                Blokkeer
                             </button>
                         </div>
                     </div>
 
-                    <div class="modal fade bs-example-modal-sm" id="myModalDelete" tabindex="-1" role="dialog" aria-labelledby="myModalDelete">
+                    <div class="modal fade bs-example-modal-sm" id="myModalBlock" tabindex="-1" role="dialog" aria-labelledby="myModalBlock">
                       <div class="modal-dialog modal-sm" role="document">
                          <div class="modal-content">
                            <div class="modal-header">
                              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                             <h4 class="modal-title" id="myModalLabel">Weet u zeker dat u deze gebruiker wil verwijderen?</h4>
+                             <h4 class="modal-title" id="myModalLabel">Weet u zeker dat u deze gebruiker wil blokkeren?</h4>
                            </div>
                            <div class="modal-footer">
                              <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
-                             <button type="button" class="btn btn-primary" onclick="myAjax(['delete','<?php echo $gebruikersnaam ?>'])">Verwijderen</button>
+                             <button type="button" class="btn btn-primary" onclick="myAjax(['delete','<?php echo $gebruikersnaam ?>'])">Blokkeren</button>
                            </div>
                          </div>
                        </div>
