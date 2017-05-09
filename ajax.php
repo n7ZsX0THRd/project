@@ -1,5 +1,5 @@
 <?php
-  include('../php/database.php');
+  include('php/database.php');
   pdo_connect();
 
   if($_POST['action'][0] == 'block') {

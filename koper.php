@@ -97,7 +97,7 @@
                            </div>
                            <div class="modal-footer">
                              <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
-                             <button type="button" class="btn btn-primary" onclick="myAjax(['delete','<?php echo $gebruikersnaam ?>'])">Blokkeren</button>
+                             <button type="button" class="btn btn-primary" onclick="myAjax(['block','<?php echo $gebruikersnaam ?>'])">Blokkeren</button>
                            </div>
                          </div>
                        </div>

@@ -14,7 +14,7 @@ function pdo_connect() {
 
 function block_user($gebruikersnaam,$db) {
     try {
-        $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = 3 WHERE gebruikersnaam = ? ");
+        $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '3' WHERE gebruikersnaam = ? ");
         $dbs->execute(array($gebruikersnaam));
         return true;
     } catch (PDOException $e) {
