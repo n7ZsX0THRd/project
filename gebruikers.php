@@ -311,7 +311,7 @@
                       </th>
                       <?php
                     }
-                    if($selectie["selectPostcode"]{ 
+                    if($selectie["selectPostcode"]){ 
                       ?> 
                       <th>
                         <label class="form-check-label">Postcode
