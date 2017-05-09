@@ -28,21 +28,96 @@ pdo_connect();
             <ol class="carousel-indicators">
               <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
               <li data-target="#myCarousel" data-slide-to="1"></li>
-              <li data-target="#myCarousel" data-slide-to="2"></li>
             </ol>
 
             <!-- Wrapper for slides -->
             <div class="carousel-inner">
               <div class="item active">
-                    <p>Dick Advocaat blijft tot en met het WK bondscoach als hij er met het Nederlands elftal in slaagt kwalificatie af te dwingen voor het eindtoernooi volgend jaar in Rusland. "Als Advocaat het met succes oppakt, is het logisch dat hij ook tijdens het WK de bondscoach is", zei Jean-Paul Decossaux dinsdag op een persconferentie in Zeist waar hij de aanstelling van Advocaat en diens assistent Ruud Gullit bevestigde. In eerste instantie maken Advocaat en Gullit alleen de kwalificatiereeks af en daarin moet Nederland nog vol aan de bak om het WK te halen. Door de nederlaag eind maart in Bulgarije, die Danny Blind zijn baan kostte als bondscoach, zakte Oranje naar de vierde plaats in kwalificatiegroep A, maar Decossaux geeft Nederland nog een goede kans om Rusland te halen. "We verwachten dat het duo Advocaat en Gullit het vuur bij Oranje weer kan aansteken, waardoor de kwalificatiereeks met succes vervolgd kan worden."</p>
+                  <div class="row">
+                    <div class="col-lg-4 col-lg-offset-2">
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <h1 style="width:100%;text-align:right;">Otis FIX IETS</h1>
+                          </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <img src="images/users/johndoe.jpg" style="width:90%;float:left;">
+                            </div>
+                            <div class="col-lg-6">
+                              <p style="text-align:right;">Dick Advocaat blijft tot en met het WK bondscoach als hij er met het Nederlands elftal in slaagt kwalificatie af te dwingen voor het eindtoernooi volgend jaar in Rusland. "Als Advocaat het met succes oppakt, is het logisch dat hij ook tijdens het WK de bondscoach is", zei Jean-Paul Decossaux dinsdag op een persconferentie in Zeist waar hij de aanstelling van Advocaat en diens assistent Ruud Gullit bevestigde.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <h1 style="width:100%;text-align:left;">Guus FIX IETS</h1>
+                          </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                              <p style="text-align:left;">Dick Advocaat blijft tot en met het WK bondscoach als hij er met het Nederlands elftal in slaagt kwalificatie af te dwingen voor het eindtoernooi volgend jaar in Rusland. "Als Advocaat het met succes oppakt, is het logisch dat hij ook tijdens het WK de bondscoach is", zei Jean-Paul Decossaux dinsdag op een persconferentie in Zeist waar hij de aanstelling van Advocaat en diens assistent Ruud Gullit bevestigde.</p>
+                            </div>
+                            <div class="col-lg-6">
+                                <img src="images/users/otisvdm.jpg" style="width:90%;float:right;">
+                            </div>
+                        </div>
+                    </div>
+                  </div>
               </div>
 
               <div class="item">
-              <p>Dick Advocaat blijft tot en met het WK bondscoach als hij er met het Nederlands elftal in slaagt kwalificatie af te dwingen voor het eindtoernooi volgend jaar in Rusland. "Als Advocaat het met succes oppakt, is het logisch dat hij ook tijdens het WK de bondscoach is", zei Jean-Paul Decossaux dinsdag op een persconferentie in Zeist waar hij de aanstelling van Advocaat en diens assistent Ruud Gullit bevestigde. In eerste instantie maken Advocaat en Gullit alleen de kwalificatiereeks af en daarin moet Nederland nog vol aan de bak om het WK te halen. Door de nederlaag eind maart in Bulgarije, die Danny Blind zijn baan kostte als bondscoach, zakte Oranje naar de vierde plaats in kwalificatiegroep A, maar Decossaux geeft Nederland nog een goede kans om Rusland te halen. "We verwachten dat het duo Advocaat en Gullit het vuur bij Oranje weer kan aansteken, waardoor de kwalificatiereeks met succes vervolgd kan worden."</p>
-              </div>
-
-              <div class="item">
-                <p>Dick Advocaat blijft tot en met het WK bondscoach als hij er met het Nederlands elftal in slaagt kwalificatie af te dwingen voor het eindtoernooi volgend jaar in Rusland. "Als Advocaat het met succes oppakt, is het logisch dat hij ook tijdens het WK de bondscoach is", zei Jean-Paul Decossaux dinsdag op een persconferentie in Zeist waar hij de aanstelling van Advocaat en diens assistent Ruud Gullit bevestigde. In eerste instantie maken Advocaat en Gullit alleen de kwalificatiereeks af en daarin moet Nederland nog vol aan de bak om het WK te halen. Door de nederlaag eind maart in Bulgarije, die Danny Blind zijn baan kostte als bondscoach, zakte Oranje naar de vierde plaats in kwalificatiegroep A, maar Decossaux geeft Nederland nog een goede kans om Rusland te halen. "We verwachten dat het duo Advocaat en Gullit het vuur bij Oranje weer kan aansteken, waardoor de kwalificatiereeks met succes vervolgd kan worden."</p>
+                <div class="row">
+                  <div class="col-lg-4 col-lg-offset-2">
+                      <div class="row">
+                        <div class="col-lg-12">
+                            <h3 style="text-align:right;">Titel</h3>
+                        </div>
+                        <div class="col-lg-4">
+                          <img src="images/vliegtuig.jpg" style="max-width:100%;">
+                        </div>
+                        <div class="col-lg-8">
+                          <p style="text-align:right;">Dick Advocaat blijft tot en met het WK bondscoach als hij er met het Nederlands elftal in slaagt kwalificatie af te dwingen voor het eindtoernooi volgend jaar in Rusland. "Als Advocaat het met succes oppakt, is het logisch dat hij ook tijdens het WK de bondscoach is", zei Jean-Paul Decossaux dinsdag op een persconferentie in Zeist waar hij de aanstelling van Advocaat en diens assistent Ruud Gullit bevestigde.</p>
+                        </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <h3 style="text-align:left;">Titel</h3>
+                          </div>
+                          <div class="col-lg-8">
+                            <p style="text-align:left;">Dick Advocaat blijft tot en met het WK bondscoach als hij er met het Nederlands elftal in slaagt kwalificatie af te dwingen voor het eindtoernooi volgend jaar in Rusland. "Als Advocaat het met succes oppakt, is het logisch dat hij ook tijdens het WK de bondscoach is", zei Jean-Paul Decossaux dinsdag op een persconferentie in Zeist waar hij de aanstelling van Advocaat en diens assistent Ruud Gullit bevestigde.</p>
+                          </div>
+                          <div class="col-lg-4">
+                            <img src="images/vliegtuig.jpg" style="max-width:100%;">
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-lg-4">
+                      <div class="row">
+                        <div class="col-lg-12">
+                            <h3 style="text-align:right;">Titel</h3>
+                        </div>
+                        <div class="col-lg-4">
+                          <img src="images/vliegtuig.jpg" style="max-width:100%;">
+                        </div>
+                        <div class="col-lg-8">
+                          <p style="text-align:right;">Dick Advocaat blijft tot en met het WK bondscoach als hij er met het Nederlands elftal in slaagt kwalificatie af te dwingen voor het eindtoernooi volgend jaar in Rusland. "Als Advocaat het met succes oppakt, is het logisch dat hij ook tijdens het WK de bondscoach is", zei Jean-Paul Decossaux dinsdag op een persconferentie in Zeist waar hij de aanstelling van Advocaat en diens assistent Ruud Gullit bevestigde.</p>
+                        </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <h3 style="text-align:left;">Titel</h3>
+                          </div>
+                          <div class="col-lg-8">
+                            <p style="text-align:left;">Dick Advocaat blijft tot en met het WK bondscoach als hij er met het Nederlands elftal in slaagt kwalificatie af te dwingen voor het eindtoernooi volgend jaar in Rusland. "Als Advocaat het met succes oppakt, is het logisch dat hij ook tijdens het WK de bondscoach is", zei Jean-Paul Decossaux dinsdag op een persconferentie in Zeist waar hij de aanstelling van Advocaat en diens assistent Ruud Gullit bevestigde.</p>
+                          </div>
+                          <div class="col-lg-4">
+                            <img src="images/vliegtuig.jpg" style="max-width:100%;">
+                          </div>
+                      </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -59,7 +134,7 @@ pdo_connect();
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
           <p class="bg-warning banner-top">
-            <strong>Hey</strong>, <?php echo $user['voornaam']; ?> je hebt jouw account nog niet geverifieerd. Doe dat nu <strong><a href="verifieer.php">hier</a></strong>
+            <strong>Hey</strong> <?php echo $user['voornaam']; ?>, je hebt jouw account nog niet geverifieerd. Doe dat nu <strong><a href="verifieer.php">hier</a></strong>
           </p>
         </div>
       </div>

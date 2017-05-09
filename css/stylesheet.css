@@ -322,6 +322,7 @@ p{
 }
 .carousel-inner > .item{
   max-height:500px;
+  overflow-y:hidden;
   height:500px;
   padding:50px;
   width:100%;
