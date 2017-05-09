@@ -2,7 +2,11 @@
 session_start();
 
 include ('php/database.php');
+include ('php/user.php');
 pdo_connect();
+
+if(isUserLoggedIn())
+  header('location: index.php');
 
 $secret_questions = $db->query("SELECT ID,vraag FROM GeheimeVragen ORDER BY vraag ASC");
 
