@@ -3,32 +3,13 @@ session_start();
 include ('php/database.php');
 pdo_connect();
 
-/*
 if (!(isset($_SESSION['email']) != '')) {
   session_destroy();
   header ("Location: login.php");
-} */
+}
 
 $email = $_SESSION['email'];
-$query="SELECT TOP(1)
-       [gebruikersnaam]
-      ,[voornaam]
-      ,[achternaam]
-      ,[adresregel1]
-      ,[adresregel2]
-      ,[postcode]
-      ,[plaatsnaam]
-      ,[land]
-      ,datepart(month,[geboortedatum]) AS geboortedag
-	    ,datepart(day,[geboortedatum]) AS geboortemaand
-	    ,datepart(year,[geboortedatum]) AS geboortejaar
-      ,[emailadres]
-      ,[wachtwoord]
-      ,[vraag]
-      ,[antwoordtekst]
-      ,[typegebruiker]
-      ,[statusID]
-      ,[bestandsnaam] FROM Gebruikers WHERE emailadres = '$email'";
+$query="SELECT TOP(1) * FROM Gebruikers WHERE emailadres = '$email'";
 $result = $db->query($query)->fetchall()[0];
 
 
@@ -37,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
   if(update_user($_POST,$db))
   {
   $_SESSION['email'] = $_POST['r_email'];
+  header('location: index.php');
   }
 }
 
@@ -115,11 +97,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 <div class="row">
                   <div class="col-lg-5">
                     <label for="exampleInputEmail1">Voornaam</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" name="p_firstname" placeholder="Voornaam" value="<?php echo $result['voornaam']?>">
+                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Voornaam" value="<?php echo $result['voornaam']?>">
                   </div>
                   <div class="col-lg-7">
                     <label for="exampleInputEmail1">Achternaam</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="p_lastname" value="<?php echo $result['achternaam']?>">
+                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Achternaam" value="<?php echo $result['achternaam']?>">
                   </div>
                 </div>
               </div>
@@ -128,8 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="col-lg-4">
                     <label for="exampleInputEmail1">Dag</label>
                     <select class="form-control">
-                      <option disabled>Dag</option>
-                      <option> <?php echo $result['geboortedag'];?> </option>
+                      <option selected disabled>Dag</option>
                       <?php for ($i = 1; $i <= 31; $i++) { ?>
                           <option><?php echo $i; ?></option>
                       <?php } ?>
@@ -165,13 +146,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 <div class="row">
                   <div class="col-lg-7">
                     <label for="exampleInputEmail1">Adres</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" name="p_street_name" placeholder="Adres" value="<?php echo $result['adresregel1']?>">
+                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Adres" value="<?php echo $result['adresregel1']?>">
                   </div>
                 </div>
               </div>
               <div class="form-group">
                 <label for="exampleInputEmail1">Telefoonnummer</label>
-                <input type="" class="form-control" id="exampleInputEmail1" name="p_tel" placeholder="Telefoonnummer." >
+                <input type="" class="form-control" id="exampleInputEmail1" placeholder="Telefoonnummer." >
               </div>
 
           </div>
