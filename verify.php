@@ -47,6 +47,7 @@ if(isset($_GET['gebruikersnaam']) && !empty($_GET['gebruikersnaam']) && isset($_
                         $dbs = $db->prepare("DELETE FROM Activatiecodes WHERE gebruikersnaam=? UPDATE Gebruikers SET statusID=2 WHERE gebruikersnaam=?");
                         $dbs->execute(array($gebruikersnaam, $gebruikersnaam));
                         echo 'Je account is geactiveerd';
+                        header( "refresh:3;url=login.php" );
                     }else {
                         echo 'Je code klopt niet!';
                     }
