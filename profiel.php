@@ -32,6 +32,7 @@ $query="SELECT TOP(1)
       ,[antwoordtekst]
       ,[typegebruiker]
       ,[statusID]
+      ,[biografie]
       ,[bestandsnaam]FROM Gebruikers WHERE emailadres = '$email'";
 $result = $db->query($query)->fetchall()[0];
 
@@ -58,7 +59,7 @@ if(isset($_POST)){
   var_dump($_POST);
   if(update_user($_POST,$db))
     {
-    //header('location: profiel.php');
+    header('location: profiel.php');
     }
 
 }
@@ -359,7 +360,15 @@ if(isset($_POST)){
                   <div class="col-lg-12">
                      <div class="form-group">
                       <label for="exampleInputFile">Biografie</label>
+                      <?php if (isset($_GET['wijzig'])==true){  ?>
                       <textarea class="form-control" rows="10" style="max-width:100%;" name="p_biografie"  maxlength="255" placeholder="Biografie"></textarea>
+                      <?php }else{ ?>
+                      <div class="pflijn">
+                          <?php
+                            echo $result['biografie'];
+                          ?>
+                      </div>
+                      <?php } ?>
                      </div>
                   </div>
                 </div>
