@@ -206,7 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <!-- Telefoonnummer -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span></div>
-                      <input type="" class="form-control" id="Tel" name="r_phonenumber" value="<?php if(isset($_POST['r_phonenumber'])){ echo $_POST['r_phonenumber']; } ?>" placeholder="Telefoonnummer">
+                      <input type="" minlength="10" maxlength="10" class="form-control" id="Tel" name="r_phonenumber" value="<?php if(isset($_POST['r_phonenumber'])){ echo $_POST['r_phonenumber']; } ?>" placeholder="Telefoonnummer">
                   </div>
                   <!-- Einde telefoonnummer -->
 
