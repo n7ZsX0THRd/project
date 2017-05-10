@@ -91,7 +91,7 @@ function update_user($data,$db){
       $dbs = $db->prepare(" UPDATE Gebruikerstelefoon SET
       telefoonnummer =?,
 
-      WHERE gebruikersnaam = ?"
+      WHERE gebruikersnaam = ?");
       $dbs->execute(array($data['p_tel'],$data['p_username']));
 
       return true;
