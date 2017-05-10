@@ -82,12 +82,12 @@ function update_user($data,$db){
       plaatsnaam=?,
       geboortedatum=?,
       emailadres=?,
-      biografie=?,
+      biografie=?
 
       WHERE gebruikersnaam = ?;
 
       UPDATE Gebruikerstelefoon SET
-      telefoonnummer =?,
+      telefoonnummer =?
 
       WHERE gebruikersnaam = ?");
 
