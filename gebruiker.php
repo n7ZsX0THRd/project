@@ -7,8 +7,17 @@
   if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (!empty($_GET)) {
         $gebruikersnaam = htmlspecialchars($_GET['gebruikersnaam']);
-        $query="SELECT TOP(1) * FROM Gebruikers WHERE gebruikersnaam = '$gebruikersnaam'";
-        $result = $db->query($query)->fetchall()[0];
+
+    
+       ///$query="SELECT TOP(1) * FROM Gebruikers WHERE gebruikersnaam = '$gebruikersnaam'"TROEP
+        ///$result = $db->query($query)->fetchall()[0];
+
+
+        $data = $db->prepare("SELECT * FROM gebruikers WHERE gebruikersnaam= ?");
+        $data->execute([$gebruikersnaam]);
+        $result=$data->fetchAll();
+
+
         if(!empty($result['bestandsnaam'])) {
           $image = $result['bestandsnaam'];
         }
@@ -132,6 +141,15 @@
             <article class="col-md-9">
                 <div class="user-content">
                     <h2>Over <?php echo $gebruikersnaam ?></h2>
+                    <?php //var_dump($result);
+                    foreach($result[0] as $key => $value){
+                        //var_dump($value);
+                        echo $key.': '.$value.'</br>';
+                    }
+                    
+                    
+                     ?>
+                    
                 </div>
 		</article>
 
