@@ -73,7 +73,6 @@ function create_verification_for_user($data,$db){
 function update_user($data,$db){
   try {
       $dbs = $db->prepare(" UPDATE Gebruikers SET
-      gebruikersnaam=?,
       voornaam=?,
       achternaam =?,
       adresregel1=?,
@@ -81,12 +80,12 @@ function update_user($data,$db){
       plaatsnaam=?,
       geboortedatum=?,
       emailadres=?,
-      wachtwoord=?,
+      biografie=?,
       WHERE gebruikersnaam = ?");
 
-      $dbs->execute(array($data['p_username'],$data['p_firstname'],$data['p_lastname'],$data['p_adres'],
+      $dbs->execute(array($data['p_firstname'],$data['p_lastname'],$data['p_adres'],
       $data['p_zipcode'],$data['p_city'],$data['p_birthday'].'-'.$data['p_birthmonth'].'-'.$data['p_birthyear'],
-      $data['p_email'],password_hash($data['p_password'], PASSWORD_DEFAULT),$data['p_username']));
+      $data['p_email'],$data['p_biografie'],$data['p_username']));
 
       return true;
   } catch (PDOException $e) {
