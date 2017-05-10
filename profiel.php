@@ -14,6 +14,7 @@ if (!(isset($_SESSION['email']) != '')) {
 
 $landcodes = $db->query("SELECT lnd_code FROM Landen ORDER BY lnd_code ASC");
 $email = $_SESSION['email'];
+$query2 = $db->query("SELECT telefoonnummer FROM Gebruikerstelefoon WHERE gebruikersnaam =");
 $query="SELECT TOP(1)
        [gebruikersnaam]
       ,[voornaam]
@@ -34,6 +35,8 @@ $query="SELECT TOP(1)
       ,[statusID]
       ,[bestandsnaam]FROM Gebruikers WHERE emailadres = '$email'";
 $result = $db->query($query)->fetchall()[0];
+$result2 = $db->query($query2)->fetchall()[0];
+
 
 if(!empty($result['bestandsnaam'])) {
   $image = $result['bestandsnaam'];
@@ -293,7 +296,7 @@ if(isset($_POST)){
                 <input type="" name="p_tel" class="form-control" id="exampleInputEmail1" placeholder="Telefoonnummer." >
                 <?php }else{ ?>
                 <div class="pflijn">
-                    <?php echo $result['plaatsnaam']?>
+                    <?php echo $result2['telefoonnummer']?>
                 </div>
                 <?php } ?>
               </div>
