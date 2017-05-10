@@ -38,7 +38,8 @@ pdo_connect();
       "selectPostcode" => false,
       "selectPlaatsnaam" => false,
       "selectLand" => false,
-      "zoeken" => ""
+      "zoeken" => "",
+      "gebruiker-soort" => "beheerder"
     );
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -123,6 +124,11 @@ pdo_connect();
           } else {
             $selectie["zoeken"] = "";
           }
+          if(!empty($_GET['gebruiker-soort'])){
+            $selectie["gebruiker-soort"] = htmlspecialchars($_GET['gebruiker-soort']);  
+          } else {
+            $selectie["gebruiker-soort"] = "beheerder";
+          }
       }
     }
 
@@ -137,9 +143,15 @@ pdo_connect();
       <h3>Selectie</h3>
   <form action="gebruikers.php" method="get" class="form-check" >
     <h4>Soort </h4>
-    <input type="radio" name="user-type" value="Buyer" checked> Kopers<br>
-    <input type="radio" name="user-type" value="Seller"> Verkopers<br>
-    <input type="radio" name="user-type" value="Both"> Alle
+    <input type="radio" name="gebruiker-soort" value="koper" 
+    <?php if($selectie["gebruiker-soort"]=="koper"){ echo 'checked';} ?> >
+     Kopers<br>
+    <input type="radio" name="gebruiker-soort" value="verkoper"
+    <?php if($selectie["gebruiker-soort"]=="verkoper"){ echo 'checked';} ?> >
+     Verkopers<br>
+    <input type="radio" name="gebruiker-soort" value="beheerder"
+    <?php if($selectie["gebruiker-soort"]=="beheerder"){ echo 'checked';} ?> >
+     Beheerder
 
     <h4>Kolommen </h4>
       <label class="form-check-label selectie">
@@ -203,8 +215,8 @@ pdo_connect();
         Land
       </label>
       <button class="btn btn-orange" type="submit"  name="Accept" >
-      <i class="glyphicon glyphicon-ok"></i>
-      Pas toe
+        <i class="glyphicon glyphicon-ok"></i>
+        Pas toe
       </button>
   
     </aside>
@@ -215,7 +227,7 @@ pdo_connect();
                      <div class="row">
                           <div class="col-lg-4">
                           <div class="inner-addon left-addon">
-    <i class="glyphicon glyphicon-search"></i>
+                              <i class="glyphicon glyphicon-search"></i>
                               <input type="search" id="search" name="zoeken" <?php echo "value='".$selectie["zoeken"]."'"; ?> class="form-control" placeholder="Zoeken..">
                           </div>
                           </div>
@@ -366,13 +378,15 @@ pdo_connect();
                     </form>
                     <tbody>
                       <?php
-                        $data = $db->prepare("SELECT voornaam, achternaam, gebruikersnaam, emailadres, geboortedatum, typegebruiker, /* beoordeling, Not yet implented*/Accountstatussen.omschrijving AS status, land, plaatsnaam, postcode, adresregel1, adresregel2 
+                        $data = $db->prepare("SELECT voornaam, achternaam, gebruikersnaam, emailadres, geboortedatum,  Accounttype.typegebruiker as soort, /* beoordeling, Not yet implented*/Accountstatussen.omschrijving AS status, land, plaatsnaam, postcode, adresregel1, adresregel2 
                                                         FROM Gebruikers
                                                         INNER JOIN Accountstatussen 
                                                           ON Gebruikers.statusID=Accountstatussen.ID
-                                                        --HERE voornaam LIKE ? OR achternaam LIKE ?  OR gebruikersnaam LIKE ?
+                                                        INNER JOIN Accounttype
+	                                                        ON Accounttype.ID=Gebruikers.typegebruiker
+                                                        WHERE Accounttype.typegebruiker = ?
                                                         ");
-                        $data->execute(array($selectie["zoeken"], $selectie["zoeken"], $selectie["zoeken"]));  
+                        $data->execute(array($selectie["gebruiker-soort"]));  
                         $result=$data->fetchAll();
 
                         $count=count($result);
