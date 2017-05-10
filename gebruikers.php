@@ -209,10 +209,15 @@ pdo_connect();
   
     </aside>
             <article class="col-md-8">
-                <h2> Gebruikers </h2>
+            <div class="row">
+                <h2 class="col-lg-4"> Gebruikers </h2>
+                </div>
                      <div class="row">
-                          <div class="col-lg-4 col-lg-offset-4">
+                          <div class="col-lg-4">
+                          <div class="inner-addon left-addon">
+    <i class="glyphicon glyphicon-search"></i>
                               <input type="search" id="search" name="zoeken" <?php echo "value='".$selectie["zoeken"]."'"; ?> class="form-control" placeholder="Zoeken..">
+                          </div>
                           </div>
                       </div>
               <div class="table-responsive">
