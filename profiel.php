@@ -192,33 +192,29 @@ if(isset($_POST)){
                   </div>
                   <div class="col-lg-4">
                     <label for="exampleInputEmail1">Maand</label>
-
-                      <?php if (isset($_GET['wijzig'])==true){  ?>
+                      <?php
+                      $months = array("januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december");
+                      if (isset($_GET['wijzig'])==true){  ?>
                       <select name="p_birthmonth" class="form-control">
                         <option selected disabled>Maand</option>
                         <?php
+                        $index = 1;
 
-                        $months = array("januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december");
-                        if (isset($_GET['wijzig'])==true){  ?>
-                        <select name="p_birthmonth" class="form-control">
-                          <option selected disabled>Maand</option>
-                          <?php
-                          $index = 1;
-                          foreach ($months as $value)
-                          {
-                          ?>
-                          <option value="<?php echo $index; ?>" <?php if($result['geboortemaand'] == $index){  echo 'selected'; } ?>><?php echo $value; ?></option>
+                        foreach ($months as $value)
+                        {
+                        ?>
+                        <option value="<?php echo $value; ?>" <?php if($result['geboortemaand'] == $index){  echo 'selected'; } ?>><?php echo $value; ?></option>
 
-                          <?php
-                          $index++;
-                          }
-                          ?>
-                        </select>
-                        <?php }else{ ?>
-                          <div class="pflijn">
-                              <?php echo $months[$result['geboortemaand']-1]; ?>
-                          </div>
-                        <?php } ?>
+                        <?php
+                        $index++;
+                        }
+                        ?>
+                      </select>
+                      <?php }else{ ?>
+                        <div class="pflijn">
+                            <?php echo $result['geboortemaand']?>
+                        </div>
+                      <?php } ?>
                   </div>
                   <div class="col-lg-4">
                     <label for="exampleInputEmail1">Jaar</label>
@@ -231,7 +227,7 @@ if(isset($_POST)){
                     </select>
                     <?php }else{ ?>
                       <div class="pflijn">
-                          <?php echo $result['geboortejaar']?>
+                          <?php echo $months[$result['geboortejaar']-1];?>
                       </div>
                     <?php } ?>
                   </div>
