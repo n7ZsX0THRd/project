@@ -301,7 +301,7 @@ if(isset($_POST)){
               <div class="form-group">
                 <label for="tel">Telefoonnummer</label>
                 <?php if (isset($_GET['wijzig'])==true){  ?>
-                <input name="p_tel" class="form-control" id="tel" placeholder="<?php
+                <input name="p_tel" class="form-control" id="tel" value="<?php
                   echo $result2['telefoonnummer'];
                 ?>" >
                 <?php }else{ ?>

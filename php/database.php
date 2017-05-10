@@ -25,7 +25,7 @@ function block_user($gebruikersnaam,$db) {
 function create_user($data,$db){
   try {
       $dbs = $db->prepare(" INSERT INTO Gebruikers (gebruikersnaam,voornaam,achternaam,adresregel1,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+      VALUES (?,?,?,?,?,?,?,?,?,?,?); INSERT INTO Gebruikerstelefoon (gebruikersnaam,telefoonnummer) VALUES (?,?)");
       $dbs->execute(array(
           $data['r_username'],
           $data['r_firstname'],
@@ -37,11 +37,11 @@ function create_user($data,$db){
           $data['r_email'],
           password_hash($data['r_password'], PASSWORD_DEFAULT),
           $data['r_secret_question'],
-          $data['r_secret_question_answer']
+          $data['r_secret_question_answer'],
+          $data['r_username'],
+          $data['r_phonenumber']
         )
       );
-      $dbs = $db->prepare(" INSERT INTO Gebruikerstelefoon (telefoonnummer) WHERE gebruikersnaam=? VALUES (?) ");
-      $dbs->execute(array($data['r_username'],$data['r_phonenumber']));
       return true;
   } catch (PDOException $e) {
       return $e;
@@ -76,7 +76,7 @@ function update_user($data,$db){
   try {
       $dbs = $db->prepare(" UPDATE Gebruikers SET
       voornaam=?,
-      achternaam =?,
+      achternaam=?,
       adresregel1=?,
       postcode=?,
       plaatsnaam=?,
@@ -84,18 +84,16 @@ function update_user($data,$db){
       emailadres=?,
       biografie=?,
 
-      WHERE gebruikersnaam = ?");
+      WHERE gebruikersnaam = ?;
 
-      $dbs->execute(array($data['p_firstname'],$data['p_lastname'],$data['p_adres'],
-      $data['p_zipcode'],$data['p_city'],$data['p_birthday'].'-'.$data['p_birthmonth'].'-'.$data['p_birthyear'],
-      $data['p_email'],$data['p_biografie'],$data['p_username']));
-
-      $dbs = $db->prepare(" UPDATE Gebruikerstelefoon SET
+      UPDATE Gebruikerstelefoon SET
       telefoonnummer =?,
 
       WHERE gebruikersnaam = ?");
 
-      $dbs->execute(array($data['p_tel'],$data['p_username']));
+      $dbs->execute(array($data['p_firstname'],$data['p_lastname'],$data['p_adres'],
+      $data['p_zipcode'],$data['p_city'],$data['p_birthday'].'-'.$data['p_birthmonth'].'-'.$data['p_birthyear'],
+      $data['p_email'],$data['p_biografie'],$data['p_username'],$data['p_tel'],$data['p_username']));
 
       return true;
   } catch (PDOException $e) {
