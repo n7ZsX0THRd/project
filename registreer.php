@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 --------------------
 
                 Klik op deze link om je account te activeren:
-                http://www.iproject2.icasites.nl/verify.php?gebruikersnaam='.$_POST['r_username'].'&code='.$code.'
+                http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$_POST['r_username'].'&code='.$code.'
 
                 '; //Bovenstaand bericht is de email die gebruikers ontvangen.
 
