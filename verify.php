@@ -30,18 +30,33 @@ if(isset($_GET['gebruikersnaam']) && !empty($_GET['gebruikersnaam']) && isset($_
         include ('php/includes/header.php');
         ?>
         
-        <div class="container">
-        <?php
-            $dbs = $db->prepare("SELECT * FROM Activatiecodes WHERE gebruikernaam=?");
-            $dbs->execute($gebruikersnaam);
-            $result = $dbs->fetchAll();
-            if ($_GET['gebruikersnaam'] == $result['gebruikersnaam'] && $_GET['code'] == $result['activatiecode']) {
-                echo 'Je code klopt!';
-            }else{
-                echo 'Je code klopt niet!';
-            }
-                
-        ?>
+        <div class="container col-md-9">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-titel">Account Registratie</h4>
+            </div>
+            <div class="panel-body">
+            <?php
+                $dbs = $db->prepare("SELECT activatiecode FROM Activatiecodes WHERE gebruikersnaam=? AND GETDATE() < verloopdatum");
+                $dbs->execute(array($gebruikersnaam));
+                $result = $dbs->fetchAll()[0];
+                if(isset($result[0])) {
+                    if ($result[0] == $code) {
+                        
+                        //Verwijder activatiecode en maak gebruiker actief
+                        $dbs = $db->prepare("DELETE FROM Activatiecodes WHERE gebruikersnaam=? UPDATE Gebruikers SET statusID=2 WHERE gebruikersnaam=?");
+                        $dbs->execute(array($gebruikersnaam, $gebruikersnaam));
+                        echo 'Je account is geactiveerd';
+                    }else {
+                        echo 'Je code klopt niet!';
+                    }
+                }else {
+                    echo 'Je activatiecode is verlopen.';
+                }
+
+            ?>
+            </div>
+        </div>
         </div>
                 
         <?php 
