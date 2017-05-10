@@ -47,6 +47,10 @@ th:hover {
     cursor:pointer;
 }
 
+table:hover{
+    cursor: pointer;
+}
+
 .header input[type="radio"]:checked{
     background: black;
 }

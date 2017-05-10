@@ -335,7 +335,6 @@ pdo_connect();
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>

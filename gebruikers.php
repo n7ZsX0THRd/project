@@ -41,15 +41,15 @@
     pdo_connect();
 
   
-    $selectie = array(
+    $selectie = array( // default values when there's no get request'
       "sorteerOp" => "achternaam",
       "pagina" => 0,
-      "selectVoornaam" => false,
-      "selectAchternaam" => false,
+      "selectVoornaam" => true,
+      "selectAchternaam" => true,
       "selectGebruikersnaam" => false,
       "selectGeboortedatum" => false,
       "selectBeoordeling" => false,
-      "selectStatus" => false,
+      "selectStatus" => true,
       "selectAccountType" => false,
       "selectEmail" => false,
       "selectAdresregel1" => false,
