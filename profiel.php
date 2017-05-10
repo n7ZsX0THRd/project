@@ -361,7 +361,9 @@ if(isset($_POST)){
                      <div class="form-group">
                       <label for="exampleInputFile">Biografie</label>
                       <?php if (isset($_GET['wijzig'])==true){  ?>
-                      <textarea class="form-control" rows="10" style="max-width:100%;" name="p_biografie"  maxlength="255" placeholder="Biografie"></textarea>
+                      <textarea class="form-control" rows="10" style="max-width:100%;" name="p_biografie"  maxlength="255" placeholder="<?php
+                        echo $result['biografie'];
+                      ?>"></textarea>
                       <?php }else{ ?>
                       <div class="pflijn">
                           <?php
