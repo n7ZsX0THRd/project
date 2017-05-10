@@ -12,7 +12,8 @@ function pdo_connect() {
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
 
-function block_user($gebruikersnaam,$db) {
+function block_user($gebruikersnaam) {
+    global $db;
     try {
         $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '3' WHERE gebruikersnaam = ? ");
         $dbs->execute(array($gebruikersnaam));
@@ -22,7 +23,8 @@ function block_user($gebruikersnaam,$db) {
         return false;
     }
 }
-function unBlock_user($gebruikersnaam,$db) {
+function unBlock_user($gebruikersnaam) {
+    global $db;
     try {
         $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '1' WHERE gebruikersnaam = ? ");
         $dbs->execute(array($gebruikersnaam));
@@ -32,7 +34,8 @@ function unBlock_user($gebruikersnaam,$db) {
         return false;
     }
 }
-function create_user($data,$db){
+function create_user($data,$db){ //db is global!!
+    global $db;
   try {
       $dbs = $db->prepare("INSERT INTO Gebruikers (gebruikersnaam,voornaam,achternaam,adresregel1,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst)
       VALUES (?,?,?,?,?,?,?,?,?,?,?); INSERT INTO Gebruikerstelefoon (gebruikersnaam,telefoonnummer) VALUES (?,?)");
@@ -57,7 +60,7 @@ function create_user($data,$db){
       return false;
   }
 }
-function create_verification_for_user($data,$db){
+function create_verification_for_user($data,$db){  //db is global!!
   try {
       $dbs = $db->prepare("SELECT COUNT(gebruikersnaam) as count FROM Activatiecodes WHERE gebruikersnaam=?");
       $dbs->execute(array($data['gebruikersnaam']));
@@ -82,7 +85,7 @@ function create_verification_for_user($data,$db){
   }
 }
 
-function update_user($data,$db){
+function update_user($data,$db){  //db is global!!
   try {
       $dbs = $db->prepare(" UPDATE Gebruikers SET
       voornaam=?,
