@@ -298,7 +298,9 @@ if(isset($_POST)){
                 <input type="" name="p_tel" class="form-control" id="exampleInputEmail1" placeholder="Telefoonnummer." >
                 <?php }else{ ?>
                 <div class="pflijn">
-                    <?php echo $result2['telefoonnummer']?>
+                    <?php if(isset($result['telefoonnummer'])){
+                      echo $result2['telefoonnummer'];
+                    } ?>
                 </div>
                 <?php } ?>
               </div>
