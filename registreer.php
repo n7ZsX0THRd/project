@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
                 --------------------
                 Gebruikersnaam: '.$_POST['r_email'].'
-                Wachtwoord: '.$_POST['r_password'].'
+                Code: '.$code.'
                 --------------------
 
                 Klik op deze link om je account te activeren:
