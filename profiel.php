@@ -37,8 +37,12 @@ $result = $db->query($query)->fetchall()[0];
 
 $gebruiker = $result['gebruikersnaam'];
 $query2 ="SELECT telefoonnummer FROM Gebruikerstelefoon WHERE gebruikersnaam = '$gebruiker'";
-$result2 = $db->query($query2)->fetchall()[0];
-
+if(!empty($db->query($query2)->fetchall()[0])) {
+  $result2 = $db->query($query2)->fetchall()[0];
+}
+else {
+  $result2["telefoonnummer"] = "Geen nummer geregistreerd";
+}
 
 if(!empty($result['bestandsnaam'])) {
   $image = $result['bestandsnaam'];
@@ -297,7 +301,9 @@ if(isset($_POST)){
               <div class="form-group">
                 <label for="tel">Telefoonnummer</label>
                 <?php if (isset($_GET['wijzig'])==true){  ?>
-                <input name="p_tel" class="form-control" id="tel" placeholder="Telefoonnummer." >
+                <input name="p_tel" class="form-control" id="tel" placeholder="<?php
+                  echo $result2['telefoonnummer'];
+                ?>" >
                 <?php }else{ ?>
                 <div class="pflijn">
                     <?php
