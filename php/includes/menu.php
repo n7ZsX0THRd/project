@@ -6,7 +6,7 @@
   <li><a href="login.php">Inloggen</a></li>-->
   <li><a href="index.php">Home</a></li>
 
-  <?php if (isUserLoggedIn()){ ?>
+  <?php if (isUserLoggedIn($db)){ ?>
     <li><a href="profiel.php"><?php echo getLoggedInUser($db)['gebruikersnaam']; ?></a></li>
     <li><a href="php/logout.php">Uitloggen</a></li>
   <?php }else{?>

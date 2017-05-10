@@ -5,7 +5,7 @@ include ('php/database.php');
 include ('php/user.php');
 pdo_connect();
 
-if(isUserLoggedIn())
+if(isUserLoggedIn($db))
   header('location: index.php');
 
 $secret_questions = $db->query("SELECT ID,vraag FROM GeheimeVragen ORDER BY vraag ASC");
@@ -68,27 +68,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         {
             if(create_user($_POST,$db))
             {
-              $random = rand(100000,999999);  
+              $random = rand(100000,999999);
               $code = create_verification_for_user(array('gebruikersnaam' => $_POST['r_username'],'verificatiecode' => $random), $db);
               if($code != 0) {
                 $to = $_POST['r_email'];
                 $subject = "Activatie code voor EenmaalAndermaal";
                 $message= '
-         
+
                 Bedankt voor het aanmelden!
-         
+
                 Je account is aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.
-         
+
                 --------------------
                 Gebruikersnaam: '.$_POST['r_email'].'
                 Wachtwoord: '.$_POST['r_password'].'
                 --------------------
-         
+
                 Klik op deze link om je account te activeren:
                 http://www.iproject2.icasites.nl/verify.php?gebruikersnaam='.$_POST['r_username'].'&code='.$code.'
-         
+
                 '; //Bovenstaand bericht is de email die gebruikers ontvangen.
-          
+
                 $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
                 mail($to, $subject, $message, $headers);
               }

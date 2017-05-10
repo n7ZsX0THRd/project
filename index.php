@@ -126,7 +126,7 @@ pdo_connect();
         </div>
       </div>
     </div>
-    <?php if (isUserLoggedIn()){
+    <?php if (isUserLoggedIn($db)){
         $user = getLoggedInUser($db);
         if($user['statusID'] == 1){
     ?>
