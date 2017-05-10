@@ -22,6 +22,16 @@ function block_user($gebruikersnaam,$db) {
         return false;
     }
 }
+function unBlock_user($gebruikersnaam,$db) {
+    try {
+        $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '1' WHERE gebruikersnaam = ? ");
+        $dbs->execute(array($gebruikersnaam));
+        return true;
+    } catch (PDOException $e) {
+        echo "Could not unBlock user, ".$e->getMessage();
+        return false;
+    }
+}
 function create_user($data,$db){
   try {
       $dbs = $db->prepare("INSERT INTO Gebruikers (gebruikersnaam,voornaam,achternaam,adresregel1,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst)
