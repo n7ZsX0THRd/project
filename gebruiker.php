@@ -8,12 +8,7 @@
       if (!empty($_GET)) {
         $gebruikersnaam = htmlspecialchars($_GET['gebruikersnaam']);
 
-    
-       ///$query="SELECT TOP(1) * FROM Gebruikers WHERE gebruikersnaam = '$gebruikersnaam'"TROEP
-        ///$result = $db->query($query)->fetchall()[0];
-
-
-        $data = $db->prepare("SELECT * FROM gebruikers WHERE gebruikersnaam= ?");
+        $data = $db->prepare("SELECT * FROM gebruikers WHERE gebruikersnaam=?");
         $data->execute([$gebruikersnaam]);
         $result=$data->fetchAll();
 
@@ -141,11 +136,14 @@
             <article class="col-md-9">
                 <div class="user-content">
                     <h2>Over <?php echo $gebruikersnaam ?></h2>
-                    <?php //var_dump($result);
-                    foreach($result[0] as $key => $value){
-                        //var_dump($value);
-                        echo $key.': '.$value.'</br>';
+                    <?php
+                   
+                    if (isset($result[0]["biografie"])){
+                         $biografie = $result[0]["biografie"];
+                    } else {
+                        $biografie = "heeft geen backstory";
                     }
+                    echo $biografie;
                     
                     
                      ?>

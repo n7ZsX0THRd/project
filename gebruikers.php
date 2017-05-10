@@ -39,7 +39,7 @@ pdo_connect();
       "selectPlaatsnaam" => false,
       "selectLand" => false,
       "zoeken" => "",
-      "gebruiker-soort" => "beheerder"
+      "gebruiker-soort" => "koper"
     );
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
