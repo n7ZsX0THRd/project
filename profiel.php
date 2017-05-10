@@ -42,16 +42,17 @@ else {
   $image = "geenfoto/geenfoto.png";
 }
 
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-//$_POST['p_username']=$result['gebruikersnaam'];
+$_POST['p_username']=$result['gebruikersnaam'];
 
-print 'ddffddfdfdfdfdfdf';
+if(isset($_POST)){
   var_dump($_POST);
-if(update_user($_POST,$db))
-  {
-  header('location: profiel.php');
-  }
+  if(update_user($_POST,$db))
+    {
+    //header('location: profiel.php');
+    }
+
+}
 }
 
 ?>
@@ -271,7 +272,7 @@ if(update_user($_POST,$db))
                       <?php
                         while ($row = $landcodes->fetch()){
                       ?>
-                        <option value="<?php echo $row['ID'];?>" <?php if(($result['land']) == $row['lnd_code']){  echo 'selected'; } ?>><?php echo $row['lnd_code'];?></option>
+                        <option value="<?php echo $row['lnd_code'];?>" <?php if(($result['land']) == $row['lnd_code']){  echo 'selected'; } ?>><?php echo $row['lnd_code'];?></option>
                       <?php
                         }
                       ?>
