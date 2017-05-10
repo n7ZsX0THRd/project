@@ -212,7 +212,7 @@ if(isset($_POST)){
                       </select>
                       <?php }else{ ?>
                         <div class="pflijn">
-                            <?php echo $result['geboortemaand']?>
+                              <?php echo $months[$result['geboortemaand']-1];?>
                         </div>
                       <?php } ?>
                   </div>
@@ -227,7 +227,7 @@ if(isset($_POST)){
                     </select>
                     <?php }else{ ?>
                       <div class="pflijn">
-                          <?php echo $months[$result['geboortejaar']-1];?>
+                          <?php echo $result['geboortejaar'];?>
                       </div>
                     <?php } ?>
                   </div>
@@ -295,9 +295,9 @@ if(isset($_POST)){
 
               <!-- Telefoonnummer -->
               <div class="form-group">
-                <label for="exampleInputEmail1">Telefoonnummer</label>
+                <label for="tel">Telefoonnummer</label>
                 <?php if (isset($_GET['wijzig'])==true){  ?>
-                <input name="p_tel" class="form-control" id="exampleInputEmail1" placeholder="Telefoonnummer." >
+                <input name="p_tel" class="form-control" id="tel" placeholder="Telefoonnummer." >
                 <?php }else{ ?>
                 <div class="pflijn">
                     <?php
