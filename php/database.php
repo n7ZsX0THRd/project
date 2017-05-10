@@ -25,7 +25,7 @@ function block_user($gebruikersnaam,$db) {
 function create_user($data,$db){
   try {
       $dbs = $db->prepare(" INSERT INTO Gebruikers (gebruikersnaam,voornaam,achternaam,adresregel1,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?); INSERT INTO Gebruikerstelefoon (gebruikersnaam,telefoonnummer) VALUES (?,?)");
+      VALUES (?,?,?,?,?,?,?,?,?,?,?)");
       $dbs->execute(array(
           $data['r_username'],
           $data['r_firstname'],
@@ -37,11 +37,11 @@ function create_user($data,$db){
           $data['r_email'],
           password_hash($data['r_password'], PASSWORD_DEFAULT),
           $data['r_secret_question'],
-          $data['r_secret_question_answer'],
-          $data['r_username'],
-          $data['r_phonenumber']
+          $data['r_secret_question_answer']
         )
       );
+      $dbs = $db->prepare(" INSERT INTO Gebruikerstelefoon (telefoonnummer) WHERE gebruikersnaam=? VALUES (?) ");
+      $dbs->execute(array($data['r_username'],$data['r_phonenumber']));
       return true;
   } catch (PDOException $e) {
       return $e;
@@ -72,28 +72,60 @@ function create_verification_for_user($data,$db){
   }
 }
 
+function update_verification_for_user($data,$db){
+  try {
+      $dbs = $db->prepare("SELECT COUNT(Activatiecodes.gebruikersnaam) as count FROM Gebruikers INNER JOIN Activatiecodes ON Gebruikers.gebruikersnaam= Activatiecodes.gebruikersnaam WHERE Gebruikers.emailadres=?");
+      $dbs->execute(array($data['email']));
+      $count = $dbs->fetchAll()[0]['count'];
+
+      if($count == 1){
+        $dbs = $db->prepare("UPDATE Activatiecodes SET activatiecode = 111111, startdatum = GETDATE()
+WHERE gebruikersnaam = (SELECT Gebruikers.gebruikersnaam
+						FROM Gebruikers
+						INNER JOIN Activatiecodes
+						ON Gebruikers.gebruikersnaam= Activatiecodes.gebruikersnaam
+						WHERE Gebruikers.emailadres = ?)");
+        $dbs->execute(array($_SESSION['email']));
+
+        return $data['verificatiecode'];
+      }
+
+  } catch (PDOException $e) {
+      $to = 'casper.plate@hotmail.com';
+                $subject = "PDOexception eenmaalandermaal";
+                $message= '
+                '.$e.'
+                ';
+                $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
+                mail($to, $subject, $message, $headers);
+      return 0;
+  }
+}
+
 function update_user($data,$db){
   try {
       $dbs = $db->prepare(" UPDATE Gebruikers SET
       voornaam=?,
-      achternaam=?,
+      achternaam =?,
       adresregel1=?,
       postcode=?,
       plaatsnaam=?,
       geboortedatum=?,
       emailadres=?,
-      biografie=?
-
-      WHERE gebruikersnaam = ?;
-
-      UPDATE Gebruikerstelefoon SET
-      telefoonnummer =?
+      biografie=?,
 
       WHERE gebruikersnaam = ?");
 
       $dbs->execute(array($data['p_firstname'],$data['p_lastname'],$data['p_adres'],
       $data['p_zipcode'],$data['p_city'],$data['p_birthday'].'-'.$data['p_birthmonth'].'-'.$data['p_birthyear'],
-      $data['p_email'],$data['p_biografie'],$data['p_username'],$data['p_tel'],$data['p_username']));
+      $data['p_email'],$data['p_biografie'],$data['p_username']));
+
+      $dbs = $db->prepare(" UPDATE Gebruikerstelefoon SET
+      telefoonnummer =?,
+
+      WHERE gebruikersnaam = ?");
+
+      $dbs->execute(array($data['p_tel'],$data['p_username']));
 
       return true;
   } catch (PDOException $e) {

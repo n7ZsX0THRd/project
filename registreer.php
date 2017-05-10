@@ -75,6 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $subject = "Activatie code voor EenmaalAndermaal";
                 $message= '
 
+                Beste '.$_POST['r_username'].',
+
                 Bedankt voor het aanmelden!
 
                 Je account is aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.
