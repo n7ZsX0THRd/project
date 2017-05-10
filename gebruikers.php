@@ -1,45 +1,26 @@
+<?php
+session_start();
+
+include ('php/database.php');
+include ('php/user.php');
+pdo_connect();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="bootstrap/favicon.ico">
-
-    <title>Gebruikers</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="bootstrap/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="bootstrap/assets/js/ie-emulation-modes-warning.js"></script>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <link href="css/stylesheet.css" rel="stylesheet">
-    <link href="css/dashboard.css" rel="stylesheet">
+        <?php include 'php/includes/default_header.php'; ?>
+        <link href="css/dashboard.css" rel="stylesheet">
+        <title>Beheer - Veilingsite - Eenmaal Andermaal</title>
   </head>
 
   <body>
+    
  
-    <?php 
-    //include 'php/includes/header.php';            
-    require_once('php/database.php'); 
-    pdo_connect();
+    <?php
 
+    include 'php/includes/header.php';
   
     $selectie = array( // default values when there's no get request'
       "sorteerOp" => "achternaam",
@@ -56,7 +37,8 @@
       "selectAdresregel2" => false,
       "selectPostcode" => false,
       "selectPlaatsnaam" => false,
-      "selectLand" => false
+      "selectLand" => false,
+      "zoeken" => ""
     );
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -135,6 +117,11 @@
             $selectie["selectStatus"] = ($_GET['selectStatus'] === 'true');
           }else{
             $selectie["selectStatus"] = false;
+          }
+          if(!empty($_GET['zoeken'])){
+            $selectie["zoeken"] = htmlspecialchars($_GET['zoeken']);  
+          } else {
+            $selectie["zoeken"] = "";
           }
       }
     }
@@ -223,7 +210,13 @@
     </aside>
             <article class="col-md-8">
                 <h2> Gebruikers </h2>
-                <table class="table table-hover">
+                     <div class="row">
+                          <div class="col-lg-4 col-lg-offset-4">
+                              <input type="search" id="search" name="zoeken" <?php echo "value='".$selectie["zoeken"]."'"; ?> class="form-control" placeholder="Zoeken..">
+                          </div>
+                      </div>
+              <div class="table-responsive">
+                <table class="table table-hover" id="table">
                     <thead>
                     <tr>
                     <?php 
@@ -372,8 +365,9 @@
                                                         FROM Gebruikers
                                                         INNER JOIN Accountstatussen 
                                                           ON Gebruikers.statusID=Accountstatussen.ID
+                                                        --HERE voornaam LIKE ? OR achternaam LIKE ?  OR gebruikersnaam LIKE ?
                                                         ");
-                        $data->execute(array($selectie["sorteerOp"]));  
+                        $data->execute(array($selectie["zoeken"], $selectie["zoeken"], $selectie["zoeken"]));  
                         $result=$data->fetchAll();
 
                         $count=count($result);
@@ -396,24 +390,25 @@
                        foreach($result as $row){
                           $gebruikersnaam ="$row[gebruikersnaam]";
                           echo "<tr onclick=\"document.location='gebruiker.php?gebruikersnaam=".$gebruikersnaam."' \" >";
-                          if($selectie["selectVoornaam"]){ echo "<td>$row[voornaam]</te>";}
-                          if($selectie["selectAchternaam"]){ echo "<td>$row[achternaam]</td>";}
-                          if($selectie["selectGebruikersnaam"]){ echo "<td>".$gebruikersnaam."</td>";}
-                          if($selectie["selectEmail"]){ echo "<td>$row[emailadres]</td>";}
-                          if($selectie["selectGeboortedatum"]){ echo "<td>$row[geboortedatum]</td>";}
-                          if($selectie["selectAccountType"]){ echo "<td>$row[typegebruiker]</td>";}
+                          if($selectie["selectVoornaam"]){ echo "<td class='col-xs-4'>$row[voornaam]</te>";}
+                          if($selectie["selectAchternaam"]){ echo "<td class='col-xs-4'>$row[achternaam]</td>";}
+                          if($selectie["selectGebruikersnaam"]){ echo "<td class='col-xs-4'>".$gebruikersnaam."</td>";}
+                          if($selectie["selectEmail"]){ echo "<td class='col-xs-4'>$row[emailadres]</td>";}
+                          if($selectie["selectGeboortedatum"]){ echo "<td class='col-xs-4'>$row[geboortedatum]</td>";}
+                          if($selectie["selectAccountType"]){ echo "<td class='col-xs-4'>$row[typegebruiker]</td>";}
                           //if($selectBeoordeling){ echo '<td>Beoordeling</td>';}
-                          if($selectie["selectStatus"]){ echo "<td>$row[status]</td>";}
-                          if($selectie["selectLand"]){ echo "<td>$row[land]</td>";}
-                          if($selectie["selectPlaatsnaam"]){ echo "<td>$row[plaatsnaam]</td>";}
-                          if($selectie["selectPostcode"]){ echo "<td>$row[postcode]</td>";}
-                          if($selectie["selectAdresregel1"]){ echo "<td>$row[adresregel1]</td>";}
-                          if($selectie["selectAdresregel2"]){ echo "<td>$row[adresregel2]</td>";}
+                          if($selectie["selectStatus"]){ echo "<td class='col-xs-4'>$row[status]</td>";}
+                          if($selectie["selectLand"]){ echo "<td class='col-xs-4'>$row[land]</td>";}
+                          if($selectie["selectPlaatsnaam"]){ echo "<td class='col-xs-4'>$row[plaatsnaam]</td>";}
+                          if($selectie["selectPostcode"]){ echo "<td class='col-xs-4'>$row[postcode]</td>";}
+                          if($selectie["selectAdresregel1"]){ echo "<td class='col-xs-4'>$row[adresregel1]</td>";}
+                          if($selectie["selectAdresregel2"]){ echo "<td class='col-xs-4'>$row[adresregel2]</td>";}
                           echo "</tr>";
                         }
                       ?>
                     </tbody>
                 </table>
+                </div>
             </article>
         </section>
     </main>
@@ -436,6 +431,7 @@
     });
     */
     </script>
+    <script src="//rawgithub.com/stidges/jquery-searchable/master/dist/jquery.searchable-1.0.0.min.js"></script>
     <script type='text/javascript'>
 
  $(document).ready(function() { 
@@ -443,7 +439,23 @@
         $('form').submit();
    });
   });
-
+$(function () {
+    $( '#table' ).searchable({
+        searchType: 'fuzzy'
+    });
+    
+    $( '#searchable-container' ).searchable({
+        searchField: '#container-search',
+        selector: '.row',
+        childSelector: '.col-xs-4',
+        show: function( elem ) {
+            elem.slideDown(100);
+        },
+        hide: function( elem ) {
+            elem.slideUp( 100 );
+        }
+    })
+});
 </script>
 
   </body>
