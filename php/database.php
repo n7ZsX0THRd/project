@@ -40,10 +40,8 @@ function create_user($data,$db){
           $data['r_secret_question_answer']
         )
       );
-      $dbs = $db->prepare(" INSERT INTO Gebruikerstelefoon (telefoonnummer)
-      VALUES (?)");
-      $dbs->execute(array(
-          $data['r_username'],
+      $dbs = $db->prepare(" INSERT INTO Gebruikerstelefoon (telefoonnummer) WHERE gebruikersnaam=? VALUES (?) ");
+      $dbs->execute(array($data['r_username'],$data['r_phonenumber']));
       return true;
   } catch (PDOException $e) {
       return $e;
