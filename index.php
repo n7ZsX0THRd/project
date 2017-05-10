@@ -129,18 +129,18 @@ pdo_connect();
     <?php if (isUserLoggedIn($db)){
         $user = getLoggedInUser($db);
         if($user['statusID'] == 1){
-    ?>
-    <div class="container banner-top-container">
+    echo '<div class="container banner-top-container">
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
           <div class="bg-warning banner-top">
-            <strong>Hey</strong> <?php echo $user['voornaam']; ?>, je hebt jouw account nog niet geverifieerd. <br> Er is een E-mail naar je E-mailadres gestuurd. <br> Geen E-mail gekregen? Controleer je ongewenst box of zend een nieuwe mail. <br> Doe dat nu <div class="btn btn-primary btn-sm" onclick="sendMail()">hier</div>
+            <strong>Hey</strong> <?php echo $user['voornaam']; ?>, je hebt jouw account nog niet geverifieerd. <br> Er is een E-mail naar je E-mailadres gestuurd. <br> Geen E-mail gekregen? Controleer je ongewenst box of zend een nieuwe E-mail. <br> Doe dat nu <div class="btn btn-primary btn-sm" onclick="sendMail()">hier</div>
             <p id="mail"></p>
           </div>
         </div>
       </div>
-    </div>
-    <?php }} ?>
+    </div>'
+    }
+    ?>
     <div class="row">
     <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
     <div class="container-fluid">

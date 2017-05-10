@@ -82,12 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $_SESSION['warning']['invalid_email'] = true;
               }
               else {
-
-<<<<<<< HEAD
-                Beste '.$_POST['r_username'].',
-
-                Bedankt voor het aanmelden!
-=======
                   if(create_user($_POST,$db))
                   {
                     $random = rand(100000,999999);
@@ -96,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                       $to = $_POST['r_email'];
                       $subject = "Activatie code voor EenmaalAndermaal";
                       $message= '
->>>>>>> origin/master
+                      Beste '.$_POST['r_username'].',
 
                       Bedankt voor het aanmelden!
 
