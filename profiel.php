@@ -44,8 +44,9 @@ else {
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-$_POST['p_username']=$result['gebruikersnaam'];
+//$_POST['p_username']=$result['gebruikersnaam'];
 
+print 'ddffddfdfdfdfdfdf';
   var_dump($_POST);
 if(update_user($_POST,$db))
   {
@@ -131,7 +132,7 @@ if(update_user($_POST,$db))
               <div class="form-group">
                 <label for="exampleInputEmail1">Email</label>
                 <?php if (isset($_GET['wijzig'])==true){  ?>
-                <input type="email" name="p_username" class="form-control" id="exampleInputEmail1" placeholder="Email" value="<?php echo $result['emailadres']?>">
+                <input type="email" name="p_email" class="form-control" id="email" placeholder="Email" value="<?php echo $result['emailadres']?>">
                 <?php }else{ ?>
                   <div class="pflijn">
                       <?php echo $result['emailadres']?>
@@ -342,7 +343,7 @@ if(update_user($_POST,$db))
                   <div class="col-lg-12">
                      <div class="form-group">
                       <label for="exampleInputFile">Biografie</label>
-                      <textarea class="form-control" rows="10" style="max-width:100%;" placeholder="Biografie"></textarea>
+                      <textarea class="form-control" rows="10" style="max-width:100%;" name="p_biografie"  placeholder="Biografie"></textarea>
                      </div>
                   </div>
                 </div>
@@ -359,14 +360,17 @@ if(update_user($_POST,$db))
           <div class="col-lg-6 col-lg-offset-6">
 
             <div class="form-group">
+              <?php if (isset($_GET['wijzig'])==true){  ?>
               <label for="exampleInputPassword1">Bevestig je wachtwoord</label>
-              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Wachtwoord">
+              <input name="confirmpass" type="password" class="form-control" id="exampleInputPassword1" placeholder="Wachtwoord">
+              <?php } ?>
             </div>
             <div class="text-right">
               <?php if (isset($_GET['wijzig'])==false){  ?>
               <a href="?wijzig" type="submit" class="btn btn-orange">Wijzig gegevens</a>
               <?php }else{ ?>
-              <button type="submit" class="btn btn-orange">Wijzigingen opslaan</button>
+              <a href="?" type="submit" class="btn btn-orange">Annuleren</a>
+              <button type="submit" class="btn btn-orange" >Wijzingen opslaan</button>
               <?php } ?>
             </div>
           </form>
