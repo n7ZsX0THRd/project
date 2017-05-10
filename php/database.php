@@ -37,13 +37,9 @@ function unBlock_user($gebruikersnaam) {
 function create_user($data,$db){ //db is global!!
     global $db;
   try {
-<<<<<<< HEAD
-      $dbs = $db->prepare(" INSERT INTO Gebruikers (gebruikersnaam,voornaam,achternaam,adresregel1,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-=======
       $dbs = $db->prepare("INSERT INTO Gebruikers (gebruikersnaam,voornaam,achternaam,adresregel1,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst)
       VALUES (?,?,?,?,?,?,?,?,?,?,?); INSERT INTO Gebruikerstelefoon (gebruikersnaam,telefoonnummer) VALUES (?,?)");
->>>>>>> origin/master
+
       $dbs->execute(array(
           $data['r_username'],
           $data['r_firstname'],
@@ -55,11 +51,11 @@ function create_user($data,$db){ //db is global!!
           $data['r_email'],
           password_hash($data['r_password'], PASSWORD_DEFAULT),
           $data['r_secret_question'],
-          $data['r_secret_question_answer']
+          $data['r_secret_question_answer'],
+          $data['r_username'],
+          $data['r_phonenumber']
         )
       );
-      $dbs = $db->prepare(" INSERT INTO Gebruikerstelefoon (telefoonnummer) WHERE gebruikersnaam=? VALUES (?) ");
-      $dbs->execute(array($data['r_username'],$data['r_phonenumber']));
       return true;
   } catch (PDOException $e) {
       return false;
@@ -90,7 +86,6 @@ function create_verification_for_user($data,$db){  //db is global!!
   }
 }
 
-<<<<<<< HEAD
 function update_verification_for_user($data,$db){
   try {
       $dbs = $db->prepare("SELECT COUNT(Activatiecodes.gebruikersnaam) as count FROM Gebruikers INNER JOIN Activatiecodes ON Gebruikers.gebruikersnaam= Activatiecodes.gebruikersnaam WHERE Gebruikers.emailadres=?");
@@ -121,10 +116,9 @@ WHERE gebruikersnaam = (SELECT Gebruikers.gebruikersnaam
   }
 }
 
-function update_user($data,$db){
-=======
+
 function update_user($data,$db){  //db is global!!
->>>>>>> origin/master
+
   try {
       $dbs = $db->prepare(" UPDATE Gebruikers SET
       voornaam=?,
