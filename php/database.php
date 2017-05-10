@@ -89,11 +89,11 @@ function update_user($data,$db){
       $data['p_email'],$data['p_biografie'],$data['p_username']));
 
       $dbs = $db->prepare(" UPDATE Gebruikerstelefoon SET
-      p_tel =?,
+      telefoonnummer =?,
 
       WHERE gebruikersnaam = ?"
       $dbs->execute(array($data['p_tel'],$data['p_username']));
-      
+
       return true;
   } catch (PDOException $e) {
       return $e;
