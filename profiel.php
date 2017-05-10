@@ -14,7 +14,6 @@ if (!(isset($_SESSION['email']) != '')) {
 
 $landcodes = $db->query("SELECT lnd_code FROM Landen ORDER BY lnd_code ASC");
 $email = $_SESSION['email'];
-$query2 = $db->query("SELECT telefoonnummer FROM Gebruikerstelefoon WHERE gebruikersnaam =");
 $query="SELECT TOP(1)
        [gebruikersnaam]
       ,[voornaam]
@@ -35,7 +34,10 @@ $query="SELECT TOP(1)
       ,[statusID]
       ,[bestandsnaam]FROM Gebruikers WHERE emailadres = '$email'";
 $result = $db->query($query)->fetchall()[0];
-$result2 = $db->query($query2)->fetchall()[0];
+
+$gebruiker = $result['gebruikersnaam'];
+$query2 ="SELECT telefoonnummer FROM Gebruikerstelefoon WHERE gebruikersnaam = '$gebruiker'";
+$result2 = $db->query($query2)->fetchall();
 
 
 if(!empty($result['bestandsnaam'])) {
