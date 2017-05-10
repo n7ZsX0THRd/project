@@ -374,7 +374,7 @@ pdo_connect();
                         $sorteerOp=$selectie["sorteerOp"];
                         global $sorteerOp;
                         $sorteerOp=$selectie["sorteerOp"];
-                        echo $count;
+                        //echo $count;
                         
                           sort($result);
                           function cmp($a, $b)
