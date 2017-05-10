@@ -2,7 +2,23 @@
 
 function getLoggedInUser($db){
   if(isset($_SESSION['email']) && !empty($_SESSION['email'])){
-    $dbs = $db->prepare("SELECT TOP(1) gebruikersnaam,voornaam,achternaam,adresregel1,postcode,plaatsnaam,land,geboortedatum,emailadres,typegebruiker,statusID FROM Gebruikers WHERE emailadres=?");
+    $dbs = $db->prepare("SELECT TOP(1)
+    gebruikersnaam,
+    voornaam,
+    achternaam,
+    adresregel1,
+    postcode,
+    plaatsnaam,
+    land,
+    geboortedatum,
+    emailadres,
+    typegebruiker,
+    statusID,
+    datepart(month,[geboortedatum]) AS geboortedag,
+    datepart(day,[geboortedatum]) AS geboortemaand,
+    datepart(year,[geboortedatum]) AS geboortejaar,
+    biografie
+    FROM Gebruikers WHERE emailadres=?");
     $dbs->execute(array($_SESSION['email']));
     $result = $dbs->fetchAll();
 

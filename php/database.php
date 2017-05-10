@@ -24,7 +24,7 @@ function block_user($gebruikersnaam,$db) {
 }
 function create_user($data,$db){
   try {
-      $dbs = $db->prepare(" INSERT INTO Gebruikers (gebruikersnaam,voornaam,achternaam,adresregel1,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst)
+      $dbs = $db->prepare("INSERT INTO Gebruikers (gebruikersnaam,voornaam,achternaam,adresregel1,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst)
       VALUES (?,?,?,?,?,?,?,?,?,?,?); INSERT INTO Gebruikerstelefoon (gebruikersnaam,telefoonnummer) VALUES (?,?)");
       $dbs->execute(array(
           $data['r_username'],
@@ -44,7 +44,7 @@ function create_user($data,$db){
       );
       return true;
   } catch (PDOException $e) {
-      return $e;
+      return false;
   }
 }
 function create_verification_for_user($data,$db){

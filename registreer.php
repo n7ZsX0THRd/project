@@ -95,6 +95,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               $_SESSION['email'] = $_POST['r_email'];
               header('location: index.php');
             }
+            else {
+                $dbs = $db->prepare("SELECT TOP(1) gebruikersnaam FROM Gebruikers WHERE gebruikersnaam = ?");
+                $dbs->execute(array($_POST['r_username']));
+
+                if(count($dbs->fetchAll()) !== 0)
+                {
+                  $_SESSION['warning']['invalid_username'] = true;
+                }
+                else {
+                  $_SESSION['warning']['invalid_email'] = true;
+                }
+            }
         }
       }
     }
@@ -153,6 +165,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 {
                 ?>
                   <p class="bg-danger">De opgegeven geboortedatum is ongeldig</p>
+                <?php
+                }
+                else if(isset($_SESSION['warning']['invalid_username']) && $_SESSION['warning']['invalid_username'] === true)
+                {
+                ?>
+                  <p class="bg-danger">De opgegeven gebruikersnaam is al in gebruik</p>
+                <?php
+                }
+                else if(isset($_SESSION['warning']['invalid_email']) && $_SESSION['warning']['invalid_email'] === true)
+                {
+                ?>
+                  <p class="bg-danger">Het opgegeven emailadres is al in gebruik</p>
                 <?php
                 }
                 ?>
