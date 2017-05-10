@@ -66,36 +66,59 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
         else
         {
-            if(create_user($_POST,$db))
-            {
-              $random = rand(100000,999999);
-              $code = create_verification_for_user(array('gebruikersnaam' => $_POST['r_username'],'verificatiecode' => $random), $db);
-              if($code != 0) {
-                $to = $_POST['r_email'];
-                $subject = "Activatie code voor EenmaalAndermaal";
-                $message= '
+            $dbs = $db->prepare("SELECT TOP(1) gebruikersnaam FROM Gebruikers WHERE gebruikersnaam = ?");
+            $dbs->execute(array($_POST['r_username']));
 
+            if(count($dbs->fetchAll()) != 0)
+            {
+              $_SESSION['warning']['invalid_username'] = true;
+            }
+            else {
+              $dbs = $db->prepare("SELECT TOP(1) emailadres FROM Gebruikers WHERE emailadres = ?");
+              $dbs->execute(array($_POST['r_email']));
+
+              if(count($dbs->fetchAll()) != 0)
+              {
+                $_SESSION['warning']['invalid_email'] = true;
+              }
+              else {
+
+<<<<<<< HEAD
                 Beste '.$_POST['r_username'].',
 
                 Bedankt voor het aanmelden!
+=======
+                  if(create_user($_POST,$db))
+                  {
+                    $random = rand(100000,999999);
+                    $code = create_verification_for_user(array('gebruikersnaam' => $_POST['r_username'],'verificatiecode' => $random), $db);
+                    if($code != 0) {
+                      $to = $_POST['r_email'];
+                      $subject = "Activatie code voor EenmaalAndermaal";
+                      $message= '
+>>>>>>> origin/master
 
-                Je account is aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.
+                      Bedankt voor het aanmelden!
 
-                --------------------
-                Gebruikersnaam: '.$_POST['r_email'].'
-                Code: '.$code.'
-                --------------------
+                      Je account is aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.
 
-                Klik op deze link om je account te activeren:
-                http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$_POST['r_username'].'&code='.$code.'
+                      --------------------
+                      Gebruikersnaam: '.$_POST['r_email'].'
+                      Code: '.$code.'
+                      --------------------
 
-                '; //Bovenstaand bericht is de email die gebruikers ontvangen.
+                      Klik op deze link om je account te activeren:
+                      http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$_POST['r_username'].'&code='.$code.'
 
-                $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
-                mail($to, $subject, $message, $headers);
+                      '; //Bovenstaand bericht is de email die gebruikers ontvangen.
+
+                      $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
+                      mail($to, $subject, $message, $headers);
+                    }
+                    $_SESSION['email'] = $_POST['r_email'];
+                    header('location: index.php');
+                  }
               }
-              $_SESSION['email'] = $_POST['r_email'];
-              header('location: index.php');
             }
         }
       }
@@ -157,6 +180,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <p class="bg-danger">De opgegeven geboortedatum is ongeldig</p>
                 <?php
                 }
+                else if(isset($_SESSION['warning']['invalid_username']) && $_SESSION['warning']['invalid_username'] === true)
+                {
+                ?>
+                  <p class="bg-danger">De opgegeven gebruikersnaam is al in gebruik</p>
+                <?php
+                }
+                else if(isset($_SESSION['warning']['invalid_email']) && $_SESSION['warning']['invalid_email'] === true)
+                {
+                ?>
+                  <p class="bg-danger">Het opgegeven emailadres is al in gebruik</p>
+                <?php
+                }
                 ?>
                   <!-- Gebruiker gegevens -->
                   <div class="input-group">
@@ -208,7 +243,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <!-- Telefoonnummer -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span></div>
-                      <input type="" class="form-control" id="Tel" name="r_phonenumber" value="<?php if(isset($_POST['r_phonenumber'])){ echo $_POST['r_phonenumber']; } ?>" placeholder="Telefoonnummer">
+                      <input type="" minlength="10" maxlength="10" class="form-control" id="Tel" name="r_phonenumber" value="<?php if(isset($_POST['r_phonenumber'])){ echo $_POST['r_phonenumber']; } ?>" placeholder="Telefoonnummer">
                   </div>
                   <!-- Einde telefoonnummer -->
 

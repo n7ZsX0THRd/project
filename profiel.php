@@ -5,36 +5,13 @@ include ('php/database.php');
 include ('php/user.php');
 pdo_connect();
 
-/*
-if (!(isset($_SESSION['email']) != '')) {
-  session_destroy();
+if(isUserLoggedIn($db) == false){
   header ("Location: login.php");
 }
-*/
 
 $landcodes = $db->query("SELECT lnd_code FROM Landen ORDER BY lnd_code ASC");
 $email = $_SESSION['email'];
-$query="SELECT TOP(1)
-       [gebruikersnaam]
-      ,[voornaam]
-      ,[achternaam]
-      ,[adresregel1]
-      ,[adresregel2]
-      ,[postcode]
-      ,[plaatsnaam]
-      ,[land]
-      ,datepart(month,[geboortedatum]) AS geboortedag
-	    ,datepart(day,[geboortedatum]) AS geboortemaand
-	    ,datepart(year,[geboortedatum]) AS geboortejaar
-      ,[emailadres]
-      ,[wachtwoord]
-      ,[vraag]
-      ,[antwoordtekst]
-      ,[typegebruiker]
-      ,[statusID]
-      ,[biografie]
-      ,[bestandsnaam]FROM Gebruikers WHERE emailadres = '$email'";
-$result = $db->query($query)->fetchall()[0];
+$result = getLoggedInUser($db);
 
 $gebruiker = $result['gebruikersnaam'];
 $query2 ="SELECT telefoonnummer FROM Gebruikerstelefoon WHERE gebruikersnaam = '$gebruiker'";
@@ -53,16 +30,20 @@ else {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-$_POST['p_username']=$result['gebruikersnaam'];
 
-if(isset($_POST)){
-  var_dump($_POST);
-  if(update_user($_POST,$db))
+  $_POST['p_username']=$result['gebruikersnaam'];
+
+  if(isset($_POST)){
+
+      
+
+
+    if(update_user($_POST,$db))
     {
-    header('location: profiel.php');
+      header('location: profiel.php');
     }
 
-}
+  }
 }
 
 ?>
@@ -328,8 +309,8 @@ if(isset($_POST)){
                   <div class="col-lg-1">
                   </div>
                   <div class="col-lg-4">
-                    <div class="square-image-fix" data-toggle="modal" data-target="#myModal">
-                      <div class="edit-user-icon"><span class="glyphicon glyphicon-edit"></span></div>
+                    <div class="square-image-fix" <?php if (isset($_GET['wijzig'])==true){ ?> data-toggle="modal" data-target="#myModal" <?php } ?>>
+                      <?php if (isset($_GET['wijzig'])==true){ ?><div class="edit-user-icon"><span class="glyphicon glyphicon-edit"></span></div><?php } ?>
                       <img src="images/users/<?php echo $image ?>" id="showImageModal" class="img-responsive img-circle">
                     </div>
                   </div>
@@ -343,7 +324,7 @@ if(isset($_POST)){
                          <div class="modal-body">
                            <div class="form-group">
                              <label for="exampleInputFile">Upload een foto</label>
-                             <input type="file" id="exampleInputFile">
+                             <input type="file" name="p_profielfoto" id="exampleInputFile">
                              <p class="help-block">Upload alleen bestanden met png of jpg als bestandstype.</p>
                            </div>
                          </div>
@@ -361,7 +342,9 @@ if(isset($_POST)){
                      <div class="form-group">
                       <label for="exampleInputFile">Biografie</label>
                       <?php if (isset($_GET['wijzig'])==true){  ?>
-                      <textarea class="form-control" rows="10" style="max-width:100%;" name="p_biografie"  maxlength="255" placeholder="Biografie"></textarea>
+                      <textarea class="form-control" rows="10" style="max-width:100%;" name="p_biografie"  maxlength="255" value="<?php
+                        echo $result['biografie'];
+                      ?>"></textarea>
                       <?php }else{ ?>
                       <div class="pflijn">
                           <?php

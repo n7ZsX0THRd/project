@@ -3,8 +3,13 @@
   pdo_connect();
 
   if($_POST['action'][0] == 'block') {
-    if((block_user($_POST['action'][1],$db))==1) {
+    if((block_user($_POST['action'][1]))==1) {
       echo 'Gebruiker geblokkeerd';
+    }
+  }
+  if($_POST['action'][0] == 'unBlock') {
+    if((unblock_user($_POST['action'][1]))==1) {
+      echo 'Gebruiker gedeblokkeerd';
     }
   }
 ?>
