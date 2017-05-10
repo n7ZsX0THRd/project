@@ -11,7 +11,11 @@
         $data = $db->prepare("SELECT * FROM gebruikers WHERE gebruikersnaam=?");
         $data->execute([$gebruikersnaam]);
         $result=$data->fetchAll();
-
+        if ($result[0]['statusID']==3){
+            $blocked = true;
+        } else {
+            $blocked = false;
+        }
 
         if(!empty($result['bestandsnaam'])) {
           $image = $result['bestandsnaam'];
@@ -78,10 +82,19 @@
                         <img class="img-responsive img-circle" src= "images/users/<?php echo $image ?>" alt="Profile picture">
                         <div class="profielbutton-group">
                           <div class="btn-group" data-toggle="buttons">
+                          <?php
+                            if ($blocked){ ?>
+                                <button class="btn btn-danger" data-toggle="modal" data-target="#myModalDeBlock" >
+                                  <i class="glyphicon glyphicon-ban-circle"></i>
+                                  de-Blokkeer
+                              </button>
+                                <?php
+                            } else { ?>
                               <button class="btn btn-danger" data-toggle="modal" data-target="#myModalBlock" >
                                   <i class="glyphicon glyphicon-ban-circle"></i>
                                   Blokkeer
                               </button>
+                              <?php } ?>
                               <button class="btn btn-niagara" type="button" name="Bericht" >
                                   <i class="glyphicon glyphicon-envelope"></i>
                                   Stuur bericht
@@ -100,6 +113,21 @@
                            <div class="modal-footer">
                              <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
                              <button type="button" class="btn btn-primary" onclick="myAjax(['block','<?php echo $gebruikersnaam ?>'])">Blokkeren</button>
+                           </div>
+                         </div>
+                       </div>
+                    </div>
+
+                    <div class="modal fade bs-example-modal-sm" id="myModalDeBlock" tabindex="-1" role="dialog" aria-labelledby="myModalBlock">
+                      <div class="modal-dialog modal-sm" role="document">
+                         <div class="modal-content">
+                           <div class="modal-header">
+                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                             <h4 class="modal-title" id="myModalLabel">Weet u zeker dat u deze gebruiker wil deblokkeren?</h4>
+                           </div>
+                           <div class="modal-footer">
+                             <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
+                             <button type="button" class="btn btn-primary" onclick="myAjax(['unBlock','<?php echo $gebruikersnaam ?>'])">Deblokkeren</button>
                            </div>
                          </div>
                        </div>

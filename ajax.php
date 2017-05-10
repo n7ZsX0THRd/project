@@ -8,7 +8,7 @@
     }
   }
   if($_POST['action'][0] == 'unBlock') {
-    if((block_user($_POST['action'][1]))==1) {
+    if((unblock_user($_POST['action'][1]))==1) {
       echo 'Gebruiker gedeblokkeerd';
     }
   }
