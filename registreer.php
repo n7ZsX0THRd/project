@@ -66,46 +66,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
         else
         {
-            if(create_user($_POST,$db))
+            $dbs = $db->prepare("SELECT TOP(1) gebruikersnaam FROM Gebruikers WHERE gebruikersnaam = ?");
+            $dbs->execute(array($_POST['r_username']));
+
+            if(count($dbs->fetchAll()) != 0)
             {
-              $random = rand(100000,999999);
-              $code = create_verification_for_user(array('gebruikersnaam' => $_POST['r_username'],'verificatiecode' => $random), $db);
-              if($code != 0) {
-                $to = $_POST['r_email'];
-                $subject = "Activatie code voor EenmaalAndermaal";
-                $message= '
-
-                Bedankt voor het aanmelden!
-
-                Je account is aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.
-
-                --------------------
-                Gebruikersnaam: '.$_POST['r_email'].'
-                Code: '.$code.'
-                --------------------
-
-                Klik op deze link om je account te activeren:
-                http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$_POST['r_username'].'&code='.$code.'
-
-                '; //Bovenstaand bericht is de email die gebruikers ontvangen.
-
-                $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
-                mail($to, $subject, $message, $headers);
-              }
-              $_SESSION['email'] = $_POST['r_email'];
-              header('location: index.php');
+              $_SESSION['warning']['invalid_username'] = true;
             }
             else {
-                $dbs = $db->prepare("SELECT TOP(1) gebruikersnaam FROM Gebruikers WHERE gebruikersnaam = ?");
-                $dbs->execute(array($_POST['r_username']));
+              $dbs = $db->prepare("SELECT TOP(1) emailadres FROM Gebruikers WHERE emailadres = ?");
+              $dbs->execute(array($_POST['r_email']));
 
-                if(count($dbs->fetchAll()) !== 0)
-                {
-                  $_SESSION['warning']['invalid_username'] = true;
-                }
-                else {
-                  $_SESSION['warning']['invalid_email'] = true;
-                }
+              if(count($dbs->fetchAll()) != 0)
+              {
+                $_SESSION['warning']['invalid_email'] = true;
+              }
+              else {
+
+                  if(create_user($_POST,$db))
+                  {
+                    $random = rand(100000,999999);
+                    $code = create_verification_for_user(array('gebruikersnaam' => $_POST['r_username'],'verificatiecode' => $random), $db);
+                    if($code != 0) {
+                      $to = $_POST['r_email'];
+                      $subject = "Activatie code voor EenmaalAndermaal";
+                      $message= '
+
+                      Bedankt voor het aanmelden!
+
+                      Je account is aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.
+
+                      --------------------
+                      Gebruikersnaam: '.$_POST['r_email'].'
+                      Code: '.$code.'
+                      --------------------
+
+                      Klik op deze link om je account te activeren:
+                      http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$_POST['r_username'].'&code='.$code.'
+
+                      '; //Bovenstaand bericht is de email die gebruikers ontvangen.
+
+                      $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
+                      mail($to, $subject, $message, $headers);
+                    }
+                    $_SESSION['email'] = $_POST['r_email'];
+                    header('location: index.php');
+                  }
+              }
             }
         }
       }
