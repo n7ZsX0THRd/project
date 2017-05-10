@@ -129,7 +129,8 @@ pdo_connect();
     <?php if (isUserLoggedIn($db)){
         $user = getLoggedInUser($db);
         if($user['statusID'] == 1){
-    echo '<div class="container banner-top-container">
+          ?>
+  <div class="container banner-top-container">
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
           <div class="bg-warning banner-top">
@@ -138,7 +139,8 @@ pdo_connect();
           </div>
         </div>
       </div>
-    </div>'
+    </div>
+    <?php
     }
     ?>
     <div class="row">
@@ -358,7 +360,7 @@ pdo_connect();
             $dbs= $db->prepare("SELECT gebruikersnaam FROM Gebruikers WHERE emailadres=?");
             $dbs->execute(array($_SESSION['email']));
             $gebruikersnaam = $dbs->fetchAll()[0]['gebruikersnaam'];
-            
+
             $random = rand(100000,999999);
               $code = update_verification_for_user(array('email' => $_SESSION['email'],'verificatiecode' => $random), $db);
               if($code != 0) {
@@ -366,7 +368,7 @@ pdo_connect();
                 $subject = "Nieuwe activatie code voor EenmaalAndermaal";
                 $message= '
 
-                Beste '.$gebruikersnaam.', 
+                Beste '.$gebruikersnaam.',
 
                 Er is een nieuwe activatiecode voor je aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.
 
