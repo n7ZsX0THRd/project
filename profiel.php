@@ -359,7 +359,7 @@ if(isset($_POST)){
                   <div class="col-lg-12">
                      <div class="form-group">
                       <label for="exampleInputFile">Biografie</label>
-                      <textarea class="form-control" rows="10" style="max-width:100%;" name="p_biografie"  placeholder="Biografie"></textarea>
+                      <textarea class="form-control" rows="10" style="max-width:100%;" name="p_biografie"  maxlength="255" placeholder="Biografie"></textarea>
                      </div>
                   </div>
                 </div>
