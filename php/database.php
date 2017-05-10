@@ -87,13 +87,14 @@ function update_user($data,$db){
       $dbs->execute(array($data['p_firstname'],$data['p_lastname'],$data['p_adres'],
       $data['p_zipcode'],$data['p_city'],$data['p_birthday'].'-'.$data['p_birthmonth'].'-'.$data['p_birthyear'],
       $data['p_email'],$data['p_biografie'],$data['p_username']));
-
+      $count = $dbs->fetchAll()[0]['count'];
       $dbs = $db->prepare(" UPDATE Gebruikerstelefoon SET
       telefoonnummer =?,
 
       WHERE gebruikersnaam = ?");
+      
       $dbs->execute(array($data['p_tel'],$data['p_username']));
-
+      $count = $dbs->fetchAll()[0]['count'];
       return true;
   } catch (PDOException $e) {
       return $e;
