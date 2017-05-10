@@ -37,7 +37,7 @@ $result = $db->query($query)->fetchall()[0];
 
 $gebruiker = $result['gebruikersnaam'];
 $query2 ="SELECT telefoonnummer FROM Gebruikerstelefoon WHERE gebruikersnaam = '$gebruiker'";
-$result2 = $db->query($query2)->fetchall();
+$result2 = $db->query($query2)->fetchall()[0];
 
 
 if(!empty($result['bestandsnaam'])) {
@@ -295,12 +295,12 @@ if(isset($_POST)){
               <div class="form-group">
                 <label for="exampleInputEmail1">Telefoonnummer</label>
                 <?php if (isset($_GET['wijzig'])==true){  ?>
-                <input type="" name="p_tel" class="form-control" id="exampleInputEmail1" placeholder="Telefoonnummer." >
+                <input name="p_tel" class="form-control" id="exampleInputEmail1" placeholder="Telefoonnummer." >
                 <?php }else{ ?>
                 <div class="pflijn">
-                    <?php if(isset($result['telefoonnummer'])){
+                    <?php
                       echo $result2['telefoonnummer'];
-                    } ?>
+                    ?>
                 </div>
                 <?php } ?>
               </div>
