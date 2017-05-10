@@ -203,7 +203,7 @@ if(isset($_POST)){
                         foreach ($months as $value)
                         {
                         ?>
-                        <option value="<?php echo $value; ?>" <?php if($result['geboortemaand'] == $index){  echo 'selected'; } ?>><?php echo $value; ?></option>
+                        <option value="<?php echo $index; ?>" <?php if($result['geboortemaand'] == $index){  echo 'selected'; } ?>><?php echo $value; ?></option>
 
                         <?php
                         $index++;
