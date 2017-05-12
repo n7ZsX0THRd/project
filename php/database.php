@@ -155,20 +155,19 @@ function update_user($data,$db){  //db is global!!
       plaatsnaam=?,
       geboortedatum=?,
       emailadres=?,
-      biografie=?,
+      biografie=?
+
+      WHERE gebruikersnaam = ?;
+
+      UPDATE Gebruikerstelefoon SET
+      telefoonnummer =?
 
       WHERE gebruikersnaam = ?");
 
       $dbs->execute(array($data['p_firstname'],$data['p_lastname'],$data['p_adres'],
       $data['p_zipcode'],$data['p_city'],$data['p_birthday'].'-'.$data['p_birthmonth'].'-'.$data['p_birthyear'],
-      $data['p_email'],$data['p_biografie'],$data['p_username']));
+      $data['p_email'],$data['p_biografie'],$data['p_username'],$data['p_tel'],$data['p_username']));
 
-      $dbs = $db->prepare(" UPDATE Gebruikerstelefoon SET
-      telefoonnummer =?,
-
-      WHERE gebruikersnaam = ?");
-
-      $dbs->execute(array($data['p_tel'],$data['p_username']));
 
       return true;
   } catch (PDOException $e) {
