@@ -1,5 +1,16 @@
 <div class="footer">
   <div class="container">
-    <p>Algemene voorwaarden Privacy Cookies Beste webwinkel 2017   Thuiswinkel waarborg © 2017 EenmaalAndermaal N.V. Beoordeling door klanten: 7.9 / 10 - 6980 beoordelingen</p>
+
+      <div class="row">
+        <div class="col-lg-4">
+          <ul>
+            <li></li>
+          </ul>
+        </div>
+        <div class="col-lg-4">
+        </div>
+        <div class="col-lg-4">
+        </div>
+      </div>
   </div>
 </div>
