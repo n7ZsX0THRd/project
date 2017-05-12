@@ -310,9 +310,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="col-lg-1">
                   </div>
                   <div class="col-lg-4">
-                    <div class="square-image-fix" <?php if (isset($_GET['wijzig'])==true){ ?> data-toggle="modal" data-target="#myModal" <?php } ?>>
+                    <div <?php if (isset($_GET['wijzig'])==true){ ?> data-toggle="modal" data-target="#myModal" <?php } ?>>
                       <?php if (isset($_GET['wijzig'])==true){ ?><div class="edit-user-icon"><span class="glyphicon glyphicon-edit"></span></div><?php } ?>
-                      <img src="images/users/<?php echo $image ?>" id="showImageModal" class="img-responsive img-circle">
+                        <div class="profile_picture" style="background-image:url(images/users/<?php echo $image; ?>);">
+                      </div>
                     </div>
                   </div>
 

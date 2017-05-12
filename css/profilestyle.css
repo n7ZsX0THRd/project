@@ -23,3 +23,12 @@
   padding: 3px;
   border-color: #efefef;
 }
+.profile_picture{
+  width:100%;
+  padding-bottom:calc(100% - 10px);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  border-radius:50%;
+  border:5px solid #EFEFEF;
+}
