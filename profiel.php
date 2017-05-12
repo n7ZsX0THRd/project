@@ -19,7 +19,7 @@ if(!empty($db->query($query2)->fetchall()[0])) {
   $result2 = $db->query($query2)->fetchall()[0];
 }
 else {
-  $result2["telefoonnummer"] = "Geen nummer geregistreerd";
+  $result2["telefoonnummer"] = "";
 }
 
 if(!empty($result['bestandsnaam'])) {
@@ -284,9 +284,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               <div class="form-group">
                 <label for="tel">Telefoonnummer</label>
                 <?php if (isset($_GET['wijzig'])==true){  ?>
-                <input name="p_tel" class="form-control" id="tel" value="<?php
+                <input name="p_tel" class="form-control" id="tel" placehold="Telefoonnummer" <?php
                   echo $result2['telefoonnummer'];
-                ?>" >
+                ?>>
                 <?php }else{ ?>
                 <div class="pflijn">
                     <?php
