@@ -28,6 +28,33 @@ function unBlock_user($gebruikersnaam) {
     try {
         $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '1' WHERE gebruikersnaam = ? ");
         $dbs->execute(array($gebruikersnaam));
+        $random = rand(100000,999999);
+        $code = create_verification_for_user(array('gebruikersnaam' => $_POST['r_username'],'verificatiecode' => $random), $db);
+        if($code != 0) {
+            $to = $_SESSION['email'];
+            $subject = "Je account is gedeblokkeerd";
+            $message= '
+                      Beste '.$gebruikersnaam.',
+
+                      Je account is gedeblokkeerd. 
+
+                      Om je account weer te kunnen gebruiken moet je deze opnieuw activeren door op onderstaande link te klikken.
+
+                      --------------------
+                      Het account met het volgende e-mailadres is gedeblokkeerd:
+                      E-mailadres: '.$_SESSION['email'].'
+                      
+                      Nieuwe activatiecode: '.$code.'
+                      --------------------
+
+                      Klik op deze link om je account te activeren:
+                      http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$gebruikersnaam.'&code='.$code.'
+
+                      '; //Bovenstaand bericht is de email die gebruikers ontvangen.
+
+            $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
+            mail($to, $subject, $message, $headers);
+        }
         return true;
     } catch (PDOException $e) {
         echo "Could not unBlock user, ".$e->getMessage();
