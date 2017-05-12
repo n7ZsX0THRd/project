@@ -32,19 +32,27 @@ else {
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
   $_POST['p_username']=$result['gebruikersnaam'];
+  if(isset($_POST['form_name'])){
+      if($_POST['form_name']=='changeprofile'){
+        if(update_user($_POST,$db))
+        {
+            header('location: profiel.php');
+        }
+    }else if($_POST['form_name']=='changepassword'){
+      var_dump($_POST);
 
-  print 'JKSAFKLFSKLFASKL';
-  if(isset($_POST)){
-
-
-
-
-    if(update_user($_POST,$db))
-    {
-      header('location: profiel.php');
+      if(update_wachtwoord($_POST,$db)){
+        print('www changed');
+      }
     }
-
   }
+
+
+
+//var_dump($_POST);
+
+
+
 }
 
 ?>
@@ -120,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         <div class="row content_top_offset">
           <div class="col-lg-6" style="border-right:1px solid #e7e7e7;">
             <form method="post" enctype="multipart/form-data" action="">
-
+              <input type="hidden" name="form_name" value="changeprofile"/>
               <!-- email -->
               <div class="form-group">
                 <label for="exampleInputEmail1">Email</label>
@@ -412,7 +420,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     </div>
   </form>
   <!-- popup -->
-  <form name="passchange" method="post" enctype="multipart/form-data" action="">
+  <form name="wachtwoordwijzig" method="post" enctype="multipart/form-data" action="">
+    <input type="hidden" name="form_name" value="changepassword"/>
   <div id="wachtwoord" class="modal fade" role="dialog">
     <div class="modal-dialog modal-sm">
       <!-- popup content-->
@@ -439,7 +448,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
-          <button type="submit" href="?pass" class="btn btn-orange">Veranderen</button>
+          <button type="submit" class="btn btn-orange">Veranderen</button>
         </div>
       </div>
     </div>

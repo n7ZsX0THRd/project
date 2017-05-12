@@ -45,12 +45,12 @@ function unBlock_user($gebruikersnaam) {
             $subject = "Je account is gedeblokkeerd";
             $message= '
                       Beste '.$gebruikersnaam.',
-                      Je account is gedeblokkeerd. 
+                      Je account is gedeblokkeerd.
                       Om je account weer te kunnen gebruiken moet je deze opnieuw activeren door op onderstaande link te klikken.
                       --------------------
                       Het account met het volgende e-mailadres is gedeblokkeerd:
                       E-mailadres: '.$result[0].'
-                                            
+
                       Nieuwe activatiecode: '.$code.'
                       --------------------
                       Klik op deze link om je account te activeren:
@@ -191,7 +191,7 @@ function update_wachtwoord($data,$db){
 
       WHERE gebruikersnaam = ?");
 
-      $dbs->execute(array($data['confirmpass']));
+      $dbs->execute(array(password_hash($data['confirmpass'], PASSWORD_DEFAULT)));
 
       return true;
   } catch (PDOException $e) {
