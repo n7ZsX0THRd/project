@@ -66,6 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
         else
         {
+          if(!preg_match('/^(?=[a-z])(?=[A-Z])[a-zA-Z]{8,}$/', $_POST['r_password'])) {
+            $_SESSION['warning']['invalid_password'] = true;
+          }
+          else {
             $dbs = $db->prepare("SELECT TOP(1) gebruikersnaam FROM Gebruikers WHERE gebruikersnaam = ?");
             $dbs->execute(array($_POST['r_username']));
 
@@ -117,6 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   }
               }
             }
+          }
         }
       }
     }
@@ -181,6 +186,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 {
                 ?>
                   <p class="bg-danger">De opgegeven gebruikersnaam is al in gebruik</p>
+                <?php
+                }
+                else if(isset($_SESSION['warning']['invalid_password']) && $_SESSION['warning']['invalid_password'] === true)
+                {
+                ?>
+                  <p class="bg-danger">Het opgegeven wachtwoord bestaat niet uit minimaal één hoofdletter en één kleine letter</p>
                 <?php
                 }
                 else if(isset($_SESSION['warning']['invalid_email']) && $_SESSION['warning']['invalid_email'] === true)
