@@ -112,6 +112,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                     $_SESSION['email'] = $_POST['r_email'];
                     header('location: index.php');
                   }
+                  else{
+                    echo 'ER IS IETS FOUT GEGAAN';
+                  }
               }
             }
         }

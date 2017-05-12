@@ -33,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
   $_POST['p_username']=$result['gebruikersnaam'];
 
+  print 'JKSAFKLFSKLFASKL';
   if(isset($_POST)){
 
 
@@ -359,39 +360,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               <!-- Trigger the popup with a button -->
               <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#wachtwoord">Wijzig wachtwoord</button>
 
-              <!-- popup -->
-              <div id="wachtwoord" class="modal fade" role="dialog">
-                <div class="modal-dialog modal-sm">
-                  <!-- popup content-->
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                      <h4 class="modal-title">Wijzig uw wachtwoord</h4>
-                    </div>
-                    <div class="modal-body">
-                      <form name="passchange" method="post" enctype="multipart/form-data" action="">
-                        <div class="form-group">
-                          <div class="form-group">
-                            <label for="formpass">Huidige wachtwoord</label>
-                            <input name="passchange" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
-                          </div>
-                          <div class="form-group">
-                            <label for="formpass">Nieuwe wachtwoord</label>
-                            <input name="confirmpass" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
-                          </div>
-                          <div class="form-group">
-                            <input name="confirmpasscheck" type="password" class="form-control" id="formpass" placeholder="Herhaal nieuwe wachtwoord">
-                          </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
-                      <button type="submit" href="?pass" class="btn btn-orange">Veranderen</button>
-                    </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
+
 
               <?php /*
               //var_dump($_POST["passchange"]);
@@ -441,7 +410,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
        </div>
     </div>
   </form>
+  <!-- popup -->
+  <form name="passchange" method="post" enctype="multipart/form-data" action="">
+  <div id="wachtwoord" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <!-- popup content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Wijzig uw wachtwoord</h4>
+        </div>
+        <div class="modal-body">
 
+            <div class="form-group">
+              <div class="form-group">
+                <label for="formpass">Huidige wachtwoord</label>
+                <input name="passchange" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+              </div>
+              <div class="form-group">
+                <label for="formpass">Nieuwe wachtwoord</label>
+                <input name="confirmpass" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+              </div>
+              <div class="form-group">
+                <input name="confirmpasscheck" type="password" class="form-control" id="formpass" placeholder="Herhaal nieuwe wachtwoord">
+              </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+          <button type="submit" href="?pass" class="btn btn-orange">Veranderen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </form>
 </div>
       <?php include 'php/includes/footer.php' ?>
 
