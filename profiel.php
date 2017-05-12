@@ -314,27 +314,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                       <img src="images/users/<?php echo $image ?>" id="showImageModal" class="img-responsive img-circle">
                     </div>
                   </div>
-                  <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal">
-                    <div class="modal-dialog" role="document">
-                       <div class="modal-content">
-                         <div class="modal-header">
-                           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                           <h4 class="modal-title" id="myModalLabel">Verander profielfoto</h4>
-                         </div>
-                         <div class="modal-body">
-                           <div class="form-group">
-                             <label for="exampleInputFile">Upload een foto</label>
-                             <input type="file" name="p_profielfoto" id="exampleInputFile">
-                             <p class="help-block">Upload alleen bestanden met png of jpg als bestandstype.</p>
-                           </div>
-                         </div>
-                         <div class="modal-footer">
-                           <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
-                           <button type="button" class="btn btn-primary">Opslaan</button>
-                         </div>
-                       </div>
-                     </div>
-                  </div>
+
                 </div>
 
                 <div class="row">
@@ -342,9 +322,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                      <div class="form-group">
                       <label for="exampleInputFile">Biografie</label>
                       <?php if (isset($_GET['wijzig'])==true){  ?>
-                      <textarea class="form-control" rows="10" style="max-width:100%;" name="p_biografie"  maxlength="255" value="<?php
+                      <textarea class="form-control" rows="10" style="max-width:100%;" name="p_biografie"  maxlength="255" ><?php
                         echo $result['biografie'];
-                      ?>"></textarea>
+                      ?></textarea>
                       <?php }else{ ?>
                       <div class="pflijn">
                           <?php
@@ -389,7 +369,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                       <h4 class="modal-title">Wijzig uw wachtwoord</h4>
                     </div>
                     <div class="modal-body">
-                      <form method="post" enctype="multipart/form-data" action="">
+                      <form name="passchange" method="post" enctype="multipart/form-data" action="">
                         <div class="form-group">
                           <div class="form-group">
                             <label for="formpass">Huidige wachtwoord</label>
@@ -403,25 +383,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                             <input name="confirmpasscheck" type="password" class="form-control" id="formpass" placeholder="Herhaal nieuwe wachtwoord">
                           </div>
                         </div>
-                      </form>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
                       <button type="submit" href="?pass" class="btn btn-orange">Veranderen</button>
                     </div>
+                    </form>
                   </div>
                 </div>
               </div>
 
-              <?php if (isset($_GET['pass'])==true){
+              <?php /*
+              //var_dump($_POST["passchange"]);
               if(password_verify($result[0]['wachtwoord'],$_POST["passchange"]))
               {
                 if(update_wachtwoord($_POST,$db))
                 {
                   header('location: profiel.php');
                 }
-              }
-            }
+              } */
               ?>
 
 
@@ -437,6 +417,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
       </div>
     </div>
   </div>
+
+  <form action="php/upload.php" method="post" enctype="multipart/form-data">
+    <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+           <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+             <h4 class="modal-title" id="myModalLabel">Verander profielfoto</h4>
+           </div>
+           <div class="modal-body">
+             <div class="form-group">
+               <label for="exampleInputFile">Upload een foto</label>
+              <input type="file" name="fileToUpload" id="fileToUpload">
+               <p class="help-block">Upload alleen bestanden met png of jpg als bestandstype.</p>
+             </div>
+           </div>
+           <div class="modal-footer">
+             <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
+             <input type="submit" class="btn btn-orange" value="Upload" name="submit">
+           </div>
+         </div>
+       </div>
+    </div>
+  </form>
 
 </div>
       <?php include 'php/includes/footer.php' ?>

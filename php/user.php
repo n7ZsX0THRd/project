@@ -17,7 +17,8 @@ function getLoggedInUser($db){
     datepart(month,[geboortedatum]) AS geboortedag,
     datepart(day,[geboortedatum]) AS geboortemaand,
     datepart(year,[geboortedatum]) AS geboortejaar,
-    biografie
+    biografie,
+    bestandsnaam
     FROM Gebruikers WHERE emailadres=?");
     $dbs->execute(array($_SESSION['email']));
     $result = $dbs->fetchAll();

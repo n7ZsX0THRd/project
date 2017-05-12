@@ -148,4 +148,19 @@ function update_user($data,$db){  //db is global!!
       return $e;
   }
 }
+
+function update_wachtwoord($data,$db){    
+  try {
+      $dbs = $db->prepare(" UPDATE Gebruikers SET
+      wachtwoord=?,
+
+      WHERE gebruikersnaam = ?");
+
+      $dbs->execute(array($data['confirmpass']));
+
+      return true;
+  } catch (PDOException $e) {
+      return $e;
+  }
+}
 ?>

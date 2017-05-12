@@ -29,27 +29,30 @@ if(isset($_POST["submit"])) {
 }
 // Check file size
 if ($_FILES["fileToUpload"]["size"] > 1000000) {
-    echo "Sorry, bestand is te groot!";
+    //echo "Sorry, bestand is te groot!";
+    header('Location: ../profiel.php?foto=size', true, 302);
     $uploadOk = 0;
 }
 // Allow certain file formats
 if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
     && $imageFileType != "gif" ) {
     echo "Alleen jpg, jpeg, png en gif!";
+      header('Location: ../profiel.php?foto=format', true, 302);
     $uploadOk = 0;
 }
 // Check if $uploadOk is set to 0 by an error
 if ($uploadOk == 0) {
-    echo "Sorry, is is iets misgegaan, probeer het opnieuw!";
+      header('Location: ../profiel.php?foto=error', true, 302);
 // if everything is ok, try to upload file
 } else {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
         $wijzigenBestandsnaam;
-        echo "Je profielfoto is geüpload!";
+        //echo "Je profielfoto is geüpload!";
+        header('Location: ../profiel.php?foto=succes', true, 302);
+exit;
     } else {
-        echo "Sorry, is is iets misgegaan, probeer het opnieuw!";
+        //echo "Sorry, is is iets misgegaan, probeer het opnieuw!";
+        header('Location: ../profiel.php?foto=error', true, 302);
     }
 }
 ?>
-
-
