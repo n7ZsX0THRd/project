@@ -26,34 +26,24 @@ function block_user($gebruikersnaam) {
 function unBlock_user($gebruikersnaam) {
     global $db;
     try {
-        $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '1' WHERE gebruikersnaam = ?");
+        $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '1' WHERE gebruikersnaam = ? ");
         $dbs->execute(array($gebruikersnaam));
-        $dbs = $db->prepare("SELECT emailadres FROM Gebruikers WHERE gebruikersnaam = ? ");
-        $dbs->execute(array($gebruikersnaam));
-        $result = $dbs->fetchAll()[0];
         $random = rand(100000,999999);
-        $dbs = $db->prepare("SELECT COUNT(gebruikersnaam) as count FROM Activatiecodes WHERE gebruikersnaam=?");
-        $dbs->execute(array($gebruikersnaam));
-        $count = $dbs->fetchAll()[0];
-        if($count == 0){
-            $code = create_verification_for_user(array('gebruikersnaam' => $gebruikersnaam,'verificatiecode' => $random), $db);
-        }else{
-            $code = update_verification_for_user(array('gebruikersnaam' => $gebruikersnaam,'verificatiecode' => $random), $db);
-        }
+        $code = create_verification_for_user(array('gebruikersnaam' => $gebruikersnaam,'verificatiecode' => $random), $db);
         if($code != 0) {
-            $to = $result[0];
+            $to = $_SESSION['email'];
             $subject = "Je account is gedeblokkeerd";
             $message= '
                       Beste '.$gebruikersnaam.',
 
-                      Je account is gedeblokkeerd. 
+                      Je account is gedeblokkeerd.
 
                       Om je account weer te kunnen gebruiken moet je deze opnieuw activeren door op onderstaande link te klikken.
 
                       --------------------
                       Het account met het volgende e-mailadres is gedeblokkeerd:
-                      E-mailadres: '.$result[0].'
-                                            
+                      E-mailadres: '.$_SESSION['email'].'
+
                       Nieuwe activatiecode: '.$code.'
                       --------------------
 
@@ -67,11 +57,7 @@ function unBlock_user($gebruikersnaam) {
         }
         return true;
     } catch (PDOException $e) {
-        $to = 'guusbouw@hotmail.com';
-        $subject = "Je account is gedeblokkeerd";
-        $message= $e;
-        $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
-        mail($to, $subject, $message, $headers);
+        echo "Could not unBlock user, ".$e->getMessage();
         return false;
     }
 }
@@ -88,7 +74,7 @@ function create_user($data,$db){ //db is global!!
           $data['r_street_name'].' '.$data['r_street_nr'].' '.$data['r_street_addition'],
           $data['r_zipcode'],
           $data['r_city'],
-          $data['r_birthday'].'-'.$data['r_birthmonth'].'-'.$data['r_birthyear'],
+          $data['r_birthmonth'].'-'.$data['r_birthday'].'-'.$data['r_birthyear'],
           $data['r_email'],
           password_hash($data['r_password'], PASSWORD_DEFAULT),
           $data['r_secret_question'],
@@ -99,6 +85,7 @@ function create_user($data,$db){ //db is global!!
       );
       return true;
   } catch (PDOException $e) {
+      var_dump($e);
       return false;
   }
 }
@@ -179,7 +166,7 @@ function update_user($data,$db){  //db is global!!
       WHERE gebruikersnaam = ?");
 
       $dbs->execute(array($data['p_firstname'],$data['p_lastname'],$data['p_adres'],
-      $data['p_zipcode'],$data['p_city'],$data['p_birthday'].'-'.$data['p_birthmonth'].'-'.$data['p_birthyear'],
+      $data['p_zipcode'],$data['p_city'],$data['p_birthmonth'].'-'.$data['p_birthday'].'-'.$data['p_birthyear'],
       $data['p_email'],$data['p_biografie'],$data['p_username'],$data['p_tel'],$data['p_username']));
 
 

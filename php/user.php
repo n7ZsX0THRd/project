@@ -14,8 +14,8 @@ function getLoggedInUser($db){
     emailadres,
     typegebruiker,
     statusID,
-    datepart(month,[geboortedatum]) AS geboortedag,
-    datepart(day,[geboortedatum]) AS geboortemaand,
+    datepart(day,[geboortedatum]) AS geboortedag,
+    datepart(month,[geboortedatum]) AS geboortemaand,
     datepart(year,[geboortedatum]) AS geboortejaar,
     biografie,
     bestandsnaam
