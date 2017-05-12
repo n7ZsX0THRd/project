@@ -17,6 +17,22 @@ function block_user($gebruikersnaam) {
     try {
         $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '3' WHERE gebruikersnaam = ? ");
         $dbs->execute(array($gebruikersnaam));
+        $dbs = $db->prepare("SELECT emailadres FROM Gebruikers WHERE gebruikersnaam = ? ");
+        $dbs->execute(array($gebruikersnaam));
+        $result = $dbs->fetchAll()[0];
+        $to = $result[0];
+        $subject = "Je account is geblokkeerd";
+        $message= '
+                      Beste '.$gebruikersnaam.',
+                      
+                      Je account dat gekoppeld is met het emailadres '.$result[0].' is geblokkeerd!
+                      Ben je het hier niet mee eens, neem contact met ons op.
+                     
+                      Vriendelijke groet,
+                      EenmaalAndermaal
+                     '; //Bovenstaand bericht is de email die gebruikers ontvangen.
+        $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
+        mail($to, $subject, $message, $headers);
         return true;
     } catch (PDOException $e) {
         echo "Could not block user, ".$e->getMessage();
@@ -35,17 +51,23 @@ function unBlock_user($gebruikersnaam) {
         $dbs = $db->prepare("SELECT COUNT(gebruikersnaam) as count FROM Activatiecodes WHERE gebruikersnaam=?");
         $dbs->execute(array($gebruikersnaam));
         $count = $dbs->fetchAll()[0];
-        if($count == 0){
+        $code = 0;
+        if($count[0] == 0){
             $code = create_verification_for_user(array('gebruikersnaam' => $gebruikersnaam,'verificatiecode' => $random), $db);
-        }else{
-            $code = update_verification_for_user(array('gebruikersnaam' => $gebruikersnaam,'verificatiecode' => $random), $db);
+        }else {
+            $code = update_verification_for_user(array('email' => $result[0],'verificatiecode' => $random), $db);
         }
         if($code != 0) {
             $to = $result[0];
             $subject = "Je account is gedeblokkeerd";
             $message= '
                       Beste '.$gebruikersnaam.',
+<<<<<<< HEAD
                       Je account is gedeblokkeerd.
+=======
+                      
+                      Je account is gedeblokkeerd. 
+>>>>>>> origin/master
                       Om je account weer te kunnen gebruiken moet je deze opnieuw activeren door op onderstaande link te klikken.
                       --------------------
                       Het account met het volgende e-mailadres is gedeblokkeerd:
@@ -135,7 +157,7 @@ WHERE gebruikersnaam = (SELECT Gebruikers.gebruikersnaam
 						INNER JOIN Activatiecodes
 						ON Gebruikers.gebruikersnaam= Activatiecodes.gebruikersnaam
 						WHERE Gebruikers.emailadres = ?)");
-        $dbs->execute(array($data['verificatiecode'], $_SESSION['email']));
+        $dbs->execute(array($data['verificatiecode'], $data['email']));
 
         return $data['verificatiecode'];
       }
