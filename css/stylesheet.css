@@ -348,3 +348,51 @@ p{
 .banner-top-container{
   margin-top:15px;
 }
+.footer_content > div > a > img{
+  width:80%;
+  margin-left:10%;
+}
+.footer_content > div > h1{
+  color:#EFEFEF;
+  font-size:1.4em;
+  margin-top:38px;
+}
+.footer_content > div > ul{
+  padding:0px;
+  margin:0px;
+}
+.footer_content > div > ul > li{
+  list-style-type: none;
+  padding:0;
+  margin:0;
+}
+.footer_content > div > ul > li > a{
+  color:#DFDFDF;
+  cursor:pointer;
+
+}
+.footer_content > div > ul > li > a:hover{
+  color:white;
+  text-decoration: none;
+}
+.captionfix{
+  margin-top:-10px;
+}
+.widebutton{
+  width:100%;
+  margin-bottom:-10px;
+}
+.thumb_image{
+  width:90%;
+  margin:5%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  padding-bottom:100%;
+}
+.thumb_image:hover{
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  z-index:1000;
+}

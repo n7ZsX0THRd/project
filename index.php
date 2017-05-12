@@ -233,41 +233,41 @@ if(isset($_GET['mail'])==true) {
                   <div class="row item-row">
                     <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                       <div class="thumbnail">
-                        <img src="images/vliegtuig.png" alt="...">
-                        <div class="caption">
-                          <h3>Thumbnail label</h3>
-                          <p>...</p>
-                          <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                        <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+                        <div class="caption captionfix">
+                          <h3>Spiegel</h3>
+                          <p>Huidige bod: <strong>€270.-</strong></p>
+                          <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                         </div>
                       </div>
                     </div>
                     <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                       <div class="thumbnail">
-                        <img src="images/vliegtuig.png" alt="...">
-                        <div class="caption">
-                          <h3>Thumbnail label</h3>
-                          <p>...</p>
-                          <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                        <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+                        <div class="caption captionfix">
+                          <h3>Spiegel</h3>
+                          <p>Huidige bod: <strong>€270.-</strong></p>
+                          <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                         </div>
                       </div>
                     </div>
                     <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                       <div class="thumbnail">
-                        <img src="images/vliegtuig.png" alt="...">
-                        <div class="caption">
-                          <h3>Thumbnail label</h3>
-                          <p>...</p>
-                          <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                        <div class="thumb_image" style="background-image:url(images/bmw.jpg);"></div>
+                        <div class="caption captionfix">
+                          <h3>Spiegel</h3>
+                          <p>Huidige bod: <strong>€270.-</strong></p>
+                          <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                         </div>
                       </div>
                     </div>
                     <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                       <div class="thumbnail">
-                        <img src="images/vliegtuig.png" alt="...">
-                        <div class="caption">
-                          <h3>Thumbnail label</h3>
-                          <p>...</p>
-                          <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                        <div class="thumb_image" style="background-image:url(images/users/ArnoudvBers.jpg);"></div>
+                        <div class="caption captionfix">
+                          <h3>Spiegel</h3>
+                          <p>Huidige bod: <strong>€270.-</strong></p>
+                          <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                         </div>
                       </div>
                     </div>
@@ -390,9 +390,10 @@ if(isset($_GET['mail'])==true) {
     </div>
     </div>
     </div>
+    </div>
+    </div>
+
     <?php include 'php/includes/footer.php' ?>
-    </div>
-    </div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
