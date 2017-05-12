@@ -172,7 +172,7 @@ if(isset($_GET['mail'])==true) {
               Doe dat nu <a href="?mail" type="submit" class="btn btn-orange">hier</a> <br>
               <?php 
               if($nieuwe_mail == 1) {
-                  echo 'Er is een nieuwe activatie E-mail verstuurd naar: '.$_SESSION['email'].'.'
+                  echo 'Er is een nieuwe activatie E-mail verstuurd naar: '.$_SESSION['email'].'.';
               }
               ?>
             <p id="mail"></p>
