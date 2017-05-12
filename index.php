@@ -174,6 +174,7 @@ if(isset($_GET['mail'])==true) {
               if($nieuwe_mail == 1) {
                   echo 'Er is een nieuwe activatie E-mail verstuurd naar: '.$_SESSION['email'].'.'
               }
+              ?>
             <p id="mail"></p>
           </div>
         </div>
