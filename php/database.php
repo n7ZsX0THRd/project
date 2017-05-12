@@ -93,13 +93,13 @@ function update_verification_for_user($data,$db){
       $count = $dbs->fetchAll()[0]['count'];
 
       if($count == 1){
-        $dbs = $db->prepare("UPDATE Activatiecodes SET activatiecode = 111111, startdatum = GETDATE()
+        $dbs = $db->prepare("UPDATE Activatiecodes SET activatiecode =?, startdatum = GETDATE()
 WHERE gebruikersnaam = (SELECT Gebruikers.gebruikersnaam
 						FROM Gebruikers
 						INNER JOIN Activatiecodes
 						ON Gebruikers.gebruikersnaam= Activatiecodes.gebruikersnaam
 						WHERE Gebruikers.emailadres = ?)");
-        $dbs->execute(array($_SESSION['email']));
+        $dbs->execute(array($data['verificatiecode'], $_SESSION['email']));
 
         return $data['verificatiecode'];
       }
