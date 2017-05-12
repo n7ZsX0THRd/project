@@ -17,6 +17,22 @@ function block_user($gebruikersnaam) {
     try {
         $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '3' WHERE gebruikersnaam = ? ");
         $dbs->execute(array($gebruikersnaam));
+        $dbs = $db->prepare("SELECT emailadres FROM Gebruikers WHERE gebruikersnaam = ? ");
+        $dbs->execute(array($gebruikersnaam));
+        $result = $dbs->fetchAll()[0];
+        $to = $result[0];
+        $subject = "Je account is geblokkeerd";
+        $message= '
+                      Beste '.$gebruikersnaam.',
+                      
+                      Je account dat gekoppeld is met het emailadres '.$result[0].' is geblokkeerd!
+                      Ben je het hier niet mee eens, neem contact met ons op.
+                     
+                      Vriendelijke groet,
+                      EenmaalAndermaal
+                     '; //Bovenstaand bericht is de email die gebruikers ontvangen.
+        $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
+        mail($to, $subject, $message, $headers);
         return true;
     } catch (PDOException $e) {
         echo "Could not block user, ".$e->getMessage();
@@ -46,6 +62,7 @@ function unBlock_user($gebruikersnaam) {
             $subject = "Je account is gedeblokkeerd";
             $message= '
                       Beste '.$gebruikersnaam.',
+                      
                       Je account is gedeblokkeerd. 
                       Om je account weer te kunnen gebruiken moet je deze opnieuw activeren door op onderstaande link te klikken.
                       --------------------
