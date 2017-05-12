@@ -175,4 +175,9 @@ function update_user($data,$db){  //db is global!!
       return $e;
   }
 }
+
+function send_message($data) {
+  header("Location: google.com");
+  echo "lol";
+}
 ?>
