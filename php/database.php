@@ -35,10 +35,11 @@ function unBlock_user($gebruikersnaam) {
         $dbs = $db->prepare("SELECT COUNT(gebruikersnaam) as count FROM Activatiecodes WHERE gebruikersnaam=?");
         $dbs->execute(array($gebruikersnaam));
         $count = $dbs->fetchAll()[0];
-        if($count == 0){
+        $code = 0;
+        if($count[0] == 0){
             $code = create_verification_for_user(array('gebruikersnaam' => $gebruikersnaam,'verificatiecode' => $random), $db);
-        }else{
-            $code = update_verification_for_user(array('gebruikersnaam' => $gebruikersnaam,'verificatiecode' => $random), $db);
+        }else {
+            $code = update_verification_for_user(array('email' => $result[0],'verificatiecode' => $random), $db);
         }
         if($code != 0) {
             $to = $result[0];
@@ -135,7 +136,7 @@ WHERE gebruikersnaam = (SELECT Gebruikers.gebruikersnaam
 						INNER JOIN Activatiecodes
 						ON Gebruikers.gebruikersnaam= Activatiecodes.gebruikersnaam
 						WHERE Gebruikers.emailadres = ?)");
-        $dbs->execute(array($data['verificatiecode'], $_SESSION['email']));
+        $dbs->execute(array($data['verificatiecode'], $data['email']));
 
         return $data['verificatiecode'];
       }
