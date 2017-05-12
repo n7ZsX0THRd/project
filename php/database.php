@@ -29,7 +29,7 @@ function unBlock_user($gebruikersnaam) {
         $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '1' WHERE gebruikersnaam = ? ");
         $dbs->execute(array($gebruikersnaam));
         $random = rand(100000,999999);
-        $code = create_verification_for_user(array('gebruikersnaam' => $_POST['r_username'],'verificatiecode' => $random), $db);
+        $code = create_verification_for_user(array('gebruikersnaam' => $gebruikersnaam,'verificatiecode' => $random), $db);
         if($code != 0) {
             $to = $_SESSION['email'];
             $subject = "Je account is gedeblokkeerd";
