@@ -5,6 +5,38 @@ include ('php/database.php');
 include ('php/user.php');
 pdo_connect();
 
+if(isset($_GET['mail'])==true) {
+    $dbs= $db->prepare("SELECT gebruikersnaam FROM Gebruikers WHERE emailadres=?");
+            $dbs->execute(array($_SESSION['email']));
+            $gebruikersnaam = $dbs->fetchAll()[0]['gebruikersnaam'];
+
+            $random = rand(100000,999999);
+              $code = update_verification_for_user(array('email' => $_SESSION['email'],'verificatiecode' => $random), $db);
+              if($code != 0) {
+                $to = $_SESSION['email'];
+                $subject = "Nieuwe activatie code voor EenmaalAndermaal";
+                $message= '
+
+                Beste '.$gebruikersnaam.',
+
+                Er is een nieuwe activatiecode voor je aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.
+
+                --------------------
+                E-mail: '.$_SESSION['email'].'
+                Code: '.$code.'
+                --------------------
+
+                Klik op deze link om je account te activeren:
+                http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$gebruikersnaam.'&code='.$code.'
+
+                '; //Bovenstaand bericht is de email die gebruikers ontvangen.
+
+                $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
+                mail($to, $subject, $message, $headers);
+              }
+    $nieuwe_mail = 1;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -134,7 +166,14 @@ pdo_connect();
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
           <div class="bg-warning banner-top">
-            <strong>Hey</strong> <?php echo $user['voornaam']; ?>, je hebt jouw account nog niet geverifieerd. <br> Er is een E-mail naar je E-mailadres gestuurd. <br> Geen E-mail gekregen? Controleer je ongewenst box of zend een nieuwe E-mail. <br> Doe dat nu <div class="btn btn-primary btn-sm">hier</div>
+            <strong>Hey</strong> <?php echo $user['voornaam']; ?>, je hebt jouw account nog niet geverifieerd. <br> 
+              Er is een E-mail naar je E-mailadres gestuurd. <br> 
+              Geen E-mail gekregen? Controleer je ongewenst box of zend een nieuwe E-mail. <br> 
+              Doe dat nu <a href="?mail" type="submit" class="btn btn-orange">hier</a> <br>
+              <?php 
+              if($nieuwe_mail == 1) {
+                  echo 'Er is een nieuwe activatie E-mail verstuurd naar: '.$_SESSION['email'].'.'
+              }
             <p id="mail"></p>
           </div>
         </div>
