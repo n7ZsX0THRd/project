@@ -166,16 +166,17 @@ if(isset($_GET['mail'])==true) {
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
           <div class="bg-warning banner-top">
-            <strong>Hey</strong> <?php echo $user['voornaam']; ?>, je hebt jouw account nog niet geverifieerd. <br> 
-              Er is een E-mail naar je E-mailadres gestuurd. <br> 
-              Geen E-mail gekregen? Controleer je ongewenst box of zend een nieuwe E-mail. <br> 
-              Doe dat nu <a href="?mail" type="submit" class="btn btn-orange">hier</a> <br>
+              Hey <?php echo $user['voornaam']; ?>, je hebt jouw account nog niet geverifieerd. <br> 
+              Er is een e-mail naar <?php echo $_SESSION['email']; ?> gestuurd. <br> 
+              Geen e-mail gekregen? Controleer je ongewenst box of stuur een nieuwe e-mail. <br> 
+              <a href="?mail" type="submit" class="btn btn-orange">Stuur opnieuw!</a> <br>
               <?php 
               if($nieuwe_mail == 1) {
-                  echo 'Er is een nieuwe activatie E-mail verstuurd naar: '.$_SESSION['email'].'.';
+                  echo 'Er is een nieuwe activatie e-mail verstuurd.';
               }
               ?>
-            <p id="mail"></p>
+              Klopt het e-mailadres niet? Wijzig deze dan <a href="profiel.php?wijzig">hier</a>.
+              
           </div>
         </div>
       </div>
