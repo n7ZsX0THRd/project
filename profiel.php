@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
   if(isset($_POST)){
 
-      
+
 
 
     if(update_user($_POST,$db))
@@ -369,12 +369,62 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             <div class="form-group">
               <?php if (isset($_GET['wijzig'])==true){  ?>
-              <label for="exampleInputPassword1">Bevestig je wachtwoord</label>
-              <input name="confirmpass" type="password" class="form-control" id="exampleInputPassword1" placeholder="Wachtwoord">
+              <label for="formpass">Bevestig huidige wachtwoord</label>
+              <input name="confirmpass" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
               <?php } ?>
             </div>
             <div class="text-right">
               <?php if (isset($_GET['wijzig'])==false){  ?>
+
+              <!-- Trigger the popup with a button -->
+              <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#wachtwoord">Wijzig wachtwoord</button>
+
+              <!-- popup -->
+              <div id="wachtwoord" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-sm">
+                  <!-- popup content-->
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Wijzig uw wachtwoord</h4>
+                    </div>
+                    <div class="modal-body">
+                      <form method="post" enctype="multipart/form-data" action="">
+                        <div class="form-group">
+                          <div class="form-group">
+                            <label for="formpass">Huidige wachtwoord</label>
+                            <input name="passchange" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+                          </div>
+                          <div class="form-group">
+                            <label for="formpass">Nieuwe wachtwoord</label>
+                            <input name="confirmpass" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+                          </div>
+                          <div class="form-group">
+                            <input name="confirmpasscheck" type="password" class="form-control" id="formpass" placeholder="Herhaal nieuwe wachtwoord">
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+                      <button type="submit" href="?pass" class="btn btn-orange">Veranderen</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <?php if (isset($_GET['pass'])==true){
+              if(password_verify($result[0]['wachtwoord'],$_POST["passchange"]))
+              {
+                if(update_wachtwoord($_POST,$db))
+                {
+                  header('location: profiel.php');
+                }
+              }
+            }
+              ?>
+
+
               <a href="?wijzig" type="submit" class="btn btn-orange">Wijzig gegevens</a>
               <?php }else{ ?>
               <a href="?" type="submit" class="btn btn-orange">Annuleren</a>
@@ -387,12 +437,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
       </div>
     </div>
   </div>
+
 </div>
       <?php include 'php/includes/footer.php' ?>
 
 </div>
-
-
 
 
 
