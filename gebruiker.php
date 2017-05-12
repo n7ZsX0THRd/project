@@ -29,7 +29,9 @@
         $image = "geenfoto/geenfoto.png";
       }
   }
-
+  if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+      send_message($_POST);
+  }
 
 ?>
 
@@ -95,14 +97,39 @@
                                   Blokkeer
                               </button>
                               <?php } ?>
-                              <button class="btn btn-niagara" type="button" name="Bericht" >
+                              <button class="btn btn-niagara" data-toggle="modal" data-target="#myModalSendMessage" >
                                   <i class="glyphicon glyphicon-envelope"></i>
                                   Stuur bericht
                               </button>
                           </div>
-                        </div>  
+                        </div>
                     </div>
+                    <div class="modal fade bs-example-modal-lg" id="myModalSendMessage" tabindex="-1" role="dialog" aria-labelledby="myModalSendMessage">
+                      <div class="modal-dialog modal-lg" role="document">
+                         <div class="modal-content">
+                           <div class="modal-header">
+                             <h4 class="modal-title">
+                               Bericht aan <?php echo $gebruikersnaam ?>
+                             </h4>
+                           </div>
+                           <form method="post" target="gebruiker.php">
+                             <div class="modal-footer">
+                               <div class="row">
+                                 <div class="col-lg-12">
+                                   <div class="form-group">
+                                     <textarea class="form-control" rows="10" style="max-width:100%" name="g_message"  maxlength="255">
 
+                                     </textarea>
+                                   </div>
+                                 </div>
+                               </div>
+                               <button type="submit" data-dismiss="modal" class="btn btn-orange" >Verzenden</button>
+                             </div>
+                           </form>
+                         </div>
+                       </div>
+                    </div>
+                    </div>
                     <div class="modal fade bs-example-modal-sm" id="myModalBlock" tabindex="-1" role="dialog" aria-labelledby="myModalBlock">
                       <div class="modal-dialog modal-sm" role="document">
                          <div class="modal-content">
@@ -165,17 +192,17 @@
                 <div class="user-content">
                     <h2>Over <?php echo $gebruikersnaam ?></h2>
                     <?php
-                   
+
                     if (isset($result[0]["biografie"])){
                          $biografie = $result[0]["biografie"];
                     } else {
                         $biografie = "heeft geen backstory";
                     }
                     echo $biografie;
-                    
-                    
+
+
                      ?>
-                    
+
                 </div>
 		</article>
 
@@ -198,7 +225,7 @@
                url: 'ajax.php',
                data:{action:actionvar},
                success:function(html) {
-               location.reload(); 
+               location.reload();
                }
           });
      } </script>
