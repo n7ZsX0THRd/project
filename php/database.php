@@ -36,14 +36,14 @@ function unBlock_user($gebruikersnaam) {
             $message= '
                       Beste '.$gebruikersnaam.',
 
-                      Je account is gedeblokkeerd. 
+                      Je account is gedeblokkeerd.
 
                       Om je account weer te kunnen gebruiken moet je deze opnieuw activeren door op onderstaande link te klikken.
 
                       --------------------
                       Het account met het volgende e-mailadres is gedeblokkeerd:
                       E-mailadres: '.$_SESSION['email'].'
-                      
+
                       Nieuwe activatiecode: '.$code.'
                       --------------------
 
@@ -176,8 +176,7 @@ function update_user($data,$db){  //db is global!!
   }
 }
 
-<<<<<<< HEAD
-function update_wachtwoord($data,$db){    
+function update_wachtwoord($data,$db){
   try {
       $dbs = $db->prepare(" UPDATE Gebruikers SET
       wachtwoord=?,
@@ -190,10 +189,10 @@ function update_wachtwoord($data,$db){
   } catch (PDOException $e) {
       return $e;
   }
-=======
+}
 function send_message($data) {
   header("Location: google.com");
   echo "lol";
->>>>>>> origin/master
+
 }
 ?>
