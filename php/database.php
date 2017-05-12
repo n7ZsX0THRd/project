@@ -26,38 +26,46 @@ function block_user($gebruikersnaam) {
 function unBlock_user($gebruikersnaam) {
     global $db;
     try {
-        $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '1' WHERE gebruikersnaam = ? ");
+        $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '1' WHERE gebruikersnaam = ?");
         $dbs->execute(array($gebruikersnaam));
+        $dbs = $db->prepare("SELECT emailadres FROM Gebruikers WHERE gebruikersnaam = ? ");
+        $dbs->execute(array($gebruikersnaam));
+        $result = $dbs->fetchAll()[0];
         $random = rand(100000,999999);
-        $code = create_verification_for_user(array('gebruikersnaam' => $gebruikersnaam,'verificatiecode' => $random), $db);
+        $dbs = $db->prepare("SELECT COUNT(gebruikersnaam) as count FROM Activatiecodes WHERE gebruikersnaam=?");
+        $dbs->execute(array($gebruikersnaam));
+        $count = $dbs->fetchAll()[0];
+        if($count == 0){
+            $code = create_verification_for_user(array('gebruikersnaam' => $gebruikersnaam,'verificatiecode' => $random), $db);
+        }else{
+            $code = update_verification_for_user(array('gebruikersnaam' => $gebruikersnaam,'verificatiecode' => $random), $db);
+        }
         if($code != 0) {
-            $to = $_SESSION['email'];
+            $to = $result[0];
             $subject = "Je account is gedeblokkeerd";
             $message= '
                       Beste '.$gebruikersnaam.',
-
-                      Je account is gedeblokkeerd.
-
+                      Je account is gedeblokkeerd. 
                       Om je account weer te kunnen gebruiken moet je deze opnieuw activeren door op onderstaande link te klikken.
-
                       --------------------
                       Het account met het volgende e-mailadres is gedeblokkeerd:
-                      E-mailadres: '.$_SESSION['email'].'
-
+                      E-mailadres: '.$result[0].'
+                                            
                       Nieuwe activatiecode: '.$code.'
                       --------------------
-
                       Klik op deze link om je account te activeren:
                       http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$gebruikersnaam.'&code='.$code.'
-
                       '; //Bovenstaand bericht is de email die gebruikers ontvangen.
-
             $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
             mail($to, $subject, $message, $headers);
         }
         return true;
     } catch (PDOException $e) {
-        echo "Could not unBlock user, ".$e->getMessage();
+        $to = 'guusbouw@hotmail.com';
+        $subject = "Je account is gedeblokkeerd";
+        $message= $e;
+        $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
+        mail($to, $subject, $message, $headers);
         return false;
     }
 }
