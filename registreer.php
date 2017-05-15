@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
         else
         {
-          if(!preg_match('/^(?=[a-z])(?=[A-Z])[a-zA-Z]{8,}$/', $_POST['r_password'])) {
+          if(false){//!preg_match('/^(?=[a-z])(?=[A-Z])[a-zA-Z]{8,}$/', $_POST['r_password'])) {
             $_SESSION['warning']['invalid_password'] = true;
           }
           else {
