@@ -23,12 +23,12 @@ if(isset($_POST["submit"])) {
     if($check !== false) {
         $uploadOk = 1;
     } else {
-        echo "Bestand is geen afbeelding!";
+        header('Location: ../profiel.php?foto=nofile', true, 302);
         $uploadOk = 0;
     }
 }
 // Check file size
-if ($_FILES["fileToUpload"]["size"] > 1000000) {
+if ($_FILES["fileToUpload"]["size"] > 100000000) {
     //echo "Sorry, bestand is te groot!";
     header('Location: ../profiel.php?foto=size', true, 302);
     $uploadOk = 0;
@@ -36,13 +36,12 @@ if ($_FILES["fileToUpload"]["size"] > 1000000) {
 // Allow certain file formats
 if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
     && $imageFileType != "gif" ) {
-    echo "Alleen jpg, jpeg, png en gif!";
       header('Location: ../profiel.php?foto=format', true, 302);
     $uploadOk = 0;
 }
 // Check if $uploadOk is set to 0 by an error
 if ($uploadOk == 0) {
-      header('Location: ../profiel.php?foto=error', true, 302);
+      header('Location: ../profiel.php?wijzig&foto=error', true, 302);
 // if everything is ok, try to upload file
 } else {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
