@@ -8,9 +8,9 @@
         <div class="col-lg-3 col-xs-6 col-md-3 col-sm-3">
           <h1>Start hier</h1>
           <ul>
-            <li><a href="">Home</a></li>
-            <li><a href="">Registreren</a></li>
-            <li><a href="">Inloggen</a></li>
+            <li><a href="index.php">Home</a></li>
+            <li><a href="registreer.php">Registreren</a></li>
+            <li><a href="login.php">Inloggen</a></li>
           </ul>
         </div>
         <div class="col-lg-3 col-xs-6 col-md-3 col-sm-3">
