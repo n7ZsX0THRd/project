@@ -355,6 +355,8 @@
 		</article>
 
         </section>
+        <?php include 'php/includes/footer.php' ?>
+
     </main>
 
 

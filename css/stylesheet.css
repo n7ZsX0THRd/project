@@ -256,6 +256,11 @@ p{
     background-color: #5484a4;
     border-color: #5484a4;
 }
+.btn-danger {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 .btn-niagara:hover {
     color: #fff;
     opacity:0.8;
