@@ -56,4 +56,27 @@ function isUserLoggedIn($db){
   return false;
 }
 
+function isUserBeheerder($db){
+  if(isset($_SESSION['email']) && !empty($_SESSION['email'])){
+
+    $data = getLoggedInUser($db);
+
+    if($data == null)
+      return false;
+
+    if($data['emailadres'] == $_SESSION['email'] && $data['typegebruiker'] == '3')
+    {
+      return true;
+    }
+    else { // USER IS NO beheerder \
+
+      header("Location: index.php"); /* Redirect browser */
+
+      return false;
+    }
+
+  }
+  return false;
+}
+
 ?>
