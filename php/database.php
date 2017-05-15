@@ -62,12 +62,9 @@ function unBlock_user($gebruikersnaam) {
             $subject = "Je account is gedeblokkeerd";
             $message= '
                       Beste '.$gebruikersnaam.',
-<<<<<<< HEAD
-                      Je account is gedeblokkeerd.
-=======
 
                       Je account is gedeblokkeerd.
->>>>>>> origin/master
+
                       Om je account weer te kunnen gebruiken moet je deze opnieuw activeren door op onderstaande link te klikken.
                       --------------------
                       Het account met het volgende e-mailadres is gedeblokkeerd:
