@@ -52,7 +52,7 @@ if(isset($_GET['mail'])==true) {
     <?php include 'php/includes/header.php' ?>
 
 
-    <div class="container-fluid fullwidth-container-fix">
+    <div class="container-fluid fullwidth-container-fix" style="display:none;">
       <div class="row fullwidth-width-row">
         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
           <div id="myCarousel" class="carousel slide" data-ride="carousel">
