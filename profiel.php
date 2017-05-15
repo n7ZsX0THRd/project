@@ -34,11 +34,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
   $_POST['p_username']=$result['gebruikersnaam'];
   if(isset($_POST['form_name'])){
       if($_POST['form_name']=='changeprofile'){
-        $_SESSION['warning']['changingprofile'] = true;
-        if(update_user($_POST,$db))
+
+        $dataquery= $db->prepare("SELECT TOP(1) wachtwoord FROM Gebruikers WHERE gebruikersnaam=?");
+        $dataquery->execute(array($_POST['p_username']));
+        $wwquery = $dataquery->fetchAll();
+        $wwtotaal = count($wwquery);
+
+        if($wwtotaal == 1)
         {
-            header('location: profiel.php');
+            if(password_verify($_POST['confirmpass'], $wwquery[0]['wachtwoord']))
+            {
+              if(update_user($_POST,$db)){
+                $result = getLoggedInUser($db);
+                $_SESSION['warning']['changesucces'] = true;
+              }
+              else {
+                $_SESSION['warning']['pw_not_equal'] = true;
+              }
+            }
+            else {
+                $_SESSION['warning']['false_pass'] = true;
+            }
         }
+
+
+
     }else if($_POST['form_name']=='changepassword'){
 
       $_SESSION['warning']['changingpassword'] = true;
@@ -159,6 +179,19 @@ if(isset($_GET['foto'])){
         </div>
 
         <div class="row content_top_offset">
+          <?php if(isset($_SESSION['warning']['false_pass']) && $_SESSION['warning']['false_pass'] === true)
+          {
+          ?>
+            <p class="bg-danger" style="padding: 5px;">Opgegeven wachtwoord is niet correct</p>
+          <?php
+        }else if(isset($_SESSION['warning']['changesucces']) && $_SESSION['warning']['changesucces'] === true)
+        {
+        ?>
+          <p class="bg-success" style="padding: 5px;">Gegevens gewijzigd</p>
+        <?php
+
+
+        } ?>
           <div class="col-lg-6" style="border-right:1px solid #e7e7e7;">
             <form method="post" enctype="multipart/form-data" action="">
               <input type="hidden" name="form_name" value="changeprofile"/>
