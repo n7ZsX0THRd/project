@@ -88,7 +88,7 @@
                             if ($blocked){ ?>
                                 <button class="btn btn-danger" data-toggle="modal" data-target="#myModalDeBlock" >
                                   <i class="glyphicon glyphicon-ban-circle"></i>
-                                  de-Blokkeer
+                                  Deblokkeer
                               </button>
                                 <?php
                             } else { ?>
