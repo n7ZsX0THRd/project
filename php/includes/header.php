@@ -8,7 +8,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#"><img src="images/logo.png" width="65"><span style="padding-left:20px;">Eenmaal Andermaal</span></a>
+          <a class="navbar-brand" href="index.php"><img src="images/logo.png" width="65"><span style="padding-left:20px;">Eenmaal Andermaal</span></a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <?php include 'menu.php' ?>
