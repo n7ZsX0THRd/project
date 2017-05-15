@@ -124,7 +124,7 @@
                                   Blokkeer
                               </button>
                               <?php } ?>
-                              <button class="btn btn-niagara" data-toggle="modal" data-target="#myModalSendMessage" >
+                              <button class="btn btn-niagara" disabled data-toggle="modal" data-target="#myModalSendMessage" >
                                   <i class="glyphicon glyphicon-envelope"></i>
                                   Stuur bericht
                               </button>
@@ -185,32 +185,48 @@
                          </div>
                        </div>
                     </div>
-
-                    <div class="profile-usermenu">
-                        <ul class="nav">
-                            <li class="active">
-                                <a href="#">
-                                <i class="glyphicon glyphicon-home"></i>
-                                Overzicht </a>
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-md-4 col-lg-2 col-sm-4 sidebar">
+                          <h3>Gebruiker</h3>
+                          <ul class="menubar">
+                            <li class="toggle-sub">
+                              <a href="">Direct regelen</a>
                             </li>
-                            <li>
-                                <a href="#">
-                                <i class="glyphicon glyphicon-user"></i>
-                                Instellingen</a>
+                            <ul class="sub">
+                              <li>
+                                <a href="">Laatste bieding</a>
+                              </li>
+                              <li>
+                                <a href="">Verkopen</a>
+                              </li>
+                            </ul>
+                            <li class="toggle-sub">
+                              <a href="">Mijn Account</a>
                             </li>
-                            <li>
-                                <a href="#" target="_blank">
-                                <i class="glyphicon glyphicon-eur"></i>
-                                Betalingen </a>
+                            <ul class="sub">
+                              <li>
+                                <a href="">Mijn biedingen</a>
+                              </li>
+                              <li>
+                                <a href="">Mijn favorieten</a>
+                              </li>
+                              <li>
+                                <a href="">Instellingen</a>
+                              </li>
+                              <li>
+                                <a href="php/logout.php">Log uit</a>
+                              </li>
+                            </ul>
+                            <?php if($result[0]['typegebruiker'] ==3){?>
+                            <li class="toggle-sub">
+                              <a href="gebruikers.php">Beheerpanel</a>
                             </li>
-                            <li>
-                                <a href="#" target="_blank">
-                                <i class="glyphicon glyphicon-star"></i>
-                                Beoordelingen </a>
-                            </li>
-                        </ul>
-                    </div>
-
+                            <?php } ?>
+                          </ul>
+                        </div>
+                     </div>
+                  </div>
                 </aside>
             </article>
 
