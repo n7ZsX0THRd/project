@@ -106,10 +106,137 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
           <div class="row">
               <div class="col-lg-12">
                 <p class="sub-text-register">Nog geen account? <a href="registreer.php">Registreer dan hier</a></p>
+                <!-- <p class="sub-text-register">Wachtwoord vergeten? <a class="mousepointer" data-toggle="modal" data-target="#forgotpass">Reset je wachtwoord</a></p> -->
               </div>
           </div>
+        </form>
+
+        <!-- popup -->
+        <form name="forgotpass" method="post" enctype="multipart/form-data" action="">
+          <input type="hidden" name="form_name" value="changepassword"/>
+        <div id="forgotpass" class="modal fade" role="dialog">
+          <div class="modal-dialog modal-sm">
+            <!-- popup content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Nieuwe wachtwoord aanvragen</h4>
+              </div>
+              <div class="modal-body">
+                <?php
+                if(isset($_SESSION['warning']['incorrect_pw']) && $_SESSION['warning']['incorrect_pw'] === true)
+                {
+                ?>
+                  <p class="bg-danger" style="padding: 5px;">Dit emailadres bestaat niet</p>
+                <?php
+                }
+                //pw_not_equal
+                ?>
+                  <div class="form-group">
+                    <div class="form-group">
+                      <label for="formpass">Emailadres</label>
+                      <input name="passchange" type="email" class="form-control" id="formpass" placeholder="Email">
+                    </div>
+
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+                <button type="submit" class="btn btn-orange">Verder</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
         </form>
+
+
+        <form name="forgotpass" method="post" enctype="multipart/form-data" action="">
+          <input type="hidden" name="form_name" value="changepassword"/>
+        <div id="forgotpass" class="modal fade" role="dialog">
+          <div class="modal-dialog modal-sm">
+            <!-- popup content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Nieuwe wachtwoord aanvragen</h4>
+              </div>
+              <div class="modal-body">
+                <?php
+                if(isset($_SESSION['warning']['incorrect_pw']) && $_SESSION['warning']['incorrect_pw'] === true)
+                {
+                ?>
+                  <p class="bg-danger" style="padding: 5px;">Dit emailadres bestaat niet</p>
+                <?php
+                }
+                //pw_not_equal
+                ?>
+                  <div class="form-group">
+                    <div class="form-group">
+                      <label for="formpass">Emailadres</label>
+                      <input name="passchange" type="email" class="form-control" id="formpass" placeholder="Email">
+                    </div>
+
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+                <button type="button" class="btn btn-orange data-toggle="modal" data-target="#question"">Verder</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        </form>
+
+        <form name="question" method="post" enctype="multipart/form-data" action="">
+          <input type="hidden" name="form_name" value="changepassword"/>
+        <div id="question" class="modal fade" role="dialog">
+          <div class="modal-dialog modal-sm">
+            <!-- popup content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Nieuwe wachtwoord aanvragen</h4>
+              </div>
+              <div class="modal-body">
+                <?php
+                if(isset($_SESSION['warning']['incorrect_pw']) && $_SESSION['warning']['incorrect_pw'] === true)
+                {
+                ?>
+                  <p class="bg-danger" style="padding: 5px;">Dit emailadres bestaat niet</p>
+                <?php
+                }
+                //pw_not_equal
+                ?>
+                  <div class="form-group">
+                    <div class="form-group">
+                      <label for="formpass">Emailadres</label>
+                      <input name="passchange" type="email" class="form-control" id="formpass" placeholder="Email">
+                    </div>
+
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+                <button type="submit" class="btn btn-orange">Verder</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
       </div>
     </div>
   </div>

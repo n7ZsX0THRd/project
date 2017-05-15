@@ -554,6 +554,64 @@ if(isset($_GET['foto'])){
   </div>
 
   </form>
+
+</form>
+<!-- popup -->
+<form name="question" method="post" enctype="multipart/form-data" action="">
+  <input type="hidden" name="form_name" value="changepassword"/>
+<div id="question" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+    <!-- popup content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Wijzig uw wachtwoord</h4>
+      </div>
+      <div class="modal-body">
+        <?php
+        if(isset($_SESSION['warning']['incorrect_pw']) && $_SESSION['warning']['incorrect_pw'] === true)
+        {
+        ?>
+          <p class="bg-danger" style="padding: 5px;">Het wachtwoord komt niet overeen met uw huidige wachtwoord</p>
+        <?php
+        }
+        else if(isset($_SESSION['warning']['pw_not_equal']) && $_SESSION['warning']['pw_not_equal'] === true)
+        {
+        ?>
+          <p class="bg-danger" style="padding: 5px;">De opgegeven wachtwoorden komen niet overeen</p>
+        <?php
+        }
+        else if(isset($_SESSION['warning']['succes']) && $_SESSION['warning']['succes'] === true)
+        {
+        ?>
+          <p class="bg-success" style="padding: 5px;">Wachtwoord succesvol gewijzigd</p>
+        <?php
+        }
+        //pw_not_equal
+        ?>
+          <div class="form-group">
+            <div class="form-group">
+              <label for="formpass">Huidige wachtwoord</label>
+              <input name="passchange" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+            </div>
+            <div class="form-group">
+              <label for="formpass">Nieuwe wachtwoord</label>
+              <input name="confirmpass" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+            </div>
+            <div class="form-group">
+              <input name="confirmpasscheck" type="password" class="form-control" id="formpass" placeholder="Herhaal nieuwe wachtwoord">
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+        <button type="submit" class="btn btn-orange">Veranderen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</form>
 </div>
       <?php include 'php/includes/footer.php' ?>
 
