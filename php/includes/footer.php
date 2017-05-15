@@ -9,8 +9,16 @@
           <h1>Start hier</h1>
           <ul>
             <li><a href="index.php">Home</a></li>
-            <li><a href="registreer.php">Registreren</a></li>
-            <li><a href="login.php">Inloggen</a></li>
+            <?php if (!isUserLoggedIn($db)){
+              ?>
+              <li><a href="registreer.php">Registreren</a></li>
+              <li><a href="login.php">Inloggen</a></li>
+              <?php
+            } else{ ?>
+              <li><a href="profiel.php">Profiel</a></li>
+              <?php
+            }
+            ?>
           </ul>
         </div>
         <div class="col-lg-3 col-xs-6 col-md-3 col-sm-3">
