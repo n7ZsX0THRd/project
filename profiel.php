@@ -41,9 +41,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     }else if($_POST['form_name']=='changepassword'){
       var_dump($_POST);
 
-      if(update_wachtwoord($_POST,$db)){
-        print('www changed');
-      }
+      $dataquery= $db->query("SELECT TOP(1) wachtwoord,statusID FROM Gebruikers WHERE gebruikersnaam=".$_POST['p_username']." AND wachtwoord=".password_hash($_POST['passchange'], PASSWORD_DEFAULT));
+
+      $wwquery = $dataquery->fetchAll();
+      $wwtotaal = count($wwquery);
+
+      if($wwtotaal == 1)
+        {
+          if(password_verify($wachtwoord, $wwquery[0]['wachtwoord']))
+          {
+            if($_POST['confirmpass']==$_POST["confirmpasscheck"]){
+            if(update_wachtwoord($_POST,$db)){
+              print('www changed');
+              }
+            }
+          }
+        }
     }
   }
 
@@ -292,7 +305,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               <div class="form-group">
                 <label for="tel">Telefoonnummer</label>
                 <?php if (isset($_GET['wijzig'])==true){  ?>
-                <input name="p_tel" class="form-control" id="tel" placehold="Telefoonnummer" <?php
+                <input name="p_tel" class="form-control" id="tel" value="<?php echo $result2['telefoonnummer'];  ?>" <?php
                   echo $result2['telefoonnummer'];
                 ?>>
                 <?php }else{ ?>

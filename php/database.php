@@ -24,10 +24,10 @@ function block_user($gebruikersnaam) {
         $subject = "Je account is geblokkeerd";
         $message= '
                       Beste '.$gebruikersnaam.',
-                      
+
                       Je account dat gekoppeld is met het emailadres '.$result[0].' is geblokkeerd!
                       Ben je het hier niet mee eens, neem contact met ons op.
-                     
+
                       Vriendelijke groet,
                       EenmaalAndermaal
                      '; //Bovenstaand bericht is de email die gebruikers ontvangen.
@@ -65,8 +65,8 @@ function unBlock_user($gebruikersnaam) {
 <<<<<<< HEAD
                       Je account is gedeblokkeerd.
 =======
-                      
-                      Je account is gedeblokkeerd. 
+
+                      Je account is gedeblokkeerd.
 >>>>>>> origin/master
                       Om je account weer te kunnen gebruiken moet je deze opnieuw activeren door op onderstaande link te klikken.
                       --------------------
@@ -209,15 +209,16 @@ function update_user($data,$db){  //db is global!!
 function update_wachtwoord($data,$db){
   try {
       $dbs = $db->prepare(" UPDATE Gebruikers SET
-      wachtwoord=?,
+      wachtwoord=?
 
       WHERE gebruikersnaam = ?");
 
-      $dbs->execute(array(password_hash($data['confirmpass'], PASSWORD_DEFAULT)));
+      $dbs->execute(array(password_hash($data['confirmpass'], PASSWORD_DEFAULT),$data['p_username']));
 
       return true;
   } catch (PDOException $e) {
-      return $e;
+      var_dump($e);
+      return false;
   }
 }
 function send_message($data) {
