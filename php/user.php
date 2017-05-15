@@ -70,7 +70,7 @@ function isUserBeheerder($db){
     }
     else { // USER IS NO beheerder \
 
-      header("Location: index.php"); /* Redirect browser */
+      //header("Location: index.php"); /* Redirect browser */
 
       return false;
     }

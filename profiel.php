@@ -75,9 +75,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
           if(password_verify($_POST['passchange'], $wwquery[0]['wachtwoord']))
           {
             if($_POST['confirmpass'] === $_POST['confirmpasscheck']){
+              if(strlen($_POST['confirmpass']) < 8 || strlen($_POST['confirmpass']) > 20){//!preg_match('/^(?=[a-z])(?=[A-Z])[a-zA-Z]{8,}$/', $_POST['r_password'])) {
+                $_SESSION['warning']['pw_not_valid'] = true;
+              }
+              else {
                 if(update_wachtwoord($_POST,$db)){
                   $_SESSION['warning']['succes'] = true;
                 }
+              }
             }
             else {
               $_SESSION['warning']['pw_not_equal'] = true;
@@ -518,6 +523,12 @@ if(isset($_GET['foto'])){
             <p class="bg-success" style="padding: 5px;">Wachtwoord succesvol gewijzigd</p>
           <?php
           }
+          else if(isset($_SESSION['warning']['pw_not_valid']) && $_SESSION['warning']['pw_not_valid'] === true)
+          {
+          ?>
+            <p class="bg-danger" style="padding: 5px;">Het opgegeven wachtwoord is te kort/lang. Minimaal 8 karakters en maximaal 20.</p>
+          <?php
+          }
           //pw_not_equal
           ?>
             <div class="form-group">
@@ -558,17 +569,6 @@ if(isset($_GET['foto'])){
 <script src="bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
-<script>
-/*
-$("li.toggle-sub").click(function(evt) {
-
-  evt.preventDefault();
-  $(this).children("span").toggleClass('glyphicon-menu-right');
-  $(this).children("span").toggleClass('glyphicon-menu-down');
-  $(this).children(".sub").toggle();
-});
-*/
-</script>
 <script>function myAjax(actionvar) {
       $.ajax({
            type: "POST",
@@ -576,7 +576,7 @@ $("li.toggle-sub").click(function(evt) {
            data:{action:actionvar},
            success:function(html) {
              window.location.href = "profiel.php";
-             alert(html);
+             //alert(html);
            }
       });
  }

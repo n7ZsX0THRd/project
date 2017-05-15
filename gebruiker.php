@@ -4,6 +4,11 @@
   include ('php/user.php');
   pdo_connect();
 
+  if(isUserBeheerder($db) == false){
+    header("Location: index.php");
+  }
+
+
   if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (!empty($_GET)) {
         $gebruikersnaam = htmlspecialchars($_GET['gebruikersnaam']);

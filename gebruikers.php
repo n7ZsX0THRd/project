@@ -5,6 +5,12 @@ include ('php/database.php');
 include ('php/user.php');
 pdo_connect();
 
+
+if(isUserBeheerder($db) == false){
+  header("Location: index.php");
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -16,12 +22,12 @@ pdo_connect();
   </head>
 
   <body>
-    
- 
+
+
     <?php
 
     include 'php/includes/header.php';
-  
+
     $selectie = array( // default values when there's no get request'
       "sorteerOp" => "achternaam",
       "pagina" => 0,
@@ -45,12 +51,12 @@ pdo_connect();
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (!empty($_GET)) {
           if(!empty($_GET['sorteerOp'])){
-            $selectie["sorteerOp"] = htmlspecialchars($_GET['sorteerOp']); 
+            $selectie["sorteerOp"] = htmlspecialchars($_GET['sorteerOp']);
           }else{
             $selectie["sorteerOp"] = 'achternaam';
           }
           if(!empty($_GET['pagina'])){
-            $selectie["pagina"] = htmlspecialchars($_GET['pagina']);  
+            $selectie["pagina"] = htmlspecialchars($_GET['pagina']);
           } else {
             $selectie["pagina"] = 0;
           }
@@ -120,12 +126,12 @@ pdo_connect();
             $selectie["selectStatus"] = false;
           }
           if(!empty($_GET['zoeken'])){
-            $selectie["zoeken"] = htmlspecialchars($_GET['zoeken']);  
+            $selectie["zoeken"] = htmlspecialchars($_GET['zoeken']);
           } else {
             $selectie["zoeken"] = "";
           }
           if(!empty($_GET['gebruiker-soort'])){
-            $selectie["gebruiker-soort"] = htmlspecialchars($_GET['gebruiker-soort']);  
+            $selectie["gebruiker-soort"] = htmlspecialchars($_GET['gebruiker-soort']);
           } else {
             $selectie["gebruiker-soort"] = "beheerder";
           }
@@ -133,7 +139,7 @@ pdo_connect();
     }
 
     //echo http_build_query($selectie) . "\n";
-    
+
     ?>
 
     <main class="container">
@@ -143,7 +149,7 @@ pdo_connect();
       <h3>Selectie</h3>
   <form action="gebruikers.php" method="get" class="form-check" >
     <h4>Soort </h4>
-    <input type="radio" name="gebruiker-soort" value="koper" 
+    <input type="radio" name="gebruiker-soort" value="koper"
     <?php if($selectie["gebruiker-soort"]=="koper"){ echo 'checked';} ?> >
      Kopers<br>
     <input type="radio" name="gebruiker-soort" value="verkoper"
@@ -173,7 +179,7 @@ pdo_connect();
         Gebruikersnaam
       </label>
       <label class="form-check-label selectie">
-        <input type="checkbox" name="selectEmail" value="true" class="form-check-input" 
+        <input type="checkbox" name="selectEmail" value="true" class="form-check-input"
         <?php if($selectie["selectEmail"]){ echo 'checked';} ?> >
         Email
       </label>
@@ -183,37 +189,37 @@ pdo_connect();
         Geboortedatum
       </label>
       <!--<label class="form-check-label selectie">
-        <input type="checkbox" name="selectBeoordeling" value="true" class="form-check-input" 
+        <input type="checkbox" name="selectBeoordeling" value="true" class="form-check-input"
         <?php// if($selectie["selectBeoordeling"]){ echo 'checked';} ?> >
         Beoordeling
       </label>-->
       <label class="form-check-label selectie">
-        <input type="checkbox" name="selectStatus" value="true" class="form-check-input" 
+        <input type="checkbox" name="selectStatus" value="true" class="form-check-input"
         <?php if($selectie["selectStatus"]){ echo 'checked';} ?> >
         Status
       </label>
       <label class="form-check-label selectie">
-        <input type="checkbox" name="selectPostcode" value="true" class="form-check-input" 
+        <input type="checkbox" name="selectPostcode" value="true" class="form-check-input"
         <?php if($selectie["selectPostcode"]){ echo 'checked';} ?> >
         Postcode
       </label>
       <label class="form-check-label selectie">
-        <input type="checkbox" name="selectAdresregel1" value="true" class="form-check-input" 
+        <input type="checkbox" name="selectAdresregel1" value="true" class="form-check-input"
         <?php if($selectie["selectAdresregel1"]){ echo 'checked';} ?> >
         Adres regel 1
       </label>
       <label class="form-check-label selectie">
-        <input type="checkbox" name="selectAdresregel2" value="true" class="form-check-input" 
+        <input type="checkbox" name="selectAdresregel2" value="true" class="form-check-input"
         <?php if($selectie["selectAdresregel2"]){ echo 'checked';} ?> >
         Adres regel 2
       </label>
       <label class="form-check-label selectie">
-        <input type="checkbox" name="selectPlaatsnaam" value="true" class="form-check-input" 
+        <input type="checkbox" name="selectPlaatsnaam" value="true" class="form-check-input"
         <?php if($selectie["selectPlaatsnaam"]){ echo 'checked';} ?> >
         Plaatsnaam
       </label>
       <label class="form-check-label selectie">
-        <input type="checkbox" name="selectLand" value="true" class="form-check-input" 
+        <input type="checkbox" name="selectLand" value="true" class="form-check-input"
         <?php if($selectie["selectLand"]){ echo 'checked';} ?> >
         Land
       </label>
@@ -221,7 +227,7 @@ pdo_connect();
         <i class="glyphicon glyphicon-ok"></i>
         Pas toe
       </button>
-  
+
     </aside>
             <article class="col-md-8">
             <div class="row">
@@ -239,53 +245,53 @@ pdo_connect();
                 <table class="table table-hover" id="table">
                     <thead>
                     <tr>
-                    <?php 
-                    if($selectie["selectVoornaam"]){ 
-                      ?> 
+                    <?php
+                    if($selectie["selectVoornaam"]){
+                      ?>
                       <th>
                         <label class="header">
-                          <input type="radio" name="sorteerOp" id="voornaam" value="voornaam" 
+                          <input type="radio" name="sorteerOp" id="voornaam" value="voornaam"
                           <?php if($selectie["sorteerOp"]=="voornaam"){ echo 'checked';} ?> >
                           <span>Voornaam</span>
                         </label>
                       </th>
                       <?php
                     }
-                    if($selectie["selectAchternaam"]){ 
-                      ?> 
+                    if($selectie["selectAchternaam"]){
+                      ?>
                       <th>
                         <label class="header">
-                        <input type="radio" name="sorteerOp" value="achternaam" 
+                        <input type="radio" name="sorteerOp" value="achternaam"
                         <?php if($selectie["sorteerOp"]=="achternaam"){ echo 'checked';} ?> >
                         <span>Achternaam</span>
                         </label>
                       </th>
                       <?php
                     }
-                    if($selectie["selectGebruikersnaam"]){ 
-                      ?> 
+                    if($selectie["selectGebruikersnaam"]){
+                      ?>
                       <th>
                         <label class="header">
-                        <input type="radio" name="sorteerOp" value="gebruikersnaam" 
+                        <input type="radio" name="sorteerOp" value="gebruikersnaam"
                         <?php if($selectie["sorteerOp"]=="gebruikersnaam"){ echo 'checked';} ?> >
                         <span>Gebruiker</span>
                         </label>
                       </th>
                       <?php
                     }
-                    if($selectie["selectEmail"]){ 
-                      ?> 
+                    if($selectie["selectEmail"]){
+                      ?>
                       <th>
                         <label class="header">
-                        <input type="radio" name="sorteerOp" value="emailadres" 
+                        <input type="radio" name="sorteerOp" value="emailadres"
                         <?php if($selectie["sorteerOp"]=="emailadres"){ echo 'checked';} ?> >
                         <span>Email</span>
                         </label>
                       </th>
                       <?php
                     }
-                    if($selectie["selectGeboortedatum"]){ 
-                      ?> 
+                    if($selectie["selectGeboortedatum"]){
+                      ?>
                       <th>
                         <label class="header">
                         <input type="radio" name="sorteerOp" value="geboortedatum"
@@ -295,8 +301,8 @@ pdo_connect();
                       </th>
                       <?php
                     }
-                    if($selectie["selectAccountType"]){ 
-                      ?> 
+                    if($selectie["selectAccountType"]){
+                      ?>
                       <th>
                         <label class="header">
                         <input type="radio" name="sorteerOp" value="accountType"
@@ -306,69 +312,69 @@ pdo_connect();
                       </th>
                       <?php
                     }
-                    /*if($selectie["selectBeoordeling"]){ 
-                     
+                    /*if($selectie["selectBeoordeling"]){
+
                     }*/
-                    if($selectie["selectStatus"]){ 
-                      ?> 
+                    if($selectie["selectStatus"]){
+                      ?>
                       <th>
                         <label class="header">
-                        <input type="radio" name="sorteerOp" value="status" 
+                        <input type="radio" name="sorteerOp" value="status"
                         <?php if($selectie["sorteerOp"]=="status"){ echo 'checked';} ?> >
                         <span>Status</span>
                         </label>
                       </th>
                       <?php
                     }
-                    if($selectie["selectLand"]){ 
-                      ?> 
+                    if($selectie["selectLand"]){
+                      ?>
                       <th>
                         <label class="header">
-                        <input type="radio" name="sorteerOp" value="land" 
+                        <input type="radio" name="sorteerOp" value="land"
                         <?php if($selectie["sorteerOp"]=="land"){ echo 'checked';} ?> >
                         <span>Land</span>
                         </label>
                       </th>
                       <?php
                     }
-                    if($selectie["selectPlaatsnaam"]){ 
-                      ?> 
+                    if($selectie["selectPlaatsnaam"]){
+                      ?>
                       <th>
                         <label class="header">
-                        <input type="radio" name="sorteerOp" value="plaatsnaam" 
+                        <input type="radio" name="sorteerOp" value="plaatsnaam"
                         <?php if($selectie["sorteerOp"]=="plaatsnaam"){ echo 'checked';} ?> >
                         <span>Plaats</span>
                         </label>
                       </th>
                       <?php
                     }
-                    if($selectie["selectPostcode"]){ 
-                      ?> 
+                    if($selectie["selectPostcode"]){
+                      ?>
                       <th>
                         <label class="header">
-                        <input type="radio" name="sorteerOp" value="postcode" 
+                        <input type="radio" name="sorteerOp" value="postcode"
                         <?php if($selectie["sorteerOp"]=="postcode"){ echo 'checked';} ?> >
                         <span>Postcode</span>
                         </label>
                       </th>
                       <?php
                     }
-                    if($selectie["selectAdresregel1"]){ 
-                      ?> 
+                    if($selectie["selectAdresregel1"]){
+                      ?>
                       <th>
                         <label class="header">
-                        <input type="radio" name="sorteerOp" value="adresregel1" 
+                        <input type="radio" name="sorteerOp" value="adresregel1"
                         <?php if($selectie["sorteerOp"]=="adresregel1"){ echo 'checked';} ?> >
                         <span>Adres regel 1</span>
                         </label>
                       </th>
                       <?php
                     }
-                    if($selectie["selectAdresregel2"]){ 
-                      ?> 
+                    if($selectie["selectAdresregel2"]){
+                      ?>
                       <th>
                         <label class="header">
-                        <input type="radio" name="sorteerOp" value="adresregel2" 
+                        <input type="radio" name="sorteerOp" value="adresregel2"
                         <?php if($selectie["sorteerOp"]=="adresregel2"){ echo 'checked';} ?> >
                         <span>Adres regel 2</span>
                         </label>
@@ -381,16 +387,16 @@ pdo_connect();
                     </form>
                     <tbody>
                       <?php
-                        
-                        $data = $db->prepare("SELECT voornaam, achternaam, gebruikersnaam, emailadres, geboortedatum,  Accounttype.typegebruiker as soort, /* beoordeling, Not yet implented*/Accountstatussen.omschrijving AS status, land, plaatsnaam, postcode, adresregel1, adresregel2 
+
+                        $data = $db->prepare("SELECT voornaam, achternaam, gebruikersnaam, emailadres, geboortedatum,  Accounttype.typegebruiker as soort, /* beoordeling, Not yet implented*/Accountstatussen.omschrijving AS status, land, plaatsnaam, postcode, adresregel1, adresregel2
                                                         FROM Gebruikers
-                                                        INNER JOIN Accountstatussen 
+                                                        INNER JOIN Accountstatussen
                                                           ON Gebruikers.statusID=Accountstatussen.ID
                                                         INNER JOIN Accounttype
 	                                                        ON Accounttype.ID=Gebruikers.typegebruiker
                                                         WHERE Accounttype.typegebruiker = ? OR 'alle'= ?
                                                         ");
-                        $data->execute(array($selectie["gebruiker-soort"], $selectie["gebruiker-soort"]));  
+                        $data->execute(array($selectie["gebruiker-soort"], $selectie["gebruiker-soort"]));
                         $result=$data->fetchAll();
 
                         $count=count($result);
@@ -398,7 +404,7 @@ pdo_connect();
                         global $sorteerOp;
                         $sorteerOp=$selectie["sorteerOp"];
                         //echo $count;
-                        
+
                           sort($result);
                           function cmp($a, $b)
                           {
@@ -407,7 +413,7 @@ pdo_connect();
                           }
 
                           usort($result, "cmp");
-                          
+
                           //array_multisort($sort['event_type'], SORT_DESC, $sort['title'], SORT_ASC,$mylist);
 
                        foreach($result as $row){
@@ -457,7 +463,7 @@ pdo_connect();
     <script src="//rawgithub.com/stidges/jquery-searchable/master/dist/jquery.searchable-1.0.0.min.js"></script>
     <script type='text/javascript'>
 
- $(document).ready(function() { 
+ $(document).ready(function() {
    $('input[name=sorteerOp]').change(function(){
         $('form').submit();
    });
@@ -466,7 +472,7 @@ $(function () {
     $( '#table' ).searchable({
         searchType: 'fuzzy'
     });
-    
+
     $( '#searchable-container' ).searchable({
         searchField: '#container-search',
         selector: '.row',
@@ -483,5 +489,3 @@ $(function () {
 
   </body>
 </html>
-
-

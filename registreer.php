@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
         else
         {
-          if(false){//!preg_match('/^(?=[a-z])(?=[A-Z])[a-zA-Z]{8,}$/', $_POST['r_password'])) {
+          if(strlen($_POST['r_password']) < 8 || strlen($_POST['r_password']) > 20){//!preg_match('/^(?=[a-z])(?=[A-Z])[a-zA-Z]{8,}$/', $_POST['r_password'])) {
             $_SESSION['warning']['invalid_password'] = true;
           }
           else {
@@ -191,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 else if(isset($_SESSION['warning']['invalid_password']) && $_SESSION['warning']['invalid_password'] === true)
                 {
                 ?>
-                  <p class="bg-danger">Het opgegeven wachtwoord bestaat niet uit minimaal één hoofdletter en één kleine letter</p>
+                  <p class="bg-danger">Het opgegeven wachtwoord is te kort/lang. Minimaal 8 karakters en maximaal 20.</p>
                 <?php
                 }
                 else if(isset($_SESSION['warning']['invalid_email']) && $_SESSION['warning']['invalid_email'] === true)

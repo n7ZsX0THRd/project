@@ -195,12 +195,13 @@ function update_user($data,$db){  //db is global!!
 
       $dbs->execute(array($data['p_firstname'],$data['p_lastname'],$data['p_adres'],
       $data['p_zipcode'],$data['p_city'],$data['p_birthmonth'].'-'.$data['p_birthday'].'-'.$data['p_birthyear'],
-      $data['p_email'],$data['p_biografie'],$data['p_land'],$data['p_username'],$data['p_tel'],$data['p_username']));
+      $data['p_email'],htmlspecialchars($data['p_biografie']),$data['p_land'],$data['p_username'],$data['p_tel'],$data['p_username']));
 
 
       return true;
   } catch (PDOException $e) {
-      return $e;
+      var_dump($e);
+      return false;
   }
 }
 
