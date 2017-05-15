@@ -325,6 +325,7 @@ p{
   display:block;
   border-bottom-left-radius: 50%;
   color:#ea8220;
+  cursor:pointer;
 }
 .carousel-inner > .item{
   max-height:500px;
