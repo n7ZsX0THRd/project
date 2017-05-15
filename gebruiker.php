@@ -17,8 +17,12 @@
             $blocked = false;
         }
 
-        if(!empty($result['bestandsnaam'])) {
-          $image = $result['bestandsnaam'];
+        if(!empty($result[0]['bestandsnaam'])) {
+          $image = $result[0]['bestandsnaam'];
+          $file = 'images/users/'.$image;
+          if (!file_exists( $file )){
+            $image = '404.png';
+          }
         }
         else {
           $image = "geenfoto/geenfoto.png";
@@ -196,7 +200,7 @@
                     if (isset($result[0]["biografie"])){
                          $biografie = $result[0]["biografie"];
                     } else {
-                        $biografie = "heeft geen backstory";
+                        $biografie = "heeft geen biografie";
                     }
                     echo $biografie;
 
