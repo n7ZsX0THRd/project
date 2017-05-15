@@ -151,6 +151,7 @@
                                </div>
                                <button type="submit" data-dismiss="modal" class="btn btn-orange" >Verzenden</button>
                              </div>
+
                            </form>
                          </div>
                        </div>
@@ -232,6 +233,18 @@
 
             <article class="col-md-9">
               <div class="row content_top_offset">
+                <div class="row navigation-row">
+                    <p>
+                      <a href="">
+                        <span class="glyphicon glyphicon-home "></span>
+                      </a>
+                      <span class="glyphicon glyphicon-menu-right"></span>
+                      <a href="">Mijn Account</a>
+                      <span class="glyphicon glyphicon-menu-right"></span>
+                      <a href="">Instellingen</a>
+                    </p>
+                </div>
+
                 <div class="col-lg-6" style="border-right:1px solid #e7e7e7;">
                   <form method="post" enctype="multipart/form-data" action="">
                     <input type="hidden" name="form_name" value="changeprofile"/>
