@@ -17,7 +17,7 @@
           <h1>Over ons</h1>
           <ul>
             <li><a href="">Bedrijfsinformatie</a></li>
-            <li><a href="">Algemene voorwaarden</a></li>
+            <li><a href="pdf/voorwaarden.pdf">Algemene voorwaarden</a></li>
           </ul>
         </div>
         <div class="col-lg-3 col-xs-6 col-md-3 col-sm-3">
