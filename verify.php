@@ -18,52 +18,52 @@ if(isset($_GET['gebruikersnaam']) && !empty($_GET['gebruikersnaam']) && isset($_
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <?php 
+        <?php
         include ('php/includes/default_header.php');
         ?>
-        
+
         <title>Verifieer - Eenmaal Andermaal</title>
     </head>
 
     <body>
-        <?php 
+        <?php
         include ('php/includes/header.php');
         ?>
-        
-        <div class="container col-md-9">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-titel">Account Registratie</h4>
-            </div>
-            <div class="panel-body">
-            <?php
-                $dbs = $db->prepare("SELECT activatiecode FROM Activatiecodes WHERE gebruikersnaam=? AND GETDATE() < verloopdatum");
-                $dbs->execute(array($gebruikersnaam));
-                $result = $dbs->fetchAll()[0];
-                if(isset($result[0])) {
-                    if ($result[0] == $code) {
-                        
-                        //Verwijder activatiecode en maak gebruiker actief
-                        $dbs = $db->prepare("DELETE FROM Activatiecodes WHERE gebruikersnaam=? UPDATE Gebruikers SET statusID=2 WHERE gebruikersnaam=?");
-                        $dbs->execute(array($gebruikersnaam, $gebruikersnaam));
-                        echo 'Je account is geactiveerd';
-                        header( "refresh:3;url=login.php" );
-                    }else {
-                        echo 'Je code klopt niet!';
-                    }
-                }else {
-                    echo 'Je activatiecode is verlopen.';
-                }
 
-            ?>
-            </div>
+        <div class="container">
+          <div class="panel panel-default">
+              <div class="panel-heading">
+                  <h4 class="panel-titel">Account Registratie</h4>
+              </div>
+              <div class="panel-body">
+              <?php
+                  $dbs = $db->prepare("SELECT activatiecode FROM Activatiecodes WHERE gebruikersnaam=? AND GETDATE() < verloopdatum");
+                  $dbs->execute(array($gebruikersnaam));
+                  $result = $dbs->fetchAll()[0];
+                  if(isset($result[0])) {
+                      if ($result[0] == $code) {
+
+                          //Verwijder activatiecode en maak gebruiker actief
+                          $dbs = $db->prepare("DELETE FROM Activatiecodes WHERE gebruikersnaam=? UPDATE Gebruikers SET statusID=2 WHERE gebruikersnaam=?");
+                          $dbs->execute(array($gebruikersnaam, $gebruikersnaam));
+                          echo 'Je account is geactiveerd';
+                          header( "refresh:3;url=login.php" );
+                      }else {
+                          echo 'Je code klopt niet!';
+                      }
+                  }else {
+                      echo 'Je activatiecode is verlopen.';
+                  }
+
+              ?>
+              </div>
+          </div>
         </div>
-        </div>
-                
-        <?php 
+
+        <?php
         include ('php/includes/footer.php');
         ?>
-        
+
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -71,16 +71,5 @@ if(isset($_GET['gebruikersnaam']) && !empty($_GET['gebruikersnaam']) && isset($_
         <script src="bootstrap/dist/js/bootstrap.min.js"></script>
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
-        <script>
-        /*
-        $("li.toggle-sub").click(function(evt) {
-
-        evt.preventDefault();
-        $(this).children("span").toggleClass('glyphicon-menu-right');
-        $(this).children("span").toggleClass('glyphicon-menu-down');
-        $(this).children(".sub").toggle();
-        });
-        */
-        </script>
     </body>
 </html>

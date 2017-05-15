@@ -2,6 +2,12 @@ body {
   padding-top: 90px;
   background-color:#fff;
   overflow-x:hidden;
+  position: relative;
+  padding-bottom: 30rem;
+  min-height: 100%;
+}
+html {
+  height: 100%;
 }
 h1 ,h2,h3,h4,h5,h6{
   color:#5484a4;
@@ -348,6 +354,9 @@ p{
 .banner-top-container{
   margin-top:15px;
 }
+.footer_content{
+
+}
 .footer_content > div > a > img{
   width:80%;
   margin-left:10%;
@@ -400,4 +409,13 @@ p{
   background-position: 50% 50%;
   z-index:1000;
   */
+}
+.container{
+
+}
+.footer {
+  position: absolute;
+  right: 0;
+  bottom:0px;
+  left: 0;
 }
