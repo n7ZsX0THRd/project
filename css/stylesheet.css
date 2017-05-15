@@ -9,11 +9,16 @@ body {
 html {
   height: 100%;
 }
-h1 ,h2,h3,h4,h5,h6{
-  color:#5484a4;
-}
+
 p{
   color:#023042;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Varela Round', sans-serif;
+  color:#5484a4;
+}
+p, div {
+  font-family: 'Varela Round', sans-serif;
 }
 .header-style{
   background-color:#5484a4;
