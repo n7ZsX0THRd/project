@@ -8,9 +8,30 @@
       if (!empty($_GET)) {
         $gebruikersnaam = htmlspecialchars($_GET['gebruikersnaam']);
 
-        $data = $db->prepare("SELECT * FROM gebruikers WHERE gebruikersnaam=?");
+        $data = $db->prepare("SELECT
+        gebruikersnaam,
+        voornaam,
+        achternaam,
+        adresregel1,
+        postcode,
+        plaatsnaam,
+        land,
+        geboortedatum,
+        emailadres,
+        typegebruiker,
+        statusID,
+        datepart(day,[geboortedatum]) AS geboortedag,
+        datepart(month,[geboortedatum]) AS geboortemaand,
+        datepart(year,[geboortedatum]) AS geboortejaar,
+        biografie,
+        bestandsnaam FROM Gebruikers WHERE gebruikersnaam=?");
         $data->execute([$gebruikersnaam]);
+        $data2 = $db->prepare("SELECT * FROM Gebruikerstelefoon WHERE gebruikersnaam=?");
+        $data2->execute([$gebruikersnaam]);
+
         $result=$data->fetchAll();
+        $result2=$data2->fetchAll();
+
         if ($result[0]['statusID']==3){
             $blocked = true;
         } else {
@@ -79,15 +100,12 @@
     <?php include 'php/includes/header.php' ?>
 
     <main class="container">
-        <h1> Beheer gebruiker</h1>
+        <h1> Beheer gebruiker: <?php echo $gebruikersnaam ?></h1>
         <section class="row profile">
             <article class="col-md-3">
                 <aside class="profile-sidebar">
                     <div class="user">
-                        <h2><?php echo $gebruikersnaam ?></h2>
-                        <img class="img-responsive img-circle" src= "images/users/<?php echo $image ?>" alt="Profile picture">
                         <div class="profielbutton-group">
-                          <div class="btn-group" data-toggle="buttons">
                           <?php
                             if ($blocked){ ?>
                                 <button class="btn btn-danger" data-toggle="modal" data-target="#myModalDeBlock" >
@@ -105,7 +123,6 @@
                                   <i class="glyphicon glyphicon-envelope"></i>
                                   Stuur bericht
                               </button>
-                          </div>
                         </div>
                     </div>
                     <div class="modal fade bs-example-modal-lg" id="myModalSendMessage" tabindex="-1" role="dialog" aria-labelledby="myModalSendMessage">
@@ -193,21 +210,143 @@
             </article>
 
             <article class="col-md-9">
-                <div class="user-content">
-                    <h2>Over <?php echo $gebruikersnaam ?></h2>
-                    <?php
+              <div class="row content_top_offset">
+                <div class="col-lg-6" style="border-right:1px solid #e7e7e7;">
+                  <form method="post" enctype="multipart/form-data" action="">
+                    <input type="hidden" name="form_name" value="changeprofile"/>
+                    <!-- email -->
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Email</label>
+                        <div class="pflijn">
+                            <?php echo $result[0]['emailadres']?>
+                        </div>
+                    </div>
 
-                    if (isset($result[0]["biografie"])){
-                         $biografie = $result[0]["biografie"];
-                    } else {
-                        $biografie = "heeft geen biografie";
-                    }
-                    echo $biografie;
+                    <!-- Voornaam en achternaam -->
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-lg-4">
+                          <label for="exampleInputEmail1">Voornaam</label>
+                            <div class="pflijn">
+                                <?php echo $result[0]['voornaam']?>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                          <label for="exampleInputEmail1">Achternaam</label>
+                            <div class="pflijn">
+                                <?php echo $result[0]['achternaam']?>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
 
+                    <!-- geboortedatum -->
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-lg-4">
+                          <label for="exampleInputEmail1">Dag</label>
+                            <div class="pflijn">
+                                <?php echo $result[0]['geboortedag']?>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <label for="exampleInputEmail1">Maand</label>
+                            <?php
+                            $months = array("januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december");?>
+                              <div class="pflijn">
+                                    <?php echo $months[$result[0]['geboortemaand']-1];?>
+                              </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <label for="exampleInputEmail1">Jaar</label>
+                            <div class="pflijn">
+                                <?php echo $result[0]['geboortejaar'];?>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
 
-                     ?>
+                    <!-- adresgegevens -->
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-lg-8">
+                          <label for="exampleInputEmail1">Adres + Huisnr.</label>
+                            <div class="pflijn">
+                                <?php echo $result[0]['adresregel1']?>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <label for="exampleInputEmail1">Postcode</label>
+                            <div class="pflijn">
+                                <?php echo $result[0]['postcode']?>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-lg-8">
+                          <label for="exampleInputEmail1">Woonplaats</label>
+                            <div class="pflijn">
+                                <?php echo $result[0]['plaatsnaam']?>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <label for="exampleInputEmail1">Landcode</label>
+                            <div class="pflijn">
+                                <?php echo $result[0]['land']?>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Telefoonnummer -->
+                    <div class="form-group">
+                      <label for="tel">Telefoonnummer</label>
+                      <div class="pflijn">
+                          <?php
+                            echo $result2[0]['telefoonnummer'];
+                          ?>
+                      </div>
+                    </div>
 
                 </div>
+                <div class="col-lg-6">
+
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-lg-7">
+                          <label for="exampleInputEmail1">Gebruikersnaam</label>
+                          <div class="pflijn">
+                              <?php echo $result[0]['gebruikersnaam']?>
+                          </div>
+                        </div>
+                        <div class="col-lg-1">
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="profile_picture" style="background-image:url(images/users/<?php echo $image; ?>);">
+                            </div>
+                        </div>
+
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-12">
+                           <div class="form-group">
+                            <label for="exampleInputFile">Biografie</label>
+                            <div class="pflijn biografietext">
+                                <?php
+                                  echo $result[0]['biografie'];
+                                ?>
+                            </div>
+                           </div>
+                        </div>
+                      </div>
+                    </div>
+
+                </div>
+
+              </div>
 		</article>
 
         </section>
