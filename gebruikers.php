@@ -152,6 +152,9 @@ pdo_connect();
     <input type="radio" name="gebruiker-soort" value="beheerder"
     <?php if($selectie["gebruiker-soort"]=="beheerder"){ echo 'checked';} ?> >
      Beheerder
+    <input type="radio" name="gebruiker-soort" value="alle"
+    <?php if($selectie["gebruiker-soort"]=="alle"){ echo 'checked';} ?> >
+     Alle
 
     <h4>Kolommen </h4>
       <label class="form-check-label selectie">
@@ -378,15 +381,16 @@ pdo_connect();
                     </form>
                     <tbody>
                       <?php
+                        
                         $data = $db->prepare("SELECT voornaam, achternaam, gebruikersnaam, emailadres, geboortedatum,  Accounttype.typegebruiker as soort, /* beoordeling, Not yet implented*/Accountstatussen.omschrijving AS status, land, plaatsnaam, postcode, adresregel1, adresregel2 
                                                         FROM Gebruikers
                                                         INNER JOIN Accountstatussen 
                                                           ON Gebruikers.statusID=Accountstatussen.ID
                                                         INNER JOIN Accounttype
 	                                                        ON Accounttype.ID=Gebruikers.typegebruiker
-                                                        WHERE Accounttype.typegebruiker = ?
+                                                        WHERE Accounttype.typegebruiker = ? OR 'alle'= ?
                                                         ");
-                        $data->execute(array($selectie["gebruiker-soort"]));  
+                        $data->execute(array($selectie["gebruiker-soort"], $selectie["gebruiker-soort"]));  
                         $result=$data->fetchAll();
 
                         $count=count($result);
