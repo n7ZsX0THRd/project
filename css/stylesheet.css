@@ -389,10 +389,15 @@ p{
   background-repeat: no-repeat;
   background-position: 50% 50%;
   padding-bottom:100%;
+  transition: all .2s ease-in-out;
 }
+
 .thumb_image:hover{
+  background-size:contain;
+  /*
   background-size: contain;
   background-repeat: no-repeat;
   background-position: 50% 50%;
   z-index:1000;
+  */
 }

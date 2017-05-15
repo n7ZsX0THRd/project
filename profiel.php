@@ -39,24 +39,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             header('location: profiel.php');
         }
     }else if($_POST['form_name']=='changepassword'){
-      var_dump($_POST);
 
-      $dataquery= $db->query("SELECT TOP(1) wachtwoord,statusID FROM Gebruikers WHERE gebruikersnaam=".$_POST['p_username']." AND wachtwoord=".password_hash($_POST['passchange'], PASSWORD_DEFAULT));
+      $_SESSION['warning']['changingpassword'] = true;
+
+      $dataquery= $db->prepare("SELECT TOP(1) wachtwoord FROM Gebruikers WHERE gebruikersnaam=?");
+
+      $dataquery->execute(array($_POST['p_username']));
 
       $wwquery = $dataquery->fetchAll();
       $wwtotaal = count($wwquery);
 
       if($wwtotaal == 1)
-        {
-          if(password_verify($wachtwoord, $wwquery[0]['wachtwoord']))
+      {
+          if(password_verify($_POST['passchange'], $wwquery[0]['wachtwoord']))
           {
-            if($_POST['confirmpass']==$_POST["confirmpasscheck"]){
-            if(update_wachtwoord($_POST,$db)){
-              print('www changed');
-              }
+            if($_POST['confirmpass'] === $_POST['confirmpasscheck']){
+                if(update_wachtwoord($_POST,$db)){
+                  $_SESSION['warning']['succes'] = true;
+                }
+            }
+            else {
+              $_SESSION['warning']['pw_not_equal'] = true;
             }
           }
-        }
+          else {
+              $_SESSION['warning']['incorrect_pw'] = true;
+          }
+      }
+      else {
+        //print('Wachtwoord komt niet overeen met oud wachtwoord');
+        $_SESSION['warning']['incorrect_pw'] = true;
+      }
     }
   }
 
@@ -382,20 +395,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               <!-- Trigger the popup with a button -->
               <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#wachtwoord">Wijzig wachtwoord</button>
 
-
-
-              <?php /*
-              //var_dump($_POST["passchange"]);
-              if(password_verify($result[0]['wachtwoord'],$_POST["passchange"]))
-              {
-                if(update_wachtwoord($_POST,$db))
-                {
-                  header('location: profiel.php');
-                }
-              } */
-              ?>
-
-
               <a href="?wijzig" type="submit" class="btn btn-orange">Wijzig gegevens</a>
               <?php }else{ ?>
               <a href="?" type="submit" class="btn btn-orange">Annuleren</a>
@@ -444,7 +443,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
           <h4 class="modal-title">Wijzig uw wachtwoord</h4>
         </div>
         <div class="modal-body">
-
+          <?php
+          if(isset($_SESSION['warning']['incorrect_pw']) && $_SESSION['warning']['incorrect_pw'] === true)
+          {
+          ?>
+            <p class="bg-danger">Het wachtwoord komt niet overeen met uw huidige wachtwoord</p>
+          <?php
+          }
+          else if(isset($_SESSION['warning']['pw_not_equal']) && $_SESSION['warning']['pw_not_equal'] === true)
+          {
+          ?>
+            <p class="bg-danger">De opgegeven wachtwoorden komen niet overeen</p>
+          <?php
+          }
+          else if(isset($_SESSION['warning']['succes']) && $_SESSION['warning']['succes'] === true)
+          {
+          ?>
+            <p class="bg-success">Wachtwoord succesvol gewijzigd</p>
+          <?php
+          }
+          //pw_not_equal
+          ?>
             <div class="form-group">
               <div class="form-group">
                 <label for="formpass">Huidige wachtwoord</label>
@@ -504,6 +523,20 @@ $("li.toggle-sub").click(function(evt) {
              alert(html);
            }
       });
- } </script>
+ }
+ </script>
+<?php if( isset($_SESSION['warning']['changingpassword']) && $_SESSION['warning']['changingpassword'] == true){
+?>
+<script type="text/javascript">
+           $(window).load(function(){
+               $('#wachtwoord').modal('show');
+           });
+       </script>
+  <?php
+}?>
+
 </body>
 </html>
+<?php
+$_SESSION['warning'] = null;
+?>

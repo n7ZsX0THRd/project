@@ -166,17 +166,17 @@ if(isset($_GET['mail'])==true) {
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
           <div class="bg-warning banner-top">
-              Hey <?php echo $user['voornaam']; ?>, je hebt jouw account nog niet geverifieerd. <br> 
-              Er is een e-mail naar <?php echo $_SESSION['email']; ?> gestuurd. <br> 
-              Geen e-mail gekregen? Controleer je ongewenst box of stuur een nieuwe e-mail. <br> 
+              Hey <?php echo $user['voornaam']; ?>, je hebt jouw account nog niet geverifieerd. <br>
+              Er is een e-mail naar <?php echo $_SESSION['email']; ?> gestuurd. <br>
+              Geen e-mail gekregen? Controleer je ongewenst box of stuur een nieuwe e-mail. <br>
               <a href="?mail" type="submit" class="btn btn-orange">Stuur opnieuw!</a> <br>
-              <?php 
+              <?php
               if($nieuwe_mail == 1) {
                   echo 'Er is een nieuwe activatie e-mail verstuurd.';
               }
               ?>
               Klopt het e-mailadres niet? Wijzig deze dan <a href="profiel.php?wijzig">hier</a>.
-              
+
           </div>
         </div>
       </div>
@@ -263,7 +263,7 @@ if(isset($_GET['mail'])==true) {
                     </div>
                     <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                       <div class="thumbnail">
-                        <div class="thumb_image" style="background-image:url(images/users/ArnoudvBers.jpg);"></div>
+                        <div class="thumb_image" style="background-image:url(images/eten.jpg);"></div>
                         <div class="caption captionfix">
                           <h3>Spiegel</h3>
                           <p>Huidige bod: <strong>€270.-</strong></p>
@@ -287,41 +287,41 @@ if(isset($_GET['mail'])==true) {
               <div class="row item-row">
                 <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                   <div class="thumbnail">
-                    <img src="images/vliegtuig.png" alt="...">
-                    <div class="caption">
-                      <h3>Thumbnail label</h3>
-                      <p>...</p>
-                      <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                    <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+                    <div class="caption captionfix">
+                      <h3>Spiegel</h3>
+                      <p>Huidige bod: <strong>€270.-</strong></p>
+                      <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                     </div>
                   </div>
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                   <div class="thumbnail">
-                    <img src="images/vliegtuig.png" alt="...">
-                    <div class="caption">
-                      <h3>Thumbnail label</h3>
-                      <p>...</p>
-                      <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                    <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+                    <div class="caption captionfix">
+                      <h3>Spiegel</h3>
+                      <p>Huidige bod: <strong>€270.-</strong></p>
+                      <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                     </div>
                   </div>
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                   <div class="thumbnail">
-                    <img src="images/vliegtuig.png" alt="...">
-                    <div class="caption">
-                      <h3>Thumbnail label</h3>
-                      <p>...</p>
-                      <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                    <div class="thumb_image" style="background-image:url(images/bmw.jpg);"></div>
+                    <div class="caption captionfix">
+                      <h3>Spiegel</h3>
+                      <p>Huidige bod: <strong>€270.-</strong></p>
+                      <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                     </div>
                   </div>
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                   <div class="thumbnail">
-                    <img src="images/vliegtuig.png" alt="...">
-                    <div class="caption">
-                      <h3>Thumbnail label</h3>
-                      <p>...</p>
-                      <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                    <div class="thumb_image" style="background-image:url(images/eten.jpg);"></div>
+                    <div class="caption captionfix">
+                      <h3>Spiegel</h3>
+                      <p>Huidige bod: <strong>€270.-</strong></p>
+                      <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                     </div>
                   </div>
                 </div>
@@ -341,50 +341,51 @@ if(isset($_GET['mail'])==true) {
           <div class="row item-row">
             <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
               <div class="thumbnail">
-                <img src="images/vliegtuig.png" alt="...">
-                <div class="caption">
-                  <h3>Thumbnail label</h3>
-                  <p>...</p>
-                  <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+                <div class="caption captionfix">
+                  <h3>Spiegel</h3>
+                  <p>Huidige bod: <strong>€270.-</strong></p>
+                  <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                 </div>
               </div>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
               <div class="thumbnail">
-                <img src="images/vliegtuig.png" alt="...">
-                <div class="caption">
-                  <h3>Thumbnail label</h3>
-                  <p>...</p>
-                  <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+                <div class="caption captionfix">
+                  <h3>Spiegel</h3>
+                  <p>Huidige bod: <strong>€270.-</strong></p>
+                  <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                 </div>
               </div>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
               <div class="thumbnail">
-                <img src="images/vliegtuig.png" alt="...">
-                <div class="caption">
-                  <h3>Thumbnail label</h3>
-                  <p>...</p>
-                  <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                <div class="thumb_image" style="background-image:url(images/bmw.jpg);"></div>
+                <div class="caption captionfix">
+                  <h3>Spiegel</h3>
+                  <p>Huidige bod: <strong>€270.-</strong></p>
+                  <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                 </div>
               </div>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
               <div class="thumbnail">
-                <img src="images/vliegtuig.png" alt="...">
-                <div class="caption">
-                  <h3>Thumbnail label</h3>
-                  <p>...</p>
-                  <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                <div class="thumb_image" style="background-image:url(images/eten.jpg);"></div>
+                <div class="caption captionfix">
+                  <h3>Spiegel</h3>
+                  <p>Huidige bod: <strong>€270.-</strong></p>
+                  <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                 </div>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
-    </div>
-    </div>
+  </div>
+</div>
       </div>
 
     </div>
