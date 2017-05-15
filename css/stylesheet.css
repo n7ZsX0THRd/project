@@ -130,7 +130,7 @@ p, div {
   border-radius: 3px;
 }
 .sidebar > .menubar{
-  padding-bottom:15px;
+
 }
 .sidebar > .menubar > li{
   list-style-type: none;
@@ -139,6 +139,9 @@ p, div {
   margin-left:-40px;
 }
 .sidebar > .menubar > li:hover{
+  border-left:2px solid #ea8220;
+}
+.sidebar > .menubar > li.active{
   border-left:2px solid #ea8220;
 }
 .sidebar > .menubar > li > a{
@@ -429,4 +432,13 @@ p, div {
   right: 0;
   bottom:0px;
   left: 0;
+}
+.menu-hr{
+  height:2px;
+  background-color:#ea8220;
+  color:#ea8220;
+}
+.menubutton{
+  margin-bottom:10px;
+  margin-top:5px;
 }

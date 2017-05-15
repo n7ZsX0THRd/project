@@ -221,7 +221,7 @@ function update_wachtwoord($data,$db){
   }
 }
 function send_message($data) {
-  header("Location: google.com");
+  //header("Location: google.com");
   echo "lol";
 
 }

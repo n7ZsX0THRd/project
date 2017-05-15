@@ -1,5 +1,6 @@
 <?PHP
 session_start();
+$_SESSION['menu']['sub'] = 'ma';
 
 include ('php/database.php');
 include ('php/user.php');
@@ -42,25 +43,47 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
         if($wwtotaal == 1)
         {
-            if(password_verify($_POST['confirmpass'], $wwquery[0]['wachtwoord']))
+            if(!password_verify($_POST['confirmpass'], $wwquery[0]['wachtwoord']))
             {
-              if(isset($_POST['p_biografie']) && strlen($_POST['p_biografie']) < 1024){
-                if(update_user($_POST,$db)){
-                  $result = getLoggedInUser($db);
-                  $_SESSION['warning']['changesucces'] = true;
-                }
-                else {
-                  $_SESSION['warning']['pw_not_equal'] = true;
-                }
-              }
-              else {
-                $_SESSION['warning']['bio_length'] = true;
-              }
-
-
+                $_SESSION['warning']['false_pass'] = true;
+            }
+            else if(!isset($_POST['p_biografie']) || strlen($_POST['p_biografie']) >= 1024){
+              $_SESSION['warning']['bio_length'] = true;
+            }
+            else if(!isset($_POST['p_firstname']) || empty($_POST['p_firstname'])){
+                $_SESSION['warning']['firstname_empty'] = true;
+            }
+            else if(!isset($_POST['p_lastname']) || empty($_POST['p_lastname'])){
+                $_SESSION['warning']['lastname_empty'] = true;
+            }
+            else if(!isset($_POST['p_adres']) || empty($_POST['p_adres'])){
+                $_SESSION['warning']['adres_empty'] = true;
+            }
+            else if(!isset($_POST['p_zipcode']) || empty($_POST['p_zipcode'])){
+                $_SESSION['warning']['zipcode_empty'] = true;
+            }
+            else if(!isset($_POST['p_city']) || empty($_POST['p_city'])){
+                $_SESSION['warning']['city_empty'] = true;
+            }
+            else if(!isset($_POST['p_tel']) || empty($_POST['p_tel'])){
+                $_SESSION['warning']['tel_empty'] = true;
+            }
+            else if(checkdate(intval($_POST['p_birthmonth']), intval($_POST['p_birthday']), intval($_POST['p_birthyear'])) === false)
+            {
+              $_SESSION['warning']['invalid_birthdate'] = true;
+            }
+            else if(!isset($_POST['p_email']) || empty($_POST['p_email']))
+            {
+              $_SESSION['warning']['mail_empty'] = true;
             }
             else {
-                $_SESSION['warning']['false_pass'] = true;
+              if(update_user($_POST,$db)){
+                $result = getLoggedInUser($db);
+                $_SESSION['warning']['changesucces'] = true;
+              }
+              else {
+                $_SESSION['warning']['pw_not_equal'] = true;
+              }
             }
         }
 
@@ -79,25 +102,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
       if($wwtotaal == 1)
       {
-          if(password_verify($_POST['passchange'], $wwquery[0]['wachtwoord']))
+          if(!password_verify($_POST['passchange'], $wwquery[0]['wachtwoord']))
           {
-            if($_POST['confirmpass'] === $_POST['confirmpasscheck']){
-              if(strlen($_POST['confirmpass']) < 8 || strlen($_POST['confirmpass']) > 20){//!preg_match('/^(?=[a-z])(?=[A-Z])[a-zA-Z]{8,}$/', $_POST['r_password'])) {
-                $_SESSION['warning']['pw_not_valid'] = true;
-              }
-              else {
-                if(update_wachtwoord($_POST,$db)){
-                  $_SESSION['warning']['succes'] = true;
-                }
-              }
-            }
-            else {
-              $_SESSION['warning']['pw_not_equal'] = true;
-            }
+            $_SESSION['warning']['incorrect_pw'] = true;
+          }
+          else if($_POST['confirmpass'] !== $_POST['confirmpasscheck']){
+            $_SESSION['warning']['pw_not_equal'] = true;
+          }
+          else if(strlen($_POST['confirmpass']) < 8 || strlen($_POST['confirmpass']) > 20){//!preg_match('/^(?=[a-z])(?=[A-Z])[a-zA-Z]{8,}$/', $_POST['r_password'])) {
+            $_SESSION['warning']['pw_not_valid'] = true;
           }
           else {
-              $_SESSION['warning']['incorrect_pw'] = true;
+            if(update_wachtwoord($_POST,$db)){
+              $_SESSION['warning']['succes'] = true;
+            }
           }
+
+
       }
       else {
         //print('Wachtwoord komt niet overeen met oud wachtwoord');
@@ -139,54 +160,19 @@ if(isset($_GET['foto'])){
 <div class="container">
   <div class="row">
     <div class="col-md-4 col-lg-2 col-sm-4 sidebar">
-      <h3>Gebruiker</h3>
-      <ul class="menubar">
-        <li class="toggle-sub">
-          <a href="">Direct regelen</a>
-        </li>
-        <ul class="sub">
-          <li>
-            <a href="">Laatste bieding</a>
-          </li>
-          <li>
-            <a href="">Verkopen</a>
-          </li>
-        </ul>
-        <li class="toggle-sub">
-          <a href="">Mijn Account</a>
-        </li>
-        <ul class="sub">
-          <li>
-            <a href="">Mijn biedingen</a>
-          </li>
-          <li>
-            <a href="">Mijn favorieten</a>
-          </li>
-          <li>
-            <a href="">Instellingen</a>
-          </li>
-          <li>
-            <a href="php/logout.php">Log uit</a>
-          </li>
-        </ul>
-        <?php if($result['typegebruiker'] ==3){?>
-        <li class="toggle-sub">
-          <a href="gebruikers.php">Beheerpanel</a>
-        </li>
-        <?php } ?>
-      </ul>
+      <?php include 'php/includes/sidebar.php'; ?>
     </div>
     <div class="col-md-8 col-lg-10 col-sm-8">
       <div class="container-fluid  content_col">
         <div class="row navigation-row">
             <p>
-              <a href="">
+              <a href="index.php">
                 <span class="glyphicon glyphicon-home "></span>
               </a>
               <span class="glyphicon glyphicon-menu-right"></span>
               <a href="">Mijn Account</a>
               <span class="glyphicon glyphicon-menu-right"></span>
-              <a href="">Instellingen</a>
+              <a href="profiel.php">Instellingen</a>
             </p>
         </div>
 
@@ -194,16 +180,55 @@ if(isset($_GET['foto'])){
           <?php if(isset($_SESSION['warning']['false_pass']) && $_SESSION['warning']['false_pass'] === true)
           {
           ?>
-            <p class="bg-danger" style="padding: 5px;">Opgegeven wachtwoord is niet correct</p>
+            <p class="bg-danger notifcation-fix">Opgegeven wachtwoord is niet correct</p>
           <?php
-        }else if(isset($_SESSION['warning']['changesucces']) && $_SESSION['warning']['changesucces'] === true)
-        {
-        ?>
-          <p class="bg-success" style="padding: 5px;">Gegevens gewijzigd</p>
-        <?php
-
-
-        } ?>
+          }else if(isset($_SESSION['warning']['changesucces']) && $_SESSION['warning']['changesucces'] === true)
+          {
+          ?>
+            <p class="bg-success notifcation-fix">Gegevens gewijzigd</p>
+          <?php
+          }else if(isset($_SESSION['warning']['bio_length']) && $_SESSION['warning']['bio_length'] === true)
+          {
+          ?>
+             <p class="bg-danger notifcation-fix">Uw biografie is te lang, maximale aantal karakters in de biografie is 1023.</p>
+          <?php
+          }else if(isset($_SESSION['warning']['firstname_empty']) && $_SESSION['warning']['firstname_empty'] === true)
+          {
+          ?>
+             <p class="bg-danger notifcation-fix">Uw voornaam kan niet leeg zijn.</p>
+          <?php
+          }else if(isset($_SESSION['warning']['lastname_empty']) && $_SESSION['warning']['lastname_empty'] === true)
+          {
+          ?>
+             <p class="bg-danger notifcation-fix">Uw achternaam kan niet leeg zijn.</p>
+          <?php
+          }else if(isset($_SESSION['warning']['adres_empty']) && $_SESSION['warning']['adres_empty'] === true)
+          {
+          ?>
+             <p class="bg-danger notifcation-fix">Uw adres kan niet leeg zijn.</p>
+          <?php
+          }else if(isset($_SESSION['warning']['zipcode_empty']) && $_SESSION['warning']['zipcode_empty'] === true)
+          {
+          ?>
+             <p class="bg-danger notifcation-fix">Uw postcode kan niet leeg zijn.</p>
+          <?php
+          }else if(isset($_SESSION['warning']['city_empty']) && $_SESSION['warning']['city_empty'] === true)
+          {
+          ?>
+             <p class="bg-danger notifcation-fix">Uw woonplaats kan niet leeg zijn.</p>
+          <?php
+          }else if(isset($_SESSION['warning']['tel_empty']) && $_SESSION['warning']['tel_empty'] === true)
+          {
+          ?>
+             <p class="bg-danger notifcation-fix">Uw telefoonnummer kan niet leeg zijn.</p>
+          <?php
+        }else if(isset($_SESSION['warning']['mail_empty']) && $_SESSION['warning']['mail_empty'] === true)
+          {
+          ?>
+             <p class="bg-danger notifcation-fix">Uw email kan niet leeg zijn.</p>
+          <?php
+          }
+          ?>
           <div class="col-lg-6" style="border-right:1px solid #e7e7e7;">
             <form method="post" enctype="multipart/form-data" action="">
               <input type="hidden" name="form_name" value="changeprofile"/>
@@ -408,14 +433,6 @@ if(isset($_GET['foto'])){
                 <div class="row">
                   <div class="col-lg-12">
                      <div class="form-group">
-                       <?php
-                       if(isset($_SESSION['warning']['bio_length']) && $_SESSION['warning']['bio_length'] === true)
-                       {
-                       ?>
-                          <p class="bg-danger" style="padding:5px;margin-top:5px;">Uw biografie is te lang, maximale aantal karakters in de biografie is 1023.</p>
-                       <?php
-                       }
-                       ?>
                       <label for="exampleInputFile">Biografie</label>
                       <?php if (isset($_GET['wijzig'])==true){  ?>
                       <textarea class="form-control" rows="10" style="max-width:100%;" name="p_biografie"  maxlength="1024" ><?php

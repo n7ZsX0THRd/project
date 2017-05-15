@@ -17,6 +17,11 @@
             } else{ ?>
               <li><a href="profiel.php">Profiel</a></li>
               <?php
+              if(isUserBeheerder($db)){
+                ?>
+                  <li><a href="gebruikers.php">Gebruikers</a></li>
+                <?php
+              }
             }
             ?>
           </ul>

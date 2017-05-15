@@ -1,5 +1,6 @@
 <?php
   session_start();
+  $_SESSION['menu']['sub'] = 'bp';
   include ('php/database.php');
   include ('php/user.php');
   pdo_connect();
@@ -7,6 +8,7 @@
   if(isUserBeheerder($db) == false){
     header("Location: index.php");
   }
+  $result = getLoggedInUser($db);
 
 
   if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -34,17 +36,22 @@
         $data2 = $db->prepare("SELECT * FROM Gebruikerstelefoon WHERE gebruikersnaam=?");
         $data2->execute([$gebruikersnaam]);
 
-        $result=$data->fetchAll();
-        $result2=$data2->fetchAll();
+        $resultUser=$data->fetchAll();
+        $resultUserPhone=$data2->fetchAll();
 
-        if ($result[0]['statusID']==3){
+        if(count($resultUser) === 0){
+          header("Location: gebruikers.php"); // Username ongeldig
+        }
+
+
+        if ($resultUser[0]['statusID']==3){
             $blocked = true;
         } else {
             $blocked = false;
         }
 
-        if(!empty($result[0]['bestandsnaam'])) {
-          $image = $result[0]['bestandsnaam'];
+        if(!empty($resultUser[0]['bestandsnaam'])) {
+          $image = $resultUser[0]['bestandsnaam'];
           $file = 'images/users/'.$image;
           if (!file_exists( $file )){
             $image = '404.png';
@@ -55,8 +62,8 @@
         }
       }
       else {
-        $gebruikersnaam = 'gebruiker niet gevonden';
-        $image = "geenfoto/geenfoto.png";
+          // Geen username opgegeven, redirect gebruikers.php
+          header("Location: gebruikers.php");
       }
   }
   if ($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -68,191 +75,45 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../bootstrap/favicon.ico">
-
-    <title>Normal Page</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="bootstrap/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="bootstrap/assets/js/ie-emulation-modes-warning.js"></script>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <link href="css/stylesheet.css" rel="stylesheet">
+    <?php
+      include 'php/includes/default_header.php';
+    ?>
     <link href="css/profilestyle.css" rel="stylesheet">
+    <title>Beheerpanel - EenmaalAndermaal</title>
   </head>
 
   <body>
 
     <?php include 'php/includes/header.php' ?>
 
-    <main class="container">
-        <h1> Beheer gebruiker: <?php echo $gebruikersnaam ?></h1>
-        <section class="row profile">
-            <article class="col-md-3">
-                <aside class="profile-sidebar">
-                    <div class="user">
-                        <div class="profielbutton-group">
-                          <?php
-                            if ($blocked){ ?>
-                                <button class="btn btn-danger" data-toggle="modal" data-target="#myModalDeBlock" >
-                                  <i class="glyphicon glyphicon-ban-circle"></i>
-                                  Deblokkeer
-                              </button>
-                                <?php
-                            } else { ?>
-                              <button class="btn btn-danger" data-toggle="modal" data-target="#myModalBlock" >
-                                  <i class="glyphicon glyphicon-ban-circle"></i>
-                                  Blokkeer
-                              </button>
-                              <?php } ?>
-                              <button class="btn btn-niagara" disabled data-toggle="modal" data-target="#myModalSendMessage" >
-                                  <i class="glyphicon glyphicon-envelope"></i>
-                                  Stuur bericht
-                              </button>
-                        </div>
-                    </div>
-                    <div class="modal fade bs-example-modal-lg" id="myModalSendMessage" tabindex="-1" role="dialog" aria-labelledby="myModalSendMessage">
-                      <div class="modal-dialog modal-lg" role="document">
-                         <div class="modal-content">
-                           <div class="modal-header">
-                             <h4 class="modal-title">
-                               Bericht aan <?php echo $gebruikersnaam ?>
-                             </h4>
-                           </div>
-                           <form method="post" target="gebruiker.php">
-                             <div class="modal-footer">
-                               <div class="row">
-                                 <div class="col-lg-12">
-                                   <div class="form-group">
-                                     <textarea class="form-control" rows="10" style="max-width:100%" name="g_message"  maxlength="255">
-
-                                     </textarea>
-                                   </div>
-                                 </div>
-                               </div>
-                               <button type="submit" data-dismiss="modal" class="btn btn-orange" >Verzenden</button>
-                             </div>
-
-                           </form>
-                         </div>
-                       </div>
-                    </div>
-                    </div>
-                    <div class="modal fade bs-example-modal-sm" id="myModalBlock" tabindex="-1" role="dialog" aria-labelledby="myModalBlock">
-                      <div class="modal-dialog modal-sm" role="document">
-                         <div class="modal-content">
-                           <div class="modal-header">
-                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                             <h4 class="modal-title" id="myModalLabel">Weet u zeker dat u deze gebruiker wil blokkeren?</h4>
-                           </div>
-                           <div class="modal-footer">
-                             <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
-                             <button type="button" class="btn btn-primary" onclick="myAjax(['block','<?php echo $gebruikersnaam ?>'])">Blokkeren</button>
-                           </div>
-                         </div>
-                       </div>
-                    </div>
-
-                    <div class="modal fade bs-example-modal-sm" id="myModalDeBlock" tabindex="-1" role="dialog" aria-labelledby="myModalBlock">
-                      <div class="modal-dialog modal-sm" role="document">
-                         <div class="modal-content">
-                           <div class="modal-header">
-                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                             <h4 class="modal-title" id="myModalLabel">Weet u zeker dat u deze gebruiker wil deblokkeren?</h4>
-                           </div>
-                           <div class="modal-footer">
-                             <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
-                             <button type="button" class="btn btn-primary" onclick="myAjax(['unBlock','<?php echo $gebruikersnaam ?>'])">Deblokkeren</button>
-                           </div>
-                         </div>
-                       </div>
-                    </div>
-                    <div class="container">
-                      <div class="row">
-                        <div class="col-md-4 col-lg-2 col-sm-4 sidebar">
-                          <h3>Gebruiker</h3>
-                          <ul class="menubar">
-                            <li class="toggle-sub">
-                              <a href="">Direct regelen</a>
-                            </li>
-                            <ul class="sub">
-                              <li>
-                                <a href="">Laatste bieding</a>
-                              </li>
-                              <li>
-                                <a href="">Verkopen</a>
-                              </li>
-                            </ul>
-                            <li class="toggle-sub">
-                              <a href="">Mijn Account</a>
-                            </li>
-                            <ul class="sub">
-                              <li>
-                                <a href="">Mijn biedingen</a>
-                              </li>
-                              <li>
-                                <a href="">Mijn favorieten</a>
-                              </li>
-                              <li>
-                                <a href="">Instellingen</a>
-                              </li>
-                              <li>
-                                <a href="php/logout.php">Log uit</a>
-                              </li>
-                            </ul>
-                            <?php if($result[0]['typegebruiker'] ==3){?>
-                            <li class="toggle-sub">
-                              <a href="gebruikers.php">Beheerpanel</a>
-                            </li>
-                            <?php } ?>
-                          </ul>
-                        </div>
-                     </div>
-                  </div>
-                </aside>
-            </article>
-
-            <article class="col-md-9">
+    <div class="container">
+        <div class="row">
+          <div class="col-md-4 col-lg-2 col-sm-4 sidebar">
+            <?php include 'php/includes/sidebar.php'; ?>
+          </div>
+          <div class="col-md-8 col-lg-10 col-sm-8">
+            <div class="container-fluid  content_col">
+              <div class="row navigation-row">
+                  <p>
+                    <a href="index.php">
+                      <span class="glyphicon glyphicon-home "></span>
+                    </a>
+                    <span class="glyphicon glyphicon-menu-right"></span>
+                    <a href="">Beheerpanel</a>
+                    <span class="glyphicon glyphicon-menu-right"></span>
+                    <a href="<?php echo $_SERVER['REQUEST_URI']; ?>">Gebruiker</a>
+                  </p>
+              </div>
+              <div class="row">
+                <h1> Beheer gebruiker: <?php echo $gebruikersnaam ?></h1>
+              </div>
               <div class="row content_top_offset">
-                <div class="row navigation-row">
-                    <p>
-                      <a href="">
-                        <span class="glyphicon glyphicon-home "></span>
-                      </a>
-                      <span class="glyphicon glyphicon-menu-right"></span>
-                      <a href="">Mijn Account</a>
-                      <span class="glyphicon glyphicon-menu-right"></span>
-                      <a href="">Instellingen</a>
-                    </p>
-                </div>
-
                 <div class="col-lg-6" style="border-right:1px solid #e7e7e7;">
-                  <form method="post" enctype="multipart/form-data" action="">
-                    <input type="hidden" name="form_name" value="changeprofile"/>
                     <!-- email -->
                     <div class="form-group">
                       <label for="exampleInputEmail1">Email</label>
                         <div class="pflijn">
-                            <?php echo $result[0]['emailadres']?>
+                            <?php echo $resultUser[0]['emailadres']?>
                         </div>
                     </div>
 
@@ -262,13 +123,13 @@
                         <div class="col-lg-4">
                           <label for="exampleInputEmail1">Voornaam</label>
                             <div class="pflijn">
-                                <?php echo $result[0]['voornaam']?>
+                                <?php echo $resultUser[0]['voornaam']?>
                             </div>
                         </div>
                         <div class="col-lg-8">
                           <label for="exampleInputEmail1">Achternaam</label>
                             <div class="pflijn">
-                                <?php echo $result[0]['achternaam']?>
+                                <?php echo $resultUser[0]['achternaam']?>
                             </div>
                         </div>
                       </div>
@@ -280,7 +141,7 @@
                         <div class="col-lg-4">
                           <label for="exampleInputEmail1">Dag</label>
                             <div class="pflijn">
-                                <?php echo $result[0]['geboortedag']?>
+                                <?php echo $resultUser[0]['geboortedag']?>
                             </div>
                         </div>
                         <div class="col-lg-4">
@@ -288,13 +149,13 @@
                             <?php
                             $months = array("januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december");?>
                               <div class="pflijn">
-                                    <?php echo $months[$result[0]['geboortemaand']-1];?>
+                                    <?php echo $months[$resultUser[0]['geboortemaand']-1];?>
                               </div>
                         </div>
                         <div class="col-lg-4">
                           <label for="exampleInputEmail1">Jaar</label>
                             <div class="pflijn">
-                                <?php echo $result[0]['geboortejaar'];?>
+                                <?php echo $resultUser[0]['geboortejaar'];?>
                             </div>
                         </div>
                       </div>
@@ -306,13 +167,13 @@
                         <div class="col-lg-8">
                           <label for="exampleInputEmail1">Adres + Huisnr.</label>
                             <div class="pflijn">
-                                <?php echo $result[0]['adresregel1']?>
+                                <?php echo $resultUser[0]['adresregel1']?>
                             </div>
                         </div>
                         <div class="col-lg-4">
                           <label for="exampleInputEmail1">Postcode</label>
                             <div class="pflijn">
-                                <?php echo $result[0]['postcode']?>
+                                <?php echo $resultUser[0]['postcode']?>
                             </div>
                         </div>
                       </div>
@@ -322,13 +183,13 @@
                         <div class="col-lg-8">
                           <label for="exampleInputEmail1">Woonplaats</label>
                             <div class="pflijn">
-                                <?php echo $result[0]['plaatsnaam']?>
+                                <?php echo $resultUser[0]['plaatsnaam']?>
                             </div>
                         </div>
                         <div class="col-lg-4">
                           <label for="exampleInputEmail1">Landcode</label>
                             <div class="pflijn">
-                                <?php echo $result[0]['land']?>
+                                <?php echo $resultUser[0]['land']?>
                             </div>
                         </div>
                       </div>
@@ -339,7 +200,7 @@
                       <label for="tel">Telefoonnummer</label>
                       <div class="pflijn">
                           <?php
-                            echo $result2[0]['telefoonnummer'];
+                            echo $resultUserPhone[0]['telefoonnummer'];
                           ?>
                       </div>
                     </div>
@@ -352,7 +213,7 @@
                         <div class="col-lg-7">
                           <label for="exampleInputEmail1">Gebruikersnaam</label>
                           <div class="pflijn">
-                              <?php echo $result[0]['gebruikersnaam']?>
+                              <?php echo $resultUser[0]['gebruikersnaam']?>
                           </div>
                         </div>
                         <div class="col-lg-1">
@@ -370,7 +231,7 @@
                             <label for="exampleInputFile">Biografie</label>
                             <div class="pflijn biografietext">
                                 <?php
-                                  echo $result[0]['biografie'];
+                                  echo $resultUser[0]['biografie'];
                                 ?>
                             </div>
                            </div>
@@ -381,14 +242,100 @@
                 </div>
 
               </div>
-		</article>
+              <div class="row">
+                <div class="col-lg-12">
+                  <hr>
+                </div>
+                <div class="col-lg-6 col-lg-offset-6">
 
-        </section>
-        <?php include 'php/includes/footer.php' ?>
+                  <div class="text-right">
+                    <div class="profielbutton-group">
+                      <?php
+                        if ($blocked){ ?>
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#myModalDeBlock" >
+                              <i class="glyphicon glyphicon-ban-circle"></i>
+                              Deblokkeer
+                          </button>
+                            <?php
+                        } else { ?>
+                          <button class="btn btn-danger" data-toggle="modal" data-target="#myModalBlock" >
+                              <i class="glyphicon glyphicon-ban-circle"></i>
+                              Blokkeer
+                          </button>
+                          <?php } ?>
+                          <button class="btn btn-niagara" disabled data-toggle="modal" data-target="#myModalSendMessage" >
+                              <i class="glyphicon glyphicon-envelope"></i>
+                              Stuur bericht
+                          </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    </main>
+    </div>
 
+    <div class="modal fade bs-example-modal-lg" id="myModalSendMessage" tabindex="-1" role="dialog" aria-labelledby="myModalSendMessage">
+      <div class="modal-dialog modal-lg" role="document">
+         <div class="modal-content">
+           <div class="modal-header">
+             <h4 class="modal-title">
+               Bericht aan <?php echo $gebruikersnaam ?>
+             </h4>
+           </div>
+           <form method="post" target="gebruiker.php">
+             <div class="modal-footer">
+               <div class="row">
+                 <div class="col-lg-12">
+                   <div class="form-group">
+                     <textarea class="form-control" rows="10" style="max-width:100%" name="g_message"  maxlength="255">
 
+                     </textarea>
+                   </div>
+                 </div>
+               </div>
+               <button type="submit" data-dismiss="modal" class="btn btn-orange" >Verzenden</button>
+             </div>
+
+           </form>
+         </div>
+       </div>
+    </div>
+    </div>
+    <div class="modal fade bs-example-modal-sm" id="myModalBlock" tabindex="-1" role="dialog" aria-labelledby="myModalBlock">
+      <div class="modal-dialog modal-sm" role="document">
+         <div class="modal-content">
+           <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+             <h4 class="modal-title" id="myModalLabel">Weet u zeker dat u deze gebruiker wil blokkeren?</h4>
+           </div>
+           <div class="modal-footer">
+             <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
+             <button type="button" class="btn btn-orange" onclick="myAjax(['block','<?php echo $gebruikersnaam ?>'])">Blokkeren</button>
+           </div>
+         </div>
+       </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-sm" id="myModalDeBlock" tabindex="-1" role="dialog" aria-labelledby="myModalBlock">
+      <div class="modal-dialog modal-sm" role="document">
+         <div class="modal-content">
+           <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+             <h4 class="modal-title" id="myModalLabel">Weet u zeker dat u deze gebruiker wil deblokkeren?</h4>
+           </div>
+           <div class="modal-footer">
+             <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
+             <button type="button" class="btn btn-orange" onclick="myAjax(['unBlock','<?php echo $gebruikersnaam ?>'])">Deblokkeren</button>
+           </div>
+         </div>
+       </div>
+    </div>
+   <?php
+    include 'php/includes/footer.php';
+   ?>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
