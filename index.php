@@ -193,32 +193,32 @@ if(isset($_GET['mail'])==true) {
           <h3>Categorieën</h3>
           <ul class="menubar">
             <li>
-              <a href="">Menu Item</a>
+              <a href="">Audio</a>
             </li>
             <li class="toggle-sub">
-              <a href="">Menu Item</a>
+              <a href="">Auto's</a>
             </li>
             <ul class="sub">
               <li>
-                <a href="">Sub Item</a>
+                <a href="">BMW</a>
               </li>
               <li>
-                <a href="">Sub Item</a>
+                <a href="">Mercedes-Benz</a>
               </li>
             </ul>
             <li class="toggle-sub">
-              <a href="">Menu Item</a>
+              <a href="">Computers</a>
             </li>
             <ul class="sub">
               <li>
-                <a href="">Sub Item</a>
+                <a href="">Dell</a>
               </li>
               <li>
-                <a href="">Sub Item</a>
+                <a href="">HP</a>
               </li>
             </ul>
             <li>
-              <a href="">Menu Item</a>
+              <a href="">Diversen</a>
             </li>
           </ul>
         </div>
@@ -226,7 +226,7 @@ if(isset($_GET['mail'])==true) {
           <div class="container-fluid content_col">
             <div class="row">
               <div class="col-lg-12 remove-margin">
-                <h1>Boeken</h1>
+                <h1>Vervoer</h1>
               <div>
               <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
                 <div class="container-fixed">
@@ -235,8 +235,8 @@ if(isset($_GET['mail'])==true) {
                       <div class="thumbnail">
                         <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
                         <div class="caption captionfix">
-                          <h3>Spiegel</h3>
-                          <p>Huidige bod: <strong>€270.-</strong></p>
+                          <h3>Boeing 737</h3>
+                          <p>Huidige bod: <strong>€280050.-</strong></p>
                           <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                         </div>
                       </div>
@@ -245,8 +245,8 @@ if(isset($_GET['mail'])==true) {
                       <div class="thumbnail">
                         <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
                         <div class="caption captionfix">
-                          <h3>Spiegel</h3>
-                          <p>Huidige bod: <strong>€270.-</strong></p>
+                          <h3>Boeing 737</h3>
+                          <p>Huidige bod: <strong>€270000.-</strong></p>
                           <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                         </div>
                       </div>
@@ -255,24 +255,23 @@ if(isset($_GET['mail'])==true) {
                       <div class="thumbnail">
                         <div class="thumb_image" style="background-image:url(images/bmw.jpg);"></div>
                         <div class="caption captionfix">
-                          <h3>Spiegel</h3>
-                          <p>Huidige bod: <strong>€270.-</strong></p>
+                          <h3>BMW 530i</h3>
+                          <p>Huidige bod: <strong>€80000.-</strong></p>
                           <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                         </div>
                       </div>
                     </div>
                     <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                       <div class="thumbnail">
-                        <div class="thumb_image" style="background-image:url(images/eten.jpg);"></div>
-                        <div class="caption captionfix">
-                          <h3>Spiegel</h3>
-                          <p>Huidige bod: <strong>€270.-</strong></p>
-                          <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                        <div class="thumb_image" style="background-image:url(images/bmw.jpg);"></div>
+                          <div class="caption captionfix">
+                            <h3>BMW 530i</h3>
+                            <p>Huidige bod: <strong>€80000.-</strong></p>
+                            <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                          </div>
                         </div>
-                      </div>
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -280,50 +279,50 @@ if(isset($_GET['mail'])==true) {
         </div>
         <div class="row">
           <div class="col-lg-12 remove-margin">
-            <h1>Boeken</h1>
+            <h1>Diners</h1>
           <div>
           <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
             <div class="container-fixed">
               <div class="row item-row">
                 <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                  <div class="thumbnail">
-                    <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
-                    <div class="caption captionfix">
-                      <h3>Spiegel</h3>
-                      <p>Huidige bod: <strong>€270.-</strong></p>
-                      <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                    <div class="thumbnail">
+                        <div class="thumb_image" style="background-image:url(images/eten.jpg);"></div>
+                        <div class="caption captionfix">
+                            <h3>3-gangen diner - 5*</h3>
+                            <p>Huidige bod: <strong>€270.-</strong></p>
+                            <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                        </div>
                     </div>
-                  </div>
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                  <div class="thumbnail">
-                    <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
-                    <div class="caption captionfix">
-                      <h3>Spiegel</h3>
-                      <p>Huidige bod: <strong>€270.-</strong></p>
-                      <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                    <div class="thumbnail">
+                        <div class="thumb_image" style="background-image:url(images/eten.jpg);"></div>
+                        <div class="caption captionfix">
+                            <h3>3-gangen diner - 4*</h3>
+                            <p>Huidige bod: <strong>€170.-</strong></p>
+                            <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                        </div>
                     </div>
-                  </div>
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                  <div class="thumbnail">
-                    <div class="thumb_image" style="background-image:url(images/bmw.jpg);"></div>
-                    <div class="caption captionfix">
-                      <h3>Spiegel</h3>
-                      <p>Huidige bod: <strong>€270.-</strong></p>
-                      <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                    <div class="thumbnail">
+                        <div class="thumb_image" style="background-image:url(images/eten.jpg);"></div>
+                        <div class="caption captionfix">
+                            <h3>Tapas arrangem...</h3>
+                            <p>Huidige bod: <strong>€80.-</strong></p>
+                            <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                        </div>
                     </div>
-                  </div>
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                  <div class="thumbnail">
-                    <div class="thumb_image" style="background-image:url(images/eten.jpg);"></div>
-                    <div class="caption captionfix">
-                      <h3>Spiegel</h3>
-                      <p>Huidige bod: <strong>€270.-</strong></p>
-                      <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                    <div class="thumbnail">
+                        <div class="thumb_image" style="background-image:url(images/eten.jpg);"></div>
+                        <div class="caption captionfix">
+                            <h3>5-gangen diner - 5*</h3>
+                            <p>Huidige bod: <strong>€380.-</strong></p>
+                            <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                        </div>
                     </div>
-                  </div>
                 </div>
               </div>
 
@@ -332,7 +331,7 @@ if(isset($_GET['mail'])==true) {
         </div>
       </div>
     </div>
-    <div class="row">
+    <!--<div class="row">
       <div class="col-lg-12 remove-margin">
         <h1>Boeken</h1>
       <div>
@@ -383,7 +382,7 @@ if(isset($_GET['mail'])==true) {
 
         </div>
       </div>
-    </div>
+    </div>-->
   </div>
 </div>
       </div>
