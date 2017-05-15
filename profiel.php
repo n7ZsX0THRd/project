@@ -34,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
   $_POST['p_username']=$result['gebruikersnaam'];
   if(isset($_POST['form_name'])){
       if($_POST['form_name']=='changeprofile'){
+        $_SESSION['warning']['changingprofile'] = true;
         if(update_user($_POST,$db))
         {
             header('location: profiel.php');
@@ -79,6 +80,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 
 
+}
+if(isset($_GET['foto'])){
+  $_SESSION['warning']['changingprofile']=true;
+  if($_GET['foto']=='succes'){
+    $_SESSION['warning']['changingprofile']=false;
+  }
 }
 
 ?>
@@ -344,7 +351,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="col-lg-1">
                   </div>
                   <div class="col-lg-4">
-                    <div <?php if (isset($_GET['wijzig'])==true){ ?> data-toggle="modal" data-target="#myModal" <?php } ?>>
+                    <div <?php if (isset($_GET['wijzig'])==true){ ?> data-toggle="modal" data-target="#profielfoto" <?php } ?>>
                       <?php if (isset($_GET['wijzig'])==true){ ?><div class="edit-user-icon"><span class="glyphicon glyphicon-edit"></span></div><?php } ?>
                         <div class="profile_picture" style="background-image:url(images/users/<?php echo $image; ?>);">
                       </div>
@@ -362,7 +369,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                         echo $result['biografie'];
                       ?></textarea>
                       <?php }else{ ?>
-                      <div class="pflijn">
+                      <div class="pflijn biografietext">
                           <?php
                             echo $result['biografie'];
                           ?>
@@ -409,7 +416,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
   </div>
 
   <form action="php/upload.php" method="post" enctype="multipart/form-data">
-    <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal">
+    <div id="profielfoto" class="modal fade" role="dialog">
       <div class="modal-dialog" role="document">
          <div class="modal-content">
            <div class="modal-header">
@@ -417,6 +424,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
              <h4 class="modal-title" id="myModalLabel">Verander profielfoto</h4>
            </div>
            <div class="modal-body">
+<?php if(isset($_GET['foto'])){
+  switch ($_GET['foto']) {
+    case 'format':
+        echo'<p class="bg-danger">Foto moet .jpg .png of .gif zijn</p>';
+        break;
+    case 'error':
+        echo'<p class="bg-danger">Dit bestand kan niet worden geupload</p>';
+        break;
+    case 'size':
+        echo'<p class="bg-danger">Bestand is te groot</p>';
+        break;
+    case 'size':
+        echo'<p class="bg-danger">Alleen afbeeldingen uploaden</p>';
+        break;
+      }
+} ?>
              <div class="form-group">
                <label for="exampleInputFile">Upload een foto</label>
               <input type="file" name="fileToUpload" id="fileToUpload">
@@ -534,6 +557,17 @@ $("li.toggle-sub").click(function(evt) {
        </script>
   <?php
 }?>
+
+<?php if( isset($_SESSION['warning']['changingprofile']) && $_SESSION['warning']['changingprofile'] == true){
+echo 'test';?>
+<script type="text/javascript">
+           $(window).load(function(){
+               $('#profielfoto').modal('show');
+           });
+       </script>
+  <?php
+}?>
+
 
 </body>
 </html>
