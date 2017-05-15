@@ -460,16 +460,16 @@ if(isset($_GET['foto'])){
 <?php if(isset($_GET['foto'])){
   switch ($_GET['foto']) {
     case 'format':
-        echo'<p class="bg-danger">Foto moet .jpg .png of .gif zijn</p>';
+        echo'<p class="bg-danger" style="padding: 5px;">Foto moet .jpg .png of .gif zijn</p>';
         break;
     case 'error':
-        echo'<p class="bg-danger">Dit bestand kan niet worden geupload</p>';
+        echo'<p class="bg-danger" style="padding: 5px;">Dit bestand kan niet worden geupload</p>';
         break;
     case 'size':
-        echo'<p class="bg-danger">Bestand is te groot</p>';
+        echo'<p class="bg-danger" style="padding: 5px;">Bestand is te groot</p>';
         break;
     case 'size':
-        echo'<p class="bg-danger">Alleen afbeeldingen uploaden</p>';
+        echo'<p class="bg-danger" style="padding: 5px;">Alleen afbeeldingen uploaden</p>';
         break;
       }
 } ?>
@@ -503,19 +503,19 @@ if(isset($_GET['foto'])){
           if(isset($_SESSION['warning']['incorrect_pw']) && $_SESSION['warning']['incorrect_pw'] === true)
           {
           ?>
-            <p class="bg-danger">Het wachtwoord komt niet overeen met uw huidige wachtwoord</p>
+            <p class="bg-danger" style="padding: 5px;">Het wachtwoord komt niet overeen met uw huidige wachtwoord</p>
           <?php
           }
           else if(isset($_SESSION['warning']['pw_not_equal']) && $_SESSION['warning']['pw_not_equal'] === true)
           {
           ?>
-            <p class="bg-danger">De opgegeven wachtwoorden komen niet overeen</p>
+            <p class="bg-danger" style="padding: 5px;">De opgegeven wachtwoorden komen niet overeen</p>
           <?php
           }
           else if(isset($_SESSION['warning']['succes']) && $_SESSION['warning']['succes'] === true)
           {
           ?>
-            <p class="bg-success">Wachtwoord succesvol gewijzigd</p>
+            <p class="bg-success" style="padding: 5px;">Wachtwoord succesvol gewijzigd</p>
           <?php
           }
           //pw_not_equal
