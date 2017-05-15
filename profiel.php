@@ -44,13 +44,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         {
             if(password_verify($_POST['confirmpass'], $wwquery[0]['wachtwoord']))
             {
-              if(update_user($_POST,$db)){
-                $result = getLoggedInUser($db);
-                $_SESSION['warning']['changesucces'] = true;
+              if(isset($_POST['p_biografie']) && strlen($_POST['p_biografie']) < 1024){
+                if(update_user($_POST,$db)){
+                  $result = getLoggedInUser($db);
+                  $_SESSION['warning']['changesucces'] = true;
+                }
+                else {
+                  $_SESSION['warning']['pw_not_equal'] = true;
+                }
               }
               else {
-                $_SESSION['warning']['pw_not_equal'] = true;
+                $_SESSION['warning']['bio_length'] = true;
               }
+
+
             }
             else {
                 $_SESSION['warning']['false_pass'] = true;
@@ -401,9 +408,17 @@ if(isset($_GET['foto'])){
                 <div class="row">
                   <div class="col-lg-12">
                      <div class="form-group">
+                       <?php
+                       if(isset($_SESSION['warning']['bio_length']) && $_SESSION['warning']['bio_length'] === true)
+                       {
+                       ?>
+                          <p class="bg-danger" style="padding:5px;margin-top:5px;">Uw biografie is te lang, maximale aantal karakters in de biografie is 1023.</p>
+                       <?php
+                       }
+                       ?>
                       <label for="exampleInputFile">Biografie</label>
                       <?php if (isset($_GET['wijzig'])==true){  ?>
-                      <textarea class="form-control" rows="10" style="max-width:100%;" name="p_biografie"  maxlength="255" ><?php
+                      <textarea class="form-control" rows="10" style="max-width:100%;" name="p_biografie"  maxlength="1024" ><?php
                         echo $result['biografie'];
                       ?></textarea>
                       <?php }else{ ?>
@@ -462,22 +477,22 @@ if(isset($_GET['foto'])){
              <h4 class="modal-title" id="myModalLabel">Verander profielfoto</h4>
            </div>
            <div class="modal-body">
-<?php if(isset($_GET['foto'])){
-  switch ($_GET['foto']) {
-    case 'format':
-        echo'<p class="bg-danger" style="padding: 5px;">Foto moet .jpg .png of .gif zijn</p>';
-        break;
-    case 'error':
-        echo'<p class="bg-danger" style="padding: 5px;">Dit bestand kan niet worden geupload</p>';
-        break;
-    case 'size':
-        echo'<p class="bg-danger" style="padding: 5px;">Bestand is te groot</p>';
-        break;
-    case 'size':
-        echo'<p class="bg-danger" style="padding: 5px;">Alleen afbeeldingen uploaden</p>';
-        break;
-      }
-} ?>
+              <?php if(isset($_GET['foto'])){
+                switch ($_GET['foto']) {
+                  case 'format':
+                      echo'<p class="bg-danger" style="padding: 5px;">Foto moet .jpg .png of .gif zijn</p>';
+                      break;
+                  case 'error':
+                      echo'<p class="bg-danger" style="padding: 5px;">Dit bestand kan niet worden geupload</p>';
+                      break;
+                  case 'size':
+                      echo'<p class="bg-danger" style="padding: 5px;">Bestand is te groot</p>';
+                      break;
+                  case 'size':
+                      echo'<p class="bg-danger" style="padding: 5px;">Alleen afbeeldingen uploaden</p>';
+                      break;
+                    }
+              } ?>
              <div class="form-group">
                <label for="exampleInputFile">Upload een foto</label>
               <input type="file" name="fileToUpload" id="fileToUpload">
