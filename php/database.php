@@ -35,7 +35,7 @@ function block_user($gebruikersnaam) {
         mail($to, $subject, $message, $headers);
         return true;
     } catch (PDOException $e) {
-        echo "Could not block user, ".$e->getMessage();
+        //echo "Could not block user, ".$e->getMessage();
         return false;
     }
 }
@@ -112,7 +112,7 @@ function create_user($data,$db){ //db is global!!
       );
       return true;
   } catch (PDOException $e) {
-      var_dump($e);
+      //var_dump($e);
       return false;
   }
 }
@@ -200,7 +200,7 @@ function update_user($data,$db){  //db is global!!
 
       return true;
   } catch (PDOException $e) {
-      var_dump($e);
+      //var_dump($e);
       return false;
   }
 }
@@ -216,7 +216,7 @@ function update_wachtwoord($data,$db){
 
       return true;
   } catch (PDOException $e) {
-      var_dump($e);
+      //var_dump($e);
       return false;
   }
 }
