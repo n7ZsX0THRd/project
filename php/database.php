@@ -91,23 +91,24 @@ function unBlock_user($gebruikersnaam) {
 function create_user($data,$db){ //db is global!!
     global $db;
   try {
-      $dbs = $db->prepare("INSERT INTO Gebruikers (gebruikersnaam,voornaam,achternaam,adresregel1,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?); INSERT INTO Gebruikerstelefoon (gebruikersnaam,telefoonnummer) VALUES (?,?)");
+      $dbs = $db->prepare("INSERT INTO Gebruikers (gebruikersnaam,voornaam,achternaam,adresregel1,postcode,plaatsnaam,land,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?); INSERT INTO Gebruikerstelefoon (gebruikersnaam,telefoonnummer) VALUES (?,?)");
 
       $dbs->execute(array(
-        $data['r_username'],
-        $data['r_firstname'],
-        $data['r_lastname'],
-        $data['r_street_name'].' '.$data['r_street_nr'].' '.$data['r_street_addition'],
-        $data['r_zipcode'],
-        $data['r_city'],
-        $data['r_birthmonth'].'-'.$data['r_birthday'].'-'.$data['r_birthyear'],
-        $data['r_email'],
-        password_hash($data['r_password'], PASSWORD_DEFAULT),
-        $data['r_secret_question'],
-        password_hash($data['r_secret_question_answer'], PASSWORD_DEFAULT),
-        $data['r_username'],
-        $data['r_phonenumber']
+          $data['r_username'],
+          $data['r_firstname'],
+          $data['r_lastname'],
+          $data['r_street_name'].' '.$data['r_street_nr'].' '.$data['r_street_addition'],
+          $data['r_zipcode'],
+          $data['r_city'],
+          $data['r_country'],
+          $data['r_birthmonth'].'-'.$data['r_birthday'].'-'.$data['r_birthyear'],
+          $data['r_email'],
+          password_hash($data['r_password'], PASSWORD_DEFAULT),
+          $data['r_secret_question'],
+          $data['r_secret_question_answer'],
+          $data['r_username'],
+          $data['r_phonenumber']
         )
       );
       return true;

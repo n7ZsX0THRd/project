@@ -9,6 +9,7 @@ if(isUserLoggedIn($db))
   header('location: index.php');
 
 $secret_questions = $db->query("SELECT ID,vraag FROM GeheimeVragen ORDER BY vraag ASC");
+$landen = $db->query("SELECT lnd_Landnaam FROM Landen")
 
 $required_register_fields = Array (
   'r_username' => 'Gebruikersnaam',
@@ -21,6 +22,7 @@ $required_register_fields = Array (
   'r_street_nr' => 'Huisnummer',
   'r_zipcode' => 'Postcode',
   'r_city' => 'Plaats',
+  'r_country' => 'Land',
   'r_phonenumber' => 'Telefoonnummer',
   'r_email' => 'Email',
   'r_email_confirm' => 'Email bevestiging',
@@ -245,6 +247,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                       <input style="max-width:22%" type="text" class="form-control" id="Nummer" name="r_street_addition" value="<?php if(isset($_POST['r_street_addition'])){ echo $_POST['r_street_addition']; } ?>" placeholder="Toev.">
                       <input type="" class="form-control" id="Postcode" placeholder="Postcode" name="r_zipcode" value="<?php if(isset($_POST['r_zipcode'])){ echo $_POST['r_zipcode']; } ?>" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}">
                       <input type="text" class="form-control" id="City" placeholder="Plaats" name="r_city" value="<?php if(isset($_POST['r_city'])){ echo $_POST['r_city']; } ?>">
+                      <select class="form-control" name="r_country">
+                        <option <?php if(isset($_POST['r_country']) === false){ echo 'selected'; } ?> disabled>Land</option>
+                        <?php
+                          while ($land_code = $landen->fetch()){
+                        ?>
+                          <option value="<?php echo $land_code['lnd_Code'];?>" <?php if(isset($_POST['r_country']) && $_POST['r_country'] == $land_code['lnd_Code']){  echo 'selected'; } ?>><?php echo $land_code['lnd_Landnaam'];?></option>
+                        <?php
+                          }
+                        ?>
+                    </select>
                   </div>
                   <!-- einde adres gegevens -->
 
