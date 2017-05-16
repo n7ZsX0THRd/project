@@ -45,6 +45,26 @@ if(isset($_GET['mail'])==true) {
         <?php include 'php/includes/default_header.php'; ?>
 
         <title>Veilingsite - Eenmaal Andermaal</title>
+        <style>
+         ul{
+          list-style-type: none;
+         }
+         li{
+          list-style-type: none;
+         }
+         .drilldown {
+           overflow: hidden;
+           width: 100%;
+           -webkit-transform: translate3d(0,0,0);
+                   transform: translate3d(0,0,0);
+         }
+         .drilldown-sub {
+           display: none;
+         }
+         .drilldown-back {
+           font-weight: bold;
+         }
+       </style>
   </head>
 
   <body>
@@ -190,7 +210,7 @@ if(isset($_GET['mail'])==true) {
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-3 col-lg-2 col-sm-3 sidebar">
-          <h3>Categorieën</h3>
+          <h3>Rubrieken</h3>
           <ul class="menubar">
             <li>
               <a href="">Audio</a>
@@ -221,6 +241,39 @@ if(isset($_GET['mail'])==true) {
               <a href="">Diversen</a>
             </li>
           </ul>
+          <div class="drilldown">
+    <div class="drilldown-container">
+      <ul class="drilldown-root">
+        <li><a href="#">A Lorem ipsum</a></li>
+        <li>
+          <a href="#">A Dolor sit amet <span class="glyphicon glyphicon-menu-right"></a>
+          <ul class="drilldown-sub">
+            <li class="drilldown-back"><a href="#"><span class="glyphicon glyphicon-menu-left"></span> terug</a></li>
+            <li><a href="#">A Fusce eget</a></li>
+            <li>
+              <a href="#">A Quam vel lorem <span class="glyphicon glyphicon-menu-right"></span></a>
+              <ul class="drilldown-sub">
+                <li class="drilldown-back"><a href="#"><span class="glyphicon glyphicon-menu-left"></span> terug</a></li>
+                <li><a href="#">A Molestie tincidunt</a></li>
+                <li><a href="#">A Pellentesque</a></li>
+              </ul>
+            </li>
+            <li><a href="#">A Sit amet tincidunt</a></li>
+          </ul>
+        </li>
+        <li><a href="#">A Consectetur</a></li>
+        <li><a href="#">A Maecenas id</a></li>
+        <li>
+          <a href="#">A Hendrerit odio <span class="glyphicon glyphicon-menu-right"></a>
+          <ul class="drilldown-sub">
+            <li class="drilldown-back"><a href="#"><span class="glyphicon glyphicon-menu-left"></span> terug</a></li>
+            <li><a href="#">A Cras tincidunt</a></li>
+            <li><a href="#">A Vivamus eu</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
         </div>
         <div class="col-md-9 col-lg-10 col-sm-9">
           <div class="container-fluid content_col">
@@ -331,58 +384,6 @@ if(isset($_GET['mail'])==true) {
         </div>
       </div>
     </div>
-    <!--<div class="row">
-      <div class="col-lg-12 remove-margin">
-        <h1>Boeken</h1>
-      <div>
-      <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
-        <div class="container-fixed">
-          <div class="row item-row">
-            <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-              <div class="thumbnail">
-                <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
-                <div class="caption captionfix">
-                  <h3>Spiegel</h3>
-                  <p>Huidige bod: <strong>€270.-</strong></p>
-                  <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-              <div class="thumbnail">
-                <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
-                <div class="caption captionfix">
-                  <h3>Spiegel</h3>
-                  <p>Huidige bod: <strong>€270.-</strong></p>
-                  <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-              <div class="thumbnail">
-                <div class="thumb_image" style="background-image:url(images/bmw.jpg);"></div>
-                <div class="caption captionfix">
-                  <h3>Spiegel</h3>
-                  <p>Huidige bod: <strong>€270.-</strong></p>
-                  <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-              <div class="thumbnail">
-                <div class="thumb_image" style="background-image:url(images/eten.jpg);"></div>
-                <div class="caption captionfix">
-                  <h3>Spiegel</h3>
-                  <p>Huidige bod: <strong>€270.-</strong></p>
-                  <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>-->
   </div>
 </div>
       </div>
@@ -403,6 +404,10 @@ if(isset($_GET['mail'])==true) {
     <script src="bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="js/jquery.drilldown.min.js"></script>
+    <script>
+      $('.drilldown').drilldown();
+    </script>
     <script>
     /*
     $("li.toggle-sub").click(function(evt) {
