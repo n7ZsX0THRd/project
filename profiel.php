@@ -125,6 +125,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         $_SESSION['warning']['incorrect_pw'] = true;
       }
     }
+    else if($_POST['form_name']=='changeemailadres'){
+
+      $_SESSION['warning']['changingemailadres'] = true;
+
+      $dataquery= $db->prepare("SELECT TOP(1) emailadres FROM Gebruikers WHERE gebruikersnaam=?");
+
+      $dataquery->execute(array($_POST['p_username']));
+
+      $wwquery = $dataquery->fetchAll();
+      $wwtotaal = count($wwquery);
+
+      if($wwtotaal == 1)
+      {
+          if(!password_verify($_POST['passchange'], $wwquery[0]['wachtwoord']))
+          {
+            $_SESSION['warning']['incorrect_pw'] = true;
+          }
+          else if($_POST['confirmmail'] !== $_POST['confirmmailcheck']){
+            $_SESSION['warning']['ea_not_equal'] = true;
+          }
+          else if(filter_var($_POST['confirmmail'],FILTER_VALIDATE_EMAIL) === false){
+            $_SESSION['warning']['ea_not_valid'] = true;
+          }
+          else {
+            if(update_emailadres($_POST,$db)){
+              $_SESSION['warning']['succes'] = true;
+            }
+          }
+
+
+      }
+      else {
+        //print('Wachtwoord komt niet overeen met oud wachtwoord');
+        $_SESSION['warning']['incorrect_pw'] = true;
+      }
+    }
   }
 
 
@@ -458,7 +494,7 @@ if(isset($_GET['foto'])){
           <div class="col-lg-12">
             <hr>
           </div>
-          <div class="col-lg-6 col-lg-offset-6">
+          <div class="col-lg-offset-3 col-lg-9">
 
             <div class="form-group">
               <?php if (isset($_GET['wijzig'])==true){  ?>
@@ -470,9 +506,10 @@ if(isset($_GET['foto'])){
               <?php if (isset($_GET['wijzig'])==false){  ?>
 
               <!-- Trigger the popup with a button -->
-              <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#wachtwoord">Wijzig wachtwoord</button>
-
+              <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#wachtwoord">Nieuw wachtwoord</button>
               <a href="?wijzig" type="submit" class="btn btn-orange">Wijzig gegevens</a>
+              <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#emailadres">Nieuw emailadres</button>
+
               <?php }else{ ?>
               <a href="?" type="submit" class="btn btn-orange">Annuleren</a>
               <button type="submit" class="btn btn-orange" >Wijzingen opslaan</button>
@@ -524,6 +561,71 @@ if(isset($_GET['foto'])){
        </div>
     </div>
   </form>
+</form>
+<!-- popup -->
+<form name="emailadreswijzig" method="post" enctype="multipart/form-data" action="">
+  <input type="hidden" name="form_name" value="changeemailadres"/>
+<div id="emailadres" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+    <!-- popup content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Wijzig uw emailadres</h4>
+      </div>
+      <div class="modal-body">
+        <?php
+        if(isset($_SESSION['warning']['incorrect_pw']) && $_SESSION['warning']['incorrect_pw'] === true)
+        {
+        ?>
+          <p class="bg-danger" style="padding: 5px;">Het wachtwoord komt niet overeen met uw account</p>
+        <?php
+        }
+        else if(isset($_SESSION['warning']['ea_not_equal']) && $_SESSION['warning']['ea_not_equal'] === true)
+        {
+        ?>
+          <p class="bg-danger" style="padding: 5px;">De opgegeven emailadressen komen niet overeen</p>
+        <?php
+        }
+        else if(isset($_SESSION['warning']['succes']) && $_SESSION['warning']['succes'] === true)
+        {
+        ?>
+          <p class="bg-success" style="padding: 5px;">emailadres succesvol gewijzigd</p>
+        <?php
+        }
+        else if(isset($_SESSION['warning']['ea_not_valid']) && $_SESSION['warning']['ea_not_valid'] === true)
+        {
+        ?>
+          <p class="bg-danger" style="padding: 5px;">Het opgegeven emailadres voldoet niet aan de eisen</p>
+        <?php
+        }
+        //pw_not_equal
+        ?>
+          <div class="form-group">
+            <div class="form-group">
+              <label for="formpass">Wachtwoord</label>
+              <input name="passchange" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+            </div>
+            <div class="form-group">
+              <label for="formpass">Nieuwe emailadres</label>
+              <input name="confirmpass" type="emailadres" class="form-control" id="formpass" placeholder="emailadres">
+            </div>
+            <div class="form-group">
+              <input name="confirmpasscheck" type="emailadres" class="form-control" id="formpass" placeholder="Herhaal nieuwe emailadres">
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+        <button type="submit" class="btn btn-orange">Veranderen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</form>
+
+</form>
   <!-- popup -->
   <form name="wachtwoordwijzig" method="post" enctype="multipart/form-data" action="">
     <input type="hidden" name="form_name" value="changepassword"/>
