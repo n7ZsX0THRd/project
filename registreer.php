@@ -9,7 +9,7 @@ if(isUserLoggedIn($db))
   header('location: index.php');
 
 $secret_questions = $db->query("SELECT ID,vraag FROM GeheimeVragen ORDER BY vraag ASC");
-$landen = $db->query("SELECT lnd_Landnaam FROM Landen")
+$landen = $db->query("SELECT lnd_Landnaam FROM Landen");
 
 $required_register_fields = Array (
   'r_username' => 'Gebruikersnaam',
