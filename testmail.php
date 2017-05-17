@@ -1,5 +1,5 @@
 <?php
-    $to = 'MPW.Muijsert@student.han.nl';
+    $to = 'hbo@guusbouw.nl';
 
     $subject = 'test email template';
 
