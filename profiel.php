@@ -360,13 +360,6 @@ if(isset($_GET['foto'])){
           <div class="col-lg-6" style="border-right:1px solid #e7e7e7;">
             <form method="post" enctype="multipart/form-data" action="">
               <input type="hidden" name="form_name" value="changeprofile"/>
-              <!-- email -->
-              <div class="form-group">
-                <label for="exampleInputEmail1">Email</label>
-                  <div class="pflijn">
-                      <?php echo $result['emailadres']?>
-                  </div>
-              </div>
 
               <!-- Voornaam en achternaam -->
               <div class="form-group">
@@ -537,11 +530,17 @@ if(isset($_GET['foto'])){
               <div class="form-group">
                 <div class="row">
                   <div class="col-lg-7">
-                    <label for="exampleInputEmail1">Gebruikersnaam</label>
+                    <label>Gebruikersnaam</label>
                     <div class="pflijn">
                         <?php echo $result['gebruikersnaam']?>
                     </div>
+                    <p></p>
+                    <label>Email</label>
+                      <div class="pflijn">
+                          <?php echo $result['emailadres']?>
+                      </div>
                   </div>
+
                   <div class="col-lg-1">
                   </div>
                   <div class="col-lg-4">

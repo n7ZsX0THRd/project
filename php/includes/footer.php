@@ -9,6 +9,7 @@
           <h1>Start hier</h1>
           <ul>
             <li><a href="index.php">Home</a></li>
+            <li><a href="rubrieken_overzicht.php">Alle rubrieken</a></li>
             <?php if (!isUserLoggedIn($db)){
               ?>
               <li><a href="registreer.php">Registreren</a></li>
