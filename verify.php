@@ -48,7 +48,7 @@ if(isset($_GET['gebruikersnaam']) && !empty($_GET['gebruikersnaam']) && isset($_
                           $dbs = $db->prepare("SELECT emailadres,gebruikersnaam FROM Activatiecodes WHERE gebruikersnaam=?");
                           $dbs->execute(array($gebruikersnaam));
                           $newmailResult = $dbs->fetchAll();
-                          if(count($newmailResult) == 1)) {
+                          if(count($newmailResult) == 1) {
                               $dbs = $db->prepare("UPDATE Gebruikers SET emailadres=? WHERE gebruikersnaam=?");
                               $dbs->execute(array($newmailResult[0]['emailadres'],$newmailResult[0]['gebruikersnaam']));
                           }
