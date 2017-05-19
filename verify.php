@@ -43,8 +43,17 @@ if(isset($_GET['gebruikersnaam']) && !empty($_GET['gebruikersnaam']) && isset($_
                   
                   if(isset($result[0])) {
                       if ($result[0] == $code) {
+                          
+                          //If new email was given change old to new
+                          $dbs = $db->prepare("SELECT emailadres FROM Activatiecodes WHERE gebruikersnaam=?");
+                          $dbs->execute(array($gebruikersnaam));
+                          $newmail = $dbs->fetchAll()[0];
+                          if(isset($newmail[0])) {
+                              $dbs = $db->prepare("UPDATE Gebruikers SET emailadres=?");
+                              $dbs->execute(array($newmail[0]));
+                          }
 
-                          //Verwijder activatiecode en maak gebruiker actief
+                          //Delete verificationcode and set status to active
                           $dbs = $db->prepare("DELETE FROM Activatiecodes WHERE gebruikersnaam=? UPDATE Gebruikers SET statusID=2 WHERE gebruikersnaam=?");
                           $dbs->execute(array($gebruikersnaam, $gebruikersnaam));
                           echo 'Je account is geactiveerd';
