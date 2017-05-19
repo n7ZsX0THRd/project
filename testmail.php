@@ -1,7 +1,7 @@
 <?php
-    $to = $_POST['r_email'];
+    $to = $result[0];
 
-    $subject = 'Activatiecode voor EenmaalAndermaal';
+    $subject = 'Je account is geblokkeerd';
 
     $headers = "From: " .'noreply@iproject2.icasites.nl'. "\r\n";
     $headers .= "Content-Type: text/html;\r\n";
@@ -24,21 +24,13 @@
                             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
                                 <tr>
                                     <td style="color:#023042">
-                                        Beste '.$_POST['r_username'].',
+                                        Beste '.$gebruikersnaam.',
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="padding: 20px 0 0 0; color:#023042">
-                                        <p>Bedankt voor het aanmelden!</p>
-                                        <p>Je account is aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.</p>
-                                        <p>Gebruikersnaam: '.$_POST['r_email'].'</p>
-                                        <p>Code: '.$code.'</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px 0 0 0; color:#023042">
-                                        <p>Klik op deze link om je account te activeren:</p>
-                                        <p>http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$_POST['r_username'].'&code='.$code.'</p>
+                                        <p>Je account dat gekoppeld is met het emailadres '.$result[0].' is geblokkeerd!
+                                        Ben je het hier niet mee eens, neem contact met ons op.!</p>
                                     </td>
                                 </tr>
                                 <tr>
