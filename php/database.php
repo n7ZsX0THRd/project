@@ -371,14 +371,20 @@ function update_emailadres($data,$code,$db){
     $result  = $dbs->fetchAll();
 
     if(count($result)==0) {
-      create_verification_for_user($data2,$db);
+      if(create_verification_for_user($data2,$db)) {
+        $dbs = $db->prepare(" UPDATE Activatiecodes SET
+        emailadres=? WHERE gebruikersnaam = ?");
+        $dbs->execute(array($data["confirmmail"], $data['p_username']));
+        return true;
+      }
     }else{
-      update_verification_for_user($data2,$db);
+      if(update_verification_for_user($data2,$db)) {
+        $dbs = $db->prepare(" UPDATE Activatiecodes SET
+        emailadres=? WHERE gebruikersnaam = ?");
+        $dbs->execute(array($data["confirmmail"], $data['p_username']));
+        return true;
+      }
     }
-      $dbs = $db->prepare(" UPDATE Activatiecodes SET
-      emailadres=? WHERE gebruikersnaam = ?");
-      $dbs->execute(array($data["confirmmail"], $data['p_username']));
-      return true;
   } catch (PDOException $e) {
       return false;
   }

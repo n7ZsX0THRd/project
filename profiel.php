@@ -152,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
           else {
             if(update_emailadres($_POST,$random,$db)){
               $_SESSION['warning']['succes'] = true;
-                  $to = $_POST['r_email'];
+                  $to = $_POST['confirmmail'];
                   $subject = 'Bevestiging wijzigen emailadres voor EenmaalAndermaal';
                   $headers = "From: " .'noreply@iproject2.icasites.nl'. "\r\n";
                   $headers .= "Content-Type: text/html;\r\n";
