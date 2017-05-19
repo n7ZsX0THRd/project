@@ -314,7 +314,6 @@ if(isset($_GET['foto'])){
           ?>
             <p class="bg-danger notifcation-fix">Opgegeven emailadres is al in gebruik</p>
           <?php
-          <?php
           }else if(isset($_SESSION['warning']['changesucces']) && $_SESSION['warning']['changesucces'] === true)
           {
           ?>
