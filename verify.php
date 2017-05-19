@@ -40,6 +40,7 @@ if(isset($_GET['gebruikersnaam']) && !empty($_GET['gebruikersnaam']) && isset($_
                   $dbs = $db->prepare("SELECT activatiecode FROM Activatiecodes WHERE gebruikersnaam=? AND GETDATE() < verloopdatum");
                   $dbs->execute(array($gebruikersnaam));
                   $result = $dbs->fetchAll()[0];
+                  
                   if(isset($result[0])) {
                       if ($result[0] == $code) {
 

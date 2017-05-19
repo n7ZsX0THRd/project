@@ -366,16 +366,13 @@ function update_emailadres($data,$code,$db){
   try {
     $dbs = $db->prepare(" SELECT gebruikersnaam FROM Activatiecodes WHERE gebruikersnaam = ? ");
     $dbs->execute(array($data['p_username']));
-    $data2=array('gebruikersnaam' => $data['p_username'],'verificatiecode' => $code, 'email' => $data["confirmmail"]);
+    $data2=array('gebruikersnaam' => $data['p_username'],'verificatiecode' => $code, 'email' => $_SESSION['email']);
 
     $result  = $dbs->fetchAll();
 
-    PRINT "gein";
     if(count($result)==0) {
       create_verification_for_user($data2,$db);
-      echo "if";
     }else{
-      echo "else";
       update_verification_for_user($data2,$db);
     }
       $dbs = $db->prepare(" UPDATE Activatiecodes SET
