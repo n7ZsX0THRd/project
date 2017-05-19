@@ -5,50 +5,100 @@ include ('php/database.php');
 include ('php/user.php');
 pdo_connect();
 
-
-
 $error = 0;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
-  $email = $_POST['l_naam'];
-  $wachtwoord = $_POST['l_wachtwoord'];
+if($_POST['form_name']=='requestanswer'){
+  $antwoord= $db->prepare("SELECT TOP(1) antwoordtekst FROM Gebruikers WHERE emailadres=?");
+  $antwoord->execute(array($_GET['email']));
+  $antwoordquery = $antwoord->fetchAll();
 
-  $data= $db->query("SELECT TOP(1) wachtwoord,statusID FROM Gebruikers WHERE emailadres='$email'");
-
-  $result = $data->fetchAll();
-  $Totaal = count($result);
-
-      if($Totaal == 1)
+      if(password_verify($_POST['antwoord'], $antwoordquery[0]['antwoordtekst']))
       {
-        if(password_verify($wachtwoord, $result[0]['wachtwoord']))
+        function RandomString()
         {
-          if($result[0]['statusID'] !== '3'){
-            $_SESSION['email'] = $email;
-
-            if(isUserLoggedIn($db))
-            {
-              header('location: index.php');
+            $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $randstring = '';
+            for ($i = 0; $i < 10; $i++) {
+                $randstring = $randstring.$characters[rand(0, strlen($characters))];
             }
-          }
-          else
-          {
-            $_SESSION['warning']['user_blocked'] = true;
-          }
+            return $randstring;
+        }
+
+          print(RandomString());
+
         }
         else {
-          $_SESSION['warning']['incorrect_login'] = true;
+          $_SESSION['warning']['wrong'] = true;
         }
-      }
-      else
-      {
-        $_SESSION['warning']['incorrect_login'] = true;
-      }
-  }
-  else {
-    if(isUserLoggedIn($db))
-      header('location: index.php');
-  }
+
+
+
+
+
+}else if($_POST['form_name']=='login'){
+ $email = $_POST['l_naam'];
+ $wachtwoord = $_POST['l_wachtwoord'];
+
+ $data= $db->query("SELECT TOP(1) wachtwoord,statusID FROM Gebruikers WHERE emailadres='$email'");
+
+ $result = $data->fetchAll();
+ $Totaal = count($result);
+
+     if($Totaal == 1)
+     {
+       if(password_verify($wachtwoord, $result[0]['wachtwoord']))
+       {
+         if($result[0]['statusID'] !== '3'){
+           $_SESSION['email'] = $email;
+
+           if(isUserLoggedIn($db))
+           {
+             header('location: index.php');
+           }
+         }
+         else
+         {
+           $_SESSION['warning']['user_blocked'] = true;
+         }
+       }
+       else {
+         $_SESSION['warning']['incorrect_login'] = true;
+       }
+     }
+     else
+     {
+       $_SESSION['warning']['incorrect_login'] = true;
+     }
+ }
+ }
+  if($_SERVER['REQUEST_METHOD'] == 'GET'){
+   //email checken in de database
+
+
+   if (isset($_GET['email'])){
+     $emailforget = $_GET['email'];
+     $emailgebruiker = $db->prepare("SELECT emailadres FROM Gebruikers WHERE emailadres = ?");
+     $emailgebruiker->execute (array($emailforget));
+     $emailcheck = $emailgebruiker->fetchAll();
+
+     if(count($emailcheck) == 1)
+     {
+       $_SESSION['warning']['invalidmail'] = true;
+     }else{
+       $_SESSION['warning']['invalidmail'] = null;
+     }
+   }
+
+ }
+
+   if(isUserLoggedIn($db))
+     header('location: index.php');
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,6 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         <title>Inloggen - Eenmaal Andermaal</title>
 
         <link href="css/login.css" rel="stylesheet">
+
   </head>
   <body>
 
@@ -71,6 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
       <div>
         <form class="form-horizontal" method="post" enctype="multipart/form-data" action="">
+          <input type="hidden" name="form_name" value="login"/>
 
           <!-- login gegevens -->
           <div class="login">
@@ -106,14 +158,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
           <div class="row">
               <div class="col-lg-12">
                 <p class="sub-text-register">Nog geen account? <a href="registreer.php">Registreer dan hier</a></p>
-                <!-- <p class="sub-text-register">Wachtwoord vergeten? <a class="mousepointer" data-toggle="modal" data-target="#forgotpass">Reset je wachtwoord</a></p> -->
+                <p class="sub-text-register">Wachtwoord vergeten? <a class="mousepointer" data-toggle="modal" data-target="#forgotpass">Reset je wachtwoord</a></p>
               </div>
           </div>
         </form>
 
-        <!-- popup -->
-        <form name="forgotpass" method="post" enctype="multipart/form-data" action="">
-          <input type="hidden" name="form_name" value="changepassword"/>
+
+
+        <form method="get">
         <div id="forgotpass" class="modal fade" role="dialog">
           <div class="modal-dialog modal-sm">
             <!-- popup content-->
@@ -123,120 +175,63 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 <h4 class="modal-title">Nieuwe wachtwoord aanvragen</h4>
               </div>
               <div class="modal-body">
-                <?php
-                if(isset($_SESSION['warning']['incorrect_pw']) && $_SESSION['warning']['incorrect_pw'] === true)
-                {
-                ?>
-                  <p class="bg-danger" style="padding: 5px;">Dit emailadres bestaat niet</p>
-                <?php
-                }
-                //pw_not_equal
-                ?>
+                 <?php if(isset($_GET['email']) || (isset($_SESSION['warning']['invalidmail']) && $_SESSION['warning']['invalidmail']==false)){
+                 ?>
+                   <p class="bg-danger" style="padding: 5px;">Email bestaat niet</p>
+                 <?php
+                  }
+                 ?>
                   <div class="form-group">
                     <div class="form-group">
                       <label for="formpass">Emailadres</label>
-                      <input name="passchange" type="email" class="form-control" id="formpass" placeholder="Email">
+                      <input name="email" type="email" class="form-control" id="formpass" placeholder="Email">
                     </div>
-
                   </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
-                <button type="submit" class="btn btn-orange">Verder</button>
+                <button type="submit" class="btn btn-orange data-toggle="modal" data-target="#question"">Verder</button>
               </div>
             </div>
           </div>
         </div>
+      </form>
 
-        </form>
-
-
-        <form name="forgotpass" method="post" enctype="multipart/form-data" action="">
-          <input type="hidden" name="form_name" value="changepassword"/>
-        <div id="forgotpass" class="modal fade" role="dialog">
-          <div class="modal-dialog modal-sm">
-            <!-- popup content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Nieuwe wachtwoord aanvragen</h4>
-              </div>
-              <div class="modal-body">
-                <?php
-                if(isset($_SESSION['warning']['incorrect_pw']) && $_SESSION['warning']['incorrect_pw'] === true)
-                {
-                ?>
-                  <p class="bg-danger" style="padding: 5px;">Dit emailadres bestaat niet</p>
-                <?php
-                }
-                //pw_not_equal
-                ?>
-                  <div class="form-group">
-                    <div class="form-group">
-                      <label for="formpass">Emailadres</label>
-                      <input name="passchange" type="email" class="form-control" id="formpass" placeholder="Email">
-                    </div>
-
-                  </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
-                <button type="button" class="btn btn-orange data-toggle="modal" data-target="#question"">Verder</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        </form>
-
-        <form name="question" method="post" enctype="multipart/form-data" action="">
-          <input type="hidden" name="form_name" value="changepassword"/>
+      <?php if (isset($_GET['email'])==true){  ?>
+      <form name="question" method="post" enctype="multipart/form-data" action="">
+        <input type="hidden" name="form_name" value="requestanswer"/>
         <div id="question" class="modal fade" role="dialog">
           <div class="modal-dialog modal-sm">
             <!-- popup content-->
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Nieuwe wachtwoord aanvragen</h4>
+                <h4 class="modal-title">Geheime vraag</h4>
               </div>
               <div class="modal-body">
                 <?php
-                if(isset($_SESSION['warning']['incorrect_pw']) && $_SESSION['warning']['incorrect_pw'] === true)
-                {
-                ?>
-                  <p class="bg-danger" style="padding: 5px;">Dit emailadres bestaat niet</p>
-                <?php
-                }
-                //pw_not_equal
+                //Geheime vraag ophalen van gebruiker
+                $emailforget = $_GET['email'];
+                $secret_question = $db->prepare("SELECT V.vraag AS vraag FROM GeheimeVragen AS V inner join Gebruikers AS G on G.vraag  = V.ID WHERE emailadres = ?");
+                $secret_question->execute (array($emailforget));
+                $vraag = $secret_question->fetchAll()[0];
                 ?>
                   <div class="form-group">
                     <div class="form-group">
-                      <label for="formpass">Emailadres</label>
-                      <input name="passchange" type="email" class="form-control" id="formpass" placeholder="Email">
+                      <label for="formpass"><?php echo $vraag['vraag'];?></label>
+                      <input name="antwoord" type="text" class="form-control" id="formpass" placeholder="Antwoord">
                     </div>
-
                   </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
-                <button type="submit" class="btn btn-orange">Verder</button>
+                <button type="submit" class="btn btn-orange">Verstuur</button>
               </div>
             </div>
           </div>
         </div>
         </form>
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <?php } ?>
       </div>
     </div>
   </div>
@@ -254,6 +249,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>
 </html>
-<?php
-  $_SESSION['warning'] = null;
+
+  <?php if(isset($_GET['email']) && (isset($_SESSION['warning']['invalidmail']))){ ?>
+<script type="text/javascript">
+           $(window).load(function(){
+               $('#question').modal('show');
+           });
+</script>
+  <?php
+}else if(isset($_GET['email']) || (isset($_SESSION['warning']['invalidmail']))){
+  ?>
+  <script type="text/javascript">
+             $(window).load(function(){
+                 $('#forgotpass').modal('show');
+             });
+  </script>
+  <?php
+}
+
+$_SESSION['warning'] = null;
 ?>
