@@ -878,6 +878,16 @@ if(isset($_GET['foto'])){
   <?php
 }?>
 
+<?php if( isset($_SESSION['warning']['changingemailadres']) && $_SESSION['warning']['changingemailadres'] == true){
+?>
+<script type="text/javascript">
+           $(window).load(function(){
+               $('#emailadres').modal('show');
+           });
+       </script>
+  <?php
+}?>
+
 <?php if( isset($_SESSION['warning']['changingprofile']) && $_SESSION['warning']['changingprofile'] == true){
 echo 'test';?>
 <script type="text/javascript">
