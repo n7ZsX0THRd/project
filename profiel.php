@@ -149,6 +149,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
           else if(filter_var($_POST['confirmmail'],FILTER_VALIDATE_EMAIL) === false){
             $_SESSION['warning']['ea_not_valid'] = true;
           }
+          else if(!unique_mail($_POST['confirmmail']),$db){
+            $_SESSION['warning']['ea_exists'] = true;
+          }
           else {
             if(update_emailadres($_POST,$random,$db)){
               $_SESSION['warning']['succes'] = true;
@@ -306,6 +309,11 @@ if(isset($_GET['foto'])){
           {
           ?>
             <p class="bg-danger notifcation-fix">Opgegeven wachtwoord is niet correct</p>
+          <?php if(isset($_SESSION['warning']['ea_exists']) && $_SESSION['warning']['ea_exists'] === true)
+          {
+          ?>
+            <p class="bg-danger notifcation-fix">Opgegeven emailadres is al in gebruik</p>
+          <?php
           <?php
           }else if(isset($_SESSION['warning']['changesucces']) && $_SESSION['warning']['changesucces'] === true)
           {
