@@ -258,7 +258,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
   }
 
 
-}
+
 if(isset($_GET['foto'])){
   $_SESSION['warning']['changingprofile']=true;
   if($_GET['foto']=='succes'){
@@ -360,13 +360,9 @@ if(isset($_GET['foto'])){
               <!-- email -->
               <div class="form-group">
                 <label for="exampleInputEmail1">Email</label>
-                <?php if (isset($_GET['wijzig'])==true){  ?>
-                <input type="email" name="p_email" class="form-control" id="email" placeholder="Email" value="<?php echo $result['emailadres']?>">
-                <?php }else{ ?>
                   <div class="pflijn">
                       <?php echo $result['emailadres']?>
                   </div>
-                <?php } ?>
               </div>
 
               <!-- Voornaam en achternaam -->
