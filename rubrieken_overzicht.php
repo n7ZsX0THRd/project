@@ -11,8 +11,7 @@ pdo_connect();
   <head>
 
         <?php include 'php/includes/default_header.php'; ?>
-
-        <title>Veilingsite - Eenmaal Andermaal</title>
+        <title>Rubrieken overzicht - Eenmaal Andermaal</title>
         <style>
          hr {
                 -moz-border-bottom-colors: none;
@@ -26,6 +25,17 @@ pdo_connect();
                 margin: 18px 0;
 
             }
+            .page-nolink{
+                background: #efefef!important;
+                color: #000 !important;
+                cursor:default;
+            }
+
+
+            .page-link:hover{
+                background: #5484a4!important;
+                color: #FFF !important;
+            }
        </style>
   </head>
 
@@ -33,16 +43,6 @@ pdo_connect();
 
     <?php include 'php/includes/header.php' ?>
         <main class="container">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                <?php
-                    foreach(range('A','Z') as $i) {
-                        echo '<li class="page-item"><a class="page-link" href="#'.$i.'">'.$i.'</a></li>';
-                    }
-
-                ?>
-                </ul>
-            </nav>
             <?php
             global $db;
             $data = $db->query("SELECT * 
@@ -74,6 +74,30 @@ pdo_connect();
                     }
                 }
 
+                ?>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                    <?php
+                        foreach(range('A','Z') as $char) {
+                            $nRubrieken = 0;
+                            foreach($rubrieken as $rubriek){
+                                $firstChar =substr ($rubriek[0] , 0 , 1 );
+                                if ($char==$firstChar){
+                                    $nRubrieken ++;
+                                    if($nRubrieken==1){
+                                        echo '<li class="page-item"><a class="page-link" href="#'.$char.'">'.$char.'</a></li>';
+                                    }
+                                }
+                            }
+                            if($nRubrieken==0){
+                                echo '<li class="page-item"><a class="page-nolink">'.$char.'</a></li>';
+                            }
+                        }
+
+                    ?>
+                    </ul>
+                </nav>
+                <?php
                 foreach(range('A','Z') as $char) {
                     $nRubrieken = 0;
                     foreach($rubrieken as $rubriek){

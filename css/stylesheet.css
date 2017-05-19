@@ -464,3 +464,7 @@ p, div {
   margin-bottom:10px;
   margin-top:5px;
 }
+
+.page-nolink{
+  color: #efefef;
+}
