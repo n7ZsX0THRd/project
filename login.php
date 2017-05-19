@@ -135,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="form-group">
                     <div class="form-group">
                       <label for="formpass">Emailadres</label>
-                      <input name="passchange" type="email" class="form-control" id="formpass" placeholder="Email">
+                      <input name="passchange" type="email" class="form-control"  placeholder="Email">
                     </div>
 
                   </div>
@@ -174,7 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="form-group">
                     <div class="form-group">
                       <label for="formpass">Emailadres</label>
-                      <input name="passchange" type="email" class="form-control" id="formpass" placeholder="Email">
+                      <input name="passchange" type="email" class="form-control"  placeholder="Email">
                     </div>
 
                   </div>
@@ -211,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="form-group">
                     <div class="form-group">
                       <label for="formpass">Emailadres</label>
-                      <input name="passchange" type="email" class="form-control" id="formpass" placeholder="Email">
+                      <input name="passchange" type="email" class="form-control"  placeholder="Email">
                     </div>
 
                   </div>

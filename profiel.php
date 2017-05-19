@@ -129,12 +129,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
       $_SESSION['warning']['changingemailadres'] = true;
 
-      $dataquery= $db->prepare("SELECT TOP(1) emailadres FROM Gebruikers WHERE gebruikersnaam=?");
+var_dump($_POST);
+      $dataquery= $db->prepare("SELECT TOP(1) emailadres, wachtwoord FROM Gebruikers WHERE gebruikersnaam=?");
 
       $dataquery->execute(array($_POST['p_username']));
 
       $wwquery = $dataquery->fetchAll();
       $wwtotaal = count($wwquery);
+      $random = rand(100000,999999);
 
       if($wwtotaal == 1)
       {
@@ -149,8 +151,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             $_SESSION['warning']['ea_not_valid'] = true;
           }
           else {
-            if(update_emailadres($_POST,$db)){
+            if(update_emailadres($_POST,$random,$db)){
               $_SESSION['warning']['succes'] = true;
+
             }
           }
 
@@ -499,7 +502,7 @@ if(isset($_GET['foto'])){
             <div class="form-group">
               <?php if (isset($_GET['wijzig'])==true){  ?>
               <label for="formpass">Bevestig huidige wachtwoord</label>
-              <input name="confirmpass" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+              <input name="confirmpass" type="password" class="form-control"  placeholder="Wachtwoord">
               <?php } ?>
             </div>
             <div class="text-right">
@@ -604,14 +607,14 @@ if(isset($_GET['foto'])){
           <div class="form-group">
             <div class="form-group">
               <label for="formpass">Wachtwoord</label>
-              <input name="passchange" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+              <input name="passchange" type="password" class="form-control"  placeholder="Wachtwoord">
             </div>
             <div class="form-group">
               <label for="formpass">Nieuwe emailadres</label>
-              <input name="confirmpass" type="emailadres" class="form-control" id="formpass" placeholder="emailadres">
+              <input name="confirmmail" type="emailadres" class="form-control"  placeholder="emailadres">
             </div>
             <div class="form-group">
-              <input name="confirmpasscheck" type="emailadres" class="form-control" id="formpass" placeholder="Herhaal nieuwe emailadres">
+              <input name="confirmmailcheck" type="emailadres" class="form-control"  placeholder="Herhaal nieuwe emailadres">
             </div>
           </div>
       </div>
@@ -668,14 +671,14 @@ if(isset($_GET['foto'])){
             <div class="form-group">
               <div class="form-group">
                 <label for="formpass">Huidige wachtwoord</label>
-                <input name="passchange" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+                <input name="passchange" type="password" class="form-control"  placeholder="Wachtwoord">
               </div>
               <div class="form-group">
                 <label for="formpass">Nieuwe wachtwoord</label>
-                <input name="confirmpass" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+                <input name="confirmpass" type="password" class="form-control"  placeholder="Wachtwoord">
               </div>
               <div class="form-group">
-                <input name="confirmpasscheck" type="password" class="form-control" id="formpass" placeholder="Herhaal nieuwe wachtwoord">
+                <input name="confirmpasscheck" type="password" class="form-control"  placeholder="Herhaal nieuwe wachtwoord">
               </div>
             </div>
         </div>
@@ -726,14 +729,14 @@ if(isset($_GET['foto'])){
           <div class="form-group">
             <div class="form-group">
               <label for="formpass">Huidige wachtwoord</label>
-              <input name="passchange" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+              <input name="passchange" type="password" class="form-control"  placeholder="Wachtwoord">
             </div>
             <div class="form-group">
               <label for="formpass">Nieuwe wachtwoord</label>
-              <input name="confirmpass" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+              <input name="confirmpass" type="password" class="form-control"  placeholder="Wachtwoord">
             </div>
             <div class="form-group">
-              <input name="confirmpasscheck" type="password" class="form-control" id="formpass" placeholder="Herhaal nieuwe wachtwoord">
+              <input name="confirmpasscheck" type="password" class="form-control"  placeholder="Herhaal nieuwe wachtwoord">
             </div>
           </div>
       </div>

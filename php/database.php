@@ -12,7 +12,7 @@ function pdo_connect() {
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
 
-function block_user($gebruikersnaam) { // Sets a user to status of blocked
+function block_user($gebruikersnaam) {
     global $db;
     try {
         $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '3' WHERE gebruikersnaam = ? ");
@@ -39,7 +39,7 @@ function block_user($gebruikersnaam) { // Sets a user to status of blocked
         return false;
     }
 }
-function unBlock_user($gebruikersnaam) { //Sets a user to status inactive
+function unBlock_user($gebruikersnaam) {
     global $db;
     try {
         $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '1' WHERE gebruikersnaam = ?");
@@ -88,7 +88,7 @@ function unBlock_user($gebruikersnaam) { //Sets a user to status inactive
         return false;
     }
 }
-function create_user($data,$db){ //Create a user
+function create_user($data,$db){ //db is global!!
     global $db;
   try {
       $dbs = $db->prepare("INSERT INTO Gebruikers (gebruikersnaam,voornaam,achternaam,adresregel1,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst)
@@ -116,7 +116,7 @@ function create_user($data,$db){ //Create a user
       return false;
   }
 }
-function create_verification_for_user($data,$db){  // verificate user
+function create_verification_for_user($data,$db){  //db is global!!
   try {
       $dbs = $db->prepare("SELECT COUNT(gebruikersnaam) as count FROM Activatiecodes WHERE gebruikersnaam=?");
       $dbs->execute(array($data['gebruikersnaam']));
@@ -130,7 +130,7 @@ function create_verification_for_user($data,$db){  // verificate user
       }
 
   } catch (PDOException $e) {
-      $to = 'casper.plate@hotmail.com'; // delete this?
+      $to = 'casper.plate@hotmail.com';
                 $subject = "PDOexception eenmaalandermaal";
                 $message= '
                 '.$e.'
@@ -141,7 +141,7 @@ function create_verification_for_user($data,$db){  // verificate user
   }
 }
 
-function update_verification_for_user($data,$db){ //set a user to verificated
+function update_verification_for_user($data,$db){
   try {
       $dbs = $db->prepare("SELECT COUNT(Activatiecodes.gebruikersnaam) as count FROM Gebruikers INNER JOIN Activatiecodes ON Gebruikers.gebruikersnaam= Activatiecodes.gebruikersnaam WHERE Gebruikers.emailadres=?");
       $dbs->execute(array($data['email']));
@@ -160,7 +160,7 @@ WHERE gebruikersnaam = (SELECT Gebruikers.gebruikersnaam
       }
 
   } catch (PDOException $e) {
-      $to = 'casper.plate@hotmail.com';
+      $to = 'otisvdm@hotmail.com';
                 $subject = "PDOexception eenmaalandermaal";
                 $message= '
                 '.$e.'
@@ -172,7 +172,7 @@ WHERE gebruikersnaam = (SELECT Gebruikers.gebruikersnaam
 }
 
 
-function update_user($data,$db){  // Update the information of a user in the database
+function update_user($data,$db){  //db is global!!
 
   try {
       $dbs = $db->prepare(" UPDATE Gebruikers SET
@@ -205,7 +205,7 @@ function update_user($data,$db){  // Update the information of a user in the dat
   }
 }
 
-function update_wachtwoord($data,$db){ // update the password in the database
+function update_wachtwoord($data,$db){
   try {
       $dbs = $db->prepare(" UPDATE Gebruikers SET
       wachtwoord=?
@@ -221,18 +221,27 @@ function update_wachtwoord($data,$db){ // update the password in the database
   }
 }
 
-function update_emailadres($data,$db){
+function update_emailadres($data,$code,$db){
+
+
   try {
-      $dbs = $db->prepare(" INSERT INTO Activatiecodes SET
-      nwemailadres=?
-      gebruikersnaam = ?,
-      activatiecode");
+    $dbs = $db->prepare(" SELECT gebruikersnaam FROM Activatiecodes WHERE gebruikersnaam = ? ");
+    $dbs->execute(array($data['p_username']));
+    $data2=array('gebruikersnaam' => $data['p_username'],'verificatiecode' => $code, 'email' => $data["confirmmail"]);
 
-      $dbs->execute(array(password_hash($data['confirmpass'], PASSWORD_DEFAULT),$data['p_username']));
+    $result  = $dbs->fetchAll();
+    echo count($result);
 
+    if(count($result)==0) {
+      create_verification_for_user($data2,$db);
+    }else{
+      update_verification_for_user($data2,$db);
+    }
+      $dbs = $db->prepare(" UPDATE Activatiecodes SET
+      emailadres=? WHERE gebruikersnaam = ?");
+      $dbs->execute(array($data["confirmmail"], $data['p_username']));
       return true;
   } catch (PDOException $e) {
-      //var_dump($e);
       return false;
   }
 }
