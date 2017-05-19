@@ -1,7 +1,7 @@
 <?php
-    $to = 'hbo@guusbouw.nl';
+    $to = $_POST['r_email'];
 
-    $subject = 'test email template';
+    $subject = 'Activatiecode voor EenmaalAndermaal';
 
     $headers = "From: " .'noreply@iproject2.icasites.nl'. "\r\n";
     $headers .= "Content-Type: text/html;\r\n";
@@ -24,12 +24,27 @@
                             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
                                 <tr>
                                     <td style="color:#023042">
-                                        Lorem ipsum dolor sit amet!
+                                        Beste '.$_POST['r_username'].',
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="padding: 20px 0 30px 0; color:#023042">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempus adipiscing felis, sit amet blandit ipsum volutpat sed. Morbi porttitor, eget accumsan dictum, nisi libero ultricies ipsum, in posuere mauris neque at erat.
+                                    <td style="padding: 20px 0 0 0; color:#023042">
+                                        <p>Bedankt voor het aanmelden!</p>
+                                        <p>Je account is aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.</p>
+                                        <p>Gebruikersnaam: '.$_POST['r_email'].'</p>
+                                        <p>Code: '.$code.'</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0 0 0; color:#023042">
+                                        <p>Klik op deze link om je account te activeren:</p>
+                                        <p>http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$_POST['r_username'].'&code='.$code.'</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0 20px 0; color:#023042">
+                                        <p>Met vriendelijke groeten,</p>
+                                        <p>Team EenmaalAndermaal</p>
                                     </td>
                                 </tr>
                             </table>
