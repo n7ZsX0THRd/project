@@ -40,17 +40,17 @@ if(isset($_GET['gebruikersnaam']) && !empty($_GET['gebruikersnaam']) && isset($_
                   $dbs = $db->prepare("SELECT activatiecode FROM Activatiecodes WHERE gebruikersnaam=? AND GETDATE() < verloopdatum");
                   $dbs->execute(array($gebruikersnaam));
                   $result = $dbs->fetchAll()[0];
-                  
+
                   if(isset($result[0])) {
                       if ($result[0] == $code) {
-                          
+
                           //If new email was given change old to new
-                          $dbs = $db->prepare("SELECT emailadres FROM Activatiecodes WHERE gebruikersnaam=?");
+                          $dbs = $db->prepare("SELECT emailadres,gebruikersnaam FROM Activatiecodes WHERE gebruikersnaam=?");
                           $dbs->execute(array($gebruikersnaam));
-                          $newmail = $dbs->fetchAll()[0];
-                          if(isset($newmail[0])) {
-                              $dbs = $db->prepare("UPDATE Gebruikers SET emailadres=?");
-                              $dbs->execute(array($newmail[0]));
+                          $newmailResult = $dbs->fetchAll();
+                          if(count($newmailResult) == 1)) {
+                              $dbs = $db->prepare("UPDATE Gebruikers SET emailadres=? WHERE gebruikersnaam=?");
+                              $dbs->execute(array($newmailResult[0]['emailadres'],$newmailResult[0]['gebruikersnaam']));
                           }
 
                           //Delete verificationcode and set status to active
