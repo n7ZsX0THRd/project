@@ -33,7 +33,7 @@ $selectie = array( // default values when there's no get request'
   "zoeken" => "",
   "gebruiker-soort" => "alle"
 );
-
+//If there is a get set the values correctly
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   if (!empty($_GET)) {
       if(!empty($_GET['sorteerOp'])){
@@ -412,8 +412,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                             $sorteerOp=$selectie["sorteerOp"];
                             global $sorteerOp;
                             $sorteerOp=$selectie["sorteerOp"];
-                            //echo $count;
 
+                            // Sort the results loaded from the database
                               sort($result);
                               function cmp($a, $b)
                               {
@@ -423,8 +423,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                               usort($result, "cmp");
 
-                              //array_multisort($sort['event_type'], SORT_DESC, $sort['title'], SORT_ASC,$mylist);
-
+                                //display the data loaded from  the database in a table
                            foreach($result as $row){
                               $gebruikersnaam ="$row[gebruikersnaam]";
                               echo "<tr onclick=\"document.location='gebruiker.php?gebruikersnaam=".$gebruikersnaam."' \" >";
@@ -434,7 +433,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                               if($selectie["selectEmail"]){ echo "<td class='col-xs-4'>$row[emailadres]</td>";}
                               if($selectie["selectGeboortedatum"]){ echo "<td class='col-xs-4'>$row[geboortedatum]</td>";}
                               if($selectie["selectAccountType"]){ echo "<td class='col-xs-4'>$row[typegebruiker]</td>";}
-                              //if($selectBeoordeling){ echo '<td>Beoordeling</td>';}
                               if($selectie["selectStatus"]){ echo "<td class='col-xs-4'>$row[status]</td>";}
                               if($selectie["selectLand"]){ echo "<td class='col-xs-4'>$row[land]</td>";}
                               if($selectie["selectPlaatsnaam"]){ echo "<td class='col-xs-4'>$row[plaatsnaam]</td>";}

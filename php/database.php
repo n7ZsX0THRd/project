@@ -12,7 +12,7 @@ function pdo_connect() {
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
 
-function block_user($gebruikersnaam) {
+function block_user($gebruikersnaam) { // Sets a user to status of blocked
     global $db;
     try {
         $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '3' WHERE gebruikersnaam = ? ");
@@ -39,7 +39,7 @@ function block_user($gebruikersnaam) {
         return false;
     }
 }
-function unBlock_user($gebruikersnaam) {
+function unBlock_user($gebruikersnaam) { //Sets a user to status inactive
     global $db;
     try {
         $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '1' WHERE gebruikersnaam = ?");
@@ -88,7 +88,7 @@ function unBlock_user($gebruikersnaam) {
         return false;
     }
 }
-function create_user($data,$db){ //db is global!!
+function create_user($data,$db){ //Create a user
     global $db;
   try {
       $dbs = $db->prepare("INSERT INTO Gebruikers (gebruikersnaam,voornaam,achternaam,adresregel1,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst)
@@ -116,7 +116,7 @@ function create_user($data,$db){ //db is global!!
       return false;
   }
 }
-function create_verification_for_user($data,$db){  //db is global!!
+function create_verification_for_user($data,$db){  // verificate user
   try {
       $dbs = $db->prepare("SELECT COUNT(gebruikersnaam) as count FROM Activatiecodes WHERE gebruikersnaam=?");
       $dbs->execute(array($data['gebruikersnaam']));
@@ -130,7 +130,7 @@ function create_verification_for_user($data,$db){  //db is global!!
       }
 
   } catch (PDOException $e) {
-      $to = 'casper.plate@hotmail.com';
+      $to = 'casper.plate@hotmail.com'; // delete this?
                 $subject = "PDOexception eenmaalandermaal";
                 $message= '
                 '.$e.'
@@ -141,7 +141,7 @@ function create_verification_for_user($data,$db){  //db is global!!
   }
 }
 
-function update_verification_for_user($data,$db){
+function update_verification_for_user($data,$db){ //set a user to verificated
   try {
       $dbs = $db->prepare("SELECT COUNT(Activatiecodes.gebruikersnaam) as count FROM Gebruikers INNER JOIN Activatiecodes ON Gebruikers.gebruikersnaam= Activatiecodes.gebruikersnaam WHERE Gebruikers.emailadres=?");
       $dbs->execute(array($data['email']));
@@ -172,7 +172,7 @@ WHERE gebruikersnaam = (SELECT Gebruikers.gebruikersnaam
 }
 
 
-function update_user($data,$db){  //db is global!!
+function update_user($data,$db){  // Update the information of a user in the database
 
   try {
       $dbs = $db->prepare(" UPDATE Gebruikers SET
@@ -205,7 +205,7 @@ function update_user($data,$db){  //db is global!!
   }
 }
 
-function update_wachtwoord($data,$db){
+function update_wachtwoord($data,$db){ // update the password in the database
   try {
       $dbs = $db->prepare(" UPDATE Gebruikers SET
       wachtwoord=?
