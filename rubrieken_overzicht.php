@@ -43,23 +43,63 @@ pdo_connect();
                 ?>
                 </ul>
             </nav>
-            <?php 
-                foreach(range('A','Z') as $i) {
-                    echo '<section id="'.$i.'" class="row">';
-                    echo '<h1>'.$i.'</h1>';
-                    for ($i=0; $i<3; $i++){
-                        echo '<article class="col-md-4">';
-                        echo '<h2>Rubriek</h2>';
-                        $nSubRubrieken = rand ( 1 , 10 );
-                        for ($j=0; $j<$nSubRubrieken; $j++){
-                            echo '<p>Sub-rubriek</p>';
-                        }
-                        echo '</article>'; 
+            <?php
+            global $db;
+            $data = $db->query("SELECT * 
+                                FROM Rubriek 
+                                WHERE parentRubriek = -1 or parentRubriek IN (
+                                                                SELECT rubrieknummer
+                                                                FROM Rubriek
+                                                                WHERE parentRubriek = -1 )
+                                ORDER BY parentRubriek ASC, volgnr ASC, rubrieknaam ASC");
+                                /*
+                while ($row = $data->fetch()){
+                    echo "$row[rubrieknaam]</br>";
+                }*/
+
+                $result = $data->fetchAll();
+                $count=count($result);
+                //print_r($result);
+                $rubrieken = [];
+                for ($row = 0; $row < $count; $row++) {
+                    //echo "<p><b>Row number $row</b></p>";
+                    if ($result[$row]['parentRubriek']==-1){
+                        $nummer = $result[$row]['rubrieknummer'];
+                        $rubrieken[$nummer][] = $result[$row]['rubrieknaam'];
+                        //echo "<li>".$result[$row]['rubrieknaam']."</li>";
+                    } else {
+                        $parentNummer = $result[$row]['parentRubriek'];
+                        $nummer = $result[$row]['rubrieknummer'];
+                        $rubrieken[$parentNummer][$nummer] = $result[$row]['rubrieknaam'];
                     }
-                    echo'<div class="col-md-12">';
-                    echo '<hr>';
-                    echo '</div>';
-                    echo '</section>';
+                }
+
+                foreach(range('A','Z') as $char) {
+                    $nRubrieken = 0;
+                    foreach($rubrieken as $rubriek){
+                        $firstChar =substr ($rubriek[0] , 0 , 1 );
+                        if ($char==$firstChar){
+                            $nRubrieken ++;
+                            if($nRubrieken==1){
+                                echo '<section id="'.$char.'" class="row">';
+                                echo '<h1>'.$char.'</h1>';
+                            }
+                            echo '<article class="col-md-4">';
+                            echo'<h2>'.$rubriek[0].'</h2>';
+                            echo '<ul>';
+                            foreach($rubriek as $subRubriek){
+                                echo '<li>'.$subRubriek.'</li>';
+                            }
+                            echo '</ul>';
+                            echo '</article>'; 
+                        }
+                    }
+                    if ($nRubrieken!=0){
+                        echo'<div class="col-md-12">';
+                        echo '<hr>';
+                        echo '</div>';
+                        echo '</section>';
+                    }
                 }
 
             ?>
