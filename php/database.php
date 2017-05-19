@@ -393,6 +393,7 @@ function update_emailadres($data,$code,$db){
 function unique_mail($mail,$db) {
   $dbs = $db->prepare(" SELECT gebruikersnaam FROM gebruikers WHERE emailadres = ?;SELECT gebruikersnaam FROM Activatiecodes WHERE emailadres = ? ");
   $dbs->execute(array($mail,$mail));
+  $result  = $dbs->fetchAll();
   if(count($result) == 0) {
     return true;
   }

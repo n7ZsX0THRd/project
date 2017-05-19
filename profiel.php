@@ -149,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
           else if(filter_var($_POST['confirmmail'],FILTER_VALIDATE_EMAIL) === false){
             $_SESSION['warning']['ea_not_valid'] = true;
           }
-          else if(!unique_mail($_POST['confirmmail']),$db){
+          else if(!unique_mail($_POST['confirmmail'],$db)){
             $_SESSION['warning']['ea_exists'] = true;
           }
           else {
@@ -309,10 +309,6 @@ if(isset($_GET['foto'])){
           {
           ?>
             <p class="bg-danger notifcation-fix">Opgegeven wachtwoord is niet correct</p>
-          <?php if(isset($_SESSION['warning']['ea_exists']) && $_SESSION['warning']['ea_exists'] === true)
-          {
-          ?>
-            <p class="bg-danger notifcation-fix">Opgegeven emailadres is al in gebruik</p>
           <?php
           }else if(isset($_SESSION['warning']['changesucces']) && $_SESSION['warning']['changesucces'] === true)
           {
@@ -679,10 +675,10 @@ if(isset($_GET['foto'])){
           <p class="bg-danger" style="padding: 5px;">De opgegeven emailadressen komen niet overeen</p>
         <?php
         }
-        else if(isset($_SESSION['warning']['succes']) && $_SESSION['warning']['succes'] === true)
+        else if(isset($_SESSION['warning']['ea_exists']) && $_SESSION['warning']['ea_exists'] === true)
         {
         ?>
-          <p class="bg-success" style="padding: 5px;">emailadres succesvol gewijzigd</p>
+          <p class="bg-danger notifcation-fix">Opgegeven emailadres is al in gebruik</p>
         <?php
         }
         else if(isset($_SESSION['warning']['ea_not_valid']) && $_SESSION['warning']['ea_not_valid'] === true)
@@ -691,6 +687,13 @@ if(isset($_GET['foto'])){
           <p class="bg-danger" style="padding: 5px;">Het opgegeven emailadres voldoet niet aan de eisen</p>
         <?php
         }
+        else if(isset($_SESSION['warning']['succes']) && $_SESSION['warning']['succes'] === true)
+        {
+        ?>
+          <p class="bg-success" style="padding: 5px;">emailadres succesvol gewijzigd</p>
+        <?php
+        }
+
         //pw_not_equal
         ?>
           <div class="form-group">
