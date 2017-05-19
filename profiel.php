@@ -174,7 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                                               <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
                                                   <tr>
                                                       <td style="color:#023042">
-                                                          Beste '.$_POST['r_username'].',
+                                                          Beste '.$_POST['p_username'].',
                                                       </td>
                                                   </tr>
                                                   <tr>
@@ -188,7 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                                                   <tr>
                                                       <td style="padding: 10px 0 0 0; color:#023042">
                                                           <p>Klik op deze link om je e-mailadres te wijzigen:</p>
-                                                          <p>http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$_POST['r_username'].'&code='.$code.'</p>
+                                                          <p>http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$_POST['p_username'].'&code='.$random.'</p>
                                                       </td>
                                                   </tr>
                                                   <tr>
