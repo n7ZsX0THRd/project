@@ -129,12 +129,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
       $_SESSION['warning']['changingemailadres'] = true;
 
-      $dataquery= $db->prepare("SELECT TOP(1) emailadres FROM Gebruikers WHERE gebruikersnaam=?");
+      $dataquery= $db->prepare("SELECT TOP(1) emailadres, wachtwoord FROM Gebruikers WHERE gebruikersnaam=?");
 
       $dataquery->execute(array($_POST['p_username']));
 
       $wwquery = $dataquery->fetchAll();
       $wwtotaal = count($wwquery);
+      $random = rand(100000,999999);
 
       if($wwtotaal == 1)
       {
@@ -148,9 +149,105 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
           else if(filter_var($_POST['confirmmail'],FILTER_VALIDATE_EMAIL) === false){
             $_SESSION['warning']['ea_not_valid'] = true;
           }
+          else if(!unique_mail($_POST['confirmmail'],$db)){
+            $_SESSION['warning']['ea_exists'] = true;
+          }
           else {
-            if(update_emailadres($_POST,$db)){
+            if(update_emailadres($_POST,$random,$db)){
               $_SESSION['warning']['succes'] = true;
+                  $to = $_POST['confirmmail'];
+                  $subject = 'Bevestiging wijzigen emailadres voor EenmaalAndermaal';
+                  $headers = "From: " .'noreply@iproject2.icasites.nl'. "\r\n";
+                  $headers .= "Content-Type: text/html;\r\n";
+                  $message = '
+                  <html>
+                  <body style="margin: 0; padding: 0;">
+                      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                          <tr>
+                              <td style="padding: 10px 0 20px 0;">
+                                  <table align="center" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #cccccc;">
+                                      <tr>
+                                          <td align="center" bgcolor="#5484a4" style="padding: 30px 0 20px 0;">
+                                              <h1 style="font-family: '.'Varela Round'.', sans-serif; color:#FFFFFF;">Eenmaal Andermaal</h1>
+                                              <img src="http://iproject2.icasites.nl/images/logo.png" alt="Eenmaal Andermaal" width="300" height="230" style="display: block;"/>
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td align="center" bgcolor="#FFFFFF" style="padding: 40px 30px 40px 30px;">
+                                              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
+                                                  <tr>
+                                                      <td style="color:#023042">
+                                                          Beste '.$_POST['p_username'].',
+                                                      </td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td style="padding: 20px 0 0 0; color:#023042">
+                                                          <p>Je hebt je emailadres gewijzigd!</p>
+                                                          <p>Om deze wijziging te bevestigen klik je op onderstaande link.</p>
+                                                          <p>Oude email: '.$_SESSION['email'].'</p>
+                                                          <p>Nieuwe email: '.$_POST['confirmmail'].'</p>
+                                                      </td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td style="padding: 10px 0 0 0; color:#023042">
+                                                          <p>Klik op deze link om je e-mailadres te wijzigen:</p>
+                                                          <p>http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$_POST['p_username'].'&code='.$random.'</p>
+                                                      </td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td style="padding: 10px 0 20px 0; color:#023042">
+                                                          <p>Met vriendelijke groeten,</p>
+                                                          <p>Team EenmaalAndermaal</p>
+                                                      </td>
+                                                  </tr>
+                                              </table>
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td align="center" bgcolor="#5484a4" style="padding: 20px 30px 20px 30px;">
+                                              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif; color:#DFDFDF;">
+                                                  <tr>
+                                                      <td width="166" valign="top">
+                                                          <h3>Start hier</h3>
+                                                          <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl">Home</a></p>
+                                                          <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl/login.php">Inloggen</a></p>
+                                                      </td>
+                                                      <td style="font-size: 0; line-height: 0;" width="21">
+                                                          &nbsp;
+                                                      </td>
+                                                      <td width="166" valign="top">
+                                                          <h3>Over ons</h3>
+                                                          <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl">Bedrijfsinformatie</a></p>
+                                                          <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl/pdf/voorwaarden.pdf">Algemene voorwaarden</a></p>
+                                                      </td>
+                                                      <td style="font-size: 0; line-height: 0;" width="21">
+                                                          &nbsp;
+                                                      </td>
+                                                      <td width="166" valign="top">
+                                                          <h3>Support</h3>
+                                                          <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl">Veelgestelde vragen</a></p>
+                                                          <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl">Contact</a></p>
+                                                      </td>
+                                                  </tr>
+                                              </table>
+                                          </td>
+                                      </tr>
+                                  </table>
+                              </td>
+                          </tr>
+                      </table>
+                  </body>
+                  </html>';
+
+                  mail($to,$subject,$message,$headers);
+
+              $_SESSION['email'] = $_POST['r_email'];
+              header('location: index.php');
+            }
+            else{
+              echo 'ER IS IETS FOUT GEGAAN';
+            }
+
             }
           }
 
@@ -165,11 +262,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 
 
-//var_dump($_POST);
-
-
-
-}
 if(isset($_GET['foto'])){
   $_SESSION['warning']['changingprofile']=true;
   if($_GET['foto']=='succes'){
@@ -271,13 +363,9 @@ if(isset($_GET['foto'])){
               <!-- email -->
               <div class="form-group">
                 <label for="exampleInputEmail1">Email</label>
-                <?php if (isset($_GET['wijzig'])==true){  ?>
-                <input type="email" name="p_email" class="form-control" id="email" placeholder="Email" value="<?php echo $result['emailadres']?>">
-                <?php }else{ ?>
                   <div class="pflijn">
                       <?php echo $result['emailadres']?>
                   </div>
-                <?php } ?>
               </div>
 
               <!-- Voornaam en achternaam -->
@@ -499,7 +587,7 @@ if(isset($_GET['foto'])){
             <div class="form-group">
               <?php if (isset($_GET['wijzig'])==true){  ?>
               <label for="formpass">Bevestig huidige wachtwoord</label>
-              <input name="confirmpass" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+              <input name="confirmpass" type="password" class="form-control"  placeholder="Wachtwoord">
               <?php } ?>
             </div>
             <div class="text-right">
@@ -587,10 +675,10 @@ if(isset($_GET['foto'])){
           <p class="bg-danger" style="padding: 5px;">De opgegeven emailadressen komen niet overeen</p>
         <?php
         }
-        else if(isset($_SESSION['warning']['succes']) && $_SESSION['warning']['succes'] === true)
+        else if(isset($_SESSION['warning']['ea_exists']) && $_SESSION['warning']['ea_exists'] === true)
         {
         ?>
-          <p class="bg-success" style="padding: 5px;">emailadres succesvol gewijzigd</p>
+          <p class="bg-danger notifcation-fix">Opgegeven emailadres is al in gebruik</p>
         <?php
         }
         else if(isset($_SESSION['warning']['ea_not_valid']) && $_SESSION['warning']['ea_not_valid'] === true)
@@ -599,19 +687,26 @@ if(isset($_GET['foto'])){
           <p class="bg-danger" style="padding: 5px;">Het opgegeven emailadres voldoet niet aan de eisen</p>
         <?php
         }
+        else if(isset($_SESSION['warning']['succes']) && $_SESSION['warning']['succes'] === true)
+        {
+        ?>
+          <p class="bg-success" style="padding: 5px;">emailadres succesvol gewijzigd</p>
+        <?php
+        }
+
         //pw_not_equal
         ?>
           <div class="form-group">
             <div class="form-group">
               <label for="formpass">Wachtwoord</label>
-              <input name="passchange" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+              <input name="passchange" type="password" class="form-control"  placeholder="Wachtwoord">
             </div>
             <div class="form-group">
               <label for="formpass">Nieuwe emailadres</label>
-              <input name="confirmpass" type="emailadres" class="form-control" id="formpass" placeholder="emailadres">
+              <input name="confirmmail" type="emailadres" class="form-control"  placeholder="emailadres">
             </div>
             <div class="form-group">
-              <input name="confirmpasscheck" type="emailadres" class="form-control" id="formpass" placeholder="Herhaal nieuwe emailadres">
+              <input name="confirmmailcheck" type="emailadres" class="form-control"  placeholder="Herhaal nieuwe emailadres">
             </div>
           </div>
       </div>
@@ -668,14 +763,14 @@ if(isset($_GET['foto'])){
             <div class="form-group">
               <div class="form-group">
                 <label for="formpass">Huidige wachtwoord</label>
-                <input name="passchange" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+                <input name="passchange" type="password" class="form-control"  placeholder="Wachtwoord">
               </div>
               <div class="form-group">
                 <label for="formpass">Nieuwe wachtwoord</label>
-                <input name="confirmpass" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+                <input name="confirmpass" type="password" class="form-control"  placeholder="Wachtwoord">
               </div>
               <div class="form-group">
-                <input name="confirmpasscheck" type="password" class="form-control" id="formpass" placeholder="Herhaal nieuwe wachtwoord">
+                <input name="confirmpasscheck" type="password" class="form-control"  placeholder="Herhaal nieuwe wachtwoord">
               </div>
             </div>
         </div>
@@ -726,14 +821,14 @@ if(isset($_GET['foto'])){
           <div class="form-group">
             <div class="form-group">
               <label for="formpass">Huidige wachtwoord</label>
-              <input name="passchange" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+              <input name="passchange" type="password" class="form-control"  placeholder="Wachtwoord">
             </div>
             <div class="form-group">
               <label for="formpass">Nieuwe wachtwoord</label>
-              <input name="confirmpass" type="password" class="form-control" id="formpass" placeholder="Wachtwoord">
+              <input name="confirmpass" type="password" class="form-control"  placeholder="Wachtwoord">
             </div>
             <div class="form-group">
-              <input name="confirmpasscheck" type="password" class="form-control" id="formpass" placeholder="Herhaal nieuwe wachtwoord">
+              <input name="confirmpasscheck" type="password" class="form-control"  placeholder="Herhaal nieuwe wachtwoord">
             </div>
           </div>
       </div>
@@ -778,6 +873,16 @@ if(isset($_GET['foto'])){
 <script type="text/javascript">
            $(window).load(function(){
                $('#wachtwoord').modal('show');
+           });
+       </script>
+  <?php
+}?>
+
+<?php if( isset($_SESSION['warning']['changingemailadres']) && $_SESSION['warning']['changingemailadres'] == true){
+?>
+<script type="text/javascript">
+           $(window).load(function(){
+               $('#emailadres').modal('show');
            });
        </script>
   <?php

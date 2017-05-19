@@ -1,12 +1,9 @@
 <?php
-    $to = 'hbo@guusbouw.nl';
-
-    $subject = 'test email template';
-
-    $headers = "From: " .'noreply@iproject2.icasites.nl'. "\r\n";
-    $headers .= "Content-Type: text/html;\r\n";
-    
-    $message = '
+$to = 'casper.plate@hotmail.com';
+$subject = 'Nieuwe activatiecode voor EenmaalAndermaal';
+$headers = "From: " .'noreply@iproject2.icasites.nl'. "\r\n";
+$headers .= "Content-Type: text/html;\r\n";    
+$message = '
 <html>
 <body style="margin: 0; padding: 0;">
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -24,12 +21,27 @@
                             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
                                 <tr>
                                     <td style="color:#023042">
-                                        Lorem ipsum dolor sit amet!
+                                        Beste '.$gebruikersnaam.',
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="padding: 20px 0 30px 0; color:#023042">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempus adipiscing felis, sit amet blandit ipsum volutpat sed. Morbi porttitor, eget accumsan dictum, nisi libero ultricies ipsum, in posuere mauris neque at erat.
+                                    <td style="padding: 20px 0 0 0; color:#023042">
+                                        <p>Er is een nieuwe activatiecode voor je aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 20px 0 0 0; color:#023042">
+                                        <p>De link is gekoppeld aan het volgende emailadres:<br>E-mail: '.$_SESSION['email'].'</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 20px 0 0 0; color:#023042">
+                                        <p>Klik op deze link om je account te activeren:<br>http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$gebruikersnaam.'&code='.$code.'</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 20px 0 20px 0; color:#023042">
+                                        <p>Met vriendelijke groeten,<br>Team EenmaalAndermaal</p>
                                     </td>
                                 </tr>
                             </table>

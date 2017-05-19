@@ -163,6 +163,45 @@ if($_POST['form_name']=='requestanswer'){
           </div>
         </form>
 
+<<<<<<< HEAD
+=======
+        <!-- popup -->
+        <form name="forgotpass" method="post" enctype="multipart/form-data" action="">
+          <input type="hidden" name="form_name" value="changepassword"/>
+        <div id="forgotpass" class="modal fade" role="dialog">
+          <div class="modal-dialog modal-sm">
+            <!-- popup content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Nieuwe wachtwoord aanvragen</h4>
+              </div>
+              <div class="modal-body">
+                <?php
+                if(isset($_SESSION['warning']['incorrect_pw']) && $_SESSION['warning']['incorrect_pw'] === true)
+                {
+                ?>
+                  <p class="bg-danger" style="padding: 5px;">Dit emailadres bestaat niet</p>
+                <?php
+                }
+                //pw_not_equal
+                ?>
+                  <div class="form-group">
+                    <div class="form-group">
+                      <label for="formpass">Emailadres</label>
+                      <input name="passchange" type="email" class="form-control"  placeholder="Email">
+                    </div>
+
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+                <button type="submit" class="btn btn-orange">Verder</button>
+              </div>
+            </div>
+          </div>
+        </div>
+>>>>>>> origin/master
 
 
         <form method="get">
@@ -184,7 +223,11 @@ if($_POST['form_name']=='requestanswer'){
                   <div class="form-group">
                     <div class="form-group">
                       <label for="formpass">Emailadres</label>
+<<<<<<< HEAD
                       <input name="email" type="email" class="form-control" id="formpass" placeholder="Email">
+=======
+                      <input name="passchange" type="email" class="form-control"  placeholder="Email">
+>>>>>>> origin/master
                     </div>
                   </div>
               </div>
@@ -218,8 +261,13 @@ if($_POST['form_name']=='requestanswer'){
                 ?>
                   <div class="form-group">
                     <div class="form-group">
+<<<<<<< HEAD
                       <label for="formpass"><?php echo $vraag['vraag'];?></label>
                       <input name="antwoord" type="text" class="form-control" id="formpass" placeholder="Antwoord">
+=======
+                      <label for="formpass">Emailadres</label>
+                      <input name="passchange" type="email" class="form-control"  placeholder="Email">
+>>>>>>> origin/master
                     </div>
                   </div>
               </div>
