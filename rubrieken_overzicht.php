@@ -139,7 +139,7 @@ pdo_connect();
                 </ul>
             </nav>
         </main>
-
+        <a id="to-top" href="#" class="btn btn-dark btn-lg"><i class="fa fa-chevron-up fa-fw fa-1x"></i></a>
 
     <?php include 'php/includes/footer.php' ?>
 
@@ -165,6 +165,34 @@ pdo_connect();
       $(this).children(".sub").toggle();
     });
     */
+    </script>
+    
+    <script>
+    //#to-top button appears after scrolling
+    var fixed = false;
+    $(document).scroll(function() {
+        if ($(this).scrollTop() > 250) {
+            if (!fixed) {
+                fixed = true;
+                // $('#to-top').css({position:'fixed', display:'block'});
+                $('#to-top').show("slow", function() {
+                    $('#to-top').css({
+                        position: 'fixed',
+                        display: 'block'
+                    });
+                });
+            }
+        } else {
+            if (fixed) {
+                fixed = false;
+                $('#to-top').hide("slow", function() {
+                    $('#to-top').css({
+                        display: 'none'
+                    });
+                });
+            }
+        }
+    });
     </script>
   </body>
 </html>
