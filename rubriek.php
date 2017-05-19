@@ -28,6 +28,9 @@ $rubriekQuery = $db->prepare("SELECT TOP(1) rubrieknummer,rubrieknaam,parentRubr
 $rubriekQuery->execute(array(htmlspecialchars($rubriekID)));
 $rubriek = $rubriekQuery->fetchAll()[0];
 
+$breadCrumbQuery = $db->prepare("SELECT * FROM dbo.fnRubriekOuders(?) ORDER BY volgorde DESC");
+$breadCrumbQuery->execute(array(htmlspecialchars($rubriekID)));
+$breadCrumb = $breadCrumbQuery->fetchAll();
 
 ?>
 <!DOCTYPE html>
@@ -82,18 +85,36 @@ $rubriek = $rubriekQuery->fetchAll()[0];
     </div>
     <div class="col-md-8 col-lg-10 col-sm-8">
       <div class="container-fluid  content_col">
-        <div class="row navigation-row">
-            <p>
-              <a href="index.php">
-                <span class="glyphicon glyphicon-home "></span>
-              </a>
-              <span class="glyphicon glyphicon-menu-right"></span>
-              <a href="">Mijn Account</a>
-              <span class="glyphicon glyphicon-menu-right"></span>
-              <a href="profiel.php">Instellingen</a>
-            </p>
-        </div>
+        <?php
+        if(count($breadCrumb) != 0)
+        {
+        ?>
+          <div class="row navigation-row">
+              <p>
+                <a href="index.php">
+                  <span class="glyphicon glyphicon-home "></span>
+                </a>
+                <span class="glyphicon glyphicon-menu-right"></span>
+                <a href="rubriek.php">Rubrieken</a>
+                <?php
 
+
+                    foreach($breadCrumb as $row)
+                    {
+                      if($row['rubrieknummer'] != $rootRubriek)
+                      {
+                      ?>
+                        <span class="glyphicon glyphicon-menu-right"></span>
+                        <a href="rubriek.php?rubriek=<?php echo $row['rubrieknummer']; ?>"><?php echo $row['rubrieknaam']; ?></a>
+                      <?php
+                      }
+                    }
+                ?>
+              </p>
+          </div>
+        <?php
+        }
+        ?>
         <div class="row content_top_offset">
 
         </div>

@@ -1,5 +1,23 @@
+<?php
+  $result = getLoggedInUser($db);
+?>
+
 <h3></h3>
 <ul class="menubar">
+  <li class="toggle-sub <?php if($_SESSION['menu']['sub'] === 'ru'){ echo 'active'; }?>">
+    <a href="rubriek.php">Rubrieken</a>
+  </li>
+  <ul class="sub">
+    <li>
+      <a href="">Item 1</a>
+    </li>
+    <li>
+      <a href="">Item 2</a>
+    </li>
+    <li>
+      <a href="">Item 3</a>
+    </li>
+  </ul>
   <li class="toggle-sub <?php if($_SESSION['menu']['sub'] === 'dr'){ echo 'active'; }?>">
     <a href="">Direct regelen</a>
   </li>
@@ -35,9 +53,6 @@
   <ul class="sub">
     <li>
       <a href="gebruikers.php">Gebruikers</a>
-    </li>
-    <li>
-      <a href="">Gebruiker</a>
     </li>
   </ul>
   <?php } ?>

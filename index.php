@@ -16,7 +16,7 @@ if(isset($_GET['mail'])==true) {
                 $to = $_SESSION['email'];
                 $subject = 'Nieuwe activatiecode voor EenmaalAndermaal';
                 $headers = "From: " .'noreply@iproject2.icasites.nl'. "\r\n";
-                $headers .= "Content-Type: text/html;\r\n";    
+                $headers .= "Content-Type: text/html;\r\n";
                 $message = '
                 <html>
                 <body style="margin: 0; padding: 0;">
@@ -87,7 +87,7 @@ if(isset($_GET['mail'])==true) {
                                                         <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl">Contact</a></p>
                                                     </td>
                                                 </tr>
-                                            </table>    
+                                            </table>
                                         </td>
                                     </tr>
                                 </table>
@@ -101,7 +101,10 @@ if(isset($_GET['mail'])==true) {
               }
     $nieuwe_mail = 1;
 }
-
+$rubriekID = -1;
+$childrenRubriekenQuery = $db->prepare("SELECT TOP(10) rubrieknummer, rubrieknaam FROM Rubriek WHERE parentRubriek = ? ORDER BY volgnr ASC, rubrieknaam ASC");
+$childrenRubriekenQuery->execute(array(htmlspecialchars($rubriekID)));
+$childrenRubrieken = $childrenRubriekenQuery->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -110,139 +113,12 @@ if(isset($_GET['mail'])==true) {
         <?php include 'php/includes/default_header.php'; ?>
 
         <title>Veilingsite - Eenmaal Andermaal</title>
-        <style>
-         ul{
-          list-style-type: none;
-         }
-         li{
-          list-style-type: none;
-         }
-         .drilldown {
-           overflow: hidden;
-           width: 100%;
-           -webkit-transform: translate3d(0,0,0);
-                   transform: translate3d(0,0,0);
-         }
-         .drilldown-sub {
-           display: none;
-         }
-         .drilldown-back {
-           font-weight: bold;
-         }
-       </style>
   </head>
 
   <body>
 
     <?php include 'php/includes/header.php' ?>
 
-
-    <div class="container-fluid fullwidth-container-fix" style="display:none;">
-      <div class="row fullwidth-width-row">
-        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-          <div id="myCarousel" class="carousel slide" data-ride="carousel">
-            <!-- Indicators -->
-            <ol class="carousel-indicators">
-              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-              <li data-target="#myCarousel" data-slide-to="1"></li>
-            </ol>
-
-            <!-- Wrapper for slides -->
-            <div class="carousel-inner">
-              <div class="item active">
-                  <div class="row">
-                    <div class="col-lg-4 col-lg-offset-2">
-                        <div class="row">
-                          <div class="col-lg-12">
-                            <h1 style="width:100%;text-align:right;">Otis FIX IETS</h1>
-                          </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <img src="images/users/johndoe.jpg" style="width:90%;float:left;">
-                            </div>
-                            <div class="col-lg-6">
-                              <p style="text-align:right;">Dick Advocaat blijft tot en met het WK bondscoach als hij er met het Nederlands elftal in slaagt kwalificatie af te dwingen voor het eindtoernooi volgend jaar in Rusland. "Als Advocaat het met succes oppakt, is het logisch dat hij ook tijdens het WK de bondscoach is", zei Jean-Paul Decossaux dinsdag op een persconferentie in Zeist waar hij de aanstelling van Advocaat en diens assistent Ruud Gullit bevestigde.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="row">
-                          <div class="col-lg-12">
-                            <h1 style="width:100%;text-align:left;">Guus FIX IETS</h1>
-                          </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                              <p style="text-align:left;">Dick Advocaat blijft tot en met het WK bondscoach als hij er met het Nederlands elftal in slaagt kwalificatie af te dwingen voor het eindtoernooi volgend jaar in Rusland. "Als Advocaat het met succes oppakt, is het logisch dat hij ook tijdens het WK de bondscoach is", zei Jean-Paul Decossaux dinsdag op een persconferentie in Zeist waar hij de aanstelling van Advocaat en diens assistent Ruud Gullit bevestigde.</p>
-                            </div>
-                            <div class="col-lg-6">
-                                <img src="images/users/otisvdm.jpg" style="width:90%;float:right;">
-                            </div>
-                        </div>
-                    </div>
-                  </div>
-              </div>
-
-              <div class="item">
-                <div class="row">
-                  <div class="col-lg-4 col-lg-offset-2">
-                      <div class="row">
-                        <div class="col-lg-12">
-                            <h3 style="text-align:right;">Titel</h3>
-                        </div>
-                        <div class="col-lg-4">
-                          <img src="images/vliegtuig.jpg" style="max-width:100%;">
-                        </div>
-                        <div class="col-lg-8">
-                          <p style="text-align:right;">Dick Advocaat blijft tot en met het WK bondscoach als hij er met het Nederlands elftal in slaagt kwalificatie af te dwingen voor het eindtoernooi volgend jaar in Rusland. "Als Advocaat het met succes oppakt, is het logisch dat hij ook tijdens het WK de bondscoach is", zei Jean-Paul Decossaux dinsdag op een persconferentie in Zeist waar hij de aanstelling van Advocaat en diens assistent Ruud Gullit bevestigde.</p>
-                        </div>
-                      </div>
-                      <div class="row">
-                          <div class="col-lg-12">
-                              <h3 style="text-align:left;">Titel</h3>
-                          </div>
-                          <div class="col-lg-8">
-                            <p style="text-align:left;">Dick Advocaat blijft tot en met het WK bondscoach als hij er met het Nederlands elftal in slaagt kwalificatie af te dwingen voor het eindtoernooi volgend jaar in Rusland. "Als Advocaat het met succes oppakt, is het logisch dat hij ook tijdens het WK de bondscoach is", zei Jean-Paul Decossaux dinsdag op een persconferentie in Zeist waar hij de aanstelling van Advocaat en diens assistent Ruud Gullit bevestigde.</p>
-                          </div>
-                          <div class="col-lg-4">
-                            <img src="images/vliegtuig.jpg" style="max-width:100%;">
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-lg-4">
-                      <div class="row">
-                        <div class="col-lg-12">
-                            <h3 style="text-align:right;">Titel</h3>
-                        </div>
-                        <div class="col-lg-4">
-                          <img src="images/vliegtuig.jpg" style="max-width:100%;">
-                        </div>
-                        <div class="col-lg-8">
-                          <p style="text-align:right;">Dick Advocaat blijft tot en met het WK bondscoach als hij er met het Nederlands elftal in slaagt kwalificatie af te dwingen voor het eindtoernooi volgend jaar in Rusland. "Als Advocaat het met succes oppakt, is het logisch dat hij ook tijdens het WK de bondscoach is", zei Jean-Paul Decossaux dinsdag op een persconferentie in Zeist waar hij de aanstelling van Advocaat en diens assistent Ruud Gullit bevestigde.</p>
-                        </div>
-                      </div>
-                      <div class="row">
-                          <div class="col-lg-12">
-                              <h3 style="text-align:left;">Titel</h3>
-                          </div>
-                          <div class="col-lg-8">
-                            <p style="text-align:left;">Dick Advocaat blijft tot en met het WK bondscoach als hij er met het Nederlands elftal in slaagt kwalificatie af te dwingen voor het eindtoernooi volgend jaar in Rusland. "Als Advocaat het met succes oppakt, is het logisch dat hij ook tijdens het WK de bondscoach is", zei Jean-Paul Decossaux dinsdag op een persconferentie in Zeist waar hij de aanstelling van Advocaat en diens assistent Ruud Gullit bevestigde.</p>
-                          </div>
-                          <div class="col-lg-4">
-                            <img src="images/vliegtuig.jpg" style="max-width:100%;">
-                          </div>
-                      </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Left and right controls -->
-          </div>
-        </div>
-      </div>
-    </div>
     <?php if (isUserLoggedIn($db)){
         $user = getLoggedInUser($db);
         if($user['statusID'] == 1){
@@ -270,82 +146,39 @@ if(isset($_GET['mail'])==true) {
     }
   }
     ?>
-    <div class="row">
-    <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
-    <div class="container-fluid">
+    <div class="container">
       <div class="row">
-        <div class="col-md-3 col-lg-2 col-sm-3 sidebar">
-          <h3>Rubrieken</h3>
-          <ul class="menubar">
-            <li>
-              <a href="">Audio</a>
-            </li>
-            <li class="toggle-sub">
-              <a href="">Auto's</a>
-            </li>
-            <ul class="sub">
-              <li>
-                <a href="">BMW</a>
-              </li>
-              <li>
-                <a href="">Mercedes-Benz</a>
-              </li>
-            </ul>
-            <li class="toggle-sub">
-              <a href="">Computers</a>
-            </li>
-            <ul class="sub">
-              <li>
-                <a href="">Dell</a>
-              </li>
-              <li>
-                <a href="">HP</a>
-              </li>
-            </ul>
-            <li>
-              <a href="">Diversen</a>
-            </li>
-          </ul>
-          <div class="drilldown">
-    <div class="drilldown-container">
-      <ul class="drilldown-root">
-        <li><a href="#">A Lorem ipsum</a></li>
-        <li>
-          <a href="#">A Dolor sit amet <span class="glyphicon glyphicon-menu-right"></a>
-          <ul class="drilldown-sub">
-            <li class="drilldown-back"><a href="#"><span class="glyphicon glyphicon-menu-left"></span> terug</a></li>
-            <li><a href="#">A Fusce eget</a></li>
-            <li>
-              <a href="#">A Quam vel lorem <span class="glyphicon glyphicon-menu-right"></span></a>
-              <ul class="drilldown-sub">
-                <li class="drilldown-back"><a href="#"><span class="glyphicon glyphicon-menu-left"></span> terug</a></li>
-                <li><a href="#">A Molestie tincidunt</a></li>
-                <li><a href="#">A Pellentesque</a></li>
-              </ul>
-            </li>
-            <li><a href="#">A Sit amet tincidunt</a></li>
-          </ul>
-        </li>
-        <li><a href="#">A Consectetur</a></li>
-        <li><a href="#">A Maecenas id</a></li>
-        <li>
-          <a href="#">A Hendrerit odio <span class="glyphicon glyphicon-menu-right"></a>
-          <ul class="drilldown-sub">
-            <li class="drilldown-back"><a href="#"><span class="glyphicon glyphicon-menu-left"></span> terug</a></li>
-            <li><a href="#">A Cras tincidunt</a></li>
-            <li><a href="#">A Vivamus eu</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </div>
+        <div class="col-md-3 col-lg-2 col-sm-4 sidebar">
+          <?php
+            if(isUserLoggedIn($db))
+              include 'php/includes/sidebar.php';
+            else {
+              ?>
+                <h3></h3>
+                <ul class="menubar">
+                  <li class="toggle-sub active">
+                    <a href="">Rubrieken</a>
+                  </li>
+                  <ul class="sub">
+                    <?php
+                      foreach($childrenRubrieken as $row)
+                      {
+                        ?>
+                        <li>
+                          <a href="rubriek.php?rubriek=<?php echo $row['rubrieknummer']; ?>"><?php echo $row['rubrieknaam']; ?></a>
+                        </li>
+                        <?php
+                      }
+                    ?>
+                  </ul>
+                </ul>
+              <?php
+            }
+          ?>
         </div>
-        <div class="col-md-9 col-lg-10 col-sm-9">
+        <div class="col-md-9 col-lg-10 col-sm-8">
           <div class="container-fluid content_col">
-            <div class="row">
-              <div class="col-lg-12 remove-margin">
-                <h1>Vervoer</h1>
-              <div>
+            <div class="row navigation-row">
               <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
                 <div class="container-fixed">
                   <div class="row item-row">
@@ -391,71 +224,55 @@ if(isset($_GET['mail'])==true) {
                     </div>
                   </div>
                 </div>
+                <div class="row item-row">
+                  <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                    <div class="thumbnail">
+                      <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+                      <div class="caption captionfix">
+                        <h3>Boeing 737</h3>
+                        <p>Huidige bod: <strong>€280050.-</strong></p>
+                        <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                    <div class="thumbnail">
+                      <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+                      <div class="caption captionfix">
+                        <h3>Boeing 737</h3>
+                        <p>Huidige bod: <strong>€270000.-</strong></p>
+                        <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                    <div class="thumbnail">
+                      <div class="thumb_image" style="background-image:url(images/bmw.jpg);"></div>
+                      <div class="caption captionfix">
+                        <h3>BMW 530i</h3>
+                        <p>Huidige bod: <strong>€80000.-</strong></p>
+                        <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                    <div class="thumbnail">
+                      <div class="thumb_image" style="background-image:url(images/bmw.jpg);"></div>
+                        <div class="caption captionfix">
+                          <h3>BMW 530i</h3>
+                          <p>Huidige bod: <strong>€80000.-</strong></p>
+                          <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                        </div>
+                      </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-12 remove-margin">
-            <h1>Diners</h1>
-          <div>
-          <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
-            <div class="container-fixed">
-              <div class="row item-row">
-                <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                    <div class="thumbnail">
-                        <div class="thumb_image" style="background-image:url(images/eten.jpg);"></div>
-                        <div class="caption captionfix">
-                            <h3>3-gangen diner - 5*</h3>
-                            <p>Huidige bod: <strong>€270.-</strong></p>
-                            <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                    <div class="thumbnail">
-                        <div class="thumb_image" style="background-image:url(images/eten.jpg);"></div>
-                        <div class="caption captionfix">
-                            <h3>3-gangen diner - 4*</h3>
-                            <p>Huidige bod: <strong>€170.-</strong></p>
-                            <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                    <div class="thumbnail">
-                        <div class="thumb_image" style="background-image:url(images/eten.jpg);"></div>
-                        <div class="caption captionfix">
-                            <h3>Tapas arrangem...</h3>
-                            <p>Huidige bod: <strong>€80.-</strong></p>
-                            <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                    <div class="thumbnail">
-                        <div class="thumb_image" style="background-image:url(images/eten.jpg);"></div>
-                        <div class="caption captionfix">
-                            <h3>5-gangen diner - 5*</h3>
-                            <p>Huidige bod: <strong>€380.-</strong></p>
-                            <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                        </div>
-                    </div>
-                </div>
-              </div>
 
-            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
       </div>
-
-    </div>
-    </div>
-    </div>
     </div>
     </div>
 
@@ -469,20 +286,5 @@ if(isset($_GET['mail'])==true) {
     <script src="bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
-    <script src="js/jquery.drilldown.min.js"></script>
-    <script>
-      $('.drilldown').drilldown();
-    </script>
-    <script>
-    /*
-    $("li.toggle-sub").click(function(evt) {
-
-      evt.preventDefault();
-      $(this).children("span").toggleClass('glyphicon-menu-right');
-      $(this).children("span").toggleClass('glyphicon-menu-down');
-      $(this).children(".sub").toggle();
-    });
-    */
-    </script>
   </body>
 </html>
