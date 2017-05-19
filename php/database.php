@@ -20,7 +20,7 @@ function block_user($gebruikersnaam) {
         $dbs = $db->prepare("SELECT emailadres FROM Gebruikers WHERE gebruikersnaam = ? ");
         $dbs->execute(array($gebruikersnaam));
         $result = $dbs->fetchAll()[0];
-        
+
         $to = $result[0];
         $subject = 'Je account is geblokkeerd';
         $headers = "From: " .'noreply@iproject2.icasites.nl'. "\r\n";
@@ -87,7 +87,7 @@ function block_user($gebruikersnaam) {
                                                 <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl">Contact</a></p>
                                             </td>
                                         </tr>
-                                    </table>    
+                                    </table>
                                 </td>
                             </tr>
                         </table>
@@ -205,7 +205,7 @@ function unBlock_user($gebruikersnaam) {
                                                     <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl">Contact</a></p>
                                                 </td>
                                             </tr>
-                                        </table>    
+                                        </table>
                                     </td>
                                 </tr>
                             </table>
@@ -369,11 +369,13 @@ function update_emailadres($data,$code,$db){
     $data2=array('gebruikersnaam' => $data['p_username'],'verificatiecode' => $code, 'email' => $data["confirmmail"]);
 
     $result  = $dbs->fetchAll();
-    echo count($result);
 
+    PRINT "gein";
     if(count($result)==0) {
       create_verification_for_user($data2,$db);
+      echo "if";
     }else{
+      echo "else";
       update_verification_for_user($data2,$db);
     }
       $dbs = $db->prepare(" UPDATE Activatiecodes SET
