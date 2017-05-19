@@ -1,12 +1,9 @@
 <?php
-    $to = $result[0];
-
-    $subject = 'Je account is geblokkeerd';
-
-    $headers = "From: " .'noreply@iproject2.icasites.nl'. "\r\n";
-    $headers .= "Content-Type: text/html;\r\n";
-    
-    $message = '
+$to = 'casper.plate@hotmail.com';
+$subject = 'Nieuwe activatiecode voor EenmaalAndermaal';
+$headers = "From: " .'noreply@iproject2.icasites.nl'. "\r\n";
+$headers .= "Content-Type: text/html;\r\n";    
+$message = '
 <html>
 <body style="margin: 0; padding: 0;">
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -29,14 +26,22 @@
                                 </tr>
                                 <tr>
                                     <td style="padding: 20px 0 0 0; color:#023042">
-                                        <p>Je account dat gekoppeld is met het emailadres '.$result[0].' is geblokkeerd!
-                                        Ben je het hier niet mee eens, neem contact met ons op.!</p>
+                                        <p>Er is een nieuwe activatiecode voor je aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.</p>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="padding: 10px 0 20px 0; color:#023042">
-                                        <p>Met vriendelijke groeten,</p>
-                                        <p>Team EenmaalAndermaal</p>
+                                    <td style="padding: 20px 0 0 0; color:#023042">
+                                        <p>De link is gekoppeld aan het volgende emailadres:<br>E-mail: '.$_SESSION['email'].'</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 20px 0 0 0; color:#023042">
+                                        <p>Klik op deze link om je account te activeren:<br>http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$gebruikersnaam.'&code='.$code.'</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 20px 0 20px 0; color:#023042">
+                                        <p>Met vriendelijke groeten,<br>Team EenmaalAndermaal</p>
                                     </td>
                                 </tr>
                             </table>
