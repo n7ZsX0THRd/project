@@ -20,19 +20,84 @@ function block_user($gebruikersnaam) {
         $dbs = $db->prepare("SELECT emailadres FROM Gebruikers WHERE gebruikersnaam = ? ");
         $dbs->execute(array($gebruikersnaam));
         $result = $dbs->fetchAll()[0];
+        
         $to = $result[0];
-        $subject = "Je account is geblokkeerd";
-        $message= '
-                      Beste '.$gebruikersnaam.',
+        $subject = 'Je account is geblokkeerd';
+        $headers = "From: " .'noreply@iproject2.icasites.nl'. "\r\n";
+        $headers .= "Content-Type: text/html;\r\n";
+        $message = '
+        <html>
+        <body style="margin: 0; padding: 0;">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td style="padding: 10px 0 20px 0;">
+                        <table align="center" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #cccccc;">
+                            <tr>
+                                <td align="center" bgcolor="#5484a4" style="padding: 30px 0 20px 0;">
+                                    <h1 style="font-family: '.'Varela Round'.', sans-serif; color:#FFFFFF;">Eenmaal Andermaal</h1>
+                                    <img src="http://iproject2.icasites.nl/images/logo.png" alt="Eenmaal Andermaal" width="300" height="230" style="display: block;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" bgcolor="#FFFFFF" style="padding: 40px 30px 40px 30px;">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
+                                        <tr>
+                                            <td style="color:#023042">
+                                                Beste '.$gebruikersnaam.',
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 20px 0 0 0; color:#023042">
+                                                <p>Je account dat gekoppeld is met het emailadres '.$result[0].' is geblokkeerd!
+                                                Ben je het hier niet mee eens, neem contact met ons op!</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 10px 0 20px 0; color:#023042">
+                                                <p>Met vriendelijke groeten,</p>
+                                                <p>Team EenmaalAndermaal</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" bgcolor="#5484a4" style="padding: 20px 30px 20px 30px;">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif; color:#DFDFDF;">
+                                        <tr>
+                                            <td width="166" valign="top">
+                                                <h3>Start hier</h3>
+                                                <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl">Home</a></p>
+                                                <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl/login.php">Inloggen</a></p>
+                                            </td>
+                                            <td style="font-size: 0; line-height: 0;" width="21">
+                                                &nbsp;
+                                            </td>
+                                            <td width="166" valign="top">
+                                                <h3>Over ons</h3>
+                                                <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl">Bedrijfsinformatie</a></p>
+                                                <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl/pdf/voorwaarden.pdf">Algemene voorwaarden</a></p>
+                                            </td>
+                                            <td style="font-size: 0; line-height: 0;" width="21">
+                                                &nbsp;
+                                            </td>
+                                            <td width="166" valign="top">
+                                                <h3>Support</h3>
+                                                <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl">Veelgestelde vragen</a></p>
+                                                <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl">Contact</a></p>
+                                            </td>
+                                        </tr>
+                                    </table>    
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </body>
+        </html>';
 
-                      Je account dat gekoppeld is met het emailadres '.$result[0].' is geblokkeerd!
-                      Ben je het hier niet mee eens, neem contact met ons op.
-
-                      Vriendelijke groet,
-                      EenmaalAndermaal
-                     '; //Bovenstaand bericht is de email die gebruikers ontvangen.
-        $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
-        mail($to, $subject, $message, $headers);
+        mail($to,$subject,$message,$headers);
         return true;
     } catch (PDOException $e) {
         //echo "Could not block user, ".$e->getMessage();
@@ -59,24 +124,98 @@ function unBlock_user($gebruikersnaam) {
         }
         if($code != 0) {
             $to = $result[0];
-            $subject = "Je account is gedeblokkeerd";
-            $message= '
-                      Beste '.$gebruikersnaam.',
+            $subject = 'Je account is gedeblokkeerd';
+            $headers = "From: " .'noreply@iproject2.icasites.nl'. "\r\n";
+            $headers .= "Content-Type: text/html;\r\n";
+            $message = '
+            <html>
+            <body style="margin: 0; padding: 0;">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                        <td style="padding: 10px 0 20px 0;">
+                            <table align="center" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #cccccc;">
+                                <tr>
+                                    <td align="center" bgcolor="#5484a4" style="padding: 30px 0 20px 0;">
+                                        <h1 style="font-family: '.'Varela Round'.', sans-serif; color:#FFFFFF;">Eenmaal Andermaal</h1>
+                                        <img src="http://iproject2.icasites.nl/images/logo.png" alt="Eenmaal Andermaal" width="300" height="230" style="display: block;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" bgcolor="#FFFFFF" style="padding: 40px 30px 40px 30px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
+                                            <tr>
+                                                <td style="color:#023042">
+                                                    Beste '.$gebruikersnaam.',
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 20px 0 0 0; color:#023042">
+                                                    Je account is gedeblokkeerd.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 20px 0 0 0; color:#023042">
+                                                    Om je account weer te kunnen gebruiken moet je deze opnieuw activeren door op onderstaande link te klikken.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 20px 0 0 0; color:#023042">
+                                                    <p>Het account met het volgende e-mailadres is gedeblokkeerd:</p>
+                                                    <p>E-mailadres: '.$result[0].'</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 10px 0 0 0; color:#023042">
+                                                    <p>Klik op deze link om je account te activeren:</p>
+                                                    <p>http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$gebruikersnaam.'&code='.$code.' </p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 10px 0 20px 0; color:#023042">
+                                                    <p>Met vriendelijke groeten,</p>
+                                                    <p>Team EenmaalAndermaal</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" bgcolor="#5484a4" style="padding: 20px 30px 20px 30px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif; color:#DFDFDF;">
+                                            <tr>
+                                                <td width="166" valign="top">
+                                                    <h3>Start hier</h3>
+                                                    <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl">Home</a></p>
+                                                    <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl/login.php">Inloggen</a></p>
+                                                </td>
+                                                <td style="font-size: 0; line-height: 0;" width="21">
+                                                    &nbsp;
+                                                </td>
+                                                <td width="166" valign="top">
+                                                    <h3>Over ons</h3>
+                                                    <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl">Bedrijfsinformatie</a></p>
+                                                    <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl/pdf/voorwaarden.pdf">Algemene voorwaarden</a></p>
+                                                </td>
+                                                <td style="font-size: 0; line-height: 0;" width="21">
+                                                    &nbsp;
+                                                </td>
+                                                <td width="166" valign="top">
+                                                    <h3>Support</h3>
+                                                    <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl">Veelgestelde vragen</a></p>
+                                                    <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl">Contact</a></p>
+                                                </td>
+                                            </tr>
+                                        </table>    
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+            </html>';
 
-                      Je account is gedeblokkeerd.
-
-                      Om je account weer te kunnen gebruiken moet je deze opnieuw activeren door op onderstaande link te klikken.
-                      --------------------
-                      Het account met het volgende e-mailadres is gedeblokkeerd:
-                      E-mailadres: '.$result[0].'
-
-                      Nieuwe activatiecode: '.$code.'
-                      --------------------
-                      Klik op deze link om je account te activeren:
-                      http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$gebruikersnaam.'&code='.$code.'
-                      '; //Bovenstaand bericht is de email die gebruikers ontvangen.
-            $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
-            mail($to, $subject, $message, $headers);
+            mail($to,$subject,$message,$headers);
         }
         return true;
     } catch (PDOException $e) {

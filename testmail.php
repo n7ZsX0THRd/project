@@ -1,7 +1,7 @@
 <?php
-    $to = 'hbo@guusbouw.nl';
+    $to = $result[0];
 
-    $subject = 'test email template';
+    $subject = 'Je account is geblokkeerd';
 
     $headers = "From: " .'noreply@iproject2.icasites.nl'. "\r\n";
     $headers .= "Content-Type: text/html;\r\n";
@@ -24,12 +24,19 @@
                             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
                                 <tr>
                                     <td style="color:#023042">
-                                        Lorem ipsum dolor sit amet!
+                                        Beste '.$gebruikersnaam.',
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="padding: 20px 0 30px 0; color:#023042">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempus adipiscing felis, sit amet blandit ipsum volutpat sed. Morbi porttitor, eget accumsan dictum, nisi libero ultricies ipsum, in posuere mauris neque at erat.
+                                    <td style="padding: 20px 0 0 0; color:#023042">
+                                        <p>Je account dat gekoppeld is met het emailadres '.$result[0].' is geblokkeerd!
+                                        Ben je het hier niet mee eens, neem contact met ons op.!</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0 20px 0; color:#023042">
+                                        <p>Met vriendelijke groeten,</p>
+                                        <p>Team EenmaalAndermaal</p>
                                     </td>
                                 </tr>
                             </table>
