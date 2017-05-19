@@ -260,7 +260,7 @@ if(isset($_GET['mail'])==true) {
                   echo 'Er is een nieuwe activatie e-mail verstuurd.';
               }
               ?>
-              Klopt het e-mailadres niet? Wijzig deze dan <a href="profiel.php?wijzig">hier</a>.
+              Klopt het e-mailadres niet? Wijzig deze dan <a href="profiel.php">hier</a>.
 
           </div>
         </div>
