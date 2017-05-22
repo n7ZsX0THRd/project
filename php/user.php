@@ -7,6 +7,7 @@ function getLoggedInUser($db){
     voornaam,
     achternaam,
     adresregel1,
+    adresregel2,
     postcode,
     plaatsnaam,
     land,

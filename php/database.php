@@ -319,6 +319,7 @@ function update_user($data,$db){  //db is global!!
       voornaam=?,
       achternaam =?,
       adresregel1=?,
+      adresregel2=?,
       postcode=?,
       plaatsnaam=?,
       geboortedatum=?,
@@ -332,7 +333,7 @@ function update_user($data,$db){  //db is global!!
 
       WHERE gebruikersnaam = ?");
 
-      $dbs->execute(array($data['p_firstname'],$data['p_lastname'],$data['p_adres'],
+      $dbs->execute(array($data['p_firstname'],$data['p_lastname'],$data['p_adres'],$data['p_adres2'],
       $data['p_zipcode'],$data['p_city'],$data['p_birthmonth'].'-'.$data['p_birthday'].'-'.$data['p_birthyear'],
       htmlspecialchars($data['p_biografie']),$data['p_land'],$data['p_username'],$data['p_tel'],$data['p_username']));
 

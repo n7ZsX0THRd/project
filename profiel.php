@@ -73,6 +73,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               $_SESSION['warning']['invalid_birthdate'] = true;
             }
             else {
+
+              if(isset($_POST['p_adres2']) == false || empty($_POST['p_adres2']))
+                $_POST['p_adres2'] = null;
+
               if(update_user($_POST,$db)){
                 $result = getLoggedInUser($db);
                 $_SESSION['warning']['changesucces'] = true;
@@ -460,6 +464,27 @@ if(isset($_GET['foto'])){
                     <?php }else{ ?>
                       <div class="pflijn">
                           <?php echo $result['postcode']?>
+                      </div>
+                    <?php } ?>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <label for="exampleInputEmail1">Adresregel 2</label>
+                    <?php if (isset($_GET['wijzig'])==true){  ?>
+                    <input name="p_adres2" type="text" class="form-control" id="exampleInputEmail1" placeholder="Adresregel 2" value="<?php echo $result['adresregel2']?>">
+                    <?php }else{
+                      ?>
+                      <div class="pflijn">
+                          <?php
+                          if(isset($result['adresregel2'])){
+                            echo $result['adresregel2'];
+                          }
+                          else {
+                            echo '<br>';
+                          }?>
                       </div>
                     <?php } ?>
                   </div>
