@@ -37,14 +37,18 @@ if(isset($_GET['gebruikersnaam']) && !empty($_GET['gebruikersnaam']) && isset($_
               </div>
               <div class="panel-body">
               <?php
+              try {
                   $dbs = $db->prepare("SELECT activatiecode FROM Activatiecodes WHERE gebruikersnaam=? AND GETDATE() < verloopdatum");
                   $dbs->execute(array($gebruikersnaam));
                   $result = $dbs->fetchAll()[0];
+                }
+                catch (PDOException $e) {
 
+                }
                   if(isset($result[0])) {
-                    try{
-                      if ($result[0] == $code) {
 
+                      if ($result[0] == $code) {
+                        try{
                           //If new email was given change old to new
                           $dbs = $db->prepare("SELECT emailadres,gebruikersnaam FROM Activatiecodes WHERE gebruikersnaam=?");
                           $dbs->execute(array($gebruikersnaam));
@@ -59,16 +63,20 @@ if(isset($_GET['gebruikersnaam']) && !empty($_GET['gebruikersnaam']) && isset($_
                           $dbs->execute(array($gebruikersnaam, $gebruikersnaam));
                           echo 'Je account is geactiveerd';
                           header( "refresh:3;url=login.php" );
-                      }else {
-                          echo 'Je code klopt niet!';
-                      }
-                  }else {
+
+                          } catch (PDOException $e) {
+
+                          }
+
+                    }
+                    else {
+                        echo 'Je code klopt niet!';
+                    }
+                }
+                  else {
                       echo 'Je activatiecode is verlopen.';
                   }
-                  catch (PDOException $e) {
-                      return false;
-                  }
-                }
+
 
               ?>
               </div>
