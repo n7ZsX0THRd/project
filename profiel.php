@@ -888,7 +888,7 @@ if(isset($_GET['foto'])){
 }?>
 
 <?php if( isset($_SESSION['warning']['changingprofile']) && $_SESSION['warning']['changingprofile'] == true){
-echo 'test';?>
+?>
 <script type="text/javascript">
            $(window).load(function(){
                $('#profielfoto').modal('show');
