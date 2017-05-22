@@ -88,6 +88,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $_SESSION['warning']['invalid_email'] = true;
               }
               else {
+
+                  if(isset($_POST['r_adressregel2']) == false)
+                    $_POST['r_adressregel2'] = '';
+                    
                   if(create_user($_POST,$db))
                   {
                     $random = rand(100000,999999);
@@ -166,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                                                                 <p style="font-size: 14px"><a style="text-decoration: none; color:#DFDFDF" href="http://iproject2.icasites.nl">Contact</a></p>
                                                             </td>
                                                         </tr>
-                                                    </table>    
+                                                    </table>
                                                 </td>
                                             </tr>
                                         </table>
@@ -182,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                     header('location: index.php');
                   }
                   else{
-                    echo 'ER IS IETS FOUT GEGAAN';
+                    //echo 'ER IS IETS FOUT GEGAAN';
                   }
               }
             }
@@ -308,6 +312,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                       <input style="max-width:58%" type="adres" class="form-control" id="Adres" name="r_street_name" value="<?php if(isset($_POST['r_street_name'])){ echo $_POST['r_street_name']; } ?>" placeholder="Straat">
                       <input style="max-width:20%" type="Number" class="form-control" id="Nummer" name="r_street_nr" value="<?php if(isset($_POST['r_street_nr'])){ echo $_POST['r_street_nr']; } ?>" placeholder="Nr.">
                       <input style="max-width:22%" type="text" class="form-control" id="Nummer" name="r_street_addition" value="<?php if(isset($_POST['r_street_addition'])){ echo $_POST['r_street_addition']; } ?>" placeholder="Toev.">
+                      <input type="text" class="form-control" id="Adresregel2" placeholder="Adresregel 2" name="r_adressregel2" value="<?php if(isset($_POST['r_adressregel2'])){ echo $_POST['r_adressregel2']; } ?>">
                       <input type="" class="form-control" id="Postcode" placeholder="Postcode" name="r_zipcode" value="<?php if(isset($_POST['r_zipcode'])){ echo $_POST['r_zipcode']; } ?>" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}">
                       <input type="text" class="form-control" id="City" placeholder="Plaats" name="r_city" value="<?php if(isset($_POST['r_city'])){ echo $_POST['r_city']; } ?>">
                       <select class="form-control" name="r_country">

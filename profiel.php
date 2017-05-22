@@ -72,10 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             {
               $_SESSION['warning']['invalid_birthdate'] = true;
             }
-            else if(!isset($_POST['p_email']) || empty($_POST['p_email']))
-            {
-              $_SESSION['warning']['mail_empty'] = true;
-            }
             else {
               if(update_user($_POST,$db)){
                 $result = getLoggedInUser($db);
@@ -350,12 +346,7 @@ if(isset($_GET['foto'])){
           ?>
              <p class="bg-danger notifcation-fix">Uw telefoonnummer kan niet leeg zijn.</p>
           <?php
-        }else if(isset($_SESSION['warning']['mail_empty']) && $_SESSION['warning']['mail_empty'] === true)
-          {
-          ?>
-             <p class="bg-danger notifcation-fix">Uw email kan niet leeg zijn.</p>
-          <?php
-          }
+        }
           ?>
           <div class="col-lg-6" style="border-right:1px solid #e7e7e7;">
             <form method="post" enctype="multipart/form-data" action="">

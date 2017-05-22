@@ -230,14 +230,15 @@ function unBlock_user($gebruikersnaam) {
 function create_user($data,$db){ //db is global!!
     global $db;
   try {
-      $dbs = $db->prepare("INSERT INTO Gebruikers (gebruikersnaam,voornaam,achternaam,adresregel1,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?); INSERT INTO Gebruikerstelefoon (gebruikersnaam,telefoonnummer) VALUES (?,?)");
+      $dbs = $db->prepare("INSERT INTO Gebruikers (gebruikersnaam,voornaam,achternaam,adresregel1,adresregel2,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?); INSERT INTO Gebruikerstelefoon (gebruikersnaam,telefoonnummer) VALUES (?,?)");
 
       $dbs->execute(array(
           $data['r_username'],
           $data['r_firstname'],
           $data['r_lastname'],
           $data['r_street_name'].' '.$data['r_street_nr'].' '.$data['r_street_addition'],
+          $data['r_adressregel2'],
           $data['r_zipcode'],
           $data['r_city'],
           $data['r_birthmonth'].'-'.$data['r_birthday'].'-'.$data['r_birthyear'],
@@ -321,7 +322,6 @@ function update_user($data,$db){  //db is global!!
       postcode=?,
       plaatsnaam=?,
       geboortedatum=?,
-      emailadres=?,
       biografie=?,
       land=?
 
@@ -334,7 +334,7 @@ function update_user($data,$db){  //db is global!!
 
       $dbs->execute(array($data['p_firstname'],$data['p_lastname'],$data['p_adres'],
       $data['p_zipcode'],$data['p_city'],$data['p_birthmonth'].'-'.$data['p_birthday'].'-'.$data['p_birthyear'],
-      $data['p_email'],htmlspecialchars($data['p_biografie']),$data['p_land'],$data['p_username'],$data['p_tel'],$data['p_username']));
+      htmlspecialchars($data['p_biografie']),$data['p_land'],$data['p_username'],$data['p_tel'],$data['p_username']));
 
 
       return true;
