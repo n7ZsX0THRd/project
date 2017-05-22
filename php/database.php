@@ -105,7 +105,7 @@ function unBlock_user($gebruikersnaam) {
                         <tr>
                             <td style="padding: 10px 0 0 0; color:#023042">
                                 <p>Klik op deze link om je account te activeren:</p>
-                                <p>http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$gebruikersnaam.'&code='.$code.' </p>
+                                <p><a href="http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$gebruikersnaam.'&code='.$code.'">http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$gebruikersnaam.'&code='.$code.'</a></p>
                             </td>
                         </tr>
                         <tr>

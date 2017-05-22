@@ -36,7 +36,7 @@ if(isset($_GET['mail'])==true) {
                             </tr>
                             <tr>
                                 <td style="padding: 20px 0 0 0; color:#023042">
-                                    <p>Klik op deze link om je account te activeren:<br>http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$gebruikersnaam.'&code='.$code.'</p>
+                                    <p>Klik op deze link om je account te activeren:<br><a href="http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$gebruikersnaam.'&code='.$code.'">http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$gebruikersnaam.'&code='.$code.'</a></p>
                                 </td>
                             </tr>
                             <tr>
