@@ -42,6 +42,7 @@ if(isset($_GET['gebruikersnaam']) && !empty($_GET['gebruikersnaam']) && isset($_
                   $result = $dbs->fetchAll()[0];
 
                   if(isset($result[0])) {
+                    try{
                       if ($result[0] == $code) {
 
                           //If new email was given change old to new
@@ -64,6 +65,10 @@ if(isset($_GET['gebruikersnaam']) && !empty($_GET['gebruikersnaam']) && isset($_
                   }else {
                       echo 'Je activatiecode is verlopen.';
                   }
+                  catch (PDOException $e) {
+                      return false;
+                  }
+                }
 
               ?>
               </div>
