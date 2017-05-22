@@ -27,12 +27,17 @@ if($_POST['form_name']=='requestanswer'){
             return $randstring;
         }
           $randomkey = RandomString();
+
+          $username =$db->prepare("SELECT gebruikersnaam FROM Gebruikers WHERE emailadres=?");
+          $username->execute(array($_POST['emailww']));
+          $usernamenaam = $username->fetchAll()[0];
+
           $nieuweww = $db->prepare("UPDATE Gebruikers SET wachtwoord=? WHERE emailadres=?");
           $nieuweww->execute(array(password_hash($randomkey, PASSWORD_DEFAULT), $_POST['emailww']));
           sendMail($_POST['emailww'],'Nieuw wachtwoord','<table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
               <tr>
                   <td style="color:#023042">
-                      Beste Username,
+                      Beste '.$usernamenaam['gebruikersnaam'].'
                   </td>
               </tr>
               <tr>
@@ -42,7 +47,7 @@ if($_POST['form_name']=='requestanswer'){
               </tr>
               <tr>
                   <td style="padding: 20px 0 0 0; color:#023042">
-                      <p>Dit is uw nieuwe wachtoord '.$randomkey.';</p>
+                      <p>Dit is uw nieuwe wachtoord '.$randomkey.'</p>
                   </td>
               </tr>
               <tr>
