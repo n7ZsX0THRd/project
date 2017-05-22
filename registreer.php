@@ -89,9 +89,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               }
               else {
 
-                  if(isset($_POST['r_adressregel2']) == false)
-                    $_POST['r_adressregel2'] = '';
-                    
+                  if(isset($_POST['r_adressregel2']) == false || empty($_POST['r_adressregel2']))
+                    $_POST['r_adressregel2'] = null;
+
                   if(create_user($_POST,$db))
                   {
                     $random = rand(100000,999999);
