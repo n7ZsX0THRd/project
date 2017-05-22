@@ -48,11 +48,12 @@ if($_POST['form_name']=='requestanswer'){
               <tr>
                   <td style="padding: 20px 0 0 0; color:#023042">
                       <p>Dit is uw nieuwe wachtoord '.$randomkey.'</p>
+                      <p><a href="http://iproject2.icasites.nl/login.php?email_input='.$_POST['emailww'].'">Log nu hier in</a></p>
                   </td>
               </tr>
               <tr>
                   <td style="padding: 20px 0 0 0; color:#023042">
-                      <p>Wijzig dit wachtwoord zo snel mogelijk op uw profielpagina</p>
+                      <p>Wijzig dit wachtwoord zo snel mogelijk op uw profielpagina.</p>
                   </td>
               </tr>
               <tr>
@@ -162,11 +163,11 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
               <?php } ?>
             <div class="input-group">
               <div class="input-group-addon"><span class="glyphicon glyphicon-envelope" aria-hidden="true" background="#f0f0f0"></span></div>
-                <input type="email" class="form-control" id="inputEmail" name='l_naam' placeholder="Email">
+                <input type="email" class="form-control" id="inputEmail" name='l_naam' placeholder="Email" value="<?php if (isset($_GET['email_input'])){ echo $_GET['email_input']; }?>">
             </div>
             <div class="input-group">
               <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
-                <input type="password" class="form-control" id="inputPassword" placeholder="Password" name='l_wachtwoord'>
+                <input type="password" class="form-control" id="inputPassword" placeholder="Password" name="l_wachtwoord" value="">
             </div>
           </div>
           <!-- Einde login gegevens -->
