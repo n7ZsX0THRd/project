@@ -11,10 +11,9 @@ function sendMail($to,$subject,$content){
               <td style="padding: 10px 0 20px 0;">
                   <table align="center" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #cccccc;">
                       <tr>
-                          <td align="center" bgcolor="#5484a4" style="padding: 20px 0 20px 0;">
+                          <td align="center" bgcolor="#5484a4" style="padding: 30px 0 20px 0;">
                               <h1 style="font-family: '.'Varela Round'.', sans-serif; color:#FFFFFF;">Eenmaal Andermaal</h1>
-                              <h3 style="font-family: '.'Varela Round'.', sans-serif; color:#FFFFFF;">De beste veilingsite van Nederland</h3>
-                              <img src="http://iproject2.icasites.nl/images/logo.png" alt="Eenmaal Andermaal" width="300" height="230" style="display: block;"/>
+                              <img src="http://iproject2.icasites.nl/images/logo.png" alt="Eenmaal Andermaal" width="230" height="230" style="display: block;"/>
                           </td>
                       </tr>
                       <tr>
