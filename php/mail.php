@@ -12,12 +12,13 @@ function sendMail($to,$subject,$content){
                   <table align="center" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #cccccc;">
                       <tr>
                           <td align="center" bgcolor="#5484a4" style="padding: 30px 0 20px 0;">
+
                               <h1 style="font-family: '.'Varela Round'.', sans-serif; color:#FFFFFF;">Eenmaal Andermaal</h1>
                               <img src="http://iproject2.icasites.nl/images/logo.png" alt="Eenmaal Andermaal" width="230" height="230" style="display: block;"/>
                           </td>
                       </tr>
                       <tr>
-                          <td align="center" bgcolor="#FFFFFF" style="padding: 40px 30px 40px 30px;">
+                          <td align="center" bgcolor="#FFFFFF" style="padding: 20px 30px 20px 30px;">
                               '.$content.'
                           </td>
                       </tr>
