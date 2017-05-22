@@ -28,16 +28,16 @@ if($_POST['form_name']=='requestanswer'){
         }
           $randomkey = RandomString();
 
-          $username =$db->prepare("SELECT gebruikersnaam FROM Gebruikers WHERE emailadres=?");
-          $username->execute(array($_POST['emailww']));
-          $usernamenaam = $username->fetchAll()[0];
+          $usernamequery =$db->prepare("SELECT gebruikersnaam FROM Gebruikers WHERE emailadres=?");
+          $usernamequery->execute(array($_POST['emailww']));
+          $username = $usernamequery->fetchAll()[0];
 
           $nieuweww = $db->prepare("UPDATE Gebruikers SET wachtwoord=? WHERE emailadres=?");
           $nieuweww->execute(array(password_hash($randomkey, PASSWORD_DEFAULT), $_POST['emailww']));
           sendMail($_POST['emailww'],'Nieuw wachtwoord','<table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
               <tr>
                   <td style="color:#023042">
-                      Beste '.$usernamenaam['gebruikersnaam'].'
+                      Beste '.$username['gebruikersnaam'].'
                   </td>
               </tr>
               <tr>
