@@ -564,6 +564,7 @@ p, div {
   bottom: 5px;
   right: 5px;
   background: #ea8220;
+  z-index: 999;
 }
 .active-menu-item{
   text-decoration: underline;
