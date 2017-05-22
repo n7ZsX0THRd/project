@@ -572,21 +572,24 @@ if(isset($_GET['foto'])){
           <div class="col-lg-12">
             <hr>
           </div>
-          <div class="col-lg-offset-3 col-lg-9">
-
+          <div class="col-lg-offset-6 col-lg-6">
             <div class="form-group">
               <?php if (isset($_GET['wijzig'])==true){  ?>
               <label for="formpass">Bevestig huidige wachtwoord</label>
               <input name="confirmpass" type="password" class="form-control"  placeholder="Wachtwoord">
               <?php } ?>
             </div>
+          </div>
+          <div class="col-lg-offset-3 col-lg-9">
+
+
             <div class="text-right">
               <?php if (isset($_GET['wijzig'])==false){  ?>
 
               <!-- Trigger the popup with a button -->
-              <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#wachtwoord">Nieuw wachtwoord</button>
+              <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#emailadres">Wijzig emailadres</button>
+              <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#wachtwoord">Wijzig wachtwoord</button>
               <a href="?wijzig" type="submit" class="btn btn-orange">Wijzig gegevens</a>
-              <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#emailadres">Nieuw emailadres</button>
 
               <?php }else{ ?>
               <a href="?" type="submit" class="btn btn-orange">Annuleren</a>
