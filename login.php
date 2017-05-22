@@ -55,7 +55,7 @@ if($_POST['form_name']=='requestanswer'){
                       <p>Met vriendelijke groeten,<br>Team EenmaalAndermaal</p>
                   </td>
               </tr>
-          </table>'){
+          </table>');
           $_SESSION['warning']['invalidanswer'] = false;
         }
         else {
