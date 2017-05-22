@@ -159,7 +159,13 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
                 <p class="bg-danger">Informatie onjuist</p>
               <?php }else if(isset($_SESSION['warning']['user_blocked'])) {?>
                 <p class="bg-danger">Gebruiker is geblokkeerd</p>
-              <?php } ?>
+              <?php }
+              if(isset($_SESSION['warning']['invalidanswer']) && $_SESSION['warning']['invalidanswer'] == false)
+              {
+              ?>
+                <p class="bg-success" style="padding: 5px;">Nieuwe wachtwoord is verstuurd</p>
+              <?php
+              }?>
             <div class="input-group">
               <div class="input-group-addon"><span class="glyphicon glyphicon-envelope" aria-hidden="true" background="#f0f0f0"></span></div>
                 <input type="email" class="form-control" id="inputEmail" name='l_naam' placeholder="Email" value="<?php if (isset($_GET['email_input'])){ echo $_GET['email_input']; }?>">
