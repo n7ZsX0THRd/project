@@ -21,21 +21,51 @@ if($_POST['form_name']=='requestanswer'){
             $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $randstring = '';
             for ($i = 0; $i < 10; $i++) {
-                $randstring = $randstring.$characters[rand(0, strlen($characters))];
+                $randstring = $randstring.$characters[rand(0, strlen($characters)-1)];
             }
             return $randstring;
         }
+          $randomkey = RandomString();
 
-          print(RandomString());
+          $usernamequery =$db->prepare("SELECT gebruikersnaam FROM Gebruikers WHERE emailadres=?");
+          $usernamequery->execute(array($_POST['emailww']));
+          $username = $usernamequery->fetchAll()[0];
 
+          $nieuweww = $db->prepare("UPDATE Gebruikers SET wachtwoord=? WHERE emailadres=?");
+          $nieuweww->execute(array(password_hash($randomkey, PASSWORD_DEFAULT), $_POST['emailww']));
+          sendMail($_POST['emailww'],'Nieuw wachtwoord','<table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
+              <tr>
+                  <td style="color:#023042">
+                      Beste '.$username['gebruikersnaam'].'
+                  </td>
+              </tr>
+              <tr>
+                  <td style="padding: 20px 0 0 0; color:#023042">
+                      <p>Er is een nieuw wachtwoord aangevraagd voor dit account.</p>
+                  </td>
+              </tr>
+              <tr>
+                  <td style="padding: 20px 0 0 0; color:#023042">
+                      <p>Dit is uw nieuwe wachtoord '.$randomkey.'</p>
+                      <p><a href="http://iproject2.icasites.nl/login.php?email_input='.$_POST['emailww'].'">Log nu hier in</a></p>
+                  </td>
+              </tr>
+              <tr>
+                  <td style="padding: 20px 0 0 0; color:#023042">
+                      <p>Wijzig dit wachtwoord zo snel mogelijk op uw profielpagina.</p>
+                  </td>
+              </tr>
+              <tr>
+                  <td style="padding: 20px 0 20px 0; color:#023042">
+                      <p>Met vriendelijke groeten,<br>Team EenmaalAndermaal</p>
+                  </td>
+              </tr>
+          </table>');
+          $_SESSION['warning']['invalidanswer'] = false;
         }
         else {
-          $_SESSION['warning']['wrong'] = true;
+          $_SESSION['warning']['invalidanswer'] = true;
         }
-
-
-
-
 
 }else if($_POST['form_name']=='login'){
  $email = $_POST['l_naam'];
@@ -88,7 +118,8 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
    {
      $_SESSION['warning']['invalidmail'] = true;
    }else{
-     $_SESSION['warning']['invalidmail'] = null;
+
+     $_SESSION['warning']['invalidmail'] = false;
    }
  }
 
@@ -128,14 +159,20 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
                 <p class="bg-danger">Informatie onjuist</p>
               <?php }else if(isset($_SESSION['warning']['user_blocked'])) {?>
                 <p class="bg-danger">Gebruiker is geblokkeerd</p>
-              <?php } ?>
+              <?php }
+              if(isset($_SESSION['warning']['invalidanswer']) && $_SESSION['warning']['invalidanswer'] == false)
+              {
+              ?>
+                <p class="bg-success" style="padding: 5px;">Nieuwe wachtwoord is verstuurd</p>
+              <?php
+              }?>
             <div class="input-group">
               <div class="input-group-addon"><span class="glyphicon glyphicon-envelope" aria-hidden="true" background="#f0f0f0"></span></div>
-                <input type="email" class="form-control" id="inputEmail" name='l_naam' placeholder="Email">
+                <input type="email" class="form-control" id="inputEmail" name='l_naam' placeholder="Email" value="<?php if (isset($_GET['email_input'])){ echo $_GET['email_input']; }?>">
             </div>
             <div class="input-group">
               <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
-                <input type="password" class="form-control" id="inputPassword" placeholder="Password" name='l_wachtwoord'>
+                <input type="password" class="form-control" id="inputPassword" placeholder="Password" name="l_wachtwoord" value="">
             </div>
           </div>
           <!-- Einde login gegevens -->
@@ -174,7 +211,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
               </div>
               <div class="modal-body">
                 <?php
-                if(isset($_SESSION['warning']['incorrect_pw']) && $_SESSION['warning']['incorrect_pw'] === true)
+                if(isset($_SESSION['warning']['invalidmail']) && $_SESSION['warning']['invalidmail'] == false)
                 {
                 ?>
                   <p class="bg-danger" style="padding: 5px;">Dit emailadres bestaat niet</p>
@@ -199,40 +236,9 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
         </div>
       </form>
 
-      <form method="post">
-        <div id="forgotpass" class="modal fade" role="dialog">
-          <div class="modal-dialog modal-sm">
-            <!-- popup content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Nieuwe wachtwoord aanvragen</h4>
-              </div>
-              <div class="modal-body">
-                 <?php if(isset($_GET['email']) || (isset($_SESSION['warning']['invalidmail']) && $_SESSION['warning']['invalidmail']==false)){
-                 ?>
-                   <p class="bg-danger" style="padding: 5px;">Email bestaat niet</p>
-                 <?php
-                  }
-                 ?>
-                  <div class="form-group">
-                    <div class="form-group">
-                      <label for="formpass">Emailadres</label>
-                      <input name="email" type="email" class="form-control" id="formpass" placeholder="Email">
-                    </div>
-                  </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
-                <button type="submit" class="btn btn-orange" data-toggle="modal" >Verder</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-
       <?php if (isset($_GET['email'])==true){  ?>
       <form name="question" method="post" enctype="multipart/form-data" action="">
+        <input type="hidden" name="emailww" value="<?php echo $_GET['email']; ?>"/>
         <input type="hidden" name="form_name" value="requestanswer"/>
         <div id="question" class="modal fade" role="dialog">
           <div class="modal-dialog modal-sm">
@@ -244,6 +250,12 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
               </div>
               <div class="modal-body">
                 <?php
+                if(isset($_SESSION['warning']['invalidanswer']) && $_SESSION['warning']['invalidanswer'] == true)
+                {
+                ?>
+                  <p class="bg-danger" style="padding: 5px;">Antwoord onjuist</p>
+                <?php
+                }
                 //Geheime vraag ophalen van gebruiker
                 $emailforget = $_GET['email'];
                 $secret_question = $db->prepare("SELECT V.vraag AS vraag FROM GeheimeVragen AS V inner join Gebruikers AS G on G.vraag  = V.ID WHERE emailadres = ?");
@@ -279,25 +291,30 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
 <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+
 <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
-<?php if(isset($_GET['email']) && (isset($_SESSION['warning']['invalidmail']))){ ?>
+<?php if(isset($_GET['email']) || (isset($_SESSION['warning']['invalidmail'])  && $_SESSION['warning']['invalidmail'] == true)){
+  if(isset($_SESSION['warning']['invalidanswer'])==false || $_SESSION['warning']['invalidanswer'] ==true){ ?>
 <script type="text/javascript">
          $(window).load(function(){
              $('#question').modal('show');
          });
 </script>
+
 <?php
-}else if(isset($_GET['email']) || (isset($_SESSION['warning']['invalidmail']))){
+}
+}else if(isset($_GET['email']) && isset($_SESSION['warning']['invalidmail'])){
 ?>
 <script type="text/javascript">
            $(window).load(function(){
                $('#forgotpass').modal('show');
            });
 </script>
-<?php
+  <?php
 }
-?>
+  ?>
 </body>
 </html>
 

@@ -88,11 +88,21 @@ p, div {
 .navbar-brand {
   color: #fff !important;
   height: auto !important;
-  line-height: 70px;
+  line-height: 20px;
   padding: 0px 10px !important;
   font-size: 20px;
 }
-
+.navbar-brand > div > span{
+  display:inline-block;
+  padding-top:15px;
+}
+.navbar-brand > div > p{
+  font-size:13px;
+  color:#EFEFEF;
+}
+.navbar-brand > div:last-of-type{
+  width:300px;
+}
 .navbar-brand>img {
   float: left;
   padding: 5px;
@@ -554,4 +564,12 @@ p, div {
   bottom: 5px;
   right: 5px;
   background: #ea8220;
+  z-index: 999;
+}
+.active-menu-item{
+  text-decoration: underline;
+  font-weight: bold;
+}
+.nonactive-menu-item{
+
 }

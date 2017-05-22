@@ -20,13 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
   }
 }
 
-$childrenRubriekenQuery = $db->prepare("SELECT rubrieknummer, rubrieknaam FROM Rubriek WHERE parentRubriek = ? ORDER BY volgnr ASC, rubrieknaam ASC");
-$childrenRubriekenQuery->execute(array(htmlspecialchars($rubriekID)));
-$childrenRubrieken = $childrenRubriekenQuery->fetchAll();
-
 $rubriekQuery = $db->prepare("SELECT TOP(1) rubrieknummer,rubrieknaam,parentRubriek,volgnr FROM Rubriek WHERE rubrieknummer = ?");
 $rubriekQuery->execute(array(htmlspecialchars($rubriekID)));
 $rubriek = $rubriekQuery->fetchAll()[0];
+
+
+$childrenRubriekenQuery = $db->prepare("SELECT rubrieknummer, rubrieknaam FROM Rubriek WHERE parentRubriek = ? ORDER BY volgnr ASC, rubrieknaam ASC");
+$childrenRubriekenQuery->execute(array(htmlspecialchars($rubriekID)));
+$childrenRubrieken = $childrenRubriekenQuery->fetchAll();
 
 $breadCrumbQuery = $db->prepare("SELECT * FROM dbo.fnRubriekOuders(?) ORDER BY volgorde DESC");
 $breadCrumbQuery->execute(array(htmlspecialchars($rubriekID)));
@@ -55,13 +56,31 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
 
 
       <ul class="menubar">
-        <?php if($rubriek['rubrieknummer'] != -1){
-          ?>
-          <li class="toggle-sub active">
-            <a href="rubriek.php?rubriek=<?php echo $rubriek['parentRubriek']; ?>"><?php echo $rubriek['rubrieknaam']; ?></a>
-          </li>
-          <?php
-        }else {
+        <?php
+        if($rubriek['rubrieknummer'] != -1){
+
+            if(count($childrenRubrieken) == 0)
+            {
+              $parentQuery = $db->prepare("SELECT rubrieknummer, rubrieknaam, parentRubriek FROM Rubriek WHERE rubrieknummer = ? ORDER BY volgnr ASC, rubrieknaam ASC");
+              $parentQuery->execute(array(htmlspecialchars($rubriek['parentRubriek'])));
+              $parent = $parentQuery->fetchAll();
+              if(count($parent) != 0)
+              {
+              ?>
+                <li class="toggle-sub active">
+                  <a href="rubriek.php?rubriek=<?php echo $parent[0]['parentRubriek']; ?>"><?php echo $parent[0]['rubrieknaam']; ?></a>
+                </li>
+              <?php
+              }
+            }
+            else {
+              ?>
+              <li class="toggle-sub active">
+                <a href="rubriek.php?rubriek=<?php echo $rubriek['parentRubriek']; ?>"><?php echo $rubriek['rubrieknaam']; ?></a>
+              </li>
+              <?php
+            }
+        }else{
           ?>
           <li class="toggle-sub active">
             <a href="">Rubrieken</a>
@@ -70,11 +89,22 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
         }?>
         <ul class="sub">
           <?php
+
+            if(count($childrenRubrieken) == 0)
+            {
+
+              $childrenRubriekenQuery = $db->prepare("SELECT rubrieknummer, rubrieknaam FROM Rubriek WHERE parentRubriek = ? ORDER BY volgnr ASC, rubrieknaam ASC");
+              $childrenRubriekenQuery->execute(array(htmlspecialchars($rubriek['parentRubriek'])));
+              $childrenRubrieken = $childrenRubriekenQuery->fetchAll();
+
+            }
+
+
             foreach($childrenRubrieken as $row)
             {
               ?>
               <li>
-                <a href="rubriek.php?rubriek=<?php echo $row['rubrieknummer']; ?>"><?php echo $row['rubrieknaam']; ?></a>
+                <a class="<?php echo ($row['rubrieknummer'] == $rubriek['rubrieknummer']) ? 'active-menu-item' : 'nonactive-menu-item'; ?>" href="rubriek.php?rubriek=<?php echo $row['rubrieknummer']; ?>"><?php echo $row['rubrieknaam']; ?></a>
               </li>
               <?php
             }

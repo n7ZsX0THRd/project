@@ -37,18 +37,23 @@ if(isset($_GET['gebruikersnaam']) && !empty($_GET['gebruikersnaam']) && isset($_
               </div>
               <div class="panel-body">
               <?php
+              try {
                   $dbs = $db->prepare("SELECT activatiecode FROM Activatiecodes WHERE gebruikersnaam=? AND GETDATE() < verloopdatum");
                   $dbs->execute(array($gebruikersnaam));
                   $result = $dbs->fetchAll()[0];
+                }
+                catch (PDOException $e) {
 
+                }
                   if(isset($result[0])) {
-                      if ($result[0] == $code) {
 
+                      if ($result[0] == $code) {
+                        try{
                           //If new email was given change old to new
                           $dbs = $db->prepare("SELECT emailadres,gebruikersnaam FROM Activatiecodes WHERE gebruikersnaam=?");
                           $dbs->execute(array($gebruikersnaam));
                           $newmailResult = $dbs->fetchAll();
-                          if(count($newmailResult) == 1) {
+                          if(count($newmailResult[0][0]) == 1) {
                               $dbs = $db->prepare("UPDATE Gebruikers SET emailadres=? WHERE gebruikersnaam=?");
                               $dbs->execute(array($newmailResult[0]['emailadres'],$newmailResult[0]['gebruikersnaam']));
                           }
@@ -58,12 +63,18 @@ if(isset($_GET['gebruikersnaam']) && !empty($_GET['gebruikersnaam']) && isset($_
                           $dbs->execute(array($gebruikersnaam, $gebruikersnaam));
                           echo 'Je account is geactiveerd';
                           header( "refresh:3;url=login.php" );
-                      }else {
-                          echo 'Je code klopt niet!';
-                      }
+
+                          } catch (PDOException $e) {
+
+                          }
+
+                    } else {
+                        echo 'Je code klopt niet!';
+                    }
                   }else {
                       echo 'Je activatiecode is verlopen.';
                   }
+
 
               ?>
               </div>

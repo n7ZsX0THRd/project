@@ -72,11 +72,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             {
               $_SESSION['warning']['invalid_birthdate'] = true;
             }
-            else if(!isset($_POST['p_email']) || empty($_POST['p_email']))
-            {
-              $_SESSION['warning']['mail_empty'] = true;
-            }
             else {
+
+              if(isset($_POST['p_adres2']) == false || empty($_POST['p_adres2']))
+                $_POST['p_adres2'] = null;
+
               if(update_user($_POST,$db)){
                 $result = getLoggedInUser($db);
                 $_SESSION['warning']['changesucces'] = true;
@@ -350,12 +350,7 @@ if(isset($_GET['foto'])){
           ?>
              <p class="bg-danger notifcation-fix">Uw telefoonnummer kan niet leeg zijn.</p>
           <?php
-        }else if(isset($_SESSION['warning']['mail_empty']) && $_SESSION['warning']['mail_empty'] === true)
-          {
-          ?>
-             <p class="bg-danger notifcation-fix">Uw email kan niet leeg zijn.</p>
-          <?php
-          }
+        }
           ?>
           <div class="col-lg-6" style="border-right:1px solid #e7e7e7;">
             <form method="post" enctype="multipart/form-data" action="">
@@ -476,6 +471,27 @@ if(isset($_GET['foto'])){
               </div>
               <div class="form-group">
                 <div class="row">
+                  <div class="col-lg-12">
+                    <label for="exampleInputEmail1">Adresregel 2</label>
+                    <?php if (isset($_GET['wijzig'])==true){  ?>
+                    <input name="p_adres2" type="text" class="form-control" id="exampleInputEmail1" placeholder="Adresregel 2" value="<?php echo $result['adresregel2']?>">
+                    <?php }else{
+                      ?>
+                      <div class="pflijn">
+                          <?php
+                          if(isset($result['adresregel2'])){
+                            echo $result['adresregel2'];
+                          }
+                          else {
+                            echo '<br>';
+                          }?>
+                      </div>
+                    <?php } ?>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
                   <div class="col-lg-8">
                     <label for="exampleInputEmail1">Woonplaats</label>
                     <?php if (isset($_GET['wijzig'])==true){  ?>
@@ -581,21 +597,24 @@ if(isset($_GET['foto'])){
           <div class="col-lg-12">
             <hr>
           </div>
-          <div class="col-lg-offset-3 col-lg-9">
-
+          <div class="col-lg-offset-6 col-lg-6">
             <div class="form-group">
               <?php if (isset($_GET['wijzig'])==true){  ?>
               <label for="formpass">Bevestig huidige wachtwoord</label>
               <input name="confirmpass" type="password" class="form-control"  placeholder="Wachtwoord">
               <?php } ?>
             </div>
+          </div>
+          <div class="col-lg-offset-3 col-lg-9">
+
+
             <div class="text-right">
               <?php if (isset($_GET['wijzig'])==false){  ?>
 
               <!-- Trigger the popup with a button -->
-              <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#wachtwoord">Nieuw wachtwoord</button>
+              <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#emailadres">Wijzig emailadres</button>
+              <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#wachtwoord">Wijzig wachtwoord</button>
               <a href="?wijzig" type="submit" class="btn btn-orange">Wijzig gegevens</a>
-              <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#emailadres">Nieuw emailadres</button>
 
               <?php }else{ ?>
               <a href="?" type="submit" class="btn btn-orange">Annuleren</a>
@@ -888,7 +907,7 @@ if(isset($_GET['foto'])){
 }?>
 
 <?php if( isset($_SESSION['warning']['changingprofile']) && $_SESSION['warning']['changingprofile'] == true){
-echo 'test';?>
+?>
 <script type="text/javascript">
            $(window).load(function(){
                $('#profielfoto').modal('show');

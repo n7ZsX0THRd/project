@@ -20,6 +20,7 @@
         voornaam,
         achternaam,
         adresregel1,
+        adresregel2,
         postcode,
         plaatsnaam,
         land,
@@ -109,14 +110,6 @@
               </div>
               <div class="row content_top_offset">
                 <div class="col-lg-6" style="border-right:1px solid #e7e7e7;">
-                    <!-- email -->
-                    <div class="form-group">
-                      <label for="exampleInputEmail1">Email</label>
-                        <div class="pflijn">
-                            <?php echo $resultUser[0]['emailadres']?>
-                        </div>
-                    </div>
-
                     <!-- Voornaam en achternaam -->
                     <div class="form-group">
                       <div class="row">
@@ -180,6 +173,24 @@
                     </div>
                     <div class="form-group">
                       <div class="row">
+                        <div class="col-lg-12">
+                          <label for="exampleInputEmail1">Adresregel 2</label>
+                            <div class="pflijn">
+                                <?php
+                                  if(isset($resultUser[0]['adresregel2']))
+                                  {
+                                    echo $resultUser[0]['adresregel2'];
+                                  }
+                                  else {
+                                    echo '<br>';
+                                  }
+                                ?>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
                         <div class="col-lg-8">
                           <label for="exampleInputEmail1">Woonplaats</label>
                             <div class="pflijn">
@@ -214,6 +225,12 @@
                           <label for="exampleInputEmail1">Gebruikersnaam</label>
                           <div class="pflijn">
                               <?php echo $resultUser[0]['gebruikersnaam']?>
+                          </div>
+                          <!-- email -->
+                          <p></p>
+                          <label for="exampleInputEmail1">Email</label>
+                          <div class="pflijn">
+                              <?php echo $resultUser[0]['emailadres']?>
                           </div>
                         </div>
                         <div class="col-lg-1">

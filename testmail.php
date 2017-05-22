@@ -1,6 +1,6 @@
 <?php
-$to = 'casper.plate@hotmail.com';
-$subject = 'Nieuwe activatiecode voor EenmaalAndermaal';
+$to = $_GET['email'];
+$subject = 'Tijdelijk wachtwoord voor EenmaalAndermaal';
 $headers = "From: " .'noreply@iproject2.icasites.nl'. "\r\n";
 $headers .= "Content-Type: text/html;\r\n";    
 $message = '
@@ -26,17 +26,15 @@ $message = '
                                 </tr>
                                 <tr>
                                     <td style="padding: 20px 0 0 0; color:#023042">
-                                        <p>Er is een nieuwe activatiecode voor je aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.</p>
+                                        <p>Er is een tijdelijk wachtwoord voor je aangemaakt, je kunt inloggen met de volgende gegevens:<br>
+                                        emailadres: '.$_GET['email'].'<br>
+                                        Wachtwoord: '.$tijdelijkWachtwoord.'</p>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="padding: 20px 0 0 0; color:#023042">
-                                        <p>De link is gekoppeld aan het volgende emailadres:<br>E-mail: '.$_SESSION['email'].'</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 20px 0 0 0; color:#023042">
-                                        <p>Klik op deze link om je account te activeren:<br>http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$gebruikersnaam.'&code='.$code.'</p>
+                                        <p>Klik op deze link om in te loggen:<br>http://iproject2.icasites.nl/login.php<br>
+                                        Na het inloggen kun je je wachtwoord wijzigen op je profielpagina.</p>
                                     </td>
                                 </tr>
                                 <tr>
