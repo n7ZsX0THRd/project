@@ -71,44 +71,18 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
         }
         ?>
         <div class="row content_top_offset">
-          <div class="col-lg-12 timer_row" id="sticky">
-              <h3 id="productCountDown">COUNTDOWN</h3>
-              <script>
-              var countDownDate = new Date("Juni 5, 2017 15:37:25").getTime();
-
-              var x = setInterval(function() {
-
-                var now = new Date().getTime();
-                var distance = countDownDate - now;
-
-                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                document.getElementById("productCountDown").innerHTML = days + "d " + hours + "h "
-                + minutes + "m " + seconds + "s ";
-
-                if (distance < 0) {
-                  clearInterval(x);
-                  document.getElementById("demo").innerHTML = "EXPIRED";
-                }
-              }, 1000);
-              </script>
-
-          </div>
-        </div>
-        <div class="row content_top_offset">
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
               <li role="presentation" class="active"><a href="#veiling" aria-controls="veiling" role="tab" data-toggle="tab">Veiling</a></li>
-              <li role="presentation"><a href="#bieden" aria-controls="bieden" role="tab" data-toggle="tab">Bieden</a></li>
+              <li role="presentation"><a href="#bieden" class="bg-success" aria-controls="bieden" role="tab" data-toggle="tab">Bieden</a></li>
             </ul>
 
             <!-- Tab panes -->
             <div class="tab-content">
               <div role="tabpanel" class="tab-pane active" id="veiling">
-
+                            <div class="col-lg-12 timer_row" >
+                                <h3 id="productCountDown">COUNTDOWN</h3>
+                            </div>
                             <div class="col-lg-6 left_content_row content_top_offset">
                                 <div class="row thumb-image">
                                   <div class="carousel slide article-slide" id="article-photo-carousel">
@@ -148,7 +122,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                 </div>
                             </div>
                             <div class="col-lg-6">
-                              <h1>Otis doet niks behalve vliegtuigjes maken</h1>
+                              <h1>Titel</h1>
                               <p>
                                 De SP voelt niets voor het voorstel van D66-leider Alexander Pechtold om samen met de VVD, CDA, D66 en de PvdA in een coalitie te stappen. In plaats daarvan doet hij een beroep op Sybrand Buma van het CDA om open te staan voor formatieonderhandelingen zonder de VVD.
                 Dat moet leiden tot een centrum-links kabinet waar niet VVD-leider Mark Rutte, maar Buma de premier wordt.
@@ -163,6 +137,9 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                             </div>
               </div>
               <div role="tabpanel" class="tab-pane" id="bieden">
+                <div class="col-lg-12 timer_row">
+                    <h3 id="productCountDown2">COUNTDOWN</h3>
+                </div>
                 <div class="col-lg-12">
                   <div class="panel-body">
                          <ul class="chat">
@@ -220,10 +197,11 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                              </li>
                          </ul>
                      </div>
-                     <div class="input-group" style="margin-left:-15px;margin-right:-15px;">
-                        <input type="number" class="form-control" placeholder="Search for...">
+                     <div class="input-group" style="margin-left:-15px;margin-right:-15px;width:40%;float:right;">
+                        <span class="input-group-addon">&euro;</span>
+                        <input style="height:36px;"class="form-control" type="number" required name="price" min="0" value="0" step="any">
                         <span class="input-group-btn">
-                          <button class="btn btn-default" type="button">Go!</button>
+                          <button class="btn btn-orange" type="button"><img src="images/hamerwit.png" class="auction-hammer"></button>
                         </span>
                       </div>
                 </div>
@@ -253,11 +231,30 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
       interval: false
     });
   </script>
-  <script src="js/jquery.sticky.js"></script>
   <script>
-    $(document).ready(function(){
-      $("#sticky").sticky({topSpacing:45});
-    });
+  var countDownDate = new Date("May 23, 2017 15:37:25").getTime();
+
+  var x = setInterval(function() {
+
+    var now = new Date().getTime();
+    var distance = countDownDate - now;
+
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    document.getElementById("productCountDown").innerHTML = days + "d " + hours + "h "
+    + minutes + "m " + seconds + "s ";
+    document.getElementById("productCountDown2").innerHTML = days + "d " + hours + "h "
+    + minutes + "m " + seconds + "s ";
+
+    if (distance < 0) {
+      clearInterval(x);
+      document.getElementById("productCountDown").innerHTML = "EXPIRED";
+      document.getElementById("productCountDown2").innerHTML = "EXPIRED";
+    }
+  }, 1000);
   </script>
 </body>
 </html>
