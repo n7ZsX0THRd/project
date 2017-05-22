@@ -1,35 +1,8 @@
 <?php
-$contentVoorbeeld = '<table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
-    <tr>
-        <td style="color:#023042">
-            Beste Username,
-        </td>
-    </tr>
-    <tr>
-        <td style="padding: 20px 0 0 0; color:#023042">
-            <p>Er is een nieuwe activatiecode voor je aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.</p>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding: 20px 0 0 0; color:#023042">
-            <p>De link is gekoppeld aan het volgende emailadres:<br>E-mail: email</p>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding: 20px 0 0 0; color:#023042">
-            <p>Klik op deze link om je account te activeren:<br>http://iproject2.icasites.nl/verify.php?gebruikersnaam=username&code=code</p>
-        </td>
-    </tr>
-    <tr>
-        <td style="padding: 20px 0 20px 0; color:#023042">
-            <p>Met vriendelijke groeten,<br>Team EenmaalAndermaal</p>
-        </td>
-    </tr>
-</table>';
 
 function sendMail($to,$subject,$content){
-  $headers = 'From: Eenmaal Andermaal <noreply@iproject2.icasites.nl>'
-  $headers = 'Content-Type: text/html';
+  $headers = "From: " .'"Eenmaal Andermaal" <noreply@iproject2.icasites.nl>'. "\r\n";
+  $headers .= "Content-Type: text/html;\r\n";
   $message = '
   <html>
   <body style="margin: 0; padding: 0;">
