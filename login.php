@@ -73,31 +73,29 @@ if($_POST['form_name']=='requestanswer'){
      }
  }
  }
-  if($_SERVER['REQUEST_METHOD'] == 'GET'){
-   //email checken in de database
+
+if($_SERVER['REQUEST_METHOD'] == 'GET'){
+ //email checken in de database
 
 
-   if (isset($_GET['email'])){
-     $emailforget = $_GET['email'];
-     $emailgebruiker = $db->prepare("SELECT emailadres FROM Gebruikers WHERE emailadres = ?");
-     $emailgebruiker->execute (array($emailforget));
-     $emailcheck = $emailgebruiker->fetchAll();
+ if (isset($_GET['email'])){
+   $emailforget = $_GET['email'];
+   $emailgebruiker = $db->prepare("SELECT emailadres FROM Gebruikers WHERE emailadres = ?");
+   $emailgebruiker->execute (array($emailforget));
+   $emailcheck = $emailgebruiker->fetchAll();
 
-     if(count($emailcheck) == 1)
-     {
-       $_SESSION['warning']['invalidmail'] = true;
-     }else{
-       $_SESSION['warning']['invalidmail'] = null;
-     }
+   if(count($emailcheck) == 1)
+   {
+     $_SESSION['warning']['invalidmail'] = true;
+   }else{
+     $_SESSION['warning']['invalidmail'] = null;
    }
-
  }
 
-   if(isUserLoggedIn($db))
-     header('location: index.php');
+}
 
-
-
+ if(isUserLoggedIn($db))
+   header('location: index.php');
 
 ?>
 <!DOCTYPE html>
@@ -163,10 +161,8 @@ if($_POST['form_name']=='requestanswer'){
           </div>
         </form>
 
-<<<<<<< HEAD
-=======
         <!-- popup -->
-        <form name="forgotpass" method="post" enctype="multipart/form-data" action="">
+        <form name="forgotpass" method="get" enctype="multipart/form-data" action="">
           <input type="hidden" name="form_name" value="changepassword"/>
         <div id="forgotpass" class="modal fade" role="dialog">
           <div class="modal-dialog modal-sm">
@@ -189,7 +185,7 @@ if($_POST['form_name']=='requestanswer'){
                   <div class="form-group">
                     <div class="form-group">
                       <label for="formpass">Emailadres</label>
-                      <input name="passchange" type="email" class="form-control"  placeholder="Email">
+                      <input name="email" type="email" class="form-control"  placeholder="Email">
                     </div>
 
                   </div>
@@ -201,10 +197,9 @@ if($_POST['form_name']=='requestanswer'){
             </div>
           </div>
         </div>
->>>>>>> origin/master
+      </form>
 
-
-        <form method="get">
+      <form method="post">
         <div id="forgotpass" class="modal fade" role="dialog">
           <div class="modal-dialog modal-sm">
             <!-- popup content-->
@@ -223,17 +218,13 @@ if($_POST['form_name']=='requestanswer'){
                   <div class="form-group">
                     <div class="form-group">
                       <label for="formpass">Emailadres</label>
-<<<<<<< HEAD
                       <input name="email" type="email" class="form-control" id="formpass" placeholder="Email">
-=======
-                      <input name="passchange" type="email" class="form-control"  placeholder="Email">
->>>>>>> origin/master
                     </div>
                   </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
-                <button type="submit" class="btn btn-orange data-toggle="modal" data-target="#question"">Verder</button>
+                <button type="submit" class="btn btn-orange" data-toggle="modal" >Verder</button>
               </div>
             </div>
           </div>
@@ -261,13 +252,8 @@ if($_POST['form_name']=='requestanswer'){
                 ?>
                   <div class="form-group">
                     <div class="form-group">
-<<<<<<< HEAD
                       <label for="formpass"><?php echo $vraag['vraag'];?></label>
                       <input name="antwoord" type="text" class="form-control" id="formpass" placeholder="Antwoord">
-=======
-                      <label for="formpass">Emailadres</label>
-                      <input name="passchange" type="email" class="form-control"  placeholder="Email">
->>>>>>> origin/master
                     </div>
                   </div>
               </div>
@@ -295,25 +281,27 @@ if($_POST['form_name']=='requestanswer'){
 <script src="bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
+<?php if(isset($_GET['email']) && (isset($_SESSION['warning']['invalidmail']))){ ?>
+<script type="text/javascript">
+         $(window).load(function(){
+             $('#question').modal('show');
+         });
+</script>
+<?php
+}else if(isset($_GET['email']) || (isset($_SESSION['warning']['invalidmail']))){
+?>
+<script type="text/javascript">
+           $(window).load(function(){
+               $('#forgotpass').modal('show');
+           });
+</script>
+<?php
+}
+?>
 </body>
 </html>
 
-  <?php if(isset($_GET['email']) && (isset($_SESSION['warning']['invalidmail']))){ ?>
-<script type="text/javascript">
-           $(window).load(function(){
-               $('#question').modal('show');
-           });
-</script>
-  <?php
-}else if(isset($_GET['email']) || (isset($_SESSION['warning']['invalidmail']))){
-  ?>
-  <script type="text/javascript">
-             $(window).load(function(){
-                 $('#forgotpass').modal('show');
-             });
-  </script>
-  <?php
-}
+<?php
 
 $_SESSION['warning'] = null;
 ?>
