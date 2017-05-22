@@ -28,8 +28,8 @@ $contentVoorbeeld = '<table border="0" cellpadding="0" cellspacing="0" width="10
 </table>';
 
 function sendMail($to,$subject,$content){
-  $headers = "From: " .'"Eenmaal Andermaal" <noreply@iproject2.icasites.nl>'. "\r\n";
-  $headers .= "Content-Type: text/html;\r\n";
+  $headers = 'From: Eenmaal Andermaal <noreply@iproject2.icasites.nl>'
+  $headers = 'Content-Type: text/html';
   $message = '
   <html>
   <body style="margin: 0; padding: 0;">
