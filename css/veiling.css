@@ -1,0 +1,120 @@
+/* Main carousel style */
+.carousel {
+    width: 100%;
+}
+
+.carousel-inner > .item{
+  padding:5px;
+}
+.cont-slider{
+  border:1px solid #EFEFEF;
+  box-shadow:0px 0px 5px #888888;
+}
+.cont-slider > .item > img{
+  width:100%;
+  padding-bottom:100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+/* Indicators list style */
+.article-slide .carousel-indicators {
+    bottom: 0;
+    left: 0;
+    margin-left: 5px;
+    width: 100%;
+}
+/* Indicators list style */
+.article-slide .carousel-indicators li {
+    border: medium none;
+    border-radius: 0;
+    float: left;
+    height: 54px;
+    margin-bottom: 5px;
+    margin-left: 0;
+    margin-top: 0;
+    width: 24.3%;
+}
+.article-slide .carousel-indicators li:hover{
+  opacity:0.8;
+}
+/* Indicators images style */
+.article-slide .carousel-indicators img {
+    border: 2px solid #FFFFFF;
+    float: left;
+    height: 100%;
+    left: 0;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+/* Indicators active image style */
+.article-slide .carousel-indicators .active img {
+    border: 2px solid #428BCA;
+    opacity: 0.7;
+}
+.timer_row{
+  border-top:2px solid #E6E6E6;
+  border-bottom:2px solid #E6E6E6;
+  margin-top:25px;
+  z-index:1029 !important;
+  background-color:white;
+}
+.timer_row > h3{
+  text-align:center;
+}
+.bid_section{
+    margin-top:20px;
+    border-top:2px solid #E6E6E6;
+    border-bottom:2px solid #E6E6E6;
+    padding-bottom:10px;
+    padding-top:10px;
+}
+
+.chat
+{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.chat li
+{
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px dotted #B3A9A9;
+}
+
+.chat li.left .chat-body
+{
+    margin-left: 60px;
+}
+
+.chat li.right .chat-body
+{
+    margin-right: 60px;
+}
+
+
+.chat li .chat-body p
+{
+    margin: 0;
+    color: #777777;
+}
+
+.panel .slidedown .glyphicon, .chat .glyphicon
+{
+    margin-right: 5px;
+}
+
+.panel-body
+{
+    margin-left:-15px;
+    margin-right:-15px;
+    min-height:300px;
+    padding-left:0px;
+    padding-right:0px;
+    padding-bottom:0px;
+    margin-bottom:-33px;
+}
