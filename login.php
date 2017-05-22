@@ -3,6 +3,7 @@ session_start();
 
 include ('php/database.php');
 include ('php/user.php');
+include ('php/mail.php');
 pdo_connect();
 
 $error = 0;
@@ -21,18 +22,44 @@ if($_POST['form_name']=='requestanswer'){
             $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $randstring = '';
             for ($i = 0; $i < 10; $i++) {
-                $randstring = $randstring.$characters[rand(0, strlen($characters))];
+                $randstring = $randstring.$characters[rand(0, strlen($characters)-1)];
             }
             return $randstring;
         }
           $randomkey = RandomString();
           $nieuweww = $db->prepare("UPDATE Gebruikers SET wachtwoord=? WHERE emailadres=?");
           $nieuweww->execute(array(password_hash($randomkey, PASSWORD_DEFAULT), $_POST['emailww']));
-          print($randomkey);
-          $_SESSION['warning']['wrong'] = false;
+          sendMail($_POST['emailww'],'Nieuw wachtwoord','<table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
+              <tr>
+                  <td style="color:#023042">
+                      Beste Username,
+                  </td>
+              </tr>
+              <tr>
+                  <td style="padding: 20px 0 0 0; color:#023042">
+                      <p>Er is een nieuw wachtwoord aangevraagd voor dit account.</p>
+                  </td>
+              </tr>
+              <tr>
+                  <td style="padding: 20px 0 0 0; color:#023042">
+                      <p>Dit is uw nieuwe wachtoord '.$randomkey.';</p>
+                  </td>
+              </tr>
+              <tr>
+                  <td style="padding: 20px 0 0 0; color:#023042">
+                      <p>Wijzig dit wachtwoord zo snel mogelijk op uw profielpagina</p>
+                  </td>
+              </tr>
+              <tr>
+                  <td style="padding: 20px 0 20px 0; color:#023042">
+                      <p>Met vriendelijke groeten,<br>Team EenmaalAndermaal</p>
+                  </td>
+              </tr>
+          </table>'){
+          $_SESSION['warning']['invalidanswer'] = false;
         }
         else {
-          $_SESSION['warning']['wrong'] = true;
+          $_SESSION['warning']['invalidanswer'] = true;
         }
 
 }else if($_POST['form_name']=='login'){
@@ -83,10 +110,10 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
    $emailcheck = $emailgebruiker->fetchAll();
 
    if(count($emailcheck) == 1)
-   { print('poep1');
+   {
      $_SESSION['warning']['invalidmail'] = true;
    }else{
-     print('poep2');
+
      $_SESSION['warning']['invalidmail'] = false;
    }
  }
@@ -198,8 +225,6 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
         </div>
       </form>
 
-
-
       <?php if (isset($_GET['email'])==true){  ?>
       <form name="question" method="post" enctype="multipart/form-data" action="">
         <input type="hidden" name="emailww" value="<?php echo $_GET['email']; ?>"/>
@@ -214,6 +239,12 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
               </div>
               <div class="modal-body">
                 <?php
+                if(isset($_SESSION['warning']['invalidanswer']) && $_SESSION['warning']['invalidanswer'] == true)
+                {
+                ?>
+                  <p class="bg-danger" style="padding: 5px;">Antwoord onjuist</p>
+                <?php
+                }
                 //Geheime vraag ophalen van gebruiker
                 $emailforget = $_GET['email'];
                 $secret_question = $db->prepare("SELECT V.vraag AS vraag FROM GeheimeVragen AS V inner join Gebruikers AS G on G.vraag  = V.ID WHERE emailadres = ?");
@@ -253,7 +284,8 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 
 <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
-<?php if(isset($_GET['email']) && isset($_SESSION['warning']['invalidmail'])  && $_SESSION['warning']['invalidmail'] == true){ ?>
+<?php if(isset($_GET['email']) || (isset($_SESSION['warning']['invalidmail'])  && $_SESSION['warning']['invalidmail'] == true)){
+  if(isset($_SESSION['warning']['invalidanswer'])==false || $_SESSION['warning']['invalidanswer'] ==true){ ?>
 <script type="text/javascript">
          $(window).load(function(){
              $('#question').modal('show');
@@ -261,6 +293,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
 </script>
 
 <?php
+}
 }else if(isset($_GET['email']) && isset($_SESSION['warning']['invalidmail'])){
 ?>
 <script type="text/javascript">
@@ -269,7 +302,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
            });
 </script>
   <?php
-  }
+}
   ?>
 </body>
 </html>
