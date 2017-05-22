@@ -111,8 +111,10 @@ pdo_connect();
                             echo '<article class="col-md-4">';
                             echo'<h2>'.$rubriek[0].'</h2>';
                             echo '<ul>';
-                            foreach($rubriek as $subRubriek){
-                                echo '<li>'.$subRubriek.'</li>';
+                            foreach($rubriek as $key => $subRubriek){
+                                if (!$key==0){
+                                    echo '<li><a href="rubriek.php?rubriek='.$key.'">'.$subRubriek.'</a></li>';
+                                }
                             }
                             echo '</ul>';
                             echo '</article>'; 
@@ -129,14 +131,27 @@ pdo_connect();
             ?>
 
             <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                <?php
-                    foreach(range('A','Z') as $i) {
-                        echo '<li class="page-item"><a class="page-link" href="#'.$i.'">'.$i.'</a></li>';
-                    }
+                    <ul class="pagination">
+                    <?php
+                        foreach(range('A','Z') as $char) {
+                            $nRubrieken = 0;
+                            foreach($rubrieken as $rubriek){
+                                $firstChar =substr ($rubriek[0] , 0 , 1 );
+                                if ($char==$firstChar){
+                                    $nRubrieken ++;
+                                    if($nRubrieken==1){
+                                        echo '<li class="page-item"><a class="page-link" href="#'.$char.'">'.$char.'</a></li>';
+                                    }
+                                }
+                            }
+                            if($nRubrieken==0){
+                                echo '<li class="page-item"><a class="page-nolink">'.$char.'</a></li>';
+                            }
+                        }
 
-                ?>
-                </ul>
+                    ?>
+                    </ul>
+                </nav>
             </nav>
         </main>
         <a id="to-top" href="#" class="btn btn-dark btn-lg"><i class="fa fa-chevron-up fa-fw fa-1x"></i></a>
