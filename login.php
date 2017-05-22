@@ -25,17 +25,15 @@ if($_POST['form_name']=='requestanswer'){
             }
             return $randstring;
         }
-
-          print(RandomString());
-
+          $randomkey = RandomString();
+          $nieuweww = $db->prepare("UPDATE Gebruikers SET wachtwoord=? WHERE emailadres=?");
+          $nieuweww->execute(array(password_hash($randomkey, PASSWORD_DEFAULT), $_POST['emailww']));
+          print($randomkey);
+          $_SESSION['warning']['wrong'] = false;
         }
         else {
           $_SESSION['warning']['wrong'] = true;
         }
-
-
-
-
 
 }else if($_POST['form_name']=='login'){
  $email = $_POST['l_naam'];
@@ -85,10 +83,11 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
    $emailcheck = $emailgebruiker->fetchAll();
 
    if(count($emailcheck) == 1)
-   {
+   { print('poep1');
      $_SESSION['warning']['invalidmail'] = true;
    }else{
-     $_SESSION['warning']['invalidmail'] = null;
+     print('poep2');
+     $_SESSION['warning']['invalidmail'] = false;
    }
  }
 
@@ -174,7 +173,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
               </div>
               <div class="modal-body">
                 <?php
-                if(isset($_SESSION['warning']['incorrect_pw']) && $_SESSION['warning']['incorrect_pw'] === true)
+                if(isset($_SESSION['warning']['invalidmail']) && $_SESSION['warning']['invalidmail'] == false)
                 {
                 ?>
                   <p class="bg-danger" style="padding: 5px;">Dit emailadres bestaat niet</p>
@@ -199,40 +198,11 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
         </div>
       </form>
 
-      <form method="post">
-        <div id="forgotpass" class="modal fade" role="dialog">
-          <div class="modal-dialog modal-sm">
-            <!-- popup content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Nieuwe wachtwoord aanvragen</h4>
-              </div>
-              <div class="modal-body">
-                 <?php if(isset($_GET['email']) || (isset($_SESSION['warning']['invalidmail']) && $_SESSION['warning']['invalidmail']==false)){
-                 ?>
-                   <p class="bg-danger" style="padding: 5px;">Email bestaat niet</p>
-                 <?php
-                  }
-                 ?>
-                  <div class="form-group">
-                    <div class="form-group">
-                      <label for="formpass">Emailadres</label>
-                      <input name="email" type="email" class="form-control" id="formpass" placeholder="Email">
-                    </div>
-                  </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
-                <button type="submit" class="btn btn-orange" data-toggle="modal" >Verder</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
+
 
       <?php if (isset($_GET['email'])==true){  ?>
       <form name="question" method="post" enctype="multipart/form-data" action="">
+        <input type="hidden" name="emailww" value="<?php echo $_GET['email']; ?>"/>
         <input type="hidden" name="form_name" value="requestanswer"/>
         <div id="question" class="modal fade" role="dialog">
           <div class="modal-dialog modal-sm">
@@ -279,25 +249,28 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
 <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+
 <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
-<?php if(isset($_GET['email']) && (isset($_SESSION['warning']['invalidmail']))){ ?>
+<?php if(isset($_GET['email']) && isset($_SESSION['warning']['invalidmail'])  && $_SESSION['warning']['invalidmail'] == true){ ?>
 <script type="text/javascript">
          $(window).load(function(){
              $('#question').modal('show');
          });
 </script>
+
 <?php
-}else if(isset($_GET['email']) || (isset($_SESSION['warning']['invalidmail']))){
+}else if(isset($_GET['email']) && isset($_SESSION['warning']['invalidmail'])){
 ?>
 <script type="text/javascript">
            $(window).load(function(){
                $('#forgotpass').modal('show');
            });
 </script>
-<?php
-}
-?>
+  <?php
+  }
+  ?>
 </body>
 </html>
 
