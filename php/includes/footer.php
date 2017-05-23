@@ -1,3 +1,4 @@
+<a id="to-top" href="#" class="btn btn-dark btn-lg"><i class="fa fa-chevron-up fa-fw fa-1x"></i></a>
 <div class="footer">
   <div class="container">
 
@@ -44,3 +45,39 @@
       </div>
   </div>
 </div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
+<script>
+//#to-top button appears after scrolling
+var fixed = false;
+$(document).scroll(function() {
+    if ($(this).scrollTop() > 250) {
+        if (!fixed) {
+            fixed = true;
+            // $('#to-top').css({position:'fixed', display:'block'});
+            $('#to-top').show("slow", function() {
+                $('#to-top').css({
+                    position: 'fixed',
+                    display: 'block'
+                });
+            });
+        }
+    } else {
+        if (fixed) {
+            fixed = false;
+            $('#to-top').hide("slow", function() {
+                $('#to-top').css({
+                    display: 'none'
+                });
+            });
+        }
+    }
+});
+</script>

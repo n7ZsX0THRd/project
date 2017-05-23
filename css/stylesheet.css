@@ -65,7 +65,6 @@ p, div {
 .header-navbar>li>a {
   color: #fff !important;
   height: 70px !important;
-  min-width: 120px !important;
   text-align: center;
   padding: 0px 15px !important;
   background-color: #5484a4 !important;
@@ -565,6 +564,7 @@ p, div {
   right: 5px;
   background: #ea8220;
   z-index: 999;
+  color:white;
 }
 .active-menu-item{
   text-decoration: underline;

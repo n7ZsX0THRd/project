@@ -30,11 +30,50 @@ pdo_connect();
                 color: #000 !important;
                 cursor:default;
             }
-
-
             .page-link:hover{
                 background: #5484a4!important;
                 color: #FFF !important;
+            }
+
+            .rubriek_column{
+              position:relative;
+            }
+            .rubriek_char{
+              position:absolute;
+              left:-30px;
+              border-right:2px solid orange;
+              padding-top:5px;
+              height: 47px;
+              width: 35px;
+              -webkit-box-shadow: 3px 0 7px -2px #888;
+              box-shadow: 3px 0 7px -2px #888;
+              -webkit-border-top-right-radius: 50%;
+              -webkit-border-bottom-right-radius: 50%;
+              -moz-border-radius-topright: 50%;
+              -moz-border-radius-bottomright: 50%;
+              border-top-right-radius: 50%;
+              border-bottom-right-radius: 50%;
+            }
+            .anchor {
+                display: block;
+                position: relative;
+                top: -120px;
+                visibility: hidden;
+            }
+            .pagination{
+              background-color: white !important;
+              z-index:1000 !important;
+            }
+            .rubriek_column:first-of-type{
+              margin-top:50px;
+            }
+            @media(max-width:768px){
+              .page-nolink{
+                display:none;
+              }
+              .rubriek_char{
+                display:none;
+              }
             }
        </style>
   </head>
@@ -45,8 +84,8 @@ pdo_connect();
         <main class="container">
             <?php
             global $db;
-            $data = $db->query("SELECT * 
-                                FROM Rubriek 
+            $data = $db->query("SELECT *
+                                FROM Rubriek
                                 WHERE parentRubriek = -1 or parentRubriek IN (
                                                                 SELECT rubrieknummer
                                                                 FROM Rubriek
@@ -76,7 +115,7 @@ pdo_connect();
 
                 ?>
                 <nav aria-label="Page navigation example">
-                    <ul class="pagination">
+                    <ul id="sticky" class="pagination">
                     <?php
                         foreach(range('A','Z') as $char) {
                             $nRubrieken = 0;
@@ -105,8 +144,9 @@ pdo_connect();
                         if ($char==$firstChar){
                             $nRubrieken ++;
                             if($nRubrieken==1){
-                                echo '<section id="'.$char.'" class="row">';
-                                echo '<h1>'.$char.'</h1>';
+                                echo '<section  class="row rubriek_column">
+                                  <a class="anchor" id="'.$char.'"></a>';
+                                echo '<h1 class="rubriek_char">'.$char.'</h1>';
                             }
                             echo '<article class="col-md-4">';
                             echo'<h2>'.$rubriek[0].'</h2>';
@@ -117,7 +157,7 @@ pdo_connect();
                                 }
                             }
                             echo '</ul>';
-                            echo '</article>'; 
+                            echo '</article>';
                         }
                     }
                     if ($nRubrieken!=0){
@@ -129,84 +169,20 @@ pdo_connect();
                 }
 
             ?>
-
-            <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                    <?php
-                        foreach(range('A','Z') as $char) {
-                            $nRubrieken = 0;
-                            foreach($rubrieken as $rubriek){
-                                $firstChar =substr ($rubriek[0] , 0 , 1 );
-                                if ($char==$firstChar){
-                                    $nRubrieken ++;
-                                    if($nRubrieken==1){
-                                        echo '<li class="page-item"><a class="page-link" href="#'.$char.'">'.$char.'</a></li>';
-                                    }
-                                }
-                            }
-                            if($nRubrieken==0){
-                                echo '<li class="page-item"><a class="page-nolink">'.$char.'</a></li>';
-                            }
-                        }
-
-                    ?>
-                    </ul>
-                </nav>
-            </nav>
         </main>
-        <a id="to-top" href="#" class="btn btn-dark btn-lg"><i class="fa fa-chevron-up fa-fw fa-1x"></i></a>
+
 
     <?php include 'php/includes/footer.php' ?>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
+    
     <script src="js/jquery.drilldown.min.js"></script>
     <script>
       $('.drilldown').drilldown();
     </script>
+    <script src="js/jquery.sticky.js"></script>
     <script>
-    /*
-    $("li.toggle-sub").click(function(evt) {
-
-      evt.preventDefault();
-      $(this).children("span").toggleClass('glyphicon-menu-right');
-      $(this).children("span").toggleClass('glyphicon-menu-down');
-      $(this).children(".sub").toggle();
-    });
-    */
-    </script>
-    
-    <script>
-    //#to-top button appears after scrolling
-    var fixed = false;
-    $(document).scroll(function() {
-        if ($(this).scrollTop() > 250) {
-            if (!fixed) {
-                fixed = true;
-                // $('#to-top').css({position:'fixed', display:'block'});
-                $('#to-top').show("slow", function() {
-                    $('#to-top').css({
-                        position: 'fixed',
-                        display: 'block'
-                    });
-                });
-            }
-        } else {
-            if (fixed) {
-                fixed = false;
-                $('#to-top').hide("slow", function() {
-                    $('#to-top').css({
-                        display: 'none'
-                    });
-                });
-            }
-        }
+    $(document).ready(function(){
+      $("#sticky").sticky({topSpacing:70});
     });
     </script>
   </body>
