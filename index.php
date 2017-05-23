@@ -69,6 +69,39 @@ $childrenRubrieken = $childrenRubriekenQuery->fetchAll();
 
     <?php include 'php/includes/header.php' ?>
 
+  <div id="myCarousel" class="carousel slide" data-ride="carousel" style="margin-top:-20px;">
+  <!-- Indicators -->
+    <ol class="carousel-indicators" style="display:none">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+      <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+      <div class="item active">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <center>
+                <h1>Eenmaal Andermaal</h1><img src="images/hamerkleur.png" width="250">
+                <p>Veil nu snel al uw oude spullen, en vang er nog een leuk bedrag voor!</p>
+              </center>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="item">
+        <img src="chicago.jpg" alt="Chicago">
+      </div>
+
+      <div class="item">
+        <img src="ny.jpg" alt="New York">
+      </div>
+    </div>
+  </div>
+
     <?php if (isUserLoggedIn($db)){
         $user = getLoggedInUser($db);
         if($user['statusID'] == 1){
