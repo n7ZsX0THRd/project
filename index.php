@@ -133,88 +133,96 @@ $childrenRubrieken = $childrenRubriekenQuery->fetchAll();
                 <div class="container-fixed">
                   <div class="row item-row">
                     <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                      <div class="thumbnail">
-                        <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
-                        <div class="caption captionfix">
-                          <h3>Boeing 737</h3>
-                          <p>Huidige bod: <strong>€280050.-</strong></p>
-                          <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                        </div>
+                     <div class="thumbnail">
+                      <h3 style="padding-left: 10px">Boeing737</h3>
+                      <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+                      <div class="caption captionfix">
+                        <h3>COUNTDOWN</h3>
+                        <p>Huidige bod: <strong>€270000.-</strong></p>
+                        <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                       </div>
+                     </div>
                     </div>
                     <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                      <div class="thumbnail">
-                        <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
-                        <div class="caption captionfix">
-                          <h3>Boeing 737</h3>
-                          <p>Huidige bod: <strong>€270000.-</strong></p>
-                          <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                        </div>
+                     <div class="thumbnail">
+                      <h3 style="padding-left: 10px">Boeing737</h3>
+                      <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+                      <div class="caption captionfix">
+                        <h3>COUNTDOWN</h3>
+                        <p>Huidige bod: <strong>€270000.-</strong></p>
+                        <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                       </div>
+                     </div>
                     </div>
                     <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                      <div class="thumbnail">
-                        <div class="thumb_image" style="background-image:url(images/bmw.jpg);"></div>
-                        <div class="caption captionfix">
-                          <h3>BMW 530i</h3>
-                          <p>Huidige bod: <strong>€80000.-</strong></p>
-                          <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                        </div>
+                     <div class="thumbnail">
+                      <h3 style="padding-left: 10px">Boeing737</h3>
+                      <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+                      <div class="caption captionfix">
+                        <h3>COUNTDOWN</h3>
+                        <p>Huidige bod: <strong>€270000.-</strong></p>
+                        <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                       </div>
+                     </div>
                     </div>
                     <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                      <div class="thumbnail">
-                        <div class="thumb_image" style="background-image:url(images/bmw.jpg);"></div>
-                          <div class="caption captionfix">
-                            <h3>BMW 530i</h3>
-                            <p>Huidige bod: <strong>€80000.-</strong></p>
-                            <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                          </div>
-                        </div>
+                     <div class="thumbnail">
+                      <h3 style="padding-left: 10px">Boeing737</h3>
+                      <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+                      <div class="caption captionfix">
+                        <h3>COUNTDOWN</h3>
+                        <p>Huidige bod: <strong>€270000.-</strong></p>
+                        <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                      </div>
+                     </div>
                     </div>
                   </div>
                 </div>
                 <div class="row item-row">
                   <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                    <div class="thumbnail">
+                     <div class="thumbnail">
+                      <h3 style="padding-left: 10px">Boeing737</h3>
                       <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
                       <div class="caption captionfix">
-                        <h3>Boeing 737</h3>
-                        <p>Huidige bod: <strong>€280050.-</strong></p>
-                        <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                    <div class="thumbnail">
-                      <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
-                      <div class="caption captionfix">
-                        <h3>Boeing 737</h3>
+                        <h3>COUNTDOWN</h3>
                         <p>Huidige bod: <strong>€270000.-</strong></p>
                         <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                       </div>
+                     </div>
                     </div>
-                  </div>
                   <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                    <div class="thumbnail">
-                      <div class="thumb_image" style="background-image:url(images/bmw.jpg);"></div>
+                     <div class="thumbnail">
+                      <h3 style="padding-left: 10px">Boeing737</h3>
+                      <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
                       <div class="caption captionfix">
-                        <h3>BMW 530i</h3>
-                        <p>Huidige bod: <strong>€80000.-</strong></p>
+                        <h3>COUNTDOWN</h3>
+                        <p>Huidige bod: <strong>€270000.-</strong></p>
                         <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                       </div>
+                     </div>
                     </div>
-                  </div>
                   <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                    <div class="thumbnail">
-                      <div class="thumb_image" style="background-image:url(images/bmw.jpg);"></div>
-                        <div class="caption captionfix">
-                          <h3>BMW 530i</h3>
-                          <p>Huidige bod: <strong>€80000.-</strong></p>
-                          <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                        </div>
+                     <div class="thumbnail">
+                      <h3 style="padding-left: 10px">Boeing737</h3>
+                      <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+                      <div class="caption captionfix">
+                        <h3>COUNTDOWN</h3>
+                        <p>Huidige bod: <strong>€270000.-</strong></p>
+                        <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                       </div>
-                  </div>
+                     </div>
+                    </div>
+                  <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                     <div class="thumbnail">
+                      <h3 style="padding-left: 10px">Boeing737</h3>
+                      <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+                      <div class="caption captionfix">
+                        <h3>COUNTDOWN</h3>
+                        <p>Huidige bod: <strong>€270000.-</strong></p>
+                        <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                      </div>
+                     </div>
+                    </div>
                 </div>
               </div>
             </div>

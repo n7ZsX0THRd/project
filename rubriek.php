@@ -146,7 +146,50 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
         }
         ?>
         <div class="row content_top_offset">
-
+          <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+            <div class="thumbnail">
+              <h3 style="padding-left: 10px">Boeing737</h3>
+              <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+              <div class="caption captionfix">
+                <h3>COUNTDOWN</h3>
+                <p>Huidige bod: <strong>€270000.-</strong></p>
+                <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+            <div class="thumbnail">
+              <h3 style="padding-left: 10px">Boeing737</h3>
+              <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+              <div class="caption captionfix">
+                <h3>COUNTDOWN</h3>
+                <p>Huidige bod: <strong>€270000.-</strong></p>
+                <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+            <div class="thumbnail">
+              <h3 style="padding-left: 10px">Boeing737</h3>
+              <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+              <div class="caption captionfix">
+                <h3>COUNTDOWN</h3>
+                <p>Huidige bod: <strong>€270000.-</strong></p>
+                <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+            <div class="thumbnail">
+              <h3 style="padding-left: 10px">Boeing737</h3>
+              <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+              <div class="caption captionfix">
+                <h3>COUNTDOWN</h3>
+                <p>Huidige bod: <strong>€270000.-</strong></p>
+                <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
