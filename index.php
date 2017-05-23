@@ -73,12 +73,13 @@ $childrenRubrieken = $childrenRubriekenQuery->fetchAll();
   <!-- Indicators -->
     <ol class="carousel-indicators" style="display:none">
       <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+
       <?php
         if(isUserLoggedIn($db)){
-          ?>
-          <li data-target="#myCarousel" data-slide-to="1"></li>
-          <li data-target="#myCarousel" data-slide-to="2"></li>
-          <?php
+      ?>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+      <?php
         }
       ?>
     </ol>
@@ -91,20 +92,31 @@ $childrenRubrieken = $childrenRubriekenQuery->fetchAll();
             <div class="col-lg-12">
               <center>
                 <h1>Eenmaal Andermaal</h1><img src="images/hamerkleur.png" width="250">
-                <p>Veil nu snel al uw oude spullen, en vang er nog een leuk bedrag voor!</p>
+                <p style="font-size:16px;">Veil nu snel al uw oude spullen, en vang er nog een leuk bedrag voor!</p>
               </center>
             </div>
           </div>
         </div>
       </div>
-
+      <?php
+        if(isUserLoggedIn($db)){
+      ?>
       <div class="item">
-        <img src="chicago.jpg" alt="Chicago">
+        <center>
+          <h1>Jouw biedingen</h1>
+          <p style="font-size:16px;">Veil nu snel al uw oude spullen, en vang er nog een leuk bedrag voor!</p>
+        </center>
       </div>
 
       <div class="item">
-        <img src="ny.jpg" alt="New York">
+        <center>
+          <h1>Jouw favorieten</h1>
+          <p style="font-size:16px;">Veil nu snel al uw oude spullen, en vang er nog een leuk bedrag voor!</p>
+        </center>
       </div>
+      <?php
+        }
+      ?>
     </div>
   </div>
 
@@ -146,7 +158,7 @@ $childrenRubrieken = $childrenRubriekenQuery->fetchAll();
                 <h3></h3>
                 <ul class="menubar">
                   <li class="toggle-sub active">
-                    <a href="">Rubrieken</a>
+                    <a href="">Actieve rubrieken</a>
                   </li>
                   <ul class="sub">
                     <?php

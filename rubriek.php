@@ -33,6 +33,27 @@ $breadCrumbQuery = $db->prepare("SELECT * FROM dbo.fnRubriekOuders(?) ORDER BY v
 $breadCrumbQuery->execute(array(htmlspecialchars($rubriekID)));
 $breadCrumb = $breadCrumbQuery->fetchAll();
 
+
+$voorwerpenQuery = $db->prepare("SELECT TOP 30
+	v.voorwerpnummer,
+	v.titel,
+	v.startprijs,
+	vir.rubrieknummer,
+	r.parentRubriek
+
+	FROM
+		Voorwerp v
+		JOIN
+			VoorwerpInRubriek vir
+				ON v.voorwerpnummer = vir.voorwerpnummer
+		JOIN
+			Rubriek r
+				ON r.rubrieknummer = vir.rubrieknummer
+		WHERE dbo.fnRubriekIsAfstammelingVan(vir.rubrieknummer,?) = 1
+		ORDER BY v.titel ASC");
+
+$voorwerpenQuery->execute(array($rubriek['rubrieknummer'])); // RUBRIEK ID, START NUMBER, END NUMBER
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -146,50 +167,36 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
         }
         ?>
         <div class="row content_top_offset">
-          <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-            <div class="thumbnail">
-              <h3 style="padding-left: 10px">Boeing737</h3>
-              <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
-              <div class="caption captionfix">
-                <h3>COUNTDOWN</h3>
-                <p>Huidige bod: <strong>€270000.-</strong></p>
-                <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+          <?php
+            $count = 0;
+            foreach($voorwerpenQuery as $row)
+            {
+          ?>
+            <div class="col-sm-6 col-md-6 col-lg-12 col-sm-6">
+              <div class="row thumbnail">
+                <div class="col-lg-2">
+                  <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+                </div>
+                <div class="col-lg-10">
+                  <h3 style="padding-left: 10px;font-size:18px;"><?php echo $row['titel']?></h3>
+                  <div class="caption captionfix">
+                    <h3 style="font-size:14px;">COUNTDOWN</h3>
+                    <p>Huidige bod: <strong>€270000.-</strong></p>
+                    <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-            <div class="thumbnail">
-              <h3 style="padding-left: 10px">Boeing737</h3>
-              <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
-              <div class="caption captionfix">
-                <h3>COUNTDOWN</h3>
-                <p>Huidige bod: <strong>€270000.-</strong></p>
-                <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-            <div class="thumbnail">
-              <h3 style="padding-left: 10px">Boeing737</h3>
-              <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
-              <div class="caption captionfix">
-                <h3>COUNTDOWN</h3>
-                <p>Huidige bod: <strong>€270000.-</strong></p>
-                <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-            <div class="thumbnail">
-              <h3 style="padding-left: 10px">Boeing737</h3>
-              <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
-              <div class="caption captionfix">
-                <h3>COUNTDOWN</h3>
-                <p>Huidige bod: <strong>€270000.-</strong></p>
-                <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-              </div>
-            </div>
-          </div>
+          <?php
+            $count++;
+
+              if($count == 4){
+
+                echo '<div class="clearfix visible-lg-block"></div>';
+                $count = 0;
+              }
+            }
+          ?>
         </div>
       </div>
     </div>
