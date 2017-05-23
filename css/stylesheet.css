@@ -596,3 +596,13 @@ p, div {
 .carousel-inner > .item{
    background-color: #EFEFEF;
 }
+
+.item-thumb{
+  border-bottom:1px solid #E6E6E6;
+  padding-bottom:15px;
+  padding-top:15px;
+}
+.item-thumb > div > img{
+  width:100%;
+  padding:5px;
+}

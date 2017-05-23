@@ -39,7 +39,8 @@ $voorwerpenQuery = $db->prepare("SELECT TOP 30
 	v.titel,
 	v.startprijs,
 	vir.rubrieknummer,
-	r.parentRubriek
+	r.parentRubriek,
+  v.looptijdeinde
 
 	FROM
 		Voorwerp v
@@ -167,23 +168,41 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'])); // RUBRIEK ID, STAR
         }
         ?>
         <div class="row content_top_offset">
+          <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12"  style="border-bottom:2px solid #E6E6E6;">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Zoek naar een veiling..." aria-describedby="sizing-addon2">
+              <span class="input-group-addon" id="sizing-addon2"><span class="glyphicon glyphicon-search"></span></span>
+            </div>
+              <p style="display:inline-block;margin-top:20px;">Sorteer op:<div style="margin-left:10px;" class="btn-group" role="group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Dropdown
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Dropdown link</a></li>
+                  <li><a href="#">Dropdown link</a></li>
+                </ul>
+              </div></p>
+
+              <p></p>
+          </div>
           <?php
             $count = 0;
             foreach($voorwerpenQuery as $row)
             {
           ?>
             <div class="col-sm-6 col-md-6 col-lg-12 col-sm-6">
-              <div class="row thumbnail">
-                <div class="col-lg-2">
-                  <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
+              <div class="row item-thumb">
+                <div class="col-lg-3">
+                  <img src="images/vliegtuig.png">
                 </div>
-                <div class="col-lg-10">
-                  <h3 style="padding-left: 10px;font-size:18px;"><?php echo $row['titel']?></h3>
-                  <div class="caption captionfix">
-                    <h3 style="font-size:14px;">COUNTDOWN</h3>
-                    <p>Huidige bod: <strong>€270000.-</strong></p>
-                    <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                  </div>
+                <div class="col-lg-9">
+                  <h3 style="font-size:18px;"><?php echo $row['titel']?></h3>
+
+                  <h3 style="font-size:14px;" id="looptijdeinde" data-looptijd="<?php echo $row['looptijdeinde']?>"></h3>
+                  <p>Start prijs: <strong><?php echo $row['startprijs']?></strong></p>
+                  <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+
                 </div>
               </div>
             </div>
@@ -214,7 +233,34 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'])); // RUBRIEK ID, STAR
   <script src="bootstrap/dist/js/bootstrap.min.js"></script>
   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
   <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
+  <script>
+  var x = setInterval(function() {
 
+
+    $( "h3#looptijdeinde" ).each(function( index ) {
+        var countDownDate = new Date($( this ).data("looptijd")).getTime();
+        var now = new Date().getTime();
+        var distance = countDownDate - now;
+
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        $( this ).text(days + "d " + hours + "h "
+        + minutes + "m " + seconds + "s ");
+
+        if (distance < 0) {
+          //clearInterval(x);
+          $( this ).text("EXPIRED");
+        }
+    });
+
+  }, 1000);
+
+  $('.dropdown-toggle').dropdown()
+
+  </script>
 </body>
 </html>
 <?php
