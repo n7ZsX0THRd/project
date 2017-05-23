@@ -29,6 +29,12 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
 
 <div class="container">
   <div class="row">
+    <div class="col-md-4 col-lg-2 col-sm-4 sidebar">
+      <h3></h3>
+      <?php
+        include 'php/includes/sidebar.php';
+      ?>
+    </div>
     <div class="col-md-8 col-lg-10 col-sm-8">
       <div class="container-fluid content_col">
         <?php
@@ -65,6 +71,18 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
         }
         ?>
         <div class="row content_top_offset">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active"><a href="#veiling" aria-controls="veiling" role="tab" data-toggle="tab">Veiling</a></li>
+              <li role="presentation"><a href="#bieden" class="bg-success" aria-controls="bieden" role="tab" data-toggle="tab">Bieden</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="veiling">
+                            <div class="col-lg-12 timer_row" >
+                                <h3 id="productCountDown">COUNTDOWN</h3>
+                            </div>
                             <div class="col-lg-6 left_content_row content_top_offset">
                                 <div class="row thumb-image">
                                   <div class="carousel slide article-slide" id="article-photo-carousel">
@@ -116,96 +134,85 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                               <div class="text-right">
                                 <h3>Hoogste bod: €900.-</h3>
                               </div>
-          
+                            </div>
               </div>
               <div role="tabpanel" class="tab-pane" id="bieden">
                 <div class="col-lg-12 timer_row">
                     <h3 id="productCountDown2">COUNTDOWN</h3>
                 </div>
+                <div class="col-lg-12">
+                  <div class="panel-body">
+                         <ul class="chat">
+                             <li class="left clearfix"><span class="chat-img pull-left">
+                                 <img src="http://placehold.it/50/55C1E7/fff&text=JACK" alt="User Avatar" class="img-circle" />
+                             </span>
+                                 <div class="chat-body clearfix">
+                                     <div class="header">
+                                         <strong class="primary-font">Jack de Koning</strong> <small class="pull-right text-muted">
+                                             <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
+                                     </div>
+                                     <p>
+                                         €500.- geboden
+                                     </p>
+                                 </div>
+                             </li>
+                             <li class="left clearfix"><span class="chat-img pull-left">
+                                  <img src="http://placehold.it/50/55C1E7/fff&text=JACK" alt="User Avatar" class="img-circle" />
+                             </span>
+                                 <div class="chat-body clearfix">
+                                     <div class="header">
+                                         <strong class="primary-font">Jack de Koning</strong> <small class="pull-right text-muted">
+                                             <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
+                                     </div>
+                                     <p>
+                                         €600.- geboden
+                                     </p>
+                                 </div>
+                             </li>
+                             <li class="left clearfix"><span class="chat-img pull-left">
+                                 <img src="http://placehold.it/50/55C1E7/fff&text=JACK" alt="User Avatar" class="img-circle" />
+                             </span>
+                                 <div class="chat-body clearfix">
+                                     <div class="header">
+                                         <strong class="primary-font">Jack de Koning</strong> <small class="pull-right text-muted">
+                                             <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
+                                     </div>
+                                     <p>
+                                         €700.- geboden
+                                     </p>
+                                 </div>
+                             </li>
+                             <li class="right clearfix"><span class="chat-img pull-right">
+                                 <img src="http://placehold.it/50/FA6F57/fff&text=KONING" alt="User Avatar" class="img-circle" />
+                             </span>
+                                 <div class="chat-body clearfix">
+                                     <div class="header">
+                                         <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>15 mins ago</small>
+                                         <strong class="pull-right primary-font">Koning Arthur</strong>
+                                     </div>
+                                     <p style="float:right;">
+                                         €900.- geboden
+                                     </p>
+                                 </div>
+                             </li>
+                         </ul>
+                     </div>
+                     <div class="input-group" style="margin-left:-15px;margin-right:-15px;width:40%;float:right;">
+                        <span class="input-group-addon">&euro;</span>
+                        <input style="height:36px;"class="form-control" type="number" required name="price" min="0" value="0" step="any">
+                        <span class="input-group-btn">
+                          <button class="btn btn-orange" type="button"><img src="images/hamerwit.png" class="auction-hammer"></button>
+                        </span>
+                      </div>
+                </div>
 
               </div>
+            </div>
         </div>
       </div>
     </div>
   </div>
 
-</div>
-<div class="container">
-  <div class="row">
-    <div class="col-md-8 col-lg-10 col-sm-8">
-      <div class="container-fluid content_col">
-        <hr>
-        <div class="col-lg-12 timer_row" >
-            <h3 id="productCountDown">COUNTDOWN</h3>
-        </div>
-        <div class="col-lg-12">
-          <div class="panel-body">
-                 <ul class="chat">
-                     <li class="left clearfix"><span class="chat-img pull-left">
-                         <img src="http://placehold.it/50/55C1E7/fff&text=JACK" alt="User Avatar" class="img-circle" />
-                     </span>
-                         <div class="chat-body clearfix">
-                             <div class="header">
-                                 <strong class="primary-font">Jack de Koning</strong> <small class="pull-right text-muted">
-                                     <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
-                             </div>
-                             <p>
-                                 €500.- geboden
-                             </p>
-                         </div>
-                     </li>
-                     <li class="left clearfix"><span class="chat-img pull-left">
-                          <img src="http://placehold.it/50/55C1E7/fff&text=JACK" alt="User Avatar" class="img-circle" />
-                     </span>
-                         <div class="chat-body clearfix">
-                             <div class="header">
-                                 <strong class="primary-font">Jack de Koning</strong> <small class="pull-right text-muted">
-                                     <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
-                             </div>
-                             <p>
-                                 €600.- geboden
-                             </p>
-                         </div>
-                     </li>
-                     <li class="left clearfix"><span class="chat-img pull-left">
-                         <img src="http://placehold.it/50/55C1E7/fff&text=JACK" alt="User Avatar" class="img-circle" />
-                     </span>
-                         <div class="chat-body clearfix">
-                             <div class="header">
-                                 <strong class="primary-font">Jack de Koning</strong> <small class="pull-right text-muted">
-                                     <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
-                             </div>
-                             <p>
-                                 €700.- geboden
-                             </p>
-                         </div>
-                     </li>
-                     <li class="right clearfix"><span class="chat-img pull-right">
-                         <img src="http://placehold.it/50/FA6F57/fff&text=KONING" alt="User Avatar" class="img-circle" />
-                     </span>
-                         <div class="chat-body clearfix">
-                             <div class="header">
-                                 <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>15 mins ago</small>
-                                 <strong class="pull-right primary-font">Koning Arthur</strong>
-                             </div>
-                             <p style="float:right;">
-                                 €900.- geboden
-                             </p>
-                         </div>
-                     </li>
-                 </ul>
-             </div>
-             <div class="input-group" style="margin-left:-15px;margin-right:-15px;width:40%;float:right;">
-                <span class="input-group-addon">&euro;</span>
-                <input style="height:36px;"class="form-control" type="number" required name="price" min="0" value="0" step="any">
-                <span class="input-group-btn">
-                  <button class="btn btn-orange" type="button"><img src="images/hamerwit.png" class="auction-hammer"></button>
-                </span>
-              </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 <?php include 'php/includes/footer.php' ?>
 
