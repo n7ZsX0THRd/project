@@ -592,3 +592,7 @@ p, div {
     left:0px;
   }
 }
+
+.carousel-inner > .item{
+   background-color: #EFEFEF;
+}
