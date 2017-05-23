@@ -12,70 +12,7 @@ pdo_connect();
 
         <?php include 'php/includes/default_header.php'; ?>
         <title>Rubrieken overzicht - Eenmaal Andermaal</title>
-        <style>
-         hr {
-                -moz-border-bottom-colors: none;
-                -moz-border-image: none;
-                -moz-border-left-colors: none;
-                -moz-border-right-colors: none;
-                -moz-border-top-colors: none;
-                border-color: #EEEEEE -moz-use-text-color #FFFFFF;
-                border-style: solid none;
-                border-width: 1px 0;
-                margin: 18px 0;
-
-            }
-            .page-nolink{
-                background: #efefef!important;
-                color: #000 !important;
-                cursor:default;
-            }
-            .page-link:hover{
-                background: #5484a4!important;
-                color: #FFF !important;
-            }
-
-            .rubriek_column{
-              position:relative;
-            }
-            .rubriek_char{
-              position:absolute;
-              left:-30px;
-              border-right:2px solid orange;
-              padding-top:5px;
-              height: 47px;
-              width: 35px;
-              -webkit-box-shadow: 3px 0 7px -2px #888;
-              box-shadow: 3px 0 7px -2px #888;
-              -webkit-border-top-right-radius: 50%;
-              -webkit-border-bottom-right-radius: 50%;
-              -moz-border-radius-topright: 50%;
-              -moz-border-radius-bottomright: 50%;
-              border-top-right-radius: 50%;
-              border-bottom-right-radius: 50%;
-            }
-            .anchor {
-                display: block;
-                position: relative;
-                top: -120px;
-                visibility: hidden;
-            }
-            .pagination{
-              background-color: white !important;
-              z-index:1000 !important;
-            }
-            .rubriek_column:first-of-type{
-              margin-top:50px;
-            }
-            @media(max-width:768px){
-              .page-nolink{
-                display:none;
-              }
-              .rubriek_char{
-                display:none;
-              }
-            }
-       </style>
+        <link href="css/rubriek_overzicht.css" rel="stylesheet">
   </head>
 
   <body>
@@ -174,7 +111,7 @@ pdo_connect();
 
     <?php include 'php/includes/footer.php' ?>
 
-    
+
     <script src="js/jquery.drilldown.min.js"></script>
     <script>
       $('.drilldown').drilldown();

@@ -6,6 +6,12 @@ body {
   padding-bottom: 30rem;
   min-height: 100%;
 }
+@media(max-width:768px){
+  body {
+    padding-bottom: 40rem;
+  }
+
+}
 
 html {
   height: 100%;
@@ -572,4 +578,12 @@ p, div {
 }
 .nonactive-menu-item{
 
+}
+
+@media(max-width:768px){
+  .navbar-brand{
+    position:absolute;
+    top:0px;
+    left:0px;
+  }
 }
