@@ -227,6 +227,12 @@ p, div {
   padding-left: 50px;
   padding-right: 50px;
 }
+@media(max-width:768px){
+  .content_col {
+    padding-left:10px;
+    padding-right:10px;
+  }
+}
 
 .content_col>.navigation-row {
   margin-top: 25px;

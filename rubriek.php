@@ -173,16 +173,28 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'])); // RUBRIEK ID, STAR
               <input type="text" class="form-control" placeholder="Zoek naar een veiling..." aria-describedby="sizing-addon2">
               <span class="input-group-addon" id="sizing-addon2"><span class="glyphicon glyphicon-search"></span></span>
             </div>
-              <p style="display:inline-block;margin-top:20px;">Sorteer op:<div style="margin-left:10px;" class="btn-group" role="group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Dropdown
-                  <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                  <li><a href="#">Dropdown link</a></li>
-                  <li><a href="#">Dropdown link</a></li>
-                </ul>
-              </div></p>
+              <p style="display:inline-block;margin-top:20px;">
+                  Sorteer op:
+                  <div style="margin-left:10px;" class="btn-group" role="group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Resterende tijd <span class="glyphicon glyphicon-sort-by-attributes-alt"></span>
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Hoogste bod <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
+                        <li><a href="#">Hoogste bod <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
+                      <li role="separator" class="divider"></li>
+                        <li><a href="#">Resterende tijd <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
+                        <li><a href="#">Resterende tijd <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
+                      <li role="separator" class="divider"></li>
+                        <li><a href="#">Beoordeling verkoper <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
+                        <li><a href="#">Beoordeling verkoper <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
+                      <li role="separator" class="divider"></li>
+                        <li><a href="#">Aantal biedingen <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
+                        <li><a href="#">Aantal biedingen <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
+                    </ul>
+                  </div>
+              </p>
 
               <p></p>
           </div>
