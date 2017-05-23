@@ -5,6 +5,25 @@
     include ('php/user.php');
     pdo_connect();
 
+    $selectedRubriek = -1;
+    $selectedSubRubriek = NULL;
+    $selectedSubSubRubriek = NULL;
+    $selectedSubSubSubRubriek = NULL;
+    $subRubrieken = NULL;
+    $subSubRubrieken = NULL;
+    $subSubSubRubrieken = NULL;
+
+    global $db;
+    $data = $db->query("SELECT rubrieknaam, rubrieknummer
+                        FROM Rubriek
+                        WHERE parentRubriek = -1 OR parentRubriek is NULL
+                        ORDER BY parentRubriek ASC, volgnr ASC, rubrieknaam ASC");
+                        /*
+        while ($row = $data->fetch()){
+            echo "$row[rubrieknaam]</br>";
+        }*/
+
+    $hoofdRubrieken = $data->fetchAll();
 
     if (!empty($_POST)){
         if(!empty($_POST['rubriek'])){
@@ -56,23 +75,12 @@
                 }
             }
 
-        } else {
-            $selectedRubriek = -1;
         }
-    }else {
-        $selectedRubriek = -1;    
     }
-    global $db;
-    $data = $db->query("SELECT rubrieknaam, rubrieknummer
-                        FROM Rubriek
-                        WHERE parentRubriek = -1 OR parentRubriek is NULL
-                        ORDER BY parentRubriek ASC, rubrieknaam ASC");
-                        /*
-        while ($row = $data->fetch()){
-            echo "$row[rubrieknaam]</br>";
-        }*/
 
-    $hoofdRubrieken = $data->fetchAll();
+
+
+    
 
 ?>
 <!DOCTYPE html>
@@ -130,6 +138,7 @@
                     <div class="form-group">
                         <label for="sel1">Selecteer rubriek:</label>
                         <select class="form-control" id="rubriek" name="rubriek" onchange="change()">
+                        <option selected disabled>selecteer rubriek</option>
                                 <?php
                                 //$selectedRubriek = $_POST['rubriek'];
                                 foreach($hoofdRubrieken as $rubriek){
@@ -137,6 +146,7 @@
                                     . ($selectedRubriek == $rubriek["rubrieknummer"] ? 'selected="selected"' : '' ) .'
                                     >'.$rubriek["rubrieknaam"].'</option>';
                                 }
+                                
                                 ?>
                         </select>
                     </div>
@@ -145,13 +155,23 @@
                 <article class="col-md-3">
                     <div class="form-group">
                         <label for="sel1">Selecteer sub-rubriek:</label>
-                        <select class="form-control" id="sub-rubriek" name="sub-rubriek" onchange="change()">
+                        <select class="form-control" id="sub-rubriek" name="sub-rubriek" onchange="change()"
+                        <?php
+                                if ($selectedRubriek == -1 || is_null($selectedSubRubriek)){
+                                    echo ' disabled="disabled"';
+                                }
+
+                                ?>
+                                >
+                                <option selected disabled>selecteer sub-rubriek</option>
                                 <?php
                                 //$selectedRubriek = $_POST['sub-rubriek'];
+                                if (!is_null($subRubrieken)){
                                 foreach($subRubrieken as $rubriek){
                                     echo '<option name="sub-rubriek" value="'.$rubriek["rubrieknummer"].'"'
                                     . ($selectedSubRubriek == $rubriek["rubrieknummer"] ? 'selected="selected"' : '' ) .'
                                     >'.$rubriek["rubrieknaam"].'</option>';
+                                }
                                 }
                                 ?>
                         </select>
@@ -161,14 +181,25 @@
                 <article class="col-md-3">
                     <div class="form-group">
                         <label for="sel1">Selecteer sub-sub-rubriek:</label>
-                        <select class="form-control" id="sub-sub-rubriek" name="sub-sub-rubriek" onchange="change()">
+                        <select class="form-control" id="sub-sub-rubriek" name="sub-sub-rubriek" onchange="change()"
+                        
+                        <?php
+                                 if (is_null($selectedSubRubriek)  || is_null($selectedSubSubRubriek)){
+                                    echo ' disabled="disabled"';
+                                }
+
+                                ?>
+                                >
+                                <option selected disabled>selecteer sub-sub-rubriek</option>
                                 <?php
                                // $selectedRubriek = $_POST['sub-sub-rubriek'];
+                               if (!is_null($subSubRubrieken)){
                                 foreach($subSubRubrieken as $rubriek){
                                     echo '<option name="sub-sub-rubriek" value="'.$rubriek["rubrieknummer"].'"'
                                     . ($selectedSubSubRubriek == $rubriek["rubrieknummer"] ? 'selected="selected"' : '' ) .'
                                     >'.$rubriek["rubrieknaam"].'</option>';
                                 }
+                               }
                                 ?>
                         </select>
                     </div>
@@ -179,19 +210,22 @@
                         <label for="sel1">Selecteer sub-sub-sub-rubriek:</label>
                         <select class="form-control" id="sub-sub-sub-rubriek" name="sub-sub-sub-rubriek" onchange="change()" 
                                 <?php
-                                /*if (is_null($selectedSubSubRubriek)){
-                                    echo 'disabled';
-                                }*/
-                                
+                                 if (is_null($selectedSubSubRubriek) || is_null($selectedSubSubSubRubriek)){
+                                    echo ' disabled="disabled"';
+                                }
+
                                 ?>
                                 >
+                                <option selected disabled>selecteer sub-sub-sub-rubriek</option>
                                 <?php
                                // $selectedRubriek = $_POST['sub-sub-rubriek'];
-                                foreach($subSubSubRubrieken as $rubriek){
-                                    echo '<option name="sub-sub-sub-rubriek" value="'.$rubriek["rubrieknummer"].'"'
-                                    . ($selectedSubSubSubRubriek == $rubriek["rubrieknummer"] ? 'selected="selected"' : '' ) .'
-                                    >'.$rubriek["rubrieknaam"].'</option>';
-                                }
+                               if (!is_null($subSubSubRubrieken)){
+                                    foreach($subSubSubRubrieken as $rubriek){
+                                        echo '<option name="sub-sub-sub-rubriek" value="'.$rubriek["rubrieknummer"].'"'
+                                        . ($selectedSubSubSubRubriek == $rubriek["rubrieknummer"] ? 'selected="selected"' : '' ) .'
+                                        >'.$rubriek["rubrieknaam"].'</option>';
+                                    }
+                               }
                                 ?>
                         </select>
                     </div>
@@ -219,48 +253,125 @@
             </article>
             <article class="col-md-3">
                 <div class="form-group">
-                    <input type="text" class="form-control" id="nieuwe-rubriek">
+                    <input type="text" class="form-control" id="nieuwe-sub-rubriek"
+                     <?php
+                                if ($selectedRubriek == -1){
+                                    echo ' disabled="disabled"';
+                                }
+
+                                ?>
+                                >
                     <label for="selectie">
                         <div class="radio">
-                            <label><input type="radio" name="optradio">Voeg toe</label>
+                            <label><input type="radio" name="optradio" <?php
+                                if ($selectedRubriek == -1){
+                                    echo ' disabled="disabled"';
+                                }
+
+                                ?>
+                                >Voeg toe</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="optradio">Wijzig</label>
+                            <label><input type="radio" name="optradio" <?php
+                                if ($selectedRubriek == -1){
+                                    echo ' disabled="disabled"';
+                                }
+
+                                ?>
+                                >Wijzig</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="optradio">Verwijder</label>
+                            <label><input type="radio" name="optradio" <?php
+                                if ($selectedRubriek == -1){
+                                    echo ' disabled="disabled"';
+                                }
+
+                                ?>
+                                >Verwijder</label>
                         </div>
                     </label>
                 </div>
             </article>
             <article class="col-md-3">
                 <div class="form-group">
-                    <input type="text" class="form-control" id="nieuwe-rubriek">
+                    <input type="text" class="form-control" id="nieuwe-sub-sub-rubriek"
+                    <?php
+                                 if (is_null($selectedSubRubriek)  || is_null($selectedSubSubRubriek)){
+                                    echo ' disabled="disabled"';
+                                }
+
+                                ?>
+                                >
                     <label for="selectie">
                         <div class="radio">
-                            <label><input type="radio" name="optradio">Voeg toe</label>
+                            <label><input type="radio" name="optradio"<?php
+                                 if (is_null($selectedSubRubriek)  || is_null($selectedSubSubRubriek)){
+                                    echo ' disabled="disabled"';
+                                }
+
+                                ?>
+                                >Voeg toe</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="optradio">Wijzig</label>
+                            <label><input type="radio" name="optradio"<?php
+                                 if (is_null($selectedSubRubriek)  || is_null($selectedSubSubRubriek)){
+                                    echo ' disabled="disabled"';
+                                }
+
+                                ?>
+                                >Wijzig</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="optradio">Verwijder</label>
+                            <label><input type="radio" name="optradio"<?php
+                                 if (is_null($selectedSubRubriek)  || is_null($selectedSubSubRubriek)){
+                                    echo ' disabled="disabled"';
+                                }
+
+                                ?>
+                                >Verwijder</label>
                         </div>
                     </label>
                 </div>
             </article>
             <article class="col-md-3">
                 <div class="form-group">
-                    <input type="text" class="form-control" id="nieuwe-rubriek">
+                    <input type="text" class="form-control" id="nieuwe-sub-sub-sub-rubriek" <?php
+                                 if (is_null($selectedSubSubRubriek) || is_null($selectedSubSubSubRubriek)){
+                                    echo ' disabled="disabled"';
+                                }
+
+                                ?>
+                                >
                     <label for="selectie">
                         <div class="radio">
-                            <label><input type="radio" name="optradio">Voeg toe</label>
+                            <label><input type="radio" name="optradio"
+                            <?php
+                                 if (is_null($selectedSubSubRubriek) || is_null($selectedSubSubSubRubriek)){
+                                    echo ' disabled="disabled"';
+                                }
+
+                                ?>
+                                >Voeg toe</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="optradio">Wijzig</label>
+                            <label><input type="radio" name="optradio"
+                            <?php
+                                 if (is_null($selectedSubSubRubriek) || is_null($selectedSubSubSubRubriek)){
+                                    echo ' disabled="disabled"';
+                                }
+
+                                ?>
+                                >Wijzig</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="optradio">Verwijder</label>
+                            <label><input type="radio" name="optradio"
+                            <?php
+                                 if (is_null($selectedSubSubRubriek) || is_null($selectedSubSubSubRubriek)){
+                                    echo ' disabled="disabled"';
+                                }
+
+                                ?>
+                                >Verwijder</label>
                         </div>
                     </label>
                 </div>
