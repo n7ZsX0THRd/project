@@ -30,7 +30,7 @@
     </li>
   </ul>
   <li class="toggle-sub <?php if($_SESSION['menu']['sub'] === 'ma'){ echo 'active'; }?>">
-    <a href="">Mijn Account</a>
+    <a href="account.php">Mijn Account</a>
   </li>
   <ul class="sub">
     <li>

@@ -45,11 +45,41 @@ pdo_connect(); ?>
     <?php include 'php/includes/header.php' ?>
 
 
-    <main class="container">
-        <section class="row">
+    <div class="container">
+      <div class="col-md-3 col-lg-2 col-sm-4 sidebar">
+        <?php
+          if(isUserLoggedIn($db))
+            include 'php/includes/sidebar.php';
+          else {
+            ?>
+              <h3></h3>
+              <ul class="menubar">
+                <li class="toggle-sub active">
+                  <a href="">Rubrieken</a>
+                </li>
+                <ul class="sub">
+                  <?php
+                    foreach($childrenRubrieken as $row)
+                    {
+                      ?>
+                      <li>
+                        <a href="rubriek.php?rubriek=<?php echo $row['rubrieknummer']; ?>"><?php echo $row['rubrieknaam']; ?></a>
+                      </li>
+                      <?php
+                    }
+                  ?>
+                </ul>
+              </ul>
+            <?php
+          }
+        ?>
+      </div>
+      <div class="col-md-9 col-lg-10 col-sm-8">
+        <div class="container-fluid content_col">
+        <div class="row">
             <h1 style="margin-bottom: 4%" > Acties </h1>
             <div class="row item-row">
-              <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+              <div  style="cursor:hand" onclick="window.location='index.php';" class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                 <div class="thumbnail">
                   <img class="account_icons"src=
                   "images/money.png"/>
@@ -58,7 +88,7 @@ pdo_connect(); ?>
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+              <div style="cursor:hand" onclick="window.location='index.php';"  class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                 <div class="thumbnail">
                   <img class="account_icons" src=
                   "images/star.png"/>
@@ -67,7 +97,7 @@ pdo_connect(); ?>
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+              <div style="cursor:hand" onclick="window.location='index.php';" class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                 <div class="thumbnail">
                   <img class="account_icons" src=
                   "images/menu.png"/>
@@ -76,7 +106,7 @@ pdo_connect(); ?>
                   </div>
                 </div>
               </div>
-                <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                <div style="cursor:hand" onclick="window.location='logout.php';"  class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                   <div class="thumbnail">
                     <img class="account_icons" src=
                     "images/logout.png"/>
@@ -85,8 +115,10 @@ pdo_connect(); ?>
                     </div>
                   </div>
                 </div>
-        </section>
-    </main>
+              </div>
+        </div>
+      </div>
+    </div>
 
     <?php include 'php/includes/footer.php' ?>
     <!-- Bootstrap core JavaScript
