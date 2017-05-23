@@ -101,6 +101,11 @@ p, div {
   display:inline-block;
   padding-top:15px;
 }
+
+.account_icons {
+  width: 60%;
+}
+
 .navbar-brand > div > p{
   font-size:13px;
   color:#EFEFEF;
