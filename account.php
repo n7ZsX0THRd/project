@@ -97,7 +97,7 @@ pdo_connect(); ?>
                   </div>
                 </div>
               </div>
-              <div style="cursor:hand" onclick="window.location='index.php';" class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+              <div style="cursor:hand" onclick="window.location='profiel.php';" class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                 <div class="thumbnail">
                   <img class="account_icons" src=
                   "images/menu.png"/>
@@ -106,7 +106,7 @@ pdo_connect(); ?>
                   </div>
                 </div>
               </div>
-                <div style="cursor:hand" onclick="window.location='logout.php';"  class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                <div style="cursor:hand" onclick="window.location='php/logout.php';"  class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                   <div class="thumbnail">
                     <img class="account_icons" src=
                     "images/logout.png"/>
