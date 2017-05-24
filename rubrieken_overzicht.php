@@ -106,7 +106,11 @@ if(isUserBeheerder($db)) {
                                 if (!$key==0){
                                     echo '<li><a href="rubriek.php?rubriek='.$key.'">'.$subRubriek['rubrieknaam'].'</a>';
                                     if($beheerder) {
-                                      echo  '<button class="glyphicon glyphicon-chevron-up"><button class="glyphicon glyphicon-chevron-down"><button class="glyphicon glyphicon-edit"><button class="glyphicon glyphicon-ban-circle">';
+                                      if($subRubriek['volgnr'] == 1) {
+                                          echo  '<button class="glyphicon glyphicon-chevron-down"><button class="glyphicon glyphicon-edit"><button class="glyphicon glyphicon-ban-circle">';
+                                      } else{
+                                          echo  '<button class="glyphicon glyphicon-chevron-up"><button class="glyphicon glyphicon-chevron-down"><button class="glyphicon glyphicon-edit"><button class="glyphicon glyphicon-ban-circle">';
+                                      }
                                     }
                                     echo '</li>';
                                 }
