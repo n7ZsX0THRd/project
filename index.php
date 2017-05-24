@@ -88,7 +88,7 @@ $childrenRubrieken = $childrenRubriekenQuery->fetchAll();
     <div class="carousel-inner">
       <div class="item active">
         <div class="container">
-          <div class="row">
+          <div class="row veilingitem">
             <div class="col-lg-12">
               <h4 class="carousel-header">Laatste kans</h4>
             </div>

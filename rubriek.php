@@ -64,9 +64,6 @@ if(isset($_GET['page'])){
   }
 }
 
-print($pageNumber);
-print('<br>');
-print($lastPage);
 $voorwerpenQuery = $db->prepare("SELECT
 v.voorwerpnummer,
 v.titel,

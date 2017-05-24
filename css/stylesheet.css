@@ -566,7 +566,11 @@ p, div {
   /*transition: all .2s ease-in-out;*/
   cursor: pointer;
 }
-
+.veilingitem{
+}
+.veilingitem > div > div > h4{
+  background-color:#EFEFEF;
+}
 .thumb_image:hover {
   background-size: contain;
   /*
@@ -635,7 +639,6 @@ p, div {
 
 .carousel-inner > .item{
    background: url('../images/bg.jpg');
-   background-size: cover;
 }
 
 .item-thumb{
@@ -656,8 +659,9 @@ p, div {
   padding-bottom: 50%;
   /*transition: all .2s ease-in-out;*/
   cursor: pointer;
-  box-shadow:0px 0px 5px #888;
+  box-shadow:0px 0px 5px #000;
   position: relative;
+  border-radius:2px;
 }
 .veilingthumb > p{
   display:block;
@@ -677,6 +681,8 @@ p, div {
   width:100%;
   color: #023042;
   text-align:left;
+  border-bottom:2px solid #023042;
+  padding-bottom:1px;
 }
 .carousel-inner > .item > .container > .row{
   margin-left:-30px;
@@ -684,6 +690,5 @@ p, div {
 }
 
 .midden{
-  border-left: 1px solid #5484a4;
-  border-right: 1px solid #5484a4;
+
 }
