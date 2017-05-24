@@ -26,7 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       plaatsnaam,
       land,
       looptijd,
-      looptijdbegin
+      looptijdbegin,
+      verzendkosten,
+      verzendinstructie,
+      verkoper,
+      koper,
+      looptijdeinde,
+      veilinggesloten,
+      verkoopprijs
       FROM Voorwerp WHERE voorwerpnummer=?");
       $data->execute([$voorwerpnummer]);
 
@@ -55,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
         <?php include 'php/includes/default_header.php'; ?>
 
-        <title>Profiel - Eenmaal Andermaal</title>
+        <title>Veiling - Eenmaal Andermaal</title>
 
         <link href="css/login.css" rel="stylesheet">
         <link href="css/profilestyle.css" rel="stylesheet">
@@ -105,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
               <li role="presentation" class="active"><a href="#veiling" aria-controls="veiling" role="tab" data-toggle="tab">Veiling</a></li>
-              <li role="presentation"><a href="#bieden" class="bg-success" aria-controls="bieden" role="tab" data-toggle="tab">Bieden</a></li>
+              <li role="presentation"><a href="#bieden" class="bg-success" aria-controls="bieden" role="tab" data-toggle="tab">Biedgeschiedenis</a></li>
             </ul>
 
             <!-- Tab panes -->
@@ -164,9 +171,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                               </div>
                               <div class="text-left">
                                 <br>
-                                <p>Verkoper:     Henk<p>
-                                <p>Startbedrag:  €500,-</p>
-                                <p>Hoogste bod:  €900,-</p>
+                                <p>Verkoper:     <?php echo ($resultVoorwerp != null) ? $resultVoorwerp['verkoper'] : ''; ?><p>
+                                <p>Startbedrag:  <?php echo ($resultVoorwerp != null) ? $resultVoorwerp['startprijs'] : ''; ?></p>
+                                <p>Hoogste bod:  NOGNIEDONE,-</p>
                               </div>
 
                               <div class="input-group" >
@@ -266,7 +273,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     });
   </script>
   <script>
-  var countDownDate = new Date("May 28, 2017 15:37:25").getTime();
+  var countDownDate = new Date('<?php echo ($resultVoorwerp != null) ? $resultVoorwerp['looptijdeinde'] : ''; ?>').getTime();
 
   var x = setInterval(function() {
 
