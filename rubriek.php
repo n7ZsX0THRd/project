@@ -34,26 +34,38 @@ $breadCrumbQuery->execute(array(htmlspecialchars($rubriekID)));
 $breadCrumb = $breadCrumbQuery->fetchAll();
 
 
-$voorwerpenQuery = $db->prepare("SELECT TOP 30
-	v.voorwerpnummer,
-	v.titel,
-	v.startprijs,
-	vir.rubrieknummer,
-	r.parentRubriek,
-  v.looptijdeinde
+$voorwerpenQuery = $db->prepare("SET STATISTICS TIME ON
 
-	FROM
-		Voorwerp v
-		JOIN
-			VoorwerpInRubriek vir
-				ON v.voorwerpnummer = vir.voorwerpnummer
-		JOIN
-			Rubriek r
-				ON r.rubrieknummer = vir.rubrieknummer
-		WHERE dbo.fnRubriekIsAfstammelingVan(vir.rubrieknummer,?) = 1
-		ORDER BY v.titel ASC");
 
-$voorwerpenQuery->execute(array($rubriek['rubrieknummer'])); // RUBRIEK ID, START NUMBER, END NUMBER
+SELECT
+v.voorwerpnummer,
+v.titel,
+v.startprijs,
+vir.rubrieknummer,
+r.parentRubriek
+
+FROM Voorwerp v
+	JOIN
+		VoorwerpInRubriek vir
+			ON v.voorwerpnummer = vir.voorwerpnummer
+	JOIN
+		Rubriek r
+			ON r.rubrieknummer = vir.rubrieknummer
+	WHERE EXISTS
+	(
+	 SELECT * FROM
+	 Rubriek
+     WHERE dbo.fnRubriekIsAfstammelingVan(rubrieknummer,?) = 1
+	   AND vir.rubrieknummer = rubriek.rubrieknummer
+	)
+ORDER BY Titel
+OFFSET 30*? ROWS
+FETCH NEXT 30 ROWS ONLY
+
+
+SET STATISTICS TIME OFF");
+
+$voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$_GET['page'])); // RUBRIEK ID, START NUMBER, END NUMBER
 
 ?>
 <!DOCTYPE html>
