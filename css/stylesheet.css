@@ -90,6 +90,36 @@ p, div {
   }
 }
 
+.veiling-countdown {
+  width: 30%;
+  float: right;
+
+}
+.veiling-countdown >h1 {
+  width: 100%;
+  text-align: right;
+}
+.veiling-titel {
+  width: 70%;
+  float: left;
+  word-wrap: break-word;
+}
+@media(max-width: 768px) {
+  .veiling-countdown {
+    width: 100%;
+    float: right;
+
+  }
+  .veiling-countdown >h1 {
+    width: 100%;
+    text-align: center;
+  }
+  .veiling-titel {
+    width: 100%;
+    float: left;
+  }
+}
+
 .navbar-brand {
   color: #fff !important;
   height: auto !important;
