@@ -6,6 +6,7 @@ include ('php/user.php');
 pdo_connect();
 
 $resultVoorwerp = null;
+$resultImages = null;
 $rootRubriek = -1;
 $breadCrumbQuery = $db->prepare("SELECT * FROM dbo.fnRubriekOuders(?) ORDER BY volgorde DESC");
 $breadCrumbQuery->execute(array(htmlspecialchars(1)));
@@ -44,6 +45,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       }
       else {
         $resultVoorwerp = $resultVoorwerplist[0];
+
+        $data = $db->prepare("
+SELECT TOP 4 bestandsnaam FROM Bestand b WHERE b.voorwerpnummer = ? ");
+        $data->execute([$voorwerpnummer]);
+
+        $resultImages=$data->fetchAll();
+
       }
 
     }
@@ -133,33 +141,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                                       <!-- Wrapper for slides -->
                                       <div class="carousel-inner cont-slider">
 
-                                        <div class="item active">
-                                          <img alt="" title="" style="background-image:url(images/vliegtuig.jpg);">
-                                        </div>
-                                        <div class="item">
-                                          <img alt="" title="" style="background-image:url(images/eten.jpg);">
-                                        </div>
-                                        <div class="item">
-                                          <img alt="" title="" style="background-image:url(images/Johny.jpg);">
-                                        </div>
-                                        <div class="item">
-                                          <img alt="" title="" style="background-image:url(images/bmw.jpg);">
-                                        </div>
+                                        <?php
+                                          $first = true;
+                                          foreach($resultImages as $row){
+                                            ?>
+                                            <div class="item <?php echo ($first) ? 'active' : '' ;?>">
+                                              <img alt="" title="" style="background-image:url(<?php echo $row['bestandsnaam'];?>);">
+                                            </div>
+                                            <?php
+                                            $first = false;
+                                          }
+                                        ?>
                                       </div>
                                       <!-- Indicators -->
                                       <ol class="carousel-indicators">
-                                        <li class="active" data-slide-to="0" data-target="#article-photo-carousel">
-                                          <img alt="" style="background-image:url(images/vliegtuig.jpg);">
-                                        </li>
-                                        <li class="" data-slide-to="1" data-target="#article-photo-carousel">
-                                          <img alt="" style="background-image:url(images/eten.jpg);">
-                                        </li>
-                                        <li class="" data-slide-to="2" data-target="#article-photo-carousel">
-                                          <img alt="" style="background-image:url(images/Johny.jpg);">
-                                        </li>
-                                        <li class="" data-slide-to="3" data-target="#article-photo-carousel">
-                                          <img alt="" style="background-image:url(images/bmw.jpg);">
-                                        </li>
+
+                                        <?php
+                                          $first = true;
+                                          $index = 0;
+                                          foreach($resultImages as $row){
+                                            ?>
+                                            <li class="<?php echo ($first) ? 'active' : '' ;?>" data-slide-to="<?php echo $index; ?>" data-target="#article-photo-carousel">
+                                              <img alt="" style="background-image:url(<?php echo $row['bestandsnaam'];?>);">
+                                            </li>
+                                            <?php
+                                            $first = false;
+                                            $index++;
+                                          }
+                                        ?>
                                       </ol>
                                     </div>
                                 </div>

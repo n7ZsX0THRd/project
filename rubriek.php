@@ -56,9 +56,9 @@ $voorwerpenCount = count($voorwerpCountQuery->fetchAll());
 
 $lastPage = floor($voorwerpenCount/30) - 1;
 
-$pageNumber = 0;
+$pageNumber = 1;
 if(isset($_GET['page'])){
-  if($_GET['page'] >= 0 && $_GET['page'] <= $lastPage)
+  if($_GET['page'] >= 1 && $_GET['page'] <= $lastPage)
   {
     $pageNumber = $_GET['page'];
   }
@@ -69,7 +69,9 @@ v.voorwerpnummer,
 v.titel,
 v.startprijs,
 vir.rubrieknummer,
-r.parentRubriek
+r.parentRubriek,
+v.looptijdeinde,
+Foto.bestandsnaam
 
 FROM Voorwerp v
 	JOIN
@@ -78,18 +80,24 @@ FROM Voorwerp v
 	JOIN
 		Rubriek r
 			ON r.rubrieknummer = vir.rubrieknummer
+  CROSS APPLY
+        (
+        SELECT  TOP 1 Bestand.bestandsnaam
+        FROM    Bestand
+        WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
+        ) Foto
 	WHERE EXISTS
 	(
 	 SELECT * FROM
 	 Rubriek
-     WHERE dbo.fnRubriekIsAfstammelingVan(rubrieknummer,?) = 1
+     WHERE (dbo.fnRubriekIsAfstammelingVan(rubrieknummer,?) = 1 OR rubrieknummer = ?)
 	   AND vir.rubrieknummer = rubriek.rubrieknummer
 	)
 ORDER BY Titel
 OFFSET 30*? ROWS
 FETCH NEXT 30 ROWS ONLY");
 
-$voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$pageNumber)); // RUBRIEK ID, START NUMBER, END NUMBER
+$voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknummer'],$pageNumber-1)); // RUBRIEK ID, START NUMBER, END NUMBER
 
 ?>
 <!DOCTYPE html>
@@ -98,7 +106,7 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$pageNumber)); // RUBR
 
         <?php include 'php/includes/default_header.php'; ?>
 
-        <title>Profiel - Eenmaal Andermaal</title>
+        <title>Rubriek - Eenmaal Andermaal</title>
 
         <link href="css/login.css" rel="stylesheet">
         <link href="css/profilestyle.css" rel="stylesheet">
@@ -242,7 +250,8 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$pageNumber)); // RUBR
             <div class="col-sm-6 col-md-6 col-lg-12 col-sm-6">
               <div class="row item-thumb">
                 <div class="col-lg-3">
-                  <img src="images/vliegtuig.png">
+                  <div class="item-row-image" style="background-image:url(<?php echo $row['bestandsnaam'];?>);">
+                  </div>
                 </div>
                 <div class="col-lg-9">
                   <h3 style="font-size:18px;"><?php echo $row['titel']?></h3>
@@ -268,7 +277,7 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$pageNumber)); // RUBR
         <div class="row page-navigation">
           <p>
             <?php
-              if($pageNumber >=1){
+              if($pageNumber >=2){
                 ?>
                 <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=<?php echo ($pageNumber-1); ?>"> <i class="noselect"><span class="glyphicon glyphicon-triangle-left"></span> Vorige</i></a>
                 <?php
@@ -278,17 +287,28 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$pageNumber)); // RUBR
 
             if($lastPage >= 2){
               ?>
-                <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=0" class="circle noselect"><i class="circle noselect <?php echo ($pageNumber == 0) ? 'selected' : '' ;?>">01</i></a>
+                <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=1" class="circle noselect"><i class="circle noselect <?php echo ($pageNumber == 1) ? 'selected' : '' ;?>">01</i></a>
               <?php
             }
-            ?>
-            <i class="circle noselect">50</i>
-            <i class="circle noselect">51</i>
-            <i class="circle selected noselect">52</i>
-            <i class="circle noselect">53</i>
-            <i class="circle noselect">54</i> ...
-            <i class="circle noselect">99</i>
-            <?php
+
+            if($lastPage >= 5)
+            {
+              if($pageNumber - 5 >= 0 ){
+                echo '...';
+              }
+              for($i = $pageNumber - 2; $i < $pageNumber+ 3; $i++)
+              {
+                if($i >= 2 && $i <= $lastPage -1)
+                {
+                  ?>
+                  <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=<?php echo $i;?>" class="circle noselect"><i class="circle noselect <?php echo ($pageNumber == $i) ? 'selected' : '' ;?>"><?php echo sprintf("%02d", $i)?></i></a>
+                  <?php
+                }
+              }
+              if($lastPage - 4 >= $pageNumber ){
+                echo '...';
+              }
+            }
 
             if($lastPage >= 2){
               ?>
