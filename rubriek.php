@@ -252,7 +252,7 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$pageNumber)); // RUBR
 
                   <h3 style="font-size:14px;" id="looptijdeinde" data-looptijd="<?php echo $row['looptijdeinde']?>"></h3>
                   <p>Start prijs: <strong><?php echo $row['startprijs']?></strong></p>
-                  <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                  <p><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bieden</a></p>
 
                 </div>
               </div>
