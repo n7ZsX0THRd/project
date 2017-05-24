@@ -102,6 +102,7 @@ if(isUserBeheerder($db)) {
                             echo '<article class="col-md-4">';
                             echo'<h2>'.$rubriek[0].'</h2>';
                             echo '<ul>';
+                            echo count($rubriek);
                             foreach($rubriek as $key => $subRubriek){
                                 if (!$key==0){
                                     echo '<li>';
