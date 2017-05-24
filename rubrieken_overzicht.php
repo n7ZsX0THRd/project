@@ -98,22 +98,23 @@ if(isUserBeheerder($db)) {
                                 echo '<section  class="row rubriek_column">
                                   <a class="anchor" id="'.$char.'"></a>';
                                 echo '<h1 class="rubriek_char">'.$char.'</h1>';
-                                echo  '<button class="glyphicon glyphicon-edit"></button><button class="glyphicon glyphicon-ban-circle"></button>';
                             }
                             echo '<article class="col-md-4">';
-                            echo'<h2>'.$rubriek[0].'</h2>';
+                            echo'<h2><button class="glyphicon glyphicon-edit"></button><button class="glyphicon glyphicon-ban-circle"></button>'.$rubriek[0].'</h2>';
                             echo '<ul>';
                             foreach($rubriek as $key => $subRubriek){
                                 if (!$key==0){
                                     echo '<li>';
                                     if($beheerder) {
                                       if($subRubriek['volgnr'] != 1) {
-                                          echo  '<button class="glyphicon glyphicon-chevron-up"></button>';
+                                          ?> <button class="glyphicon glyphicon-chevron-up"  onclick="document.write(' ')"></button> <?
                                       }
                                       if((count($rubriek) - 1) != $subRubriek['volgnr']){
-                                          echo  '<button class="glyphicon glyphicon-chevron-down"></button>';
+                                          ?> <button class="glyphicon glyphicon-chevron-down" onclick="document.write('<?php swap_rubriek_volgnr($subRubriek['volgnr'], $subRubriek['volgnr']+1, $subRubriek['rubrieknummer'], next($subRubriek['rubrieknummer'])) ?>')"></button> <?php
                                       }
-                                      echo  '<button class="glyphicon glyphicon-edit"></button><button class="glyphicon glyphicon-ban-circle"></button>';
+                                        ?> <button class="glyphicon glyphicon-edit">
+                                            </button><button class="glyphicon glyphicon-ban-circle" onclick="document.write('<?php functie() ?>')"></button> 
+                                        <?php
                                     }
                                     echo '<a href="rubriek.php?rubriek='.$key.'">'.$subRubriek['rubrieknaam'].'</a>';
                                     echo '</li>';
