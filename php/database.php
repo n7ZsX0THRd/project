@@ -334,18 +334,8 @@ function change_rubriek_status($rubriek_status, $rubriek_nummer){
             $data->execute(array($rubriek_status, $rubriek_nummer));
 }
 
-function swap_rubriek_volgnr($volgnr_A, $volgnr_B, $rubriek_nummer_A){
-            global $db;
-            
-            $data = $db->prepare("SELECT rubrieknummer 
-                                  FROM Rubriek 
-                                  WHERE volgnr = ? AND parentRubriek = (SELECT parentRubriek 
-                                                                        FROM Rubriek 
-                                                                        WHERE rubrieknummer = ?)");
-            $data->execute(array($volgnr_B, $rubriek_nummer_A));
-            $rubriek_nummer_B = $data->fetchAll()[0];
-            var_dump($rubriek_nummer_B);
-                
+function swap_rubriek_volgnr($volgnr_A, $volgnr_B, $rubriek_nummer_A, $rubriek_nummer_B){
+               
             $data = $db->prepare("  UPDATE Rubriek
                                     SET  volgnr = ?
                                     WHERE rubrieknummer = ?;  

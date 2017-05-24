@@ -111,14 +111,30 @@ if(isUserBeheerder($db)) {
                                     echo '<li>';
                                     if($beheerder) {
                                       if($subRubriek['volgnr'] != 1) {
-                                          ?> <button class="glyphicon glyphicon-chevron-up"  onclick="document.write(' ')"></button> <?php
+                                          ?> <button class="glyphicon glyphicon-chevron-up" ></button> <?php
                                       }
                                       if((count($rubriek) - 1) != $subRubriek['volgnr']){
+                                          $volgnr_A = $subRubriek['volgnr'];
+                                          $volgnr_B = ($subRubriek['volgnr'] + 1);
+                                          $rubriek_nummer_A=$key;
                                           
-                                          ?> <button class="glyphicon glyphicon-chevron-down" onclick="document.write('<?php swap_rubriek_volgnr($subRubriek['volgnr'], $subRubriek['volgnr']+1, $subRubriek['rubrieknummer']) ?>')"></button> <?php
+                                          global $db;
+                                          $data = $db->prepare("SELECT rubrieknummer
+                                  FROM Rubriek 
+                                  WHERE volgnr = ? AND parentRubriek = (SELECT parentRubriek 
+                                                                        FROM Rubriek 
+                                                                        WHERE rubrieknummer = ?)");
+                                            $data->execute(array($volgnr_B, $rubriek_nummer_A));
+                                            $results= $data->fetchAll();
+                                            $rubriek_nummer_B= $results[0]['rubrieknummer'];
+                                          
+                                          
+        
+                                        ?> <button class="glyphicon glyphicon-chevron-down" onclick="document.write('<?php swap_rubriek_volgnr($volgnr_A, $volgnr_B, $key, $rubriek_nummer_B) ?>')" ></button> 
+                                        <?php
                                       }
                                         ?> <button class="glyphicon glyphicon-edit">
-                                            </button><button class="glyphicon glyphicon-ban-circle" onclick="document.write('<?php ?>')"></button> 
+                                            </button><button class="glyphicon glyphicon-ban-circle" ></button> 
                                         <?php
                                     }
                                     echo '<a href="rubriek.php?rubriek='.$key.'">'.$subRubriek['rubrieknaam'].'</a>';
