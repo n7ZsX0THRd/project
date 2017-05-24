@@ -98,6 +98,7 @@ if(isUserBeheerder($db)) {
                                 echo '<section  class="row rubriek_column">
                                   <a class="anchor" id="'.$char.'"></a>';
                                 echo '<h1 class="rubriek_char">'.$char.'</h1>';
+                                echo  '<button class="glyphicon glyphicon-edit"></button><button class="glyphicon glyphicon-ban-circle"></button>';
                             }
                             echo '<article class="col-md-4">';
                             echo'<h2>'.$rubriek[0].'</h2>';
