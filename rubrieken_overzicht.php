@@ -102,7 +102,6 @@ if(isUserBeheerder($db)) {
                             echo '<article class="col-md-4">';
                             echo'<h2>'.$rubriek[0].'</h2>';
                             echo '<ul>';
-                            echo count($rubriek);
                             foreach($rubriek as $key => $subRubriek){
                                 if (!$key==0){
                                     echo '<li>';
@@ -110,7 +109,7 @@ if(isUserBeheerder($db)) {
                                       if($subRubriek['volgnr'] != 1) {
                                           echo  '<button class="glyphicon glyphicon-chevron-up"></button>';
                                       }
-                                      if(count($rubriek) != $subRubriek['volgnr']){
+                                      if((count($rubriek) - 1) != $subRubriek['volgnr']){
                                           echo  '<button class="glyphicon glyphicon-chevron-down"></button>';
                                       }
                                       echo  '<button class="glyphicon glyphicon-edit"></button><button class="glyphicon glyphicon-ban-circle"></button>';
