@@ -9,6 +9,11 @@
 .cont-slider{
   border:1px solid #EFEFEF;
   box-shadow:0px 0px 5px #888888;
+
+}
+.cont-slider > .item{
+    background-color: #FFF !important;
+    background-image: none;
 }
 .cont-slider > .item > img{
   width:100%;
