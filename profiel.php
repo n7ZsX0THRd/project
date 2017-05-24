@@ -528,6 +528,26 @@ if(isset($_GET['foto'])){
               <div class="form-group">
                 <label for="tel">Telefoonnummer</label>
                 <?php if (isset($_GET['wijzig'])==true){  ?>
+                  <div class="container">
+                  	<div class="row">
+                          <div class="control-group" id="fields">
+                              <div class="controls">
+                                  <form role="form" autocomplete="off">
+                                      <div class="entry input-group col-xs-3">
+                                          <input class="form-control" name="fields[]" type="text" placeholder="tel" />
+                                      	<span class="input-group-btn">
+                                              <button class="btn btn-success btn-add" type="button">
+                                                  <span class="glyphicon glyphicon-plus"></span>
+                                              </button>
+                                          </span>
+                                      </div>
+                                  </form>
+                              <br>
+                              </div>
+                          </div>
+                  	</div>
+                  </div>
+
                 <input name="p_tel" class="form-control" id="tel" value="<?php echo $result2['telefoonnummer'];  ?>" <?php
                   echo $result2['telefoonnummer'];
                 ?>>
@@ -537,6 +557,7 @@ if(isset($_GET['foto'])){
                       echo $result2['telefoonnummer'];
                     ?>
                 </div>
+
                 <?php } ?>
               </div>
 
@@ -866,14 +887,7 @@ if(isset($_GET['foto'])){
 
 
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
-<script src="bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
+
 <script>function myAjax(actionvar) {
       $.ajax({
            type: "POST",
@@ -912,8 +926,40 @@ if(isset($_GET['foto'])){
            $(window).load(function(){
                $('#profielfoto').modal('show');
            });
-       </script>
-  <?php
+</script>
+<script type="text/javascript">
+
+  $(document).ready(
+    function()
+    {
+
+      $(".btn-add").click(function(e)
+        {
+                console.log('test');
+            e.preventDefault();
+
+            var controlForm = $('.controls form:first'),
+                currentEntry = $(this).parents('.entry:first'),
+                newEntry = $(currentEntry.clone()).appendTo(controlForm);
+
+            newEntry.find('input').val('');
+            controlForm.find('.entry:not(:last) .btn-add')
+                .removeClass('btn-add').addClass('btn-remove')
+                .removeClass('btn-success').addClass('btn-danger')
+                .html('<span class="glyphicon glyphicon-minus"></span>');
+        }).on('click', '.btn-remove', function(e)
+        {
+    		$(this).parents('.entry:first').remove();
+
+    		e.preventDefault();
+    		return false;
+    	});
+
+    }
+  );
+
+</script>
+<?php
 }?>
 
 
