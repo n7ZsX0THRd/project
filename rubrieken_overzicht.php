@@ -106,13 +106,13 @@ if(isUserBeheerder($db)) {
                                 if (!$key==0){
                                     echo '<li>';
                                     if($beheerder) {
-                                      if(!$subRubriek['volgnr'] == 1) {
-                                          echo  '<button class="glyphicon glyphicon-chevron-up">';
+                                      if($subRubriek['volgnr'] != 1) {
+                                          echo  '<button class="glyphicon glyphicon-chevron-up"></button>';
                                       }
-                                      if(!count($rubriek) == $subRubriek['volgnr']){
-                                          echo  '<button class="glyphicon glyphicon-chevron-down">';
+                                      if(count($rubriek) != $subRubriek['volgnr']){
+                                          echo  '<button class="glyphicon glyphicon-chevron-down"></button>';
                                       }
-                                      echo  '<button class="glyphicon glyphicon-edit"><button class="glyphicon glyphicon-ban-circle">';
+                                      echo  '<button class="glyphicon glyphicon-edit"></button><button class="glyphicon glyphicon-ban-circle"></button>';
                                     }
                                     echo '<a href="rubriek.php?rubriek='.$key.'">'.$subRubriek['rubrieknaam'].'</a>';
                                     echo '</li>';
