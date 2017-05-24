@@ -90,22 +90,33 @@ $childrenRubrieken = $childrenRubriekenQuery->fetchAll();
         <div class="container">
           <div class="row">
             <div class="col-lg-12">
-              <h4 class="carousel-header">Laatste kansjes</h4>
+              <h4 class="carousel-header">Laatste kans</h4>
             </div>
             <div class="col-lg-4">
-                <div class="veilingthumb" style="background-image:url('images/bmw.jpg');">
-                  <p>TEST</p>
-                </div>
+              <div>
+                <h4> BMW supersnel XL beter dan audi 3.0 5423pk diesel koop dan!!! </h4>
+              </div>
+              <div class="veilingthumb" style="background-image:url('images/bmw.jpg');">
+                <p>Resterende tijd: 1:00</p>
+              </div>
             </div>
-            <div class="col-lg-4">
-                <div class="veilingthumb" style="background-image:url('images/bmw.jpg');">
-                  <p>TEST</p>
-                </div>
+
+            <div class="col-lg-4 midden">
+              <div>
+                <h4> FIAT BETER DAN BMW supersnel XL beter dan audi 3.0 5423pk diesel koop dan </h4>
+              </div>
+              <div class="veilingthumb" style="background-image:url('images/fiat.jpg');">
+                <p>Resterende tijd: 1:00</p>
+              </div>
             </div>
+
             <div class="col-lg-4">
-                <div class="veilingthumb" style="background-image:url('images/bmw.jpg');">
-                  <p>TEST</p>
-                </div>
+              <div>
+                <h4> BEST CAR EU XL beter dan audi 3.0 5423pk diesel KOOOOP </h4>
+              </div>
+              <div class="veilingthumb" style="background-image:url('images/corsa.jpg');">
+                <p>Resterende tijd: 1:00</p>
+              </div>
             </div>
           </div>
         </div>
