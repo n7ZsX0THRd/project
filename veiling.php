@@ -5,10 +5,49 @@ include ('php/database.php');
 include ('php/user.php');
 pdo_connect();
 
+$resultVoorwerp = null;
 $rootRubriek = -1;
 $breadCrumbQuery = $db->prepare("SELECT * FROM dbo.fnRubriekOuders(?) ORDER BY volgorde DESC");
 $breadCrumbQuery->execute(array(htmlspecialchars(1)));
 $breadCrumb = $breadCrumbQuery->fetchAll();
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if (isset($_GET['voorwerpnummer'])) {
+      $voorwerpnummer = htmlspecialchars($_GET['voorwerpnummer']);
+
+      $data = $db->prepare("SELECT
+      voorwerpnummer,
+      titel,
+      beschrijving,
+      startprijs,
+      betalingswijze,
+      betalingsinstructie,
+      postcode,
+      plaatsnaam,
+      land,
+      looptijd,
+      looptijdbegin
+      FROM Voorwerp WHERE voorwerpnummer=?");
+      $data->execute([$voorwerpnummer]);
+
+      $resultVoorwerplist=$data->fetchAll();
+
+      if(count($resultVoorwerplist) === 0){
+        header("Location: index.php"); // voorwerpnummer ongeldig
+      }
+      else {
+        $resultVoorwerp = $resultVoorwerplist[0];
+      }
+
+    }
+    else {
+        // Geen voorwerpnummer opgegeven, redirect index.php
+        header("Location: index.php");
+    }
+}
+if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+    send_message($_POST);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,8 +85,6 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                 <span class="glyphicon glyphicon-menu-right"></span>
                 <a href="rubriek.php">Rubrieken</a>
                 <?php
-
-
                     foreach($breadCrumb as $row)
                     {
                       if($row['rubrieknummer'] != $rootRubriek)
@@ -79,7 +116,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                 <h1 id="productCountDown">COUNTDOWN</h1>
                               </div>
                               <div class="veiling-titel">
-                                <h2>Alle pokemonkaarten van sam voor maar 1 euro. Moet snel weg omdat ik meer skeer voedsel moet kopen!!</h2>
+                                <h2><?php echo ($resultVoorwerp != null) ? $resultVoorwerp['titel'] : ''; ?></h2>
                               </div>
                             </div>
                             <div class="col-lg-4 left_content_row content_top_offset">
@@ -122,14 +159,9 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                             </div>
                             <div class="col-lg-8" style="margin-left:40px; margin-top:20px; width:60%">
 
-                              <p>
-                                De SP voelt niets voor het voorstel van D66-leider Alexander Pechtold om samen met de VVD, CDA, D66 en de PvdA in een coalitie te stappen. In plaats daarvan doet hij een beroep op Sybrand Buma van het CDA om open te staan voor formatieonderhandelingen zonder de VVD.
-                Dat moet leiden tot een centrum-links kabinet waar niet VVD-leider Mark Rutte, maar Buma de premier wordt.
-
-                "Aansluiten bij het motorblok (VVD, CDA, D66, red.) zou voor iedereen linkse partij neerkomen op politieke zelfmoord", zei Roemer maandag na afloop van zijn gesprek met informateur Edith Schippers.
-
-                Hij herhaalde zijn wens om te komen tot een centrum-links kabinet. Roemer denkt dat voor een aantal partijen deze optie het bespreken waard is, maar begrijpt ook dat Buma de boot op dit moment afhoudt. Volgens Roemer wacht Buma op een vierde partij die het motorblok aan een meerderheid kan helpen.
-                              </p>
+                              <div style="overflow-x:scroll;">
+                                <?php echo ($resultVoorwerp != null) ? $resultVoorwerp['beschrijving'] : ''; ?>
+                              </div>
                               <div class="text-left">
                                 <br>
                                 <p>Verkoper:     Henk<p>
