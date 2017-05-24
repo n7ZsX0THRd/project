@@ -33,11 +33,41 @@ $breadCrumbQuery = $db->prepare("SELECT * FROM dbo.fnRubriekOuders(?) ORDER BY v
 $breadCrumbQuery->execute(array(htmlspecialchars($rubriekID)));
 $breadCrumb = $breadCrumbQuery->fetchAll();
 
+$voorwerpCountQuery = $db->prepare("SELECT
+v.voorwerpnummer
+FROM Voorwerp v
+	JOIN
+		VoorwerpInRubriek vir
+			ON v.voorwerpnummer = vir.voorwerpnummer
+	JOIN
+		Rubriek r
+			ON r.rubrieknummer = vir.rubrieknummer
+	WHERE EXISTS
+	(
+	 SELECT * FROM
+	 Rubriek
+     WHERE dbo.fnRubriekIsAfstammelingVan(rubrieknummer,?) = 1
+	   AND vir.rubrieknummer = rubriek.rubrieknummer
+	)");
 
-$voorwerpenQuery = $db->prepare("SET STATISTICS TIME ON
+$voorwerpCountQuery->execute(array($rubriek['rubrieknummer']));
 
+$voorwerpenCount = count($voorwerpCountQuery->fetchAll());
 
-SELECT
+$lastPage = floor($voorwerpenCount/30) - 1;
+
+$pageNumber = 0;
+if(isset($_GET['page'])){
+  if($_GET['page'] >= 0 && $_GET['page'] <= $lastPage)
+  {
+    $pageNumber = $_GET['page'];
+  }
+}
+
+print($pageNumber);
+print('<br>');
+print($lastPage);
+$voorwerpenQuery = $db->prepare("SELECT
 v.voorwerpnummer,
 v.titel,
 v.startprijs,
@@ -60,12 +90,9 @@ FROM Voorwerp v
 	)
 ORDER BY Titel
 OFFSET 30*? ROWS
-FETCH NEXT 30 ROWS ONLY
+FETCH NEXT 30 ROWS ONLY");
 
-
-SET STATISTICS TIME OFF");
-
-$voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$_GET['page'])); // RUBRIEK ID, START NUMBER, END NUMBER
+$voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$pageNumber)); // RUBRIEK ID, START NUMBER, END NUMBER
 
 ?>
 <!DOCTYPE html>
@@ -240,6 +267,46 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$_GET['page'])); // RU
               }
             }
           ?>
+        </div>
+        <div class="row page-navigation">
+          <p>
+            <?php
+              if($pageNumber >=1){
+                ?>
+                <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=<?php echo ($pageNumber-1); ?>"> <i class="noselect"><span class="glyphicon glyphicon-triangle-left"></span> Vorige</i></a>
+                <?php
+              }
+            ?>
+            <?php
+
+            if($lastPage >= 2){
+              ?>
+                <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=0" class="circle noselect"><i class="circle noselect <?php echo ($pageNumber == 0) ? 'selected' : '' ;?>">01</i></a>
+              <?php
+            }
+            ?>
+            <i class="circle noselect">50</i>
+            <i class="circle noselect">51</i>
+            <i class="circle selected noselect">52</i>
+            <i class="circle noselect">53</i>
+            <i class="circle noselect">54</i> ...
+            <i class="circle noselect">99</i>
+            <?php
+
+            if($lastPage >= 2){
+              ?>
+                <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=<?php echo $lastPage ?>" class="circle noselect"><i class="circle noselect <?php echo ($pageNumber == $lastPage) ? 'selected' : '' ;?>"><?php echo sprintf("%02d", $lastPage); ?></i></a>
+              <?php
+            }
+            ?>
+            <?php
+              if($pageNumber < $lastPage){
+                ?>
+                <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=<?php echo ($pageNumber+1); ?>"> <i class="noselect">Volgende <span class="glyphicon glyphicon-triangle-right"></span></i></a>
+                <?php
+              }
+            ?>
+          </p>
         </div>
       </div>
     </div>

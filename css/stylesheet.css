@@ -295,7 +295,7 @@ p, div {
   cursor: pointer;
 }
 
-.page-navigation>p>i.circle {
+.page-navigation>p>a>i.circle {
   padding: 5px;
   width: 50px;
   height: 50px;
@@ -304,9 +304,11 @@ p, div {
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
+  font-style: normal;
+  color:black;
 }
 
-.page-navigation>p>i.circle.selected {
+.page-navigation>p>a>i.circle.selected {
   background-color: #5484a4;
   color: #efefef;
 }
