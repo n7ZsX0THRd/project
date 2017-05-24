@@ -130,17 +130,21 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
 
                 Hij herhaalde zijn wens om te komen tot een centrum-links kabinet. Roemer denkt dat voor een aantal partijen deze optie het bespreken waard is, maar begrijpt ook dat Buma de boot op dit moment afhoudt. Volgens Roemer wacht Buma op een vierde partij die het motorblok aan een meerderheid kan helpen.
                               </p>
-                              <div class="text-right">
-                                <h3>Hoogste bod: €900.-</h3>
+                              <div class="text-left">
+                                <br>
+                                <p>Verkoper:     Henk<p>
+                                <p>Startbedrag:  €500,-</p>
+                                <p>Hoogste bod:  €900,-</p>
                               </div>
+
+                              <div class="input-group" >
+                                 <span class="input-group-addon">&euro;</span>
+                                 <input style="height:36px;"class="form-control" type="number" required name="price" min="0" value="0" step="any">
+                                 <span class="input-group-btn">
+                                   <button class="btn btn-orange" type="button"><img src="images/hamerwit.png" class="auction-hammer"></button>
+                                 </span>
+                               </div>
                             </div>
-                            <div class="input-group" style="margin-right:-15px;width:47%;float:left; margin-left:50px; margin-top: 20px">
-                               <span class="input-group-addon">&euro;</span>
-                               <input style="height:36px;"class="form-control" type="number" required name="price" min="0" value="0" step="any">
-                               <span class="input-group-btn">
-                                 <button class="btn btn-orange" type="button"><img src="images/hamerwit.png" class="auction-hammer"></button>
-                               </span>
-                             </div>
               </div>
               <div role="tabpanel" class="tab-pane" id="bieden">
                 <div class="col-lg-12 timer_row">
