@@ -109,7 +109,7 @@ if(isUserBeheerder($db)) {
                                       if(!$subRubriek['volgnr'] == 1) {
                                           echo  '<button class="glyphicon glyphicon-chevron-up">';
                                       }
-                                      if(!count($rubriek) == &subRubriek['volgnr']){
+                                      if(!count($rubriek) == $subRubriek['volgnr']){
                                           echo  '<button class="glyphicon glyphicon-chevron-down">';
                                       }
                                       echo  '<button class="glyphicon glyphicon-edit"><button class="glyphicon glyphicon-ban-circle">';
