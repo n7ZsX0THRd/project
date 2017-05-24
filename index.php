@@ -90,10 +90,22 @@ $childrenRubrieken = $childrenRubriekenQuery->fetchAll();
         <div class="container">
           <div class="row">
             <div class="col-lg-12">
-              <center>
-                <h1>Eenmaal Andermaal</h1><img src="images/hamerkleur.png" width="250">
-                <p style="font-size:16px;">Veil nu snel al uw oude spullen, en vang er nog een leuk bedrag voor!</p>
-              </center>
+              <h4 class="carousel-header">Laatste kansjes</h4>
+            </div>
+            <div class="col-lg-4">
+                <div class="veilingthumb" style="background-image:url('images/bmw.jpg');">
+                  <p>TEST</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="veilingthumb" style="background-image:url('images/bmw.jpg');">
+                  <p>TEST</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="veilingthumb" style="background-image:url('images/bmw.jpg');">
+                  <p>TEST</p>
+                </div>
             </div>
           </div>
         </div>
