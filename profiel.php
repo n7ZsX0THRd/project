@@ -528,25 +528,14 @@ if(isset($_GET['foto'])){
               <div class="form-group">
                 <label for="tel">Telefoonnummer</label>
                 <?php if (isset($_GET['wijzig'])==true){  ?>
-                  <div class="container">
-                  	<div class="row">
-                          <div class="control-group" id="fields">
-                              <div class="controls">
-                                  <form role="form" autocomplete="off">
-                                      <div class="entry input-group col-xs-3">
-                                          <input class="form-control" name="fields[]" type="text" placeholder="tel" />
-                                      	<span class="input-group-btn">
-                                              <button class="btn btn-success btn-add" type="button">
-                                                  <span class="glyphicon glyphicon-plus"></span>
-                                              </button>
-                                          </span>
-                                      </div>
-                                  </form>
-                              <br>
-                              </div>
-                          </div>
-                  	</div>
-                  </div>
+                  <div class="form-group multiple-form-group" data-max=3>
+
+            				<div class="form-group input-group">
+            					<input type="number" name="multiple[]" class="form-control">
+            						<span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+
+            						</button></span>
+            				</div>
+            			</div>
 
                 <input name="p_tel" class="form-control" id="tel" value="<?php echo $result2['telefoonnummer'];  ?>" <?php
                   echo $result2['telefoonnummer'];
@@ -927,41 +916,62 @@ if(isset($_GET['foto'])){
                $('#profielfoto').modal('show');
            });
 </script>
-<script type="text/javascript">
-
-  $(document).ready(
-    function()
-    {
-
-      $(".btn-add").click(function(e)
-        {
-                console.log('test');
-            e.preventDefault();
-
-            var controlForm = $('.controls form:first'),
-                currentEntry = $(this).parents('.entry:first'),
-                newEntry = $(currentEntry.clone()).appendTo(controlForm);
-
-            newEntry.find('input').val('');
-            controlForm.find('.entry:not(:last) .btn-add')
-                .removeClass('btn-add').addClass('btn-remove')
-                .removeClass('btn-success').addClass('btn-danger')
-                .html('<span class="glyphicon glyphicon-minus"></span>');
-        }).on('click', '.btn-remove', function(e)
-        {
-    		$(this).parents('.entry:first').remove();
-
-    		e.preventDefault();
-    		return false;
-    	});
-
-    }
-  );
-
-</script>
 <?php
 }?>
 
+<script type="text/javascript">
+
+
+(function ($) {
+    $(function () {
+
+        var addFormGroup = function (event) {
+            event.preventDefault();
+
+            var $formGroup = $(this).closest('.form-group');
+            var $multipleFormGroup = $formGroup.closest('.multiple-form-group');
+            var $formGroupClone = $formGroup.clone();
+
+            $(this)
+                .toggleClass('btn-default btn-add btn-danger btn-remove')
+                .css("marginTop", '0px')
+                .html('–');
+
+            $formGroupClone.find('input').val('');
+            $formGroupClone.insertAfter($formGroup);
+
+            var $lastFormGroupLast = $multipleFormGroup.find('.form-group:last');
+            if ($multipleFormGroup.data('max') <= countFormGroup($multipleFormGroup)) {
+                $lastFormGroupLast.find('.btn-add').attr('disabled', true);
+            }
+        };
+
+        var removeFormGroup = function (event) {
+            event.preventDefault();
+
+            var $formGroup = $(this).closest('.form-group');
+            var $multipleFormGroup = $formGroup.closest('.multiple-form-group');
+
+            var $lastFormGroupLast = $multipleFormGroup.find('.form-group:last');
+            if ($multipleFormGroup.data('max') >= countFormGroup($multipleFormGroup)) {
+                $lastFormGroupLast.find('.btn-add').attr('disabled', false);
+            }
+
+            $formGroup.remove();
+        };
+
+        var countFormGroup = function ($form) {
+            return $form.find('.form-group').length;
+        };
+
+        $(document).on('click', '.btn-add', addFormGroup);
+        $(document).on('click', '.btn-remove', removeFormGroup);
+
+    });
+})(jQuery);
+
+
+</script>
 
 </body>
 </html>
