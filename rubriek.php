@@ -117,7 +117,7 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
 
 <div class="container">
   <div class="row">
-    <div class="col-md-4 col-lg-2 col-sm-4 sidebar">
+    <div class="col-md-4 col-lg-2 col-sm-4 sidebar" >
       <h3></h3>
 
 
@@ -247,18 +247,20 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
             foreach($voorwerpenQuery as $row)
             {
           ?>
-            <div class="col-sm-6 col-md-6 col-lg-12 col-sm-6">
-              <div class="row item-thumb">
-                <div class="col-lg-3">
-                  <div class="item-row-image" style="background-image:url(<?php echo $row['bestandsnaam'];?>);">
-                  </div>
+            <div class="col-sm-12 col-md-12 col-lg-12 col-sm-12">
+              <div class="row item-thumb" style="display: flex;">
+                <div class="col-lg-3 col-xs-3 col-sm-4 col-md-4" >
+                  <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
+                    <div class="item-row-image" style="background-image:url(<?php echo $row['bestandsnaam'];?>);">
+                    </div>
+                  </a>
                 </div>
-                <div class="col-lg-9">
-                  <h3 style="font-size:18px;"><?php echo $row['titel']?></h3>
+                <div class="col-lg-9 col-xs-9 col-sm-8 col-md-8" style="position:relative;flex: 1;">
+                  <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>"><h3 class="item-row-titel"><?php echo $row['titel']?></h3></a>
 
-                  <h3 style="font-size:14px;" id="looptijdeinde" data-looptijd="<?php echo $row['looptijdeinde']?>"></h3>
+                  <h3 style="font-size:14px;" id="looptijdeinde" data-looptijd="<?php echo $row['looptijdeinde']?>">&nbsp;</h3>
                   <p>Start prijs: <strong><?php echo $row['startprijs']?></strong></p>
-                  <p><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                  <p style="position:absolute; bottom:0px;right:0px;width:150px;"><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bieden</a></p>
 
                 </div>
               </div>
@@ -369,6 +371,12 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
   $('.dropdown-toggle').dropdown()
 
   </script>
+  <script src="js/jquery.sticky.js"></script>
+  <script>
+    $(document).ready(function(){
+      $("#sticky_sidebar").sticky({topSpacing:70});
+    });
+    </script>
 </body>
 </html>
 <?php

@@ -60,7 +60,6 @@
     opacity: 0.7;
 }
 .timer_row{
-  border-bottom:2px solid #E6E6E6;
   z-index:1029 !important;
   background-color:white;
 }

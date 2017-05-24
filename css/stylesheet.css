@@ -16,6 +16,9 @@ body {
 html {
   height: 100%;
 }
+html {
+  overflow-y: scroll;
+}
 
 p {
   color: #023042;
@@ -697,4 +700,11 @@ p, div {
   background-repeat: no-repeat;
   background-position: 50% 50%;
   padding-bottom: 100%;
+}
+.item-row-image:hover{
+  opacity: 0.8;
+  cursor:pointer;
+}
+.item-row-titel{
+  font-size:18px;
 }

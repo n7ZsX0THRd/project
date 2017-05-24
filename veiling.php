@@ -5,37 +5,40 @@ include ('php/database.php');
 include ('php/user.php');
 pdo_connect();
 
+
 $resultVoorwerp = null;
 $resultImages = null;
+$rubriek = -1;
 $rootRubriek = -1;
-$breadCrumbQuery = $db->prepare("SELECT * FROM dbo.fnRubriekOuders(?) ORDER BY volgorde DESC");
-$breadCrumbQuery->execute(array(htmlspecialchars(1)));
-$breadCrumb = $breadCrumbQuery->fetchAll();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['voorwerpnummer'])) {
       $voorwerpnummer = htmlspecialchars($_GET['voorwerpnummer']);
 
       $data = $db->prepare("SELECT
-      voorwerpnummer,
-      titel,
-      beschrijving,
-      startprijs,
-      betalingswijze,
-      betalingsinstructie,
-      postcode,
-      plaatsnaam,
-      land,
-      looptijd,
-      looptijdbegin,
-      verzendkosten,
-      verzendinstructie,
-      verkoper,
-      koper,
-      looptijdeinde,
-      veilinggesloten,
-      verkoopprijs
-      FROM Voorwerp WHERE voorwerpnummer=?");
+      v.voorwerpnummer,
+      v.titel,
+      v.beschrijving,
+      v.startprijs,
+      v.betalingswijze,
+      v.betalingsinstructie,
+      v.postcode,
+      v.plaatsnaam,
+      v.land,
+      v.looptijd,
+      v.looptijdbegin,
+      v.verzendkosten,
+      v.verzendinstructie,
+      v.verkoper,
+      v.koper,
+      v.looptijdeinde,
+      v.veilinggesloten,
+      v.verkoopprijs,
+      vir.rubrieknummer as rn
+      FROM Voorwerp v
+      JOIN VoorwerpInRubriek vir
+        ON vir.voorwerpnummer = v.voorwerpnummer
+        WHERE v.voorwerpnummer=?");
       $data->execute([$voorwerpnummer]);
 
       $resultVoorwerplist=$data->fetchAll();
@@ -45,6 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       }
       else {
         $resultVoorwerp = $resultVoorwerplist[0];
+
+        $rubriek = $resultVoorwerp['rn'];
 
         $data = $db->prepare("
 SELECT TOP 4 bestandsnaam FROM Bestand b WHERE b.voorwerpnummer = ? ");
@@ -63,6 +68,9 @@ SELECT TOP 4 bestandsnaam FROM Bestand b WHERE b.voorwerpnummer = ? ");
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     send_message($_POST);
 }
+$breadCrumbQuery = $db->prepare("SELECT * FROM dbo.fnRubriekOuders(?) ORDER BY volgorde DESC");
+$breadCrumbQuery->execute(array(htmlspecialchars($rubriek)));
+$breadCrumb = $breadCrumbQuery->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -84,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 <div class="container">
   <div class="row">
     <div class="col-md-12 col-lg-12 col-sm-12">
-      <div class="container-fluid">
+      <div class="container-fluid content_col" style="padding-left:0px;">
         <?php
         if(count($breadCrumb) != 0)
         {
@@ -117,23 +125,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
         ?>
         <div class="row content_top_offset">
+          <div class="col-lg-12 timer_row" >
+            <div class="veiling-countdown">
+              <h1 id="productCountDown">&nbsp;</h1>
+            </div>
+            <div class="veiling-titel">
+              <h2><?php echo ($resultVoorwerp != null) ? $resultVoorwerp['titel'] : ''; ?></h2>
+            </div>
+          </div>
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
               <li role="presentation" class="active"><a href="#veiling" aria-controls="veiling" role="tab" data-toggle="tab">Veiling</a></li>
-              <li role="presentation"><a href="#bieden" class="bg-success" aria-controls="bieden" role="tab" data-toggle="tab">Biedgeschiedenis</a></li>
+              <li role="presentation"><a href="#bieden" aria-controls="bieden" role="tab" data-toggle="tab">Biedgeschiedenis</a></li>
             </ul>
 
             <!-- Tab panes -->
             <div class="tab-content">
               <div role="tabpanel" class="tab-pane active" id="veiling">
-                            <div class="col-lg-12 timer_row" >
-                              <div class="veiling-countdown">
-                                <h1 id="productCountDown">COUNTDOWN</h1>
-                              </div>
-                              <div class="veiling-titel">
-                                <h2><?php echo ($resultVoorwerp != null) ? $resultVoorwerp['titel'] : ''; ?></h2>
-                              </div>
-                            </div>
+
                             <div class="col-lg-4 left_content_row content_top_offset">
                                 <div class="row thumb-image">
                                   <div class="carousel slide article-slide" id="article-photo-carousel">
@@ -175,8 +184,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                             </div>
                             <div class="col-lg-8" style="margin-left:40px; margin-top:20px; width:60%">
 
-                              <div style="overflow-x:scroll;">
-                                <?php echo ($resultVoorwerp != null) ? $resultVoorwerp['beschrijving'] : ''; ?>
+                              <div>
+                                <?php
+                                if($resultVoorwerp != null){
+                                    $allowedTags = '<br><p><h1><h2><h3><h4><h5><h6><ul><li><ol><span><b><i><strong><small><mark><em><ins><sub><sup><del>';
+                                    $text = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $resultVoorwerp['beschrijving']);
+                                    $text = preg_replace('/(<(script|style)\b[^>]*>).*?(<\/\2>)/is', "$1$3", $text);
+
+                                    echo strip_tags($text,$allowedTags);
+                                }
+                                 ?>
                               </div>
                               <div class="text-left">
                                 <br>
@@ -195,9 +212,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                             </div>
               </div>
               <div role="tabpanel" class="tab-pane" id="bieden">
-                <div class="col-lg-12 timer_row">
-                    <h3 id="productCountDown2">COUNTDOWN</h3>
-                </div>
                 <div class="col-lg-12">
                   <div class="panel-body">
                          <ul class="chat">
@@ -296,13 +310,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     document.getElementById("productCountDown").innerHTML = days + "d " + hours + "h "
     + minutes + "m " + seconds + "s ";
-    document.getElementById("productCountDown2").innerHTML = days + "d " + hours + "h "
-    + minutes + "m " + seconds + "s ";
 
     if (distance < 0) {
       clearInterval(x);
       document.getElementById("productCountDown").innerHTML = "EXPIRED";
-      document.getElementById("productCountDown2").innerHTML = "EXPIRED";
     }
   }, 1000);
   </script>
