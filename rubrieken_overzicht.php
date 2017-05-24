@@ -5,6 +5,13 @@ include ('php/database.php');
 include ('php/user.php');
 pdo_connect();
 
+$beheerder = false;
+if(isUserBeheerder($db)) {
+    $beheerder = true;
+} else {
+    $beheerder = false;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,14 +46,21 @@ pdo_connect();
                 $rubrieken = [];
                 for ($row = 0; $row < $count; $row++) {
                     //echo "<p><b>Row number $row</b></p>";
-                    if ($result[$row]['parentRubriek']==-1){
+                    if ($result[$row]['parentRubriek']==-1){ //hoofdrubriek
                         $nummer = $result[$row]['rubrieknummer'];
                         $rubrieken[$nummer][] = $result[$row]['rubrieknaam'];
                         //echo "<li>".$result[$row]['rubrieknaam']."</li>";
-                    } else {
+                    } else { //subruriek
                         $parentNummer = $result[$row]['parentRubriek'];
-                        $nummer = $result[$row]['rubrieknummer'];
-                        $rubrieken[$parentNummer][$nummer] = $result[$row]['rubrieknaam'];
+                        $rubriekNummer = $result[$row]['rubrieknummer'];
+                        
+                        $rubriekNaam = $result[$row]['rubrieknaam'];
+                        $volgnr = $result[$row]['volgnr'];
+                        
+                        $rubriek_gegevens['volgnr']= $volgnr;
+                        $rubriek_gegevens['rubrieknaam'] = $rubriekNaam;
+                        
+                        $rubrieken[$parentNummer][$rubriekNummer] = $rubriek_gegevens;
                     }
                 }
 
@@ -90,7 +104,11 @@ pdo_connect();
                             echo '<ul>';
                             foreach($rubriek as $key => $subRubriek){
                                 if (!$key==0){
-                                    echo '<li><a href="rubriek.php?rubriek='.$key.'">'.$subRubriek.'</a></li>';
+                                    echo '<li><a href="rubriek.php?rubriek='.$key.'">'.$subRubriek['rubrieknaam'].'</a>';
+                                    if($beheerder) {
+                                      echo  '<button class="glyphicon glyphicon-chevron-up"><button class="glyphicon glyphicon-chevron-down"><button class="glyphicon glyphicon-edit"><button class="glyphicon glyphicon-ban-circle">';
+                                    }
+                                    echo '</li>';
                                 }
                             }
                             echo '</ul>';
