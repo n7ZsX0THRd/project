@@ -49,6 +49,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       else {
         $resultVoorwerp = $resultVoorwerplist[0];
 
+        $data2 = $db->prepare("SELECT TOP 3 v.voorwerpnummer, titel, looptijdeinde, bestandsnaam
+                               FROM Voorwerp v
+                               INNER JOIN Bestand b
+                               ON v.voorwerpnummer = b.voorwerpnummer
+                               WHERE verkoper = ?
+                               AND v.voorwerpnummer != ?
+                               ");
+        $data2->execute(array($resultVoorwerp['verkoper'],$resultVoorwerp['voorwerpnummer']));
+        $meerVanVerkoper = $data2->fetchAll();
+
         $rubriek = $resultVoorwerp['rn'];
 
         $data = $db->prepare("
@@ -180,33 +190,44 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                         ?>
                                       </ol>
                                     </div>
+                                    <br>
+                                    <p>Land: <b><?php echo $resultVoorwerp['land']?></b></p>
+                                    <p>Plaatsnaam: <b><?php echo $resultVoorwerp['plaatsnaam']?></b></p>
+                                    <p>Postcode: <b><?php echo $resultVoorwerp['postcode']?></b></p>
+                                    <br>
+                                    <p>Betalingswijze: <b><?php echo $resultVoorwerp['betalingswijze']?></b></p>
+                                    <p>Betalingsinstructie: <b><?php echo $resultVoorwerp['betalingsinstructie']?></b> </p>
+                                    <br>
+                                    <p>Verzendkosten: <b><?php echo $resultVoorwerp['verzendkosten']?></b></p>
+                                    <p>Verzendinstructie: <b><?php echo $resultVoorwerp['verzendinstructie']?></b></p>
                                 </div>
                             </div>
                             <div class="col-lg-8" style="margin-left:40px; margin-top:20px; width:60%">
 
-                              <div>
+                              <div style="padding: 5px;border: 1px solid;border-radius: 5px; border-color: #5484a4">
                                 <?php
                                 if($resultVoorwerp != null){
                                     $allowedTags = '<br><p><h1><h2><h3><h4><h5><h6><ul><li><ol><span><b><i><strong><small><mark><em><ins><sub><sup><del>';
-                                    $text = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $resultVoorwerp['beschrijving']);
-                                    $text = preg_replace('/(<(script|style)\b[^>]*>).*?(<\/\2>)/is', "$1$3", $text);
 
-                                    $stripped_text = strip_tags($text,$allowedTags);
+                                      $text = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $resultVoorwerp['beschrijving']);
+                                      $text = preg_replace('/(<(script|style)\b[^>]*>).*?(<\/\2>)/is', "$1$3", $text);
 
-                                    if(strlen($stripped_text) > 0)
-                                      echo $stripped_text;
-                                    else {
-                                      echo 'Deze veiling heeft geen beschrijving';
-                                    }
+                                      $stripped_text = strip_tags($text,$allowedTags);
+
+                                      if(strlen($stripped_text) > 0)
+                                        echo $stripped_text;
+                                      else {
+                                        echo 'Deze veiling heeft geen beschrijving';
+                                      }
 
                                 }
                                  ?>
                               </div>
                               <div class="text-left" style="margin-top:15px;border-top:1px solid #E6E6E6;">
                                 <br>
-                                <p>Verkoper:     <?php echo ($resultVoorwerp != null) ? $resultVoorwerp['verkoper'] : ''; ?><p>
-                                <p>Startbedrag:  <?php echo ($resultVoorwerp != null) ? $resultVoorwerp['startprijs'] : ''; ?></p>
-                                <p>Hoogste bod:  NOGNIEDONE,-</p>
+                                <p>Verkoper:     <b><?php echo ($resultVoorwerp != null) ? $resultVoorwerp['verkoper'] : ''; ?></b><p>
+                                <p>Startbedrag:  <b>€<?php echo ($resultVoorwerp != null) ? $resultVoorwerp['startprijs'] : ''; ?></b></p>
+                                <p>Hoogste bod:  <b>€NOGNIEDONE,-</b></p>
                               </div>
 
                               <div class="input-group" >
@@ -284,6 +305,29 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
     </div>
   </div>
 
+  <br>
+  <?php
+    if(!empty($meerVanVerkoper)) {
+   ?>
+  <h2>
+    Meer van deze verkoper
+  </h2>
+  <?php
+  foreach($meerVanVerkoper as $row)
+    {?>
+    <div class="col-lg-4">
+      <div>
+        <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
+          <h4 style="word-wrap: break-word;overflow:hidden;width:100%;height:19px;"> <?php echo $row['titel']; ?> </h4>
+        </a>
+      </div>
+      <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
+        <div class="veilingthumb" style="background-image:url('<?php echo $row['bestandsnaam']; ?>');">
+          <p>Resterende tijd: geen</p>
+        </div>
+      </a>
+    </div>
+    <?php }} ?>
 </div>
 <?php include 'php/includes/footer.php' ?>
 
