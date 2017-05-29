@@ -81,12 +81,14 @@ if(isUserBeheerder($db)) {
                     } else { //subruriek
                         $parentNummer = $result[$row]['parentRubriek'];
                         $rubriekNummer = $result[$row]['rubrieknummer'];
+                        $rubriekStatus = $result[$row]['inactief'];
                         
                         $rubriekNaam = $result[$row]['rubrieknaam'];
                         $volgnr = $result[$row]['volgnr'];
                         
                         $rubriek_gegevens['volgnr']= $volgnr;
                         $rubriek_gegevens['rubrieknaam'] = $rubriekNaam;
+                        $rubriek_gegevens['status'] = $rubriekStatus;
                         
                         $rubrieken[$parentNummer][$rubriekNummer] = $rubriek_gegevens;
                     }
@@ -160,6 +162,8 @@ if(isUserBeheerder($db)) {
                                         $rubriek_nummer_before=$neigbour_keys[0];
                                         $rubriek_nummer_current=$key;
                                         $rubriek_nummer_after=$neigbour_keys[1];
+
+                                        $rubriek_status = $subRubriek['status'];
                                         
                                         //echo $rubriek_nummer_before.'<br>';
                                        // echo $rubriek_nummer_current.'<br>';
@@ -194,16 +198,25 @@ if(isUserBeheerder($db)) {
                                       }
                                         ?> 
                                             <form class="btn-group" action="php/functies/change_rubrieknaam.php" method="POST">
-                                                <input type="hidden" name="rubriek_nummer" value="<?php echo $rubriek_nummer ?>" >
+                                                <input type="hidden" name="rubriek_nummer" value="<?php echo $rubriek_nummer_current ?>" >
                                                 <input type="hidden" name="rubriek_naam" value="<?php echo $rubriek_naam ?>"  >
                                                 <button type="submit" class="btn btn-secondary glyphicon glyphicon-edit"></button>
                                             </form>
                                             <form class="btn-group inline" action="php/functies/change_rubriek_status.php" method="POST">
-                                                <input type="hidden" name="rubriek_nummer" value="<?php echo $rubriek_nummer ?>" >
+                                                <input type="hidden" name="rubriek_nummer" value="<?php echo $rubriek_nummer_current ?>" >
                                                 <input type="hidden" name="rubriek_status" value="<?php echo $rubriek_status ?>" >
-                                                <button type="submit" class="btn btn-secondary glyphicon glyphicon-ban-circle"></button>
+                                                <?php if ((bool)$rubriek_status){ ?>
+                                                    <button type="submit" class="btn btn-secondary glyphicon glyphicon glyphicon-eye-open">
+                                                <?php }else{ ?> 
+                                                    <button type="submit" class="btn btn-secondary glyphicon glyphicon glyphicon-eye-close">
+                                                <?php } ?>
+                                                
+                                                </button>
                                             </form>                            
                                         <?php
+                                    }
+                                    if ($beheerder){
+                                        echo '<br>';
                                     }
                                     echo '<a href="rubriek.php?rubriek='.$key.'">'.$subRubriek['rubrieknaam'].'</a>';
                                     echo '</li>';

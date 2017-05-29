@@ -1,6 +1,6 @@
 <?php
 
-include ('php/mail.php');
+//include ('php/mail.php');
 
 //Making a connection with the database
 function pdo_connect() {

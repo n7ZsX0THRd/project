@@ -7,10 +7,12 @@ if (!empty($_POST))
     {
     $rubriek_status=htmlspecialchars($_POST["rubriek_status"]);
     $rubriek_nummer=htmlspecialchars($_POST["rubriek_nummer"]);
-
+    echo $rubriek_status; 
     global $db;
 
-    $rubriek_status != $rubriek_status; // true to false and false to true
+    (bool)$rubriek_status = !(bool)$rubriek_status; // true to false and false to true
+
+    echo $rubriek_nummer; 
 
     $data = $db->prepare("  UPDATE Rubriek
                             SET inactief = ?
@@ -22,6 +24,6 @@ if (!empty($_POST))
 
 // go back to where you came from
 $previous = $_SERVER['HTTP_REFERER'];
-header("Location:".$previous.'"');
+header("Location: ".$previous);
 
 ?>
