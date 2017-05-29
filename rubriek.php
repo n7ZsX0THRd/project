@@ -7,8 +7,11 @@ pdo_connect();
 
 $rootRubriek = -1;
 $rubriekID = $rootRubriek;
+$filter = 'price_asc';
 
-if ($_SERVER['REQUEST_METHOD'] == 'GET'){
+$available_filters = array('price_asc','price_desc','rate_asc','rate_desc','time_asc','time_desc','count_asc','count_desc');
+
+if ($_SERVER['REQUEST_METHOD'] == 'GET'){ // Disabled, doesn't work with POST Request from search form
   if(isset($_GET['rubriek']) && !empty($_GET['rubriek']))
   {
       $dbs = $db->prepare("SELECT TOP(1) rubrieknummer FROM Rubriek WHERE rubrieknummer = ?");
@@ -17,6 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
 
       if($resultCount == 1)
         $rubriekID = $_GET['rubriek'];
+  }
+  if(isset($_GET['filter']) && !empty($_GET['filter']) && in_array($_GET['filter'],$available_filters)){
+    $filter = $_GET['filter'];
   }
 }
 
@@ -33,8 +39,14 @@ $breadCrumbQuery = $db->prepare("SELECT * FROM dbo.fnRubriekOuders(?) ORDER BY v
 $breadCrumbQuery->execute(array(htmlspecialchars($rubriekID)));
 $breadCrumb = $breadCrumbQuery->fetchAll();
 
+$filter_SQL = '';
+$search_SQL = '';
+
+$search_Value = '';
+
 $voorwerpCountQuery = $db->prepare("SELECT
-v.voorwerpnummer
+v.voorwerpnummer,
+v.looptijdeinde
 FROM Voorwerp v
 	JOIN
 		VoorwerpInRubriek vir
@@ -48,7 +60,7 @@ FROM Voorwerp v
 	 Rubriek
      WHERE dbo.fnRubriekIsAfstammelingVan(rubrieknummer,?) = 1
 	   AND vir.rubrieknummer = rubriek.rubrieknummer
-	)");
+	)".$search_SQL." AND v.looptijdeinde > GETDATE()");
 
 $voorwerpCountQuery->execute(array($rubriek['rubrieknummer']));
 
@@ -64,7 +76,34 @@ if(isset($_GET['page'])){
   }
 }
 
-$voorwerpenQuery = $db->prepare("SELECT
+//$available_filters = array('price_asc','price_desc','rate_asc','rate_desc','time_asc','time_desc','count_asc','count_desc');
+
+//if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+  if(isset($_GET['search']) && !empty($_GET['search'])){
+
+    $search_SQL = "AND v.titel LIKE '%".$_GET['search']."%'";
+    $search_Value = $_GET['search'];
+  }
+
+//}
+switch ($filter) {
+    case 'price_asc':
+          $filter_SQL = 'v.startprijs ASC';
+        break;
+    case 'price_desc':
+          $filter_SQL = 'v.startprijs DESC';
+        break;
+    case 'time_asc':
+          $filter_SQL = 'v.looptijdeinde ASC';
+        break;
+    case 'time_desc':
+          $filter_SQL = 'v.looptijdeinde DESC';
+        break;
+}
+
+
+$voorwerpSelectSQL = "SELECT
 v.voorwerpnummer,
 v.titel,
 v.startprijs,
@@ -88,14 +127,18 @@ FROM Voorwerp v
         ) Foto
 	WHERE EXISTS
 	(
-	 SELECT * FROM
+	 SELECT rubrieknummer FROM
 	 Rubriek
      WHERE (dbo.fnRubriekIsAfstammelingVan(rubrieknummer,?) = 1 OR rubrieknummer = ?)
 	   AND vir.rubrieknummer = rubriek.rubrieknummer
 	)
-ORDER BY Titel
+".$search_SQL."  AND v.looptijdeinde > GETDATE()
+ORDER BY ".$filter_SQL." ,v.titel
 OFFSET 30*? ROWS
-FETCH NEXT 30 ROWS ONLY");
+FETCH NEXT 30 ROWS ONLY";
+
+
+$voorwerpenQuery = $db->prepare($voorwerpSelectSQL);
 
 $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknummer'],$pageNumber-1)); // RUBRIEK ID, START NUMBER, END NUMBER
 
@@ -191,7 +234,7 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
                   <span class="glyphicon glyphicon-home "></span>
                 </a>
                 <span class="glyphicon glyphicon-menu-right"></span>
-                <a href="rubriek.php">Rubrieken</a>
+                  <a href="rubriek.php">Rubrieken</a>
                 <?php
 
 
@@ -213,23 +256,44 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
         ?>
         <div class="row content_top_offset">
           <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12"  style="border-bottom:2px solid #E6E6E6;">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Zoek naar een veiling..." aria-describedby="sizing-addon2">
-              <span class="input-group-addon" id="sizing-addon2"><span class="glyphicon glyphicon-search"></span></span>
-            </div>
+            <form method="GET" action="rubriek.php">
+              <input type="hidden" name="rubriek" value="<?php echo $rubriek['rubrieknummer']; ?>">
+              <input type="hidden" name="filter" value="<?php echo $filter; ?>">
+              <div class="input-group">
+                <input type="text" class="form-control" name="search" value="<?php echo $search_Value?>" placeholder="Waar ben je naar op zoek?">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                </span>
+              </div>
+            </form>
               <p style="display:inline-block;margin-top:20px;">
                   Sorteer op:
                   <div style="margin-left:10px;" class="btn-group" role="group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Resterende tijd <span class="glyphicon glyphicon-sort-by-attributes-alt"></span>
+                      <?php
+                      switch ($filter) {
+                          case 'price_asc':
+                                echo 'Hoogste bod <span class="glyphicon glyphicon-sort-by-attributes"></span>';
+                              break;
+                          case 'price_desc':
+                                echo 'Hoogste bod <span class="glyphicon glyphicon-sort-by-attributes-alt"></span>';
+                              break;
+                          case 'time_asc':
+                                echo 'Resterende tijd <span class="glyphicon glyphicon-sort-by-attributes"></span>';
+                              break;
+                          case 'time_desc':
+                                echo 'Resterende tijd <span class="glyphicon glyphicon-sort-by-attributes-alt"></span>';
+                              break;
+                      }
+                      ?>
                       <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Hoogste bod <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
-                        <li><a href="#">Hoogste bod <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
+                        <li><a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer']; ?>&page=<?php echo $pageNumber; ?>&filter=price_asc&search=<?php echo $search_Value; ?>">Hoogste bod <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
+                        <li><a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer']; ?>&page=<?php echo $pageNumber; ?>&filter=price_desc&search=<?php echo $search_Value; ?>">Hoogste bod <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
                       <li role="separator" class="divider"></li>
-                        <li><a href="#">Resterende tijd <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
-                        <li><a href="#">Resterende tijd <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
+                        <li><a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer']; ?>&page=<?php echo $pageNumber; ?>&filter=time_asc&search=<?php echo $search_Value; ?>">Resterende tijd <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
+                        <li><a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer']; ?>&page=<?php echo $pageNumber; ?>&filter=time_desc&search=<?php echo $search_Value; ?>">Resterende tijd <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
                       <li role="separator" class="divider"></li>
                         <li><a href="#">Beoordeling verkoper <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
                         <li><a href="#">Beoordeling verkoper <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
@@ -279,9 +343,11 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
         <div class="row page-navigation">
           <p>
             <?php
+            if($voorwerpenCount > 30)
+            {
               if($pageNumber >=2){
                 ?>
-                <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=<?php echo ($pageNumber-1); ?>"> <i class="noselect"><span class="glyphicon glyphicon-triangle-left"></span> Vorige</i></a>
+                <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=<?php echo ($pageNumber-1); ?>&filter=<?php echo $filter; ?>&search=<?php echo $search_Value; ?>"> <i class="noselect"><span class="glyphicon glyphicon-triangle-left"></span> Vorige</i></a>
                 <?php
               }
             ?>
@@ -289,7 +355,7 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
 
             if($lastPage >= 2){
               ?>
-                <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=1" class="circle noselect"><i class="circle noselect <?php echo ($pageNumber == 1) ? 'selected' : '' ;?>">01</i></a>
+                <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=1&filter=<?php echo $filter; ?>&search=<?php echo $search_Value; ?>" class="circle noselect"><i class="circle noselect <?php echo ($pageNumber == 1) ? 'selected' : '' ;?>">01</i></a>
               <?php
             }
 
@@ -303,7 +369,7 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
                 if($i >= 2 && $i <= $lastPage -1)
                 {
                   ?>
-                  <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=<?php echo $i;?>" class="circle noselect"><i class="circle noselect <?php echo ($pageNumber == $i) ? 'selected' : '' ;?>"><?php echo sprintf("%02d", $i)?></i></a>
+                  <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=<?php echo $i;?>&filter=<?php echo $filter; ?>&search=<?php echo $search_Value; ?>" class="circle noselect"><i class="circle noselect <?php echo ($pageNumber == $i) ? 'selected' : '' ;?>"><?php echo sprintf("%02d", $i)?></i></a>
                   <?php
                 }
               }
@@ -314,16 +380,17 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
 
             if($lastPage >= 2){
               ?>
-                <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=<?php echo $lastPage ?>" class="circle noselect"><i class="circle noselect <?php echo ($pageNumber == $lastPage) ? 'selected' : '' ;?>"><?php echo sprintf("%02d", $lastPage); ?></i></a>
+                <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=<?php echo $lastPage ?>&filter=<?php echo $filter; ?>&search=<?php echo $search_Value; ?>" class="circle noselect"><i class="circle noselect <?php echo ($pageNumber == $lastPage) ? 'selected' : '' ;?>"><?php echo sprintf("%02d", $lastPage); ?></i></a>
               <?php
             }
             ?>
             <?php
               if($pageNumber < $lastPage){
                 ?>
-                <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=<?php echo ($pageNumber+1); ?>"> <i class="noselect">Volgende <span class="glyphicon glyphicon-triangle-right"></span></i></a>
+                <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=<?php echo ($pageNumber+1); ?>&filter=<?php echo $filter; ?>&search=<?php echo $search_Value; ?>"> <i class="noselect">Volgende <span class="glyphicon glyphicon-triangle-right"></span></i></a>
                 <?php
               }
+            }
             ?>
           </p>
         </div>
@@ -362,7 +429,7 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
 
         if (distance < 0) {
           //clearInterval(x);
-          $( this ).text("EXPIRED");
+          $( this ).text("Gesloten");
         }
     });
 

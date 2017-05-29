@@ -55,6 +55,16 @@ $rubriekID = -1;
 $childrenRubriekenQuery = $db->prepare("SELECT TOP(10) rubrieknummer, rubrieknaam FROM Rubriek WHERE parentRubriek = ? ORDER BY volgnr ASC, rubrieknaam ASC");
 $childrenRubriekenQuery->execute(array(htmlspecialchars($rubriekID)));
 $childrenRubrieken = $childrenRubriekenQuery->fetchAll();
+
+$lastChanceQuery = $db->prepare("SELECT TOP 3 v.voorwerpnummer,v.looptijdeinde,v.titel,Foto.bestandsnaam FROM Voorwerp v CROSS APPLY
+        (
+        SELECT  TOP 1 Bestand.bestandsnaam
+        FROM    Bestand
+        WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
+        ) Foto
+		WHERE DATEADD(MI,30,GETDATE()) < v.looptijdeinde ORDER BY v.looptijdeinde ASC");
+$lastChanceQuery->execute();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -92,32 +102,22 @@ $childrenRubrieken = $childrenRubriekenQuery->fetchAll();
             <div class="col-lg-12">
               <h4 class="carousel-header">Laatste kans</h4>
             </div>
-            <div class="col-lg-4">
-              <div>
-                <h4> BMW supersnel XL beter dan audi 3.0 5423pk diesel koop dan!!! </h4>
-              </div>
-              <div class="veilingthumb" style="background-image:url('images/bmw.jpg');">
-                <p>Resterende tijd: 1:00</p>
-              </div>
-            </div>
+            <?php
+            foreach($lastChanceQuery->fetchAll() as $row)
+            {
+                ?>
+                <div class="col-lg-4">
+                  <div>
+                    <h4 style="word-wrap: break-word;overflow:hidden;width:100%;height:19px;"> <?php echo $row['titel']; ?> </h4>
+                  </div>
+                  <div class="veilingthumb" style="background-image:url('<?php echo $row['bestandsnaam']; ?>');">
+                    <p>Resterende tijd: <?php echo $row['looptijdeinde']; ?></p>
+                  </div>
+                </div>
+                <?php
+            }
 
-            <div class="col-lg-4 midden">
-              <div>
-                <h4> FIAT BETER DAN BMW supersnel XL beter dan audi 3.0 5423pk diesel koop dan </h4>
-              </div>
-              <div class="veilingthumb" style="background-image:url('images/fiat.jpg');">
-                <p>Resterende tijd: 1:00</p>
-              </div>
-            </div>
-
-            <div class="col-lg-4">
-              <div>
-                <h4> BEST CAR EU XL beter dan audi 3.0 5423pk diesel KOOOOP </h4>
-              </div>
-              <div class="veilingthumb" style="background-image:url('images/corsa.jpg');">
-                <p>Resterende tijd: 1:00</p>
-              </div>
-            </div>
+            ?>
           </div>
         </div>
       </div>

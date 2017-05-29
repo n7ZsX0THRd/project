@@ -191,11 +191,18 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                     $text = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $resultVoorwerp['beschrijving']);
                                     $text = preg_replace('/(<(script|style)\b[^>]*>).*?(<\/\2>)/is', "$1$3", $text);
 
-                                    echo strip_tags($text,$allowedTags);
+                                    $stripped_text = strip_tags($text,$allowedTags);
+
+                                    if(strlen($stripped_text) > 0)
+                                      echo $stripped_text;
+                                    else {
+                                      echo 'Deze veiling heeft geen beschrijving';
+                                    }
+
                                 }
                                  ?>
                               </div>
-                              <div class="text-left">
+                              <div class="text-left" style="margin-top:15px;border-top:1px solid #E6E6E6;">
                                 <br>
                                 <p>Verkoper:     <?php echo ($resultVoorwerp != null) ? $resultVoorwerp['verkoper'] : ''; ?><p>
                                 <p>Startbedrag:  <?php echo ($resultVoorwerp != null) ? $resultVoorwerp['startprijs'] : ''; ?></p>
@@ -313,7 +320,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
 
     if (distance < 0) {
       clearInterval(x);
-      document.getElementById("productCountDown").innerHTML = "EXPIRED";
+      document.getElementById("productCountDown").innerHTML = "Gesloten";
     }
   }, 1000);
   </script>
