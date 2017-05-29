@@ -1,4 +1,8 @@
 <?php //Sets a rubriek who's active to inactive and vice versa
+include ('../../php/database.php');
+pdo_connect();
+
+
 if (!empty($_POST))
     {
     $rubriek_status=htmlspecialchars($_POST["rubriek_status"]);

@@ -1,4 +1,8 @@
 <?php // sets a new name for the given rubriek (number)
+include ('../../php/database.php');
+pdo_connect();
+
+
 if (!empty($_POST))
     {
     $rubriek_naam=htmlspecialchars($_POST["rubriek_naam"]);

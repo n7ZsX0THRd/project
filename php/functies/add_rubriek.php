@@ -1,4 +1,6 @@
 <?php // add a new rubriek to a parent rubriek, if there's no other sub rubriek in the parent rubriek it will make a new rubriek overig 
+include ('../../php/database.php');
+pdo_connect();
 
 if (!empty($_POST))
     {
