@@ -1,4 +1,4 @@
-<?  // swap the volgnr's  of two rubrieken
+<?php  // swap the volgnr's  of two rubrieken
 if (!empty($_POST))
     {
     $volgnr_A=htmlspecialchars($_POST["volgnr_A"]);

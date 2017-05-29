@@ -1,4 +1,4 @@
-<? //Sets a rubriek who's active to inactive and vice versa
+<?php //Sets a rubriek who's active to inactive and vice versa
 if (!empty($_POST))
     {
     $rubriek_status=htmlspecialchars($_POST["rubriek_status"]);

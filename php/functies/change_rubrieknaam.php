@@ -1,8 +1,8 @@
-<? // sets a new name for the given rubriek (number)
+<?php // sets a new name for the given rubriek (number)
 if (!empty($_POST))
     {
     $rubriek_naam=htmlspecialchars($_POST["rubriek_naam"]);
-    $$rubriek_nummer=htmlspecialchars($_POST["rubriek_nummer"]);
+    $rubriek_nummer=htmlspecialchars($_POST["rubriek_nummer"]);
     
     global $db;
 

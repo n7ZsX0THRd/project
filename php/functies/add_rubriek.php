@@ -1,4 +1,4 @@
-<? // add a new rubriek to a parent rubriek, if there's no other sub rubriek in the parent rubriek it will make a new rubriek overig 
+<?php // add a new rubriek to a parent rubriek, if there's no other sub rubriek in the parent rubriek it will make a new rubriek overig 
 
 if (!empty($_POST))
     {

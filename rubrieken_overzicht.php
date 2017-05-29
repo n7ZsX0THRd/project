@@ -20,6 +20,7 @@ if(isUserBeheerder($db)) {
         <?php include 'php/includes/default_header.php'; ?>
         <title>Rubrieken overzicht - Eenmaal Andermaal</title>
         <link href="css/rubriek_overzicht.css" rel="stylesheet">
+        
   </head>
 
   <body>
@@ -102,16 +103,38 @@ if(isUserBeheerder($db)) {
                             echo '<article class="col-md-4">';
                             echo '<h2>'; 
                             if($beheerder) {
-                                echo '<form><input type="text" value="'.$rubriek[0].' style="display: none"><input type="submit" class="glyphicon glyphicon-edit"></form><form><input type="submit" class="glyphicon glyphicon-ban-circle"></form>';
+                                ?>
+               
+                                    <form class="btn-group" action="php/functies/change_rubrieknaam.php" method="POST">
+                                        <input type="hidden" name="rubriek_nummer" value="<?php $rubriek_nummer ?>" >
+                                        <input type="hidden" name="rubriek_naam" value="<?php $rubriek_naam ?>"  style="display: none">
+                                        <button type="submit" class="btn btn-secondary glyphicon glyphicon-edit"></button>
+                                    </form>
+                                    <form class="btn-group inline" action="php/functies/change_rubriek_status.php" method="POST">
+                                        <input type="hidden" name="rubriek_nummer" value="<?php $rubriek_nummer ?>" >
+                                        <input type="hidden" name="rubriek_status" value="<?php $rubriek_status ?>" >
+                                        <button type="submit" class="btn btn-secondary glyphicon glyphicon-ban-circle"></button>
+                                    </form>
+                              
+                                <?php
                             }
                             echo ''.$rubriek[0].'</h2>';
-                            echo '<ul>';
+                            echo '<ul class="list-unstyled">';
                             foreach($rubriek as $key => $subRubriek){
                                 if (!$key==0){
                                     echo '<li>';
                                     if($beheerder) {
                                       if($subRubriek['volgnr'] != 1) {
-                                          ?> <button class="glyphicon glyphicon-chevron-up" ></button> <?php
+                                          ?> 
+                                          
+                                          <form class="btn-group" action="php/functies/swap_rubriek_volgnr.php" method="POST">
+                                                <input type="hidden" name="volgnr_A" value="<?php $volgnr_A ?>" >
+                                                <input type="hidden" name="volgnr_B" value="<?php $volgnr_B ?>" >
+                                                <input type="hidden" name="rubriek_nummer_A" value="<?php $rubriek_nummer_A ?>" >
+                                                <input type="hidden" name="rubriek_nummer_B" value="<?php $rubriek_nummer_B ?>" >
+                                                <button type="submit" class="btn btn-secondary glyphicon glyphicon-chevron-up"></button>
+                                            </form>
+                                        <?php
                                       }
                                       if((count($rubriek) - 1) != $subRubriek['volgnr']){
                                           $volgnr_A = $subRubriek['volgnr'];
@@ -130,11 +153,27 @@ if(isUserBeheerder($db)) {
                                           
                                           
         
-                                        ?> <button class="glyphicon glyphicon-chevron-down" onclick="document.write('<?php swap_rubriek_volgnr($volgnr_A, $volgnr_B, $key, $rubriek_nummer_B) ?>')" ></button> 
+                                        ?> 
+                                            <form class="btn-group" action="php/functies/swap_rubriek_volgnr.php" method="POST">
+                                                <input type="hidden" name="volgnr_A" value="<?php $volgnr_A ?>" >
+                                                <input type="hidden" name="volgnr_B" value="<?php $volgnr_B ?>" >
+                                                <input type="hidden" name="rubriek_nummer_A" value="<?php $rubriek_nummer_A ?>" >
+                                                <input type="hidden" name="rubriek_nummer_B" value="<?php $rubriek_nummer_B ?>" >
+                                                <button type="submit" class="btn btn-secondary glyphicon glyphicon-chevron-down"></button>
+                                            </form>
                                         <?php
                                       }
-                                        ?> <button class="glyphicon glyphicon-edit">
-                                            </button><button class="glyphicon glyphicon-ban-circle" ></button> 
+                                        ?> 
+                                            <form class="btn-group" action="php/functies/change_rubrieknaam.php" method="POST">
+                                                <input type="hidden" name="rubriek_nummer" value="<?php $rubriek_nummer ?>" >
+                                                <input type="hidden" name="rubriek_naam" value="<?php $rubriek_naam ?>"  >
+                                                <button type="submit" class="btn btn-secondary glyphicon glyphicon-edit"></button>
+                                            </form>
+                                            <form class="btn-group inline" action="php/functies/change_rubriek_status.php" method="POST">
+                                                <input type="hidden" name="rubriek_nummer" value="<?php $rubriek_nummer ?>" >
+                                                <input type="hidden" name="rubriek_status" value="<?php $rubriek_status ?>" >
+                                                <button type="submit" class="btn btn-secondary glyphicon glyphicon-ban-circle"></button>
+                                            </form>                            
                                         <?php
                                     }
                                     echo '<a href="rubriek.php?rubriek='.$key.'">'.$subRubriek['rubrieknaam'].'</a>';
