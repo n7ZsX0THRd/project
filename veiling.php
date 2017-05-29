@@ -49,10 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       else {
         $resultVoorwerp = $resultVoorwerplist[0];
 
-        $data2 = $db->prepare("SELECT TOP 3 v.voorwerpnummer, titel, looptijdeinde, bestandsnaam
+        $data2 = $db->prepare("SELECT TOP 3 v.voorwerpnummer, titel, looptijdeinde, Foto.bestandsnaam
                                FROM Voorwerp v
-                               INNER JOIN Bestand b
-                               ON v.voorwerpnummer = b.voorwerpnummer
+                               CROSS APPLY
+                               (
+                                   SELECT  TOP 1 Bestand.bestandsnaam
+                                   FROM    Bestand
+                                   WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
+                               ) Foto
                                WHERE verkoper = ?
                                AND v.voorwerpnummer != ?
                                ");
