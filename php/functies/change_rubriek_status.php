@@ -3,7 +3,7 @@ if (!empty($_POST))
     {
     $rubriek_status=htmlspecialchars($_POST["rubriek_status"]);
     $rubriek_nummer=htmlspecialchars($_POST["rubriek_nummer"]);
-    
+
     global $db;
 
     $rubriek_status != $rubriek_status; // true to false and false to true
@@ -13,6 +13,11 @@ if (!empty($_POST))
                             WHERE rubrieknummer = ?;  
                                                                                     ");
     $data->execute(array($rubriek_status, $rubriek_nummer));
+
 }
+
+// go back to where you came from
+$previous = $_SERVER['HTTP_REFERER'];
+header("Location:".$previous.'"');
 
 ?>

@@ -44,4 +44,9 @@ if (!empty($_POST))
     }
 }
 
+// go back to where you came from
+$previous = $_SERVER['HTTP_REFERER'];
+header("Location:".$previous.'"');
+
+
 ?>
