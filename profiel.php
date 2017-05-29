@@ -85,7 +85,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               {
                 if(empty($value) == false && is_numeric($value))
                 {
-                  array_push($phone_array, $value);
+                  if(in_array($value,$phone_array) == false)
+                    array_push($phone_array, $value);
                 }
               }
               $_POST['p_phonenumbers'] = $phone_array;
