@@ -5,12 +5,29 @@ include ('php/database.php');
 include ('php/user.php');
 pdo_connect();
 
+function array_neighbor($arr, $key)
+{
+    krsort($arr);
+    $keys = array_keys($arr);
+    $keyIndexes = array_flip($keys);
+   
+    $return = array();
+    if (isset($keys[$keyIndexes[$key]-1]))
+        $return[] = $keys[$keyIndexes[$key]-1];
+    if (isset($keys[$keyIndexes[$key]+1]))
+        $return[] = $keys[$keyIndexes[$key]+1];
+
+    return $return;
+}
+
 $beheerder = false;
 if(isUserBeheerder($db)) {
     $beheerder = true;
 } else {
     $beheerder = false;
 }
+
+
 
 ?>
 <!DOCTYPE html>
@@ -125,6 +142,8 @@ if(isUserBeheerder($db)) {
                                     echo '<li>';
                                     if($beheerder) {
                                       if($subRubriek['volgnr'] != 1) {
+                                          
+
                                           ?> 
                                           
                                           <form class="btn-group" action="php/functies/swap_rubriek_volgnr.php" method="POST">
@@ -137,19 +156,19 @@ if(isUserBeheerder($db)) {
                                         <?php
                                       }
                                       if((count($rubriek) - 1) != $subRubriek['volgnr']){
-                                          $volgnr_A = $subRubriek['volgnr'];
-                                          $volgnr_B = ($subRubriek['volgnr'] + 1);
-                                          $rubriek_nummer_A=$key;
-                                          
-                                          global $db;
-                                          $data = $db->prepare("SELECT rubrieknummer
-                                  FROM Rubriek 
-                                  WHERE volgnr = ? AND parentRubriek = (SELECT parentRubriek 
-                                                                        FROM Rubriek 
-                                                                        WHERE rubrieknummer = ?)");
-                                            $data->execute(array($volgnr_B, $rubriek_nummer_A));
-                                            $results= $data->fetchAll();
-                                            $rubriek_nummer_B= $results[0]['rubrieknummer'];
+
+                                        $neigbour_keys=array_neighbor($rubriek, $key);
+
+                                        $volgnr_before = ($subRubriek['volgnr'] - 1);
+                                        $volgnr_current = $subRubriek['volgnr'];
+                                        $volgnr_after = ($subRubriek['volgnr'] + 1);
+                                        $rubriek_nummer_before=$neigbour_keys[0];
+                                        $rubriek_nummer_current=$key;
+                                        $rubriek_nummer_after=$neigbour_keys[1];
+                                        
+                                        echo $rubriek_nummer_before.'<br>';
+                                        echo $rubriek_nummer_current.'<br>';
+                                        echo $rubriek_nummer_after.'<br>';
                                           
                                           
         
