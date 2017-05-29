@@ -1,5 +1,7 @@
 <?php
   $result = getLoggedInUser($db);
+
+
 ?>
 
 <h3></h3>
@@ -9,13 +11,10 @@
   </li>
   <ul class="sub">
     <li>
-      <a href="">Item 1</a>
+      <a href="rubrieken_overzicht.php">Bekijk alles</a>
     </li>
     <li>
-      <a href="">Item 2</a>
-    </li>
-    <li>
-      <a href="">Item 3</a>
+      <a href="rubriek.php">Zoeken</a>
     </li>
   </ul>
   <li class="toggle-sub <?php if($_SESSION['menu']['sub'] === 'dr'){ echo 'active'; }?>">

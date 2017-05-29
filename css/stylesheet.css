@@ -570,6 +570,7 @@ p, div {
   cursor: pointer;
 }
 .veilingitem{
+  margin-top:-20px;
 }
 .veilingitem > div > div > h4{
   background-color:#EFEFEF;
@@ -641,7 +642,11 @@ p, div {
 }
 
 .carousel-inner > .item{
-   background: url('../images/bg.jpg');
+  background-color: #E6E6E6;
+   background-image: url('../images/balk.png');
+   background-position: center bottom;
+   background-repeat: no-repeat;
+   background-attachment: initial;
 }
 
 .item-thumb{
@@ -707,4 +712,20 @@ p, div {
 }
 .item-row-titel{
   font-size:18px;
+}
+
+.grey{
+  color: #efefef;
+}
+.orange{
+  color:#ea8220;
+}
+.niagara{
+  color:#5484a4;
+}
+.darkblue{
+  color: #023042;
+}
+.denim{
+  color: #4f5d75;
 }

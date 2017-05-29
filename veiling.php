@@ -78,7 +78,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
 
         <?php include 'php/includes/default_header.php'; ?>
 
-        <title>Veiling - Eenmaal Andermaal</title>
+        <title><?php echo ($resultVoorwerp != null) ? $resultVoorwerp['titel'] : 'Veiling'; ?> - Eenmaal Andermaal</title>
 
         <link href="css/login.css" rel="stylesheet">
         <link href="css/profilestyle.css" rel="stylesheet">
@@ -127,7 +127,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
         <div class="row content_top_offset">
           <div class="col-lg-12 timer_row" >
             <div class="veiling-countdown">
-              <h1 id="productCountDown">&nbsp;</h1>
+              <h1 id="productCountDown" class="orange">&nbsp;</h1>
             </div>
             <div class="veiling-titel">
               <h2><?php echo ($resultVoorwerp != null) ? $resultVoorwerp['titel'] : ''; ?></h2>

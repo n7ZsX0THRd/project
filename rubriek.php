@@ -294,12 +294,14 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
                       <li role="separator" class="divider"></li>
                         <li><a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer']; ?>&page=<?php echo $pageNumber; ?>&filter=time_asc&search=<?php echo $search_Value; ?>">Resterende tijd <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
                         <li><a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer']; ?>&page=<?php echo $pageNumber; ?>&filter=time_desc&search=<?php echo $search_Value; ?>">Resterende tijd <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
+                        <!--
                       <li role="separator" class="divider"></li>
                         <li><a href="#">Beoordeling verkoper <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
                         <li><a href="#">Beoordeling verkoper <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
                       <li role="separator" class="divider"></li>
                         <li><a href="#">Aantal biedingen <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
                         <li><a href="#">Aantal biedingen <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
+                      -->
                     </ul>
                   </div>
               </p>
@@ -322,8 +324,8 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
                 <div class="col-lg-9 col-xs-9 col-sm-8 col-md-8" style="position:relative;flex: 1;">
                   <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>"><h3 class="item-row-titel"><?php echo $row['titel']?></h3></a>
 
-                  <h3 style="font-size:14px;" id="looptijdeinde" data-looptijd="<?php echo $row['looptijdeinde']?>">&nbsp;</h3>
-                  <p>Start prijs: <strong><?php echo $row['startprijs']?></strong></p>
+                  <h3 style="font-size:14px;" class="orange" id="looptijdeinde" data-looptijd="<?php echo $row['looptijdeinde']?>">&nbsp;</h3>
+                  <p>Start prijs: <strong>&euro;<?php echo $row['startprijs']?></strong></p>
                   <p style="position:absolute; bottom:0px;right:0px;width:150px;"><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bieden</a></p>
 
                 </div>

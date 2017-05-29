@@ -68,79 +68,85 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
         else
         {
-          if(strlen($_POST['r_password']) < 8 || strlen($_POST['r_password']) > 20){//!preg_match('/^(?=[a-z])(?=[A-Z])[a-zA-Z]{8,}$/', $_POST['r_password'])) {
-            $_SESSION['warning']['invalid_password'] = true;
-          }
-          else {
-            $dbs = $db->prepare("SELECT TOP(1) gebruikersnaam FROM Gebruikers WHERE gebruikersnaam = ?");
-            $dbs->execute(array($_POST['r_username']));
+          if(strlen($_POST['r_username']) >= 2 && strlen($_POST['r_username']) <= 20 && preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $_POST['r_username']) == false){
 
-            if(count($dbs->fetchAll()) != 0)
-            {
-              $_SESSION['warning']['invalid_username'] = true;
+            if(strlen($_POST['r_password']) < 8 || strlen($_POST['r_password']) > 20){//!preg_match('/^(?=[a-z])(?=[A-Z])[a-zA-Z]{8,}$/', $_POST['r_password'])) {
+              $_SESSION['warning']['invalid_password'] = true;
             }
             else {
-              $dbs = $db->prepare("SELECT TOP(1) emailadres FROM Gebruikers WHERE emailadres = ?");
-              $dbs->execute(array($_POST['r_email']));
+              $dbs = $db->prepare("SELECT TOP(1) gebruikersnaam FROM Gebruikers WHERE gebruikersnaam = ?");
+              $dbs->execute(array($_POST['r_username']));
 
               if(count($dbs->fetchAll()) != 0)
               {
-                $_SESSION['warning']['invalid_email'] = true;
+                $_SESSION['warning']['invalid_username'] = true;
               }
               else {
+                $dbs = $db->prepare("SELECT TOP(1) emailadres FROM Gebruikers WHERE emailadres = ?");
+                $dbs->execute(array($_POST['r_email']));
 
-                  if(isset($_POST['r_adressregel2']) == false || empty($_POST['r_adressregel2']))
-                    $_POST['r_adressregel2'] = null;
+                if(count($dbs->fetchAll()) != 0)
+                {
+                  $_SESSION['warning']['invalid_email'] = true;
+                }
+                else {
 
-                  if(create_user($_POST,$db))
-                  {
-                    $random = rand(100000,999999);
-                    $code = create_verification_for_user(array('gebruikersnaam' => $_POST['r_username'],'verificatiecode' => $random), $db);
-                    if($code != 0) {
-                        $to = $_POST['r_email'];
-                        $subject = 'Activatiecode voor EenmaalAndermaal';
-                        $message = '
-                        <tr>
-                            <td align="center" bgcolor="#FFFFFF" style="padding: 40px 30px 40px 30px;">
-                                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
-                                    <tr>
-                                        <td style="color:#023042">
-                                            Beste '.$_POST['r_username'].',
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 20px 0 0 0; color:#023042">
-                                            <p>Bedankt voor het aanmelden!</p>
-                                            <p>Je account is aangemaakt, je kunt inloggen met het volgende emailadres en het opgegeven wachtwoord nadat je je account hebt geverifieerd door op onderstaande link te klikken.</p>
-                                            <p>Email: '.$_POST['r_email'].'</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 10px 0 0 0; color:#023042">
-                                            <p>Klik op deze link om je account te activeren:</p>
-                                            <p><a href="http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$_POST['r_username'].'&code='.$code.'">http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$_POST['r_username'].'&code='.$code.'</a></p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 10px 0 20px 0; color:#023042">
-                                            <p>Met vriendelijke groeten,</p>
-                                            <p>Team EenmaalAndermaal</p>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        ';
-                        sendMail($to,$subject,$message);
+                    if(isset($_POST['r_adressregel2']) == false || empty($_POST['r_adressregel2']))
+                      $_POST['r_adressregel2'] = null;
+
+                    if(create_user($_POST,$db))
+                    {
+                      $random = rand(100000,999999);
+                      $code = create_verification_for_user(array('gebruikersnaam' => $_POST['r_username'],'verificatiecode' => $random), $db);
+                      if($code != 0) {
+                          $to = $_POST['r_email'];
+                          $subject = 'Activatiecode voor EenmaalAndermaal';
+                          $message = '
+                          <tr>
+                              <td align="center" bgcolor="#FFFFFF" style="padding: 40px 30px 40px 30px;">
+                                  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
+                                      <tr>
+                                          <td style="color:#023042">
+                                              Beste '.$_POST['r_username'].',
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td style="padding: 20px 0 0 0; color:#023042">
+                                              <p>Bedankt voor het aanmelden!</p>
+                                              <p>Je account is aangemaakt, je kunt inloggen met het volgende emailadres en het opgegeven wachtwoord nadat je je account hebt geverifieerd door op onderstaande link te klikken.</p>
+                                              <p>Email: '.$_POST['r_email'].'</p>
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td style="padding: 10px 0 0 0; color:#023042">
+                                              <p>Klik op deze link om je account te activeren:</p>
+                                              <p><a href="http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$_POST['r_username'].'&code='.$code.'">http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$_POST['r_username'].'&code='.$code.'</a></p>
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td style="padding: 10px 0 20px 0; color:#023042">
+                                              <p>Met vriendelijke groeten,</p>
+                                              <p>Team EenmaalAndermaal</p>
+                                          </td>
+                                      </tr>
+                                  </table>
+                              </td>
+                          </tr>
+                          ';
+                          sendMail($to,$subject,$message);
+                      }
+                      $_SESSION['email'] = $_POST['r_email'];
+                      header('location: index.php');
                     }
-                    $_SESSION['email'] = $_POST['r_email'];
-                    header('location: index.php');
-                  }
-                  else{
-                    //echo 'ER IS IETS FOUT GEGAAN';
-                  }
+                    else{
+                      //echo 'ER IS IETS FOUT GEGAAN';
+                    }
+                }
               }
             }
+          }
+          else {
+              $_SESSION['warning']['username_invalid'] = true;
           }
         }
       }
@@ -218,6 +224,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 {
                 ?>
                   <p class="bg-danger">Het opgegeven emailadres is al in gebruik</p>
+                <?php
+                }
+                else if(isset($_SESSION['warning']['username_invalid']) && $_SESSION['warning']['username_invalid'] === true)
+                {
+                ?>
+                  <p class="bg-danger">De gebruikersnaam voldoet niet aan de eisen, 2-20 karakters tekens. Geen speciale tekens</p>
                 <?php
                 }
                 ?>

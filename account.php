@@ -2,7 +2,12 @@
 
 include ('php/database.php');
 include ('php/user.php');
-pdo_connect(); ?>
+pdo_connect();
+
+if(isUserLoggedIn($db) == false)
+  header("Location: index.php");
+
+?>
 
 
 <!DOCTYPE html>
@@ -50,28 +55,6 @@ pdo_connect(); ?>
         <?php
           if(isUserLoggedIn($db))
             include 'php/includes/sidebar.php';
-          else {
-            ?>
-              <h3></h3>
-              <ul class="menubar">
-                <li class="toggle-sub active">
-                  <a href="">Rubrieken</a>
-                </li>
-                <ul class="sub">
-                  <?php
-                    foreach($childrenRubrieken as $row)
-                    {
-                      ?>
-                      <li>
-                        <a href="rubriek.php?rubriek=<?php echo $row['rubrieknummer']; ?>"><?php echo $row['rubrieknaam']; ?></a>
-                      </li>
-                      <?php
-                    }
-                  ?>
-                </ul>
-              </ul>
-            <?php
-          }
         ?>
       </div>
       <div class="col-md-9 col-lg-10 col-sm-8">

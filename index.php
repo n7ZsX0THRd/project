@@ -52,7 +52,7 @@ if(isset($_GET['mail'])==true) {
     $nieuwe_mail = 1;
 }
 $rubriekID = -1;
-$childrenRubriekenQuery = $db->prepare("SELECT TOP(10) rubrieknummer, rubrieknaam FROM Rubriek WHERE parentRubriek = ? ORDER BY volgnr ASC, rubrieknaam ASC");
+$childrenRubriekenQuery = $db->prepare("SELECT rubrieknummer, rubrieknaam FROM Rubriek WHERE parentRubriek = ? ORDER BY volgnr ASC, rubrieknaam ASC");
 $childrenRubriekenQuery->execute(array(htmlspecialchars($rubriekID)));
 $childrenRubrieken = $childrenRubriekenQuery->fetchAll();
 
@@ -108,11 +108,15 @@ $lastChanceQuery->execute();
                 ?>
                 <div class="col-lg-4">
                   <div>
-                    <h4 style="word-wrap: break-word;overflow:hidden;width:100%;height:19px;"> <?php echo $row['titel']; ?> </h4>
+                    <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
+                      <h4 style="word-wrap: break-word;overflow:hidden;width:100%;height:19px;"> <?php echo $row['titel']; ?> </h4>
+                    </a>
                   </div>
-                  <div class="veilingthumb" style="background-image:url('<?php echo $row['bestandsnaam']; ?>');">
-                    <p>Resterende tijd: <?php echo $row['looptijdeinde']; ?></p>
-                  </div>
+                  <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
+                    <div class="veilingthumb" style="background-image:url('<?php echo $row['bestandsnaam']; ?>');">
+                      <p>Resterende tijd: <?php echo $row['looptijdeinde']; ?></p>
+                    </div>
+                  </a>
                 </div>
                 <?php
             }
@@ -181,7 +185,7 @@ $lastChanceQuery->execute();
                 <h3></h3>
                 <ul class="menubar">
                   <li class="toggle-sub active">
-                    <a href="">Actieve rubrieken</a>
+                    <a href="">Rubrieken</a>
                   </li>
                   <ul class="sub">
                     <?php

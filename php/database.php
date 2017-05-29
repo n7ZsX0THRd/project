@@ -53,6 +53,7 @@ function block_user($gebruikersnaam) {
         return true;
     } catch (PDOException $e) {
         //echo "Could not block user, ".$e->getMessage();
+
         return false;
     }
 }
@@ -154,7 +155,7 @@ function create_user($data,$db){ //db is global!!
       );
       return true;
   } catch (PDOException $e) {
-      //var_dump($e);
+      var_dump($e);
       return false;
   }
 }
@@ -317,7 +318,7 @@ function change_rubrieknaam($rubriek_naam, $rubriek_nummer){
 
             $data = $db->prepare("  UPDATE Rubriek
                                     SET rubrieknaam = ?
-                                    WHERE rubrieknummer = ?;   
+                                    WHERE rubrieknummer = ?;
                                                             ");
             $data->execute(array($rubriek_naam, $rubriek_nummer));
 }
@@ -329,22 +330,22 @@ function change_rubriek_status($rubriek_status, $rubriek_nummer){
 
             $data = $db->prepare("  UPDATE Rubriek
                                     SET inactief = ?
-                                    WHERE rubrieknummer = ?;  
+                                    WHERE rubrieknummer = ?;
                                                                                             ");
             $data->execute(array($rubriek_status, $rubriek_nummer));
 }
 
 function swap_rubriek_volgnr($volgnr_A, $volgnr_B, $rubriek_nummer_A, $rubriek_nummer_B){
-               
+
             $data = $db->prepare("  UPDATE Rubriek
                                     SET  volgnr = ?
-                                    WHERE rubrieknummer = ?;  
+                                    WHERE rubrieknummer = ?;
                                                             ");
             $data->execute(array($volgnr_B, $rubriek_nummer_A));
 
             $data = $db->prepare("  UPDATE Rubriek
                                     SET  volgnr = ?
-                                    WHERE rubrieknummer = ?;  
+                                    WHERE rubrieknummer = ?;
                                                             ");
             $data->execute(array($volgnr_A, $rubriek_nummer_B));
 }
