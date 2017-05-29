@@ -643,7 +643,7 @@ p, div {
 
 .carousel-inner > .item{
   background-color: #E6E6E6;
-   background-image: url('../images/balk.png');
+   /* background-image: url('../images/balk.png'); */
    background-position: center bottom;
    background-repeat: no-repeat;
    background-attachment: initial;
@@ -728,4 +728,16 @@ p, div {
 }
 .denim{
   color: #4f5d75;
+}
+.banner{
+  background-image: url('../images/banner.png')!important;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.bannercontent{
+  background-color: rgba(230, 230, 230, .4);
+  font-family: 'Varela Round', sans-serif;
+  color: #032042;
+  margin-top: 270px;
+  font-size: 2.4em;
 }

@@ -83,12 +83,13 @@ $lastChanceQuery->execute();
   <!-- Indicators -->
     <ol class="carousel-indicators" style="display:none">
       <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
 
       <?php
         if(isUserLoggedIn($db)){
       ?>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
         <li data-target="#myCarousel" data-slide-to="2"></li>
+        <li data-target="#myCarousel" data-slide-to="3"></li>
       <?php
         }
       ?>
@@ -96,7 +97,13 @@ $lastChanceQuery->execute();
 
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
-      <div class="item active">
+    <div class="item active banner">
+        <center class="bannercontent">
+          Veil nu snel al uw oude spullen, en vang er nog een leuk bedrag voor!
+        </center>
+
+    </div>
+      <div class="item">
         <div class="container">
           <div class="row veilingitem">
             <div class="col-lg-12">
@@ -210,6 +217,7 @@ $lastChanceQuery->execute();
               <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
                 <div class="container-fixed">
                   <div class="row item-row">
+                    <h4 class="carousel-header">Uitgelicht</h4>
                     <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                      <div class="thumbnail">
                       <h3 style="padding-left: 10px">Boeing737</h3>
@@ -254,8 +262,11 @@ $lastChanceQuery->execute();
                       </div>
                      </div>
                     </div>
+                    <h4 class="carousel-header">In de buurt</h4>
+
                   </div>
                 </div>
+
                 <div class="row item-row">
                   <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                      <div class="thumbnail">
