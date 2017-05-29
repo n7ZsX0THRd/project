@@ -60,3 +60,7 @@ hr {
        display:none;
      }
    }
+
+.btn{
+  margin-top:2px !important;
+}
