@@ -102,7 +102,7 @@ if(isUserBeheerder($db)) {
                             echo '<article class="col-md-4">';
                             echo '<h2>'; 
                             if($beheerder) {
-                                echo '<button class="glyphicon glyphicon-edit"></button><button class="glyphicon glyphicon-ban-circle"></button>';
+                                echo '<form><input type="text" value="'.$rubriek[0].' style="display: none"><input type="submit" class="glyphicon glyphicon-edit"></form><form><input type="submit" class="glyphicon glyphicon-ban-circle"></form>';
                             }
                             echo ''.$rubriek[0].'</h2>';
                             echo '<ul>';
