@@ -5,20 +5,30 @@ include ('php/database.php');
 include ('php/user.php');
 pdo_connect();
 
+
 function array_neighbor($arr, $key)
 {
-    krsort($arr);
-    $keys = array_keys($arr);
-    $keyIndexes = array_flip($keys);
-   
-    $return = array();
-    if (isset($keys[$keyIndexes[$key]-1]))
-        $return[] = $keys[$keyIndexes[$key]-1];
-    if (isset($keys[$keyIndexes[$key]+1]))
-        $return[] = $keys[$keyIndexes[$key]+1];
-
-    return $return;
+   $keys = array_keys($arr);
+   $keyIndexes = array_flip($keys);
+ 
+   $return = array();
+   if (isset($keys[$keyIndexes[$key]-1])) {
+       $return[] = $keys[$keyIndexes[$key]-1];
+   }
+   else {
+       $return[] = $keys[sizeof($keys)-1];
+   }
+  
+   if (isset($keys[$keyIndexes[$key]+1])) {
+       $return[] = $keys[$keyIndexes[$key]+1];
+   }
+   else {
+       $return[] = $keys[0];
+   }
+  
+   return $return;
 }
+
 
 $beheerder = false;
 if(isUserBeheerder($db)) {
@@ -158,7 +168,7 @@ if(isUserBeheerder($db)) {
                                       if((count($rubriek) - 1) != $subRubriek['volgnr']){
 
                                         $neigbour_keys=array_neighbor($rubriek, $key);
-
+                                        echo var_dump($neigbour_keys);
                                         $volgnr_before = ($subRubriek['volgnr'] - 1);
                                         $volgnr_current = $subRubriek['volgnr'];
                                         $volgnr_after = ($subRubriek['volgnr'] + 1);
