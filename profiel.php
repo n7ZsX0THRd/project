@@ -34,7 +34,7 @@ else {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
-  var_dump($_POST);
+  //var_dump($_POST);
 
   $_POST['p_username']=$result['gebruikersnaam'];
   if(isset($_POST['form_name'])){
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 if(empty($value) == false && is_numeric($value))
                 {
                   if(in_array($value,$phone_array) == false)
-                    array_push($phone_array, (int)$value);
+                    array_push($phone_array, $value);
                 }
               }
               $_POST['p_phonenumbers'] = $phone_array;
