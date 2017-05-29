@@ -7,6 +7,7 @@ pdo_connect();
 if(isUserLoggedIn($db) == false)
   header("Location: index.php");
 
+$_SESSION['menu']['sub'] = 'ma';
 ?>
 
 
@@ -21,7 +22,7 @@ if(isUserLoggedIn($db) == false)
     <meta name="author" content="">
     <link rel="icon" href="bootstrap/favicon.ico">
 
-    <title>Normal Page</title>
+    <title>Mijn Account - EenmaalAndermaal</title>
 
     <!-- Bootstrap core CSS -->
     <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -60,7 +61,7 @@ if(isUserLoggedIn($db) == false)
       <div class="col-md-9 col-lg-10 col-sm-8">
         <div class="container-fluid content_col">
         <div class="row">
-            <h1 style="margin-bottom: 4%" > Acties </h1>
+            <h1 style="margin-bottom: 4%" > Mijn Account </h1>
             <div class="row item-row">
               <div  style="cursor:hand" onclick="window.location='index.php';" class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                 <div class="thumbnail">

@@ -229,19 +229,26 @@ function update_user($data,$db){  //db is global!!
       biografie=?,
       land=?
 
-      WHERE gebruikersnaam = ?;
-
-      UPDATE Gebruikerstelefoon SET
-      telefoonnummer =?
-
       WHERE gebruikersnaam = ?");
 
       $dbs->execute(array($data['p_firstname'],$data['p_lastname'],$data['p_adres'],$data['p_adres2'],
       $data['p_zipcode'],$data['p_city'],$data['p_birthmonth'].'-'.$data['p_birthday'].'-'.$data['p_birthyear'],
-      htmlspecialchars($data['p_biografie']),$data['p_land'],$data['p_username'],$data['p_tel'],$data['p_username']));
+      htmlspecialchars($data['p_biografie']),$data['p_land'],$data['p_username']));
 
+      try{
+        $dbs = $db->prepare("DELETE FROM Gebruikerstelefoon WHERE gebruikersnaam = ?");
+        $dbs->execute(array($data['p_username']));
 
-      return true;
+        foreach($data['p_phonenumbers'] as $value){
+          $dbs = $db->prepare("INSERT INTO Gebruikerstelefoon(gebruikersnaam,telefoonnummer) VALUES(?,?)");
+          $dbs->execute(array($data['p_username'],$value));
+        }
+
+        return true;
+      }catch(PDOException $e){
+        return false;
+      }
+
   } catch (PDOException $e) {
       //var_dump($e);
       return false;

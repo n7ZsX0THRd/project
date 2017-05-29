@@ -17,10 +17,10 @@ $result = getLoggedInUser($db);
 $gebruiker = $result['gebruikersnaam'];
 $query2 ="SELECT telefoonnummer FROM Gebruikerstelefoon WHERE gebruikersnaam = '$gebruiker'";
 if(!empty($db->query($query2)->fetchall()[0])) {
-  $result2 = $db->query($query2)->fetchall()[0];
+  $telefoonnummers = $db->query($query2)->fetchall();
 }
 else {
-  $result2["telefoonnummer"] = "";
+  $telefoonnummers = null;
 }
 
 if(!empty($result['bestandsnaam'])) {
@@ -31,6 +31,8 @@ else {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+  var_dump($_POST);
 
   $_POST['p_username']=$result['gebruikersnaam'];
   if(isset($_POST['form_name'])){
@@ -72,7 +74,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             {
               $_SESSION['warning']['invalid_birthdate'] = true;
             }
+            else if(!isset($_POST['p_phonenumbers']) || empty($_POST['p_phonenumbers']))
+            {
+              $_SESSION['warning']['phonenumbers_empty'] = true;
+            }
             else {
+
+              $phone_array = array();
+              foreach($_POST['p_phonenumbers'] as $value)
+              {
+                if(empty($value) == false && is_numeric($value))
+                {
+                  array_push($phone_array, $value);
+                }
+              }
+              $_POST['p_phonenumbers'] = $phone_array;
 
               if(isset($_POST['p_adres2']) == false || empty($_POST['p_adres2']))
                 $_POST['p_adres2'] = null;
@@ -413,10 +429,9 @@ if(isset($_GET['foto'])){
                         foreach ($months as $value)
                         {
                         ?>
-                        <option value="<?php echo $index; ?>" <?php if($result['geboortemaand'] == $index){  echo 'selected'; } ?>><?php echo $value; ?></option>
-
+                          <option value="<?php echo $index; ?>" <?php if($result['geboortemaand'] == $index){  echo 'selected'; } ?>><?php echo $value; ?></option>
                         <?php
-                        $index++;
+                          $index++;
                         }
                         ?>
                       </select>
@@ -528,22 +543,58 @@ if(isset($_GET['foto'])){
               <div class="form-group">
                 <label for="tel">Telefoonnummer</label>
                 <?php if (isset($_GET['wijzig'])==true){  ?>
-                  <div class="form-group multiple-form-group" data-max=3>
+                  <div class="form-group multiple-form-group" data-max="3">
+                    <?php
 
-            				<div class="form-group input-group">
-            					<input type="number" name="multiple[]" class="form-control">
-            						<span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+
-            						</button></span>
-            				</div>
+                    if(count($telefoonnummers) == 1){
+                        ?>
+                          <div class="form-group input-group">
+                            <input type="number" value="<?php echo $telefoonnummers[0]['telefoonnummer'];?>" name="p_phonenumbers[]" class="form-control">
+                              <span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+
+                              </button></span>
+                          </div>
+                        <?php
+                    }
+                    else {
+                      $index = 0;
+                      foreach($telefoonnummers as $row)
+                      {
+                        if($index == count($telefoonnummers) - 1){
+                          ?>
+                          <div class="form-group input-group">
+                            <input type="number" value="<?php echo $row['telefoonnummer']; ?>" name="p_phonenumbers[]" class="form-control">
+                              <span class="input-group-btn"><button type="button" class="btn btn-danger btn-remove" style="margin-top: 0px;">–</button></span>
+                          </div>
+                          <?php
+                        }
+                        else {
+
+                          ?>
+
+                          <div class="form-group input-group">
+                            <input type="number" value="<?php echo $row['telefoonnummer']; ?>" name="p_phonenumbers[]" class="form-control">
+                              <span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+
+                              </button></span>
+                          </div>
+                          <?php
+                        }
+                      }
+                    }
+                    ?>
             			</div>
 
-                <input name="p_tel" class="form-control" id="tel" value="<?php echo $result2['telefoonnummer'];  ?>" <?php
-                  echo $result2['telefoonnummer'];
+                <input name="p_tel" class="form-control" id="tel" value="<?php $telefoonnummers[0]['telefoonnummer']  ?>" <?php
+                  echo $telefoonnummers[0]['telefoonnummer'];
                 ?>>
                 <?php }else{ ?>
                 <div class="pflijn">
                     <?php
-                      echo $result2['telefoonnummer'];
+                    foreach($telefoonnummers as $row)
+                    {
+                      echo $row['telefoonnummer'];
+                      echo '<br>';
+                    }
+                      //echo $result2['telefoonnummer'];
                     ?>
                 </div>
 
