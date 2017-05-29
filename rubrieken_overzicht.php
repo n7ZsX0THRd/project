@@ -151,24 +151,9 @@ if(isUserBeheerder($db)) {
                                 if (!$key==0){
                                     echo '<li>';
                                     if($beheerder) {
-                                      if($subRubriek['volgnr'] != 1) {
-                                          
-
-                                          ?> 
-                                          
-                                          <form class="btn-group" action="php/functies/swap_rubriek_volgnr.php" method="POST">
-                                                <input type="hidden" name="volgnr_A" value="<?php $volgnr_A ?>" >
-                                                <input type="hidden" name="volgnr_B" value="<?php $volgnr_B ?>" >
-                                                <input type="hidden" name="rubriek_nummer_A" value="<?php $rubriek_nummer_A ?>" >
-                                                <input type="hidden" name="rubriek_nummer_B" value="<?php $rubriek_nummer_B ?>" >
-                                                <button type="submit" class="btn btn-secondary glyphicon glyphicon-chevron-up"></button>
-                                            </form>
-                                        <?php
-                                      }
-                                      if((count($rubriek) - 1) != $subRubriek['volgnr']){
 
                                         $neigbour_keys=array_neighbor($rubriek, $key);
-                                        echo var_dump($neigbour_keys);
+                                        //echo var_dump($neigbour_keys);
                                         $volgnr_before = ($subRubriek['volgnr'] - 1);
                                         $volgnr_current = $subRubriek['volgnr'];
                                         $volgnr_after = ($subRubriek['volgnr'] + 1);
@@ -176,31 +161,46 @@ if(isUserBeheerder($db)) {
                                         $rubriek_nummer_current=$key;
                                         $rubriek_nummer_after=$neigbour_keys[1];
                                         
-                                        echo $rubriek_nummer_before.'<br>';
-                                        echo $rubriek_nummer_current.'<br>';
-                                        echo $rubriek_nummer_after.'<br>';
+                                        //echo $rubriek_nummer_before.'<br>';
+                                       // echo $rubriek_nummer_current.'<br>';
+                                        //echo $rubriek_nummer_after.'<br>';
+
+                                      if($subRubriek['volgnr'] != 1) {
+                                          
+
+                                          ?> 
+                                        <form class="btn-group" action="php/functies/swap_rubriek_volgnr.php" method="POST">
+                                                <input type="hidden" name="volgnr_A" value="<?php echo $volgnr_current ?>" >
+                                                <input type="hidden" name="volgnr_B" value="<?php echo $volgnr_before ?>" >
+                                                <input type="hidden" name="rubriek_nummer_A" value="<?php echo $rubriek_nummer_current ?>" >
+                                                <input type="hidden" name="rubriek_nummer_B" value="<?php echo $rubriek_nummer_before ?>" >
+                                                <button type="submit" class="btn btn-secondary glyphicon glyphicon-chevron-up"></button>
+                                        </form>
+                                        <?php
+                                      }
+                                      if((count($rubriek) - 1) != $subRubriek['volgnr']){
                                           
                                           
         
                                         ?> 
-                                            <form class="btn-group" action="php/functies/swap_rubriek_volgnr.php" method="POST">
-                                                <input type="hidden" name="volgnr_A" value="<?php $volgnr_A ?>" >
-                                                <input type="hidden" name="volgnr_B" value="<?php $volgnr_B ?>" >
-                                                <input type="hidden" name="rubriek_nummer_A" value="<?php $rubriek_nummer_A ?>" >
-                                                <input type="hidden" name="rubriek_nummer_B" value="<?php $rubriek_nummer_B ?>" >
+                                            <form class="btn-group" action='php/functies/swap_rubriek_volgnr.php' method="POST">
+                                                <input type="hidden" name="volgnr_A" value="<?php echo $volgnr_current ?>" >
+                                                <input type="hidden" name="volgnr_B" value="<?php echo $volgnr_after ?>" >
+                                                <input type="hidden" name="rubriek_nummer_A" value="<?php echo $rubriek_nummer_current ?>" >
+                                                <input type="hidden" name="rubriek_nummer_B" value="<?php echo $rubriek_nummer_after ?>" >
                                                 <button type="submit" class="btn btn-secondary glyphicon glyphicon-chevron-down"></button>
                                             </form>
                                         <?php
                                       }
                                         ?> 
                                             <form class="btn-group" action="php/functies/change_rubrieknaam.php" method="POST">
-                                                <input type="hidden" name="rubriek_nummer" value="<?php $rubriek_nummer ?>" >
-                                                <input type="hidden" name="rubriek_naam" value="<?php $rubriek_naam ?>"  >
+                                                <input type="hidden" name="rubriek_nummer" value="<?php echo $rubriek_nummer ?>" >
+                                                <input type="hidden" name="rubriek_naam" value="<?php echo $rubriek_naam ?>"  >
                                                 <button type="submit" class="btn btn-secondary glyphicon glyphicon-edit"></button>
                                             </form>
                                             <form class="btn-group inline" action="php/functies/change_rubriek_status.php" method="POST">
-                                                <input type="hidden" name="rubriek_nummer" value="<?php $rubriek_nummer ?>" >
-                                                <input type="hidden" name="rubriek_status" value="<?php $rubriek_status ?>" >
+                                                <input type="hidden" name="rubriek_nummer" value="<?php echo $rubriek_nummer ?>" >
+                                                <input type="hidden" name="rubriek_status" value="<?php echo $rubriek_status ?>" >
                                                 <button type="submit" class="btn btn-secondary glyphicon glyphicon-ban-circle"></button>
                                             </form>                            
                                         <?php
