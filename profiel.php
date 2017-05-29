@@ -15,13 +15,15 @@ $email = $_SESSION['email'];
 $result = getLoggedInUser($db);
 
 $gebruiker = $result['gebruikersnaam'];
-$query2 ="SELECT telefoonnummer FROM Gebruikerstelefoon WHERE gebruikersnaam = '$gebruiker'";
-if(!empty($db->query($query2)->fetchall()[0])) {
-  $telefoonnummers = $db->query($query2)->fetchall();
-}
-else {
-  $telefoonnummers = null;
-}
+
+$telefoonnummers = null;
+
+$telefoonnummersQuery = $db->prepare("SELECT volgnr,telefoonnummer FROM Gebruikerstelefoon WHERE gebruikersnaam = ? ORDER BY volgnr");
+$telefoonnummersQuery->execute(array($gebruiker));
+
+$telefoonnummers = $telefoonnummersQuery->fetchAll();
+
+//var_dump($telefoonnummers);
 
 if(!empty($result['bestandsnaam'])) {
   $image = $result['bestandsnaam'];
@@ -67,9 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             else if(!isset($_POST['p_city']) || empty($_POST['p_city'])){
                 $_SESSION['warning']['city_empty'] = true;
             }
-            else if(!isset($_POST['p_tel']) || empty($_POST['p_tel'])){
-                $_SESSION['warning']['tel_empty'] = true;
-            }
             else if(checkdate(intval($_POST['p_birthmonth']), intval($_POST['p_birthday']), intval($_POST['p_birthyear'])) === false)
             {
               $_SESSION['warning']['invalid_birthdate'] = true;
@@ -86,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 if(empty($value) == false && is_numeric($value))
                 {
                   if(in_array($value,$phone_array) == false)
-                    array_push($phone_array, $value);
+                    array_push($phone_array, (int)$value);
                 }
               }
               $_POST['p_phonenumbers'] = $phone_array;
@@ -97,6 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               if(update_user($_POST,$db)){
                 $result = getLoggedInUser($db);
                 $_SESSION['warning']['changesucces'] = true;
+                header("Location: profiel.php?wijzig&succes");
               }
               else {
                 $_SESSION['warning']['pw_not_equal'] = true;
@@ -262,7 +262,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               header('location: index.php');
             }
             else{
-              echo 'ER IS IETS FOUT GEGAAN';
+              //echo 'ER IS IETS FOUT GEGAAN';
             }
 
             }
@@ -315,7 +315,7 @@ if(isset($_GET['foto'])){
                 <span class="glyphicon glyphicon-home "></span>
               </a>
               <span class="glyphicon glyphicon-menu-right"></span>
-              <a href="">Mijn Account</a>
+              <a href="account.php">Mijn Account</a>
               <span class="glyphicon glyphicon-menu-right"></span>
               <a href="profiel.php">Instellingen</a>
             </p>
@@ -327,7 +327,7 @@ if(isset($_GET['foto'])){
           ?>
             <p class="bg-danger notifcation-fix">Opgegeven wachtwoord is niet correct</p>
           <?php
-          }else if(isset($_SESSION['warning']['changesucces']) && $_SESSION['warning']['changesucces'] === true)
+          }else if(isset($_GET['succes']))
           {
           ?>
             <p class="bg-success notifcation-fix">Gegevens gewijzigd</p>
@@ -362,12 +362,13 @@ if(isset($_GET['foto'])){
           ?>
              <p class="bg-danger notifcation-fix">Uw woonplaats kan niet leeg zijn.</p>
           <?php
-          }else if(isset($_SESSION['warning']['tel_empty']) && $_SESSION['warning']['tel_empty'] === true)
+          }
+          else if(isset($_SESSION['warning']['phonenumbers_empty']) && $_SESSION['warning']['phonenumbers_empty'] === true)
           {
           ?>
-             <p class="bg-danger notifcation-fix">Uw telefoonnummer kan niet leeg zijn.</p>
+             <p class="bg-danger notifcation-fix">De opgegeven telefoonnummers zijn niet geldig.</p>
           <?php
-        }
+          }
           ?>
           <div class="col-lg-6" style="border-right:1px solid #e7e7e7;">
             <form method="post" enctype="multipart/form-data" action="">
@@ -547,10 +548,10 @@ if(isset($_GET['foto'])){
                   <div class="form-group multiple-form-group" data-max="3">
                     <?php
 
-                    if(count($telefoonnummers) == 1){
+                   if(empty($telefoonnummers)){
                         ?>
                           <div class="form-group input-group">
-                            <input type="number" value="<?php echo $telefoonnummers[0]['telefoonnummer'];?>" name="p_phonenumbers[]" class="form-control">
+                            <input type="text" value="" name="p_phonenumbers[]" class="form-control">
                               <span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+
                               </button></span>
                           </div>
@@ -563,41 +564,45 @@ if(isset($_GET['foto'])){
                         if($index == count($telefoonnummers) - 1){
                           ?>
                           <div class="form-group input-group">
-                            <input type="number" value="<?php echo $row['telefoonnummer']; ?>" name="p_phonenumbers[]" class="form-control">
-                              <span class="input-group-btn"><button type="button" class="btn btn-danger btn-remove" style="margin-top: 0px;">–</button></span>
+                            <input type="text" value="<?php echo $row['telefoonnummer']; ?>" name="p_phonenumbers[]" class="form-control">
+                              <span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+
+                              </button></span>
                           </div>
                           <?php
                         }
                         else {
 
                           ?>
-
                           <div class="form-group input-group">
                             <input type="number" value="<?php echo $row['telefoonnummer']; ?>" name="p_phonenumbers[]" class="form-control">
-                              <span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+
-                              </button></span>
+                              <span class="input-group-btn"><button type="button" class="btn btn-danger btn-remove" style="margin-top: 0px;">–</button></span>
                           </div>
                           <?php
                         }
+                        $index++;
                       }
                     }
                     ?>
             			</div>
-
-                <input name="p_tel" class="form-control" id="tel" value="<?php $telefoonnummers[0]['telefoonnummer']  ?>" <?php
-                  echo $telefoonnummers[0]['telefoonnummer'];
-                ?>>
                 <?php }else{ ?>
-                <div class="pflijn">
+
                     <?php
-                    foreach($telefoonnummers as $row)
-                    {
-                      echo $row['telefoonnummer'];
-                      echo '<br>';
+                    if(empty($telefoonnummers) == false){
+                      foreach($telefoonnummers as $row)
+                      {
+                        echo '<div class="pflijn" style="margin-bottom:5px;">';
+                          echo $row['telefoonnummer'];
+                        echo '</div>';
+                      }
                     }
+                    else {
+                      echo '<div class="pflijn">';
+                        echo 'Telefoonnummer niet gevonden.';
+                      echo '</div>';
+                    }
+
                       //echo $result2['telefoonnummer'];
                     ?>
-                </div>
 
                 <?php } ?>
               </div>
