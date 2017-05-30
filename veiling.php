@@ -5,86 +5,130 @@ include ('php/database.php');
 include ('php/user.php');
 pdo_connect();
 
+function time_elapsed_string($datetime, $full = false) {
+    $now = new DateTime;
+    $ago = new DateTime($datetime);
+    $diff = $now->diff($ago);
+
+    $diff->w = floor($diff->d / 7);
+    $diff->d -= $diff->w * 7;
+
+    $string = array(
+        'y' => 'year',
+        'm' => 'month',
+        'w' => 'week',
+        'd' => 'day',
+        'h' => 'hour',
+        'i' => 'minute',
+        's' => 'second',
+    );
+    foreach ($string as $k => &$v) {
+        if ($diff->$k) {
+            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+        } else {
+            unset($string[$k]);
+        }
+    }
+
+    if (!$full) $string = array_slice($string, 0, 1);
+    return $string ? implode(', ', $string) . ' ago' : 'just now';
+}
 
 $resultVoorwerp = null;
 $resultImages = null;
 $rubriek = -1;
 $rootRubriek = -1;
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if (isset($_GET['voorwerpnummer'])) {
-      $voorwerpnummer = htmlspecialchars($_GET['voorwerpnummer']);
 
-      $data = $db->prepare("SELECT
-      v.voorwerpnummer,
-      v.titel,
-      v.beschrijving,
-      v.startprijs,
-      v.betalingswijze,
-      v.betalingsinstructie,
-      v.postcode,
-      v.plaatsnaam,
-      v.land,
-      v.looptijd,
-      v.looptijdbegin,
-      v.verzendkosten,
-      v.verzendinstructie,
-      v.verkoper,
-      v.koper,
-      v.looptijdeinde,
-      v.veilinggesloten,
-      v.verkoopprijs,
-      vir.rubrieknummer as rn
-      FROM Voorwerp v
-      JOIN VoorwerpInRubriek vir
-        ON vir.voorwerpnummer = v.voorwerpnummer
-        WHERE v.voorwerpnummer=?");
-      $data->execute([$voorwerpnummer]);
+if (isset($_GET['voorwerpnummer'])) {
+  $voorwerpnummer = htmlspecialchars($_GET['voorwerpnummer']);
 
-      $resultVoorwerplist=$data->fetchAll();
+  $data = $db->prepare("SELECT
+v.voorwerpnummer,
+  v.titel,
+  v.beschrijving,
+  v.startprijs,
+  v.betalingswijze,
+  v.betalingsinstructie,
+  v.postcode,
+  v.plaatsnaam,
+  v.land,
+  v.looptijd,
+  v.looptijdbegin,
+  v.verzendkosten,
+  v.verzendinstructie,
+  v.verkoper,
+  v.koper,
+  v.looptijdeinde,
+  v.veilinggesloten,
+  v.verkoopprijs,
+  vir.rubrieknummer as rn,
+  l.lnd_Landnaam as landNaam,
+  dbo.fnGetMinBid(v.voorwerpnummer) AS minimaalBod,
+  dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod
+  FROM Voorwerp v
+  JOIN VoorwerpInRubriek vir
+    ON vir.voorwerpnummer = v.voorwerpnummer
+  JOIN Landen l
+    ON l.lnd_Code = v.land
+    WHERE v.voorwerpnummer=?");
+  $data->execute([$voorwerpnummer]);
 
-      if(count($resultVoorwerplist) === 0){
-        header("Location: index.php"); // voorwerpnummer ongeldig
-      }
-      else {
-        $resultVoorwerp = $resultVoorwerplist[0];
+  $resultVoorwerplist=$data->fetchAll();
 
-        $data2 = $db->prepare("SELECT TOP 3 v.voorwerpnummer, titel, looptijdeinde, Foto.bestandsnaam
-                               FROM Voorwerp v
-                               CROSS APPLY
-                               (
-                                   SELECT  TOP 1 Bestand.bestandsnaam
-                                   FROM    Bestand
-                                   WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
-                               ) Foto
-                               WHERE verkoper = ?
-                               AND v.voorwerpnummer != ?
-                               ");
-        $data2->execute(array($resultVoorwerp['verkoper'],$resultVoorwerp['voorwerpnummer']));
-        $meerVanVerkoper = $data2->fetchAll();
+  if(count($resultVoorwerplist) === 0){
+    header("Location: index.php"); // voorwerpnummer ongeldig
+  }
+  else {
+    $resultVoorwerp = $resultVoorwerplist[0];
 
-        $rubriek = $resultVoorwerp['rn'];
+    $data2 = $db->prepare("SELECT TOP 3 v.voorwerpnummer, titel, looptijdeinde, Foto.bestandsnaam
+                           FROM Voorwerp v
+                           CROSS APPLY
+                           (
+                               SELECT  TOP 1 Bestand.bestandsnaam
+                               FROM    Bestand
+                               WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
+                           ) Foto
+                           WHERE verkoper = ?
+                           AND v.voorwerpnummer != ?
+                           AND v.looptijdeinde > GETDATE()
+                           ");
+    $data2->execute(array($resultVoorwerp['verkoper'],$resultVoorwerp['voorwerpnummer']));
+    $meerVanVerkoper = $data2->fetchAll();
 
-        $data = $db->prepare("
+    $rubriek = $resultVoorwerp['rn'];
+
+    $data = $db->prepare("
 SELECT TOP 4 bestandsnaam FROM Bestand b WHERE b.voorwerpnummer = ? ");
-        $data->execute([$voorwerpnummer]);
+    $data->execute([$voorwerpnummer]);
 
-        $resultImages=$data->fetchAll();
+    $resultImages=$data->fetchAll();
 
-      }
+  }
 
-    }
-    else {
-        // Geen voorwerpnummer opgegeven, redirect index.php
-        header("Location: index.php");
-    }
 }
+else {
+    // Geen voorwerpnummer opgegeven, redirect index.php
+    header("Location: index.php");
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-    send_message($_POST);
+    if(isUserLoggedIn($db)){
+      $biedQuery = $db->prepare("INSERT INTO Bod(voorwerpnummer,bodbedrag,gebruiker,boddagtijd) VALUES(?,?,?,GETDATE())");
+      $biedQuery->execute(array($resultVoorwerp['voorwerpnummer'],$_POST['price'],getLoggedInUser($db)['gebruikersnaam']));
+    }
 }
 $breadCrumbQuery = $db->prepare("SELECT * FROM dbo.fnRubriekOuders(?) ORDER BY volgorde DESC");
 $breadCrumbQuery->execute(array(htmlspecialchars($rubriek)));
 $breadCrumb = $breadCrumbQuery->fetchAll();
+
+$bidHistoryQuery = $db->prepare("SELECT b.voorwerpnummer,b.bodbedrag,b.boddagtijd,g.gebruikersnaam,g.bestandsnaam FROM Bod b
+	JOIN
+		Gebruikers g
+			ON g.gebruikersnaam = b.gebruiker
+WHERE voorwerpnummer = ? ORDER BY boddagtijd ASC");
+$bidHistoryQuery->execute(array($resultVoorwerp['voorwerpnummer']));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -195,15 +239,23 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                       </ol>
                                     </div>
                                     <br>
-                                    <p>Land: <b><?php echo $resultVoorwerp['land']?></b></p>
-                                    <p>Plaatsnaam: <b><?php echo $resultVoorwerp['plaatsnaam']?></b></p>
-                                    <p>Postcode: <b><?php echo $resultVoorwerp['postcode']?></b></p>
+                                    <p>Land: <b><?php echo (!empty($resultVoorwerp['landNaam']))?$resultVoorwerp['landNaam']:"Onbekend";?></b></p>
+                                    <p>Plaatsnaam: <b><?php echo (!empty($resultVoorwerp['plaatsnaam']))?$resultVoorwerp['plaatsnaam']:"Onbekend";?></b></p>
+                                    <p>Postcode: <b><?php echo (!empty($resultVoorwerp['postcode']))?$resultVoorwerp['postcode']:"Onbekend";?></b></p>
                                     <br>
-                                    <p>Betalingswijze: <b><?php echo $resultVoorwerp['betalingswijze']?></b></p>
-                                    <p>Betalingsinstructie: <b><?php echo $resultVoorwerp['betalingsinstructie']?></b> </p>
+                                    <?php if(isset($resultVoorwerp['betalingswijze']) && !empty($resultVoorwerp['betalingswijze'])){ ?>
+                                      <p>Betalingswijze: <b><?php echo $resultVoorwerp['betalingswijze']?></b></p>
+                                    <?php }?>
+                                    <?php if(isset($resultVoorwerp['betalingsinstructie']) && !empty($resultVoorwerp['betalingsinstructie'])){ ?>
+                                      <p>Betalingsinstructie: <b><?php echo $resultVoorwerp['betalingsinstructie']?></b> </p>
+                                    <?php }?>
                                     <br>
-                                    <p>Verzendkosten: <b><?php echo $resultVoorwerp['verzendkosten']?></b></p>
-                                    <p>Verzendinstructie: <b><?php echo $resultVoorwerp['verzendinstructie']?></b></p>
+                                    <?php if(isset($resultVoorwerp['verzendkosten']) && !empty($resultVoorwerp['verzendkosten'])){ ?>
+                                      <p>Verzendkosten: <b><?php echo $resultVoorwerp['verzendkosten']?></b></p>
+                                    <?php }?>
+                                    <?php if(isset($resultVoorwerp['verzendinstructie']) && !empty($resultVoorwerp['verzendinstructie'])){ ?>
+                                      <p>Verzendinstructie: <b><?php echo $resultVoorwerp['verzendinstructie']?></b></p>
+                                    <?php }?>
                                 </div>
                             </div>
                             <div class="col-lg-8" style="margin-left:40px; margin-top:20px; width:60%">
@@ -231,74 +283,95 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                 <br>
                                 <p>Verkoper:     <b><?php echo ($resultVoorwerp != null) ? $resultVoorwerp['verkoper'] : ''; ?></b><p>
                                 <p>Startbedrag:  <b>€<?php echo ($resultVoorwerp != null) ? $resultVoorwerp['startprijs'] : ''; ?></b></p>
-                                <p>Hoogste bod:  <b>€NOGNIEDONE,-</b></p>
+                                <p>Hoogste bod:  <b><?php echo ($resultVoorwerp['hoogsteBod'] != null) ? '&euro;'.$resultVoorwerp['hoogsteBod'] : 'Er is nog niet geboden';?></b></p>
                               </div>
-
-                              <div class="input-group" >
-                                 <span class="input-group-addon">&euro;</span>
-                                 <input style="height:36px;"class="form-control" type="number" required name="price" min="0" value="0" step="any">
-                                 <span class="input-group-btn">
-                                   <button class="btn btn-orange" type="button"><img src="images/hamerwit.png" class="auction-hammer"></button>
-                                 </span>
-                               </div>
+                              <?php if(isUserLoggedIn($db)){
+                                ?>
+                                <form method="POST" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
+                                  <div class="input-group" >
+                                     <span class="input-group-addon">&euro;</span>
+                                     <input style="height:36px;"class="form-control" type="number" required name="price" min="<?php echo $resultVoorwerp['minimaalBod']; ?>" value="<?php echo $resultVoorwerp['minimaalBod']; ?>" step="any">
+                                     <span class="input-group-btn">
+                                       <button class="btn btn-orange" type="submit"><img src="images/hamerwit.png" class="auction-hammer"></button>
+                                     </span>
+                                   </div>
+                                 </form>
+                                <?php
+                              }else {
+                                ?>
+                                <p style="font-size:18px;margin-top:20px;">Om te bieden op deze veiling moet je ingelogd zijn, doe dat <a href="login.php">hier</a>.</p>
+                                <?php
+                              }?>
                             </div>
               </div>
               <div role="tabpanel" class="tab-pane" id="bieden">
                 <div class="col-lg-12">
                   <div class="panel-body">
                          <ul class="chat">
-                             <li class="left clearfix"><span class="chat-img pull-left">
-                                 <img src="http://placehold.it/50/55C1E7/fff&text=JACK" alt="User Avatar" class="img-circle" />
-                             </span>
-                                 <div class="chat-body clearfix">
-                                     <div class="header">
-                                         <strong class="primary-font">Jack de Koning</strong> <small class="pull-right text-muted">
-                                             <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
+                            <?php
+
+                              $loggedInUser = '';
+
+                              if(isUserLoggedIn($db))
+                                $loggedInUser = getLoggedInUser($db)['gebruikersnaam'];
+
+                              //echo $loggedInUser;
+
+                              foreach($bidHistoryQuery->fetchAll() as $row){
+
+                                if($row['gebruikersnaam'] == $loggedInUser){
+                                ?>
+                                <li class="right clearfix"><span class="chat-img pull-right">
+                                  <?php
+                                  if(file_exists('images/users/'.$row['bestandsnaam'])) {
+                                    ?>
+                                    <img width="50" height="50" style="background-image:url(images/users/<?php echo $row['bestandsnaam']; ?>);background-size:contain;" class="img-circle" />
+                                    <?php
+                                  }else {
+                                    ?>
+                                    <img width="50" height="50" style="background-image:url(images/users/geenfoto/geenfoto.png);background-size:contain;" class="img-circle" />
+                                    <?php
+                                  }?>
+                                </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <small class=" text-muted"><span class="glyphicon glyphicon-time"></span><?php echo time_elapsed_string($row['boddagtijd']); ?></small>
+                                            <strong class="pull-right primary-font"><?php echo $row['gebruikersnaam']; ?></strong>
+                                        </div>
+                                        <p style="float:right;">
+                                             &euro;<?php echo $row['bodbedrag']; ?> geboden
+                                        </p>
+                                    </div>
+                                </li>
+                                <?php
+                              }else {
+                                ?>
+                                <li class="left clearfix"><span class="chat-img pull-left">
+                                  <?php
+                                  if(file_exists('images/users/'.$row['bestandsnaam'])) {
+                                    ?>
+                                    <img width="50" height="50" style="background-image:url(images/users/<?php echo $row['bestandsnaam']; ?>);background-size:contain;" class="img-circle" />
+                                    <?php
+                                  }else {
+                                    ?>
+                                    <img width="50" height="50" style="background-image:url(images/users/geenfoto/geenfoto.png);background-size:contain;" class="img-circle" />
+                                    <?php
+                                  }?>
+                                 </span>
+                                     <div class="chat-body clearfix">
+                                         <div class="header">
+                                             <strong class="primary-font"><?php echo $row['gebruikersnaam']; ?></strong> <small class="pull-right text-muted">
+                                                 <span class="glyphicon glyphicon-time"></span><?php echo time_elapsed_string($row['boddagtijd']); ?></small>
+                                         </div>
+                                         <p>
+                                            &euro;<?php echo $row['bodbedrag']; ?> geboden
+                                         </p>
                                      </div>
-                                     <p>
-                                         €500.- geboden
-                                     </p>
-                                 </div>
-                             </li>
-                             <li class="left clearfix"><span class="chat-img pull-left">
-                                  <img src="http://placehold.it/50/55C1E7/fff&text=JACK" alt="User Avatar" class="img-circle" />
-                             </span>
-                                 <div class="chat-body clearfix">
-                                     <div class="header">
-                                         <strong class="primary-font">Jack de Koning</strong> <small class="pull-right text-muted">
-                                             <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
-                                     </div>
-                                     <p>
-                                         €600.- geboden
-                                     </p>
-                                 </div>
-                             </li>
-                             <li class="left clearfix"><span class="chat-img pull-left">
-                                 <img src="http://placehold.it/50/55C1E7/fff&text=JACK" alt="User Avatar" class="img-circle" />
-                             </span>
-                                 <div class="chat-body clearfix">
-                                     <div class="header">
-                                         <strong class="primary-font">Jack de Koning</strong> <small class="pull-right text-muted">
-                                             <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
-                                     </div>
-                                     <p>
-                                         €700.- geboden
-                                     </p>
-                                 </div>
-                             </li>
-                             <li class="right clearfix"><span class="chat-img pull-right">
-                                 <img src="http://placehold.it/50/FA6F57/fff&text=KONING" alt="User Avatar" class="img-circle" />
-                             </span>
-                                 <div class="chat-body clearfix">
-                                     <div class="header">
-                                         <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>15 mins ago</small>
-                                         <strong class="pull-right primary-font">Koning Arthur</strong>
-                                     </div>
-                                     <p style="float:right;">
-                                         €900.- geboden
-                                     </p>
-                                 </div>
-                             </li>
+                                 </li>
+                                <?php
+                              }
+                            }
+                            ?>
                          </ul>
                      </div>
                 </div>
@@ -327,10 +400,32 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
       </div>
       <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
         <div class="veilingthumb" style="background-image:url('<?php echo $row['bestandsnaam']; ?>');">
-          <p>Resterende tijd: geen</p>
+          <p>Resterende tijd: <span id="rest_time_<?php echo $row['voorwerpnummer']; ?>">&nbsp;</span></p>
         </div>
       </a>
     </div>
+    <script>
+    var countDownDate = new Date('<?php echo $row['looptijdeinde']; ?>').getTime();
+
+    var x = setInterval(function() {
+
+      var now = new Date().getTime();
+      var distance = countDownDate - now;
+
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("rest_time_<?php echo $row['voorwerpnummer']; ?>").innerHTML = days + "d " + hours + "h "
+      + minutes + "m " + seconds + "s ";
+
+      if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("rest_time_<?php echo $row['voorwerpnummer']; ?>").innerHTML = "Gesloten";
+      }
+    }, 1000);
+    </script>
     <?php }} ?>
 </div>
 <?php include 'php/includes/footer.php' ?>
