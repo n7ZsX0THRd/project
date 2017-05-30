@@ -120,8 +120,7 @@ WHERE voorwerpnummer = ? ORDER BY boddagtijd ASC");
 $bidHistoryQuery->execute(array($resultVoorwerp['voorwerpnummer']));
 
 ?>
-<div class="col-lg-12">
-  <div class="panel-body">
+
          <ul class="chat">
             <?php
 
@@ -131,9 +130,9 @@ $bidHistoryQuery->execute(array($resultVoorwerp['voorwerpnummer']));
                 $loggedInUser = getLoggedInUser($db)['gebruikersnaam'];
 
               //echo $loggedInUser;
-
+              $index = 0;
               foreach($bidHistoryQuery->fetchAll() as $row){
-
+                $index++;
                 if($row['gebruikersnaam'] == $loggedInUser){
                 ?>
                 <li class="right clearfix"><span class="chat-img pull-right">
@@ -186,7 +185,8 @@ $bidHistoryQuery->execute(array($resultVoorwerp['voorwerpnummer']));
                 <?php
               }
             }
+
+            if($index == 0)
+              echo '<center><strong style="font-size:18px;">Hier is nog niet op geboden</strong></center>';
             ?>
          </ul>
-     </div>
-</div>

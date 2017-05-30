@@ -285,7 +285,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                       $text = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $resultVoorwerp['beschrijving']);
                                       $text = preg_replace('/(<(script|style)\b[^>]*>).*?(<\/\2>)/is', "$1$3", $text);
 
-                                      $stripped_text = strip_tags($text,$allowedTags);
+                                      $stripped_text = strip_tags($text);//,$allowedTags
 
                                       $stripped_text = str_replace ("<p><br></p>", "", $stripped_text);
 
@@ -324,7 +324,12 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                             </div>
               </div>
               <div role="tabpanel" class="tab-pane" id="bieden">
-                <!-- CONTENT FROM AJAX -->
+
+                <div class="col-lg-12">
+                  <div class="panel-body" id="bieden_content">
+                        <!-- CONTENT FROM AJAX -->
+                </div>
+                </div>
               </div>
             </div>
         </div>
@@ -417,7 +422,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
     }
   }, 1000);
   $('#bied_refresh').click(function(){
-    $( "#bieden" ).load( "php/includes/bied_geschiedenis.php?voorwerpnummer=<?php echo $resultVoorwerp['voorwerpnummer'];?>" );
+    $( "#bieden_content" ).load( "php/includes/bied_geschiedenis.php?voorwerpnummer=<?php echo $resultVoorwerp['voorwerpnummer'];?>" );
   });
   </script>
 </body>
