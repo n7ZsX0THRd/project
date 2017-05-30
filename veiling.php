@@ -5,34 +5,6 @@ include ('php/database.php');
 include ('php/user.php');
 pdo_connect();
 
-function time_elapsed_string($datetime, $full = false) {
-    $now = new DateTime;
-    $ago = new DateTime($datetime);
-    $diff = $now->diff($ago);
-
-    $diff->w = floor($diff->d / 7);
-    $diff->d -= $diff->w * 7;
-
-    $string = array(
-        'y' => 'year',
-        'm' => 'month',
-        'w' => 'week',
-        'd' => 'day',
-        'h' => 'hour',
-        'i' => 'minute',
-        's' => 'second',
-    );
-    foreach ($string as $k => &$v) {
-        if ($diff->$k) {
-            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
-        } else {
-            unset($string[$k]);
-        }
-    }
-
-    if (!$full) $string = array_slice($string, 0, 1);
-    return $string ? implode(', ', $string) . ' ago' : 'just now';
-}
 
 $resultVoorwerp = null;
 $resultImages = null;
@@ -174,12 +146,6 @@ $breadCrumbQuery = $db->prepare("SELECT * FROM dbo.fnRubriekOuders(?) ORDER BY v
 $breadCrumbQuery->execute(array(htmlspecialchars($rubriek)));
 $breadCrumb = $breadCrumbQuery->fetchAll();
 
-$bidHistoryQuery = $db->prepare("SELECT b.voorwerpnummer,b.bodbedrag,b.boddagtijd,g.gebruikersnaam,g.bestandsnaam FROM Bod b
-	JOIN
-		Gebruikers g
-			ON g.gebruikersnaam = b.gebruiker
-WHERE voorwerpnummer = ? ORDER BY boddagtijd ASC");
-$bidHistoryQuery->execute(array($resultVoorwerp['voorwerpnummer']));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -245,7 +211,7 @@ $bidHistoryQuery->execute(array($resultVoorwerp['voorwerpnummer']));
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
               <li role="presentation" class="active"><a href="#veiling" aria-controls="veiling" role="tab" data-toggle="tab">Veiling</a></li>
-              <li role="presentation"><a href="#bieden" aria-controls="bieden" role="tab" data-toggle="tab">Biedgeschiedenis</a></li>
+              <li role="presentation"><a href="#bieden" id="bied_refresh" aria-controls="bieden" role="tab" data-toggle="tab">Biedgeschiedenis</a></li>
             </ul>
 
             <!-- Tab panes -->
@@ -358,76 +324,7 @@ $bidHistoryQuery->execute(array($resultVoorwerp['voorwerpnummer']));
                             </div>
               </div>
               <div role="tabpanel" class="tab-pane" id="bieden">
-                <div class="col-lg-12">
-                  <div class="panel-body">
-                         <ul class="chat">
-                            <?php
-
-                              $loggedInUser = '';
-
-                              if(isUserLoggedIn($db))
-                                $loggedInUser = getLoggedInUser($db)['gebruikersnaam'];
-
-                              //echo $loggedInUser;
-
-                              foreach($bidHistoryQuery->fetchAll() as $row){
-
-                                if($row['gebruikersnaam'] == $loggedInUser){
-                                ?>
-                                <li class="right clearfix"><span class="chat-img pull-right">
-                                  <?php
-                                  if(file_exists('images/users/'.$row['bestandsnaam'])) {
-                                    ?>
-                                    <img width="50" height="50" style="background-image:url(images/users/<?php echo $row['bestandsnaam']; ?>);background-size:contain;" class="img-circle" />
-                                    <?php
-                                  }else {
-                                    ?>
-                                    <img width="50" height="50" style="background-image:url(images/users/geenfoto/geenfoto.png);background-size:contain;" class="img-circle" />
-                                    <?php
-                                  }?>
-                                </span>
-                                    <div class="chat-body clearfix">
-                                        <div class="header">
-                                            <small class=" text-muted"><span class="glyphicon glyphicon-time"></span><?php echo time_elapsed_string($row['boddagtijd']); ?></small>
-                                            <strong class="pull-right primary-font"><?php echo $row['gebruikersnaam']; ?></strong>
-                                        </div>
-                                        <p style="float:right;">
-                                             &euro;<?php echo $row['bodbedrag']; ?> geboden
-                                        </p>
-                                    </div>
-                                </li>
-                                <?php
-                              }else {
-                                ?>
-                                <li class="left clearfix"><span class="chat-img pull-left">
-                                  <?php
-                                  if(file_exists('images/users/'.$row['bestandsnaam'])) {
-                                    ?>
-                                    <img width="50" height="50" style="background-image:url(images/users/<?php echo $row['bestandsnaam']; ?>);background-size:contain;" class="img-circle" />
-                                    <?php
-                                  }else {
-                                    ?>
-                                    <img width="50" height="50" style="background-image:url(images/users/geenfoto/geenfoto.png);background-size:contain;" class="img-circle" />
-                                    <?php
-                                  }?>
-                                 </span>
-                                     <div class="chat-body clearfix">
-                                         <div class="header">
-                                             <strong class="primary-font"><?php echo $row['gebruikersnaam']; ?></strong> <small class="pull-right text-muted">
-                                                 <span class="glyphicon glyphicon-time"></span><?php echo time_elapsed_string($row['boddagtijd']); ?></small>
-                                         </div>
-                                         <p>
-                                            &euro;<?php echo $row['bodbedrag']; ?> geboden
-                                         </p>
-                                     </div>
-                                 </li>
-                                <?php
-                              }
-                            }
-                            ?>
-                         </ul>
-                     </div>
-                </div>
+                <!-- CONTENT FROM AJAX -->
               </div>
             </div>
         </div>
@@ -519,6 +416,9 @@ $bidHistoryQuery->execute(array($resultVoorwerp['voorwerpnummer']));
       document.getElementById("productCountDown").innerHTML = "Gesloten";
     }
   }, 1000);
+  $('#bied_refresh').click(function(){
+    $( "#bieden" ).load( "php/includes/bied_geschiedenis.php?voorwerpnummer=<?php echo $resultVoorwerp['voorwerpnummer'];?>" );
+  });
   </script>
 </body>
 </html>
