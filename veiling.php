@@ -115,8 +115,59 @@ else {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     if(isUserLoggedIn($db)){
-      $biedQuery = $db->prepare("INSERT INTO Bod(voorwerpnummer,bodbedrag,gebruiker,boddagtijd) VALUES(?,?,?,GETDATE())");
-      $biedQuery->execute(array($resultVoorwerp['voorwerpnummer'],$_POST['price'],getLoggedInUser($db)['gebruikersnaam']));
+      if(isset($_POST['price']) && !empty($_POST['price']))
+      {
+        if(is_numeric($_POST['price'])){
+
+          $highestBiedQuery = $db->prepare("SELECT dbo.fnGetMinBid(?) AS highestBid;");
+          $highestBiedQuery->execute(array($resultVoorwerp['voorwerpnummer']));
+
+          $resultHighest = $highestBiedQuery->fetchAll();
+
+          if(count($resultHighest) > 0)
+          {
+            if(((float)$_POST['price']) >= ((float)$resultHighest[0]['highestBid']))
+            {
+
+              //SELECT gebruiker FROM Bod WHERE voorwerpnummer = 110353566179 ORDER BY bodbedrag DESC
+              $laatsteBiederQuery = $db->prepare("SELECT gebruiker FROM Bod WHERE voorwerpnummer = ? ORDER BY bodbedrag DESC");
+              $laatsteBiederQuery->execute(array($resultVoorwerp['voorwerpnummer']));
+
+              $laatsteBiederResult = $laatsteBiederQuery->fetchAll();
+
+              if(count($laatsteBiederResult) > 0)
+              {
+                if($laatsteBiederResult[0]['gebruiker'] != getLoggedInUser($db)['gebruikersnaam'])
+                {
+                  $biedQuery = $db->prepare("INSERT INTO Bod(voorwerpnummer,bodbedrag,gebruiker,boddagtijd) VALUES(?,?,?,GETDATE())");
+                  $biedQuery->execute(array($resultVoorwerp['voorwerpnummer'],$_POST['price'],getLoggedInUser($db)['gebruikersnaam']));
+
+                  header("Refresh:0");
+                }
+                else {
+                  echo 'Je kunt niet zelf overbieden';
+                }
+              }
+              else {
+                $biedQuery = $db->prepare("INSERT INTO Bod(voorwerpnummer,bodbedrag,gebruiker,boddagtijd) VALUES(?,?,?,GETDATE())");
+                $biedQuery->execute(array($resultVoorwerp['voorwerpnummer'],$_POST['price'],getLoggedInUser($db)['gebruikersnaam']));
+
+                header("Refresh:0");
+              }
+            }
+            else {
+              echo 'Dit bedrag is te laag';
+            }
+          }
+        }
+        else {
+          echo 'Dit is geen bedrag';
+        }
+      }
+      else {
+        echo 'Bedrag is te laag';
+      }
+
     }
 }
 $breadCrumbQuery = $db->prepare("SELECT * FROM dbo.fnRubriekOuders(?) ORDER BY volgorde DESC");
@@ -269,6 +320,8 @@ $bidHistoryQuery->execute(array($resultVoorwerp['voorwerpnummer']));
                                       $text = preg_replace('/(<(script|style)\b[^>]*>).*?(<\/\2>)/is', "$1$3", $text);
 
                                       $stripped_text = strip_tags($text,$allowedTags);
+
+                                      $stripped_text = str_replace ("<p><br></p>", "", $stripped_text);
 
                                       if(strlen($stripped_text) > 0)
                                         echo $stripped_text;
