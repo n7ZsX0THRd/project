@@ -3,6 +3,7 @@ session_start();
 
 include ('php/database.php');
 include ('php/user.php');
+include ('php/mail.php');
 pdo_connect();
 
 if(isset($_GET['mail'])==true) {
@@ -65,6 +66,15 @@ $lastChanceQuery = $db->prepare("SELECT TOP 3 v.voorwerpnummer,v.looptijdeinde,v
 		WHERE DATEADD(MI,30,GETDATE()) < v.looptijdeinde ORDER BY v.looptijdeinde ASC");
 $lastChanceQuery->execute();
 
+$newItemsQuery = $db->prepare("SELECT TOP 4 v.voorwerpnummer,v.titel,v.looptijdeinde,Foto.bestandsnaam FROM Voorwerp v CROSS APPLY
+        (
+        SELECT  TOP 1 Bestand.bestandsnaam
+        FROM    Bestand
+        WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
+        ) Foto ORDER BY v.looptijdbegin DESC");
+$newItemsQuery->execute();
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -85,14 +95,6 @@ $lastChanceQuery->execute();
       <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
       <li data-target="#myCarousel" data-slide-to="1"></li>
 
-      <?php
-        if(isUserLoggedIn($db)){
-      ?>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-        <li data-target="#myCarousel" data-slide-to="3"></li>
-      <?php
-        }
-      ?>
     </ol>
 
     <!-- Wrapper for slides -->
@@ -132,25 +134,6 @@ $lastChanceQuery->execute();
           </div>
         </div>
       </div>
-      <?php
-        if(isUserLoggedIn($db)){
-      ?>
-      <div class="item">
-        <center>
-          <h1>Jouw biedingen</h1>
-          <p style="font-size:16px;">Veil nu snel al uw oude spullen, en vang er nog een leuk bedrag voor!</p>
-        </center>
-      </div>
-
-      <div class="item">
-        <center>
-          <h1>Jouw favorieten</h1>
-          <p style="font-size:16px;">Veil nu snel al uw oude spullen, en vang er nog een leuk bedrag voor!</p>
-        </center>
-      </div>
-      <?php
-        }
-      ?>
     </div>
   </div>
 
@@ -217,7 +200,7 @@ $lastChanceQuery->execute();
               <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
                 <div class="container-fixed">
                   <div class="row item-row">
-                    <h4 class="carousel-header">Uitgelicht</h4>
+                    <h4 class="carousel-header">Nu populair</h4>
                     <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                      <div class="thumbnail">
                       <h3 style="padding-left: 10px">Boeing737</h3>
@@ -262,56 +245,52 @@ $lastChanceQuery->execute();
                       </div>
                      </div>
                     </div>
-                    <h4 class="carousel-header">In de buurt</h4>
+                    <h4 class="carousel-header">Nieuwe veilingen</h4>
 
                   </div>
                 </div>
 
                 <div class="row item-row">
-                  <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                     <div class="thumbnail">
-                      <h3 style="padding-left: 10px">Boeing737</h3>
-                      <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
-                      <div class="caption captionfix">
-                        <h3>COUNTDOWN</h3>
-                        <p>Huidige bod: <strong>€270000.-</strong></p>
-                        <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                      </div>
-                     </div>
+                  <?php
+
+                  foreach($newItemsQuery->fetchAll() as $row){
+                    ?>
+                    <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                       <div class="thumbnail">
+                        <h3 style="padding-left: 10px;word-wrap: break-word;overflow: hidden;height:24px;"><?php echo $row['titel']; ?></h3>
+                        <div class="thumb_image" style="background-image:url(<?php echo $row['bestandsnaam']; ?>);"></div>
+                        <div class="caption captionfix">
+                          <h3 id="count_<?php echo $row['voorwerpnummer']; ?>">&nbsp;</h3>
+                          <p>Huidige bod: <strong>€NogNiet.-</strong></p>
+                          <p><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                        </div>
+                       </div>
                     </div>
-                  <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                     <div class="thumbnail">
-                      <h3 style="padding-left: 10px">Boeing737</h3>
-                      <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
-                      <div class="caption captionfix">
-                        <h3>COUNTDOWN</h3>
-                        <p>Huidige bod: <strong>€270000.-</strong></p>
-                        <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                      </div>
-                     </div>
-                    </div>
-                  <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                     <div class="thumbnail">
-                      <h3 style="padding-left: 10px">Boeing737</h3>
-                      <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
-                      <div class="caption captionfix">
-                        <h3>COUNTDOWN</h3>
-                        <p>Huidige bod: <strong>€270000.-</strong></p>
-                        <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                      </div>
-                     </div>
-                    </div>
-                  <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
-                     <div class="thumbnail">
-                      <h3 style="padding-left: 10px">Boeing737</h3>
-                      <div class="thumb_image" style="background-image:url(images/vliegtuig.png);"></div>
-                      <div class="caption captionfix">
-                        <h3>COUNTDOWN</h3>
-                        <p>Huidige bod: <strong>€270000.-</strong></p>
-                        <p><a href="#" class="btn btn-orange widebutton" role="button">Bieden</a></p>
-                      </div>
-                     </div>
-                    </div>
+                    <script>
+                    var countDownDate = new Date('<?php echo $row['looptijdeinde']; ?>').getTime();
+
+                    var x = setInterval(function() {
+
+                      var now = new Date().getTime();
+                      var distance = countDownDate - now;
+
+                      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                      document.getElementById("count_<?php echo $row['voorwerpnummer']; ?>").innerHTML = days + "d " + hours + "h "
+                      + minutes + "m " + seconds + "s ";
+
+                      if (distance < 0) {
+                        clearInterval(x);
+                        document.getElementById("count_<?php echo $row['voorwerpnummer']; ?>").innerHTML = "Gesloten";
+                      }
+                    }, 1000);
+                    </script>
+                    <?php
+                  }
+                  ?>
                 </div>
               </div>
             </div>

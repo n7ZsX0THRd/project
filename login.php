@@ -3,6 +3,7 @@ session_start();
 
 include ('php/database.php');
 include ('php/user.php');
+include ('php/mail.php');
 pdo_connect();
 
 $error = 0;

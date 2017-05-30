@@ -320,7 +320,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                       <select class="form-control" name="r_secret_question">
                         <option <?php if(isset($_POST['r_secret_question']) === false){ echo 'selected'; } ?> disabled>Geheime vraag</option>
                         <?php
-                          while ($row = $secret_questions->fetch()){
+                          $secret_questions_db = $secret_questions->fetchAll();
+                          var_dump($secret_questions_db);
+                          foreach ($secret_questions_db as $row){
                         ?>
                           <option value="<?php echo $row['ID'];?>" <?php if(isset($_POST['r_secret_question']) && $_POST['r_secret_question'] == $row['ID']){  echo 'selected'; } ?>><?php echo $row['vraag'];?></option>
                         <?php
