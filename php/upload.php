@@ -28,7 +28,7 @@ if(isset($_POST["submit"])) {
     }
 }
 // Check file size
-if ($_FILES["fileToUpload"]["size"] > 100000000) {
+if ($_FILES["fileToUpload"]["size"] > 1000000000) {
     //echo "Sorry, bestand is te groot!";
     header('Location: ../profiel.php?wijzig&foto=size', true, 302);
     $uploadOk = 0;
@@ -44,6 +44,10 @@ if ($uploadOk == 0) {
       header('Location: ../profiel.php?wijzig&foto=error', true, 302);
 // if everything is ok, try to upload file
 } else {
+    if(file_exists($target_file)){
+      unlink($target_file);
+    }
+
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
         $wijzigenBestandsnaam;
         //echo "Je profielfoto is geüpload!";
