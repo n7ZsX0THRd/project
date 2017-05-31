@@ -16,7 +16,7 @@ if (isset($_GET['voorwerpnummer'])) {
   $voorwerpnummer = htmlspecialchars($_GET['voorwerpnummer']);
 
   $data = $db->prepare("SELECT
-v.voorwerpnummer,
+  v.voorwerpnummer,
   v.titel,
   v.beschrijving,
   v.startprijs,
@@ -87,58 +87,81 @@ else {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     if(isUserLoggedIn($db)){
-      if(isset($_POST['price']) && !empty($_POST['price']))
-      {
-        if(is_numeric($_POST['price'])){
 
-          $highestBiedQuery = $db->prepare("SELECT dbo.fnGetMinBid(?) AS highestBid;");
-          $highestBiedQuery->execute(array($resultVoorwerp['voorwerpnummer']));
+      if(getLoggedInUser($db)['statusID'] == 1){
+        $_SESSION['warning']['inactief_account'] = true;
+        header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']); // USER IS INACTIEF
+        exit();
+      }
+      else {
 
-          $resultHighest = $highestBiedQuery->fetchAll();
+        if(isset($_POST['price']) && !empty($_POST['price']))
+        {
+          if(is_numeric($_POST['price'])){
 
-          if(count($resultHighest) > 0)
-          {
-            if(((float)$_POST['price']) >= ((float)$resultHighest[0]['highestBid']))
+            $highestBiedQuery = $db->prepare("SELECT dbo.fnGetMinBid(?) AS highestBid;");
+            $highestBiedQuery->execute(array($resultVoorwerp['voorwerpnummer']));
+
+            $resultHighest = $highestBiedQuery->fetchAll();
+
+            if(count($resultHighest) > 0)
             {
-
-              //SELECT gebruiker FROM Bod WHERE voorwerpnummer = 110353566179 ORDER BY bodbedrag DESC
-              $laatsteBiederQuery = $db->prepare("SELECT gebruiker FROM Bod WHERE voorwerpnummer = ? ORDER BY bodbedrag DESC");
-              $laatsteBiederQuery->execute(array($resultVoorwerp['voorwerpnummer']));
-
-              $laatsteBiederResult = $laatsteBiederQuery->fetchAll();
-
-              if(count($laatsteBiederResult) > 0)
+              if(((float)$_POST['price']) >= ((float)$resultHighest[0]['highestBid']))
               {
-                if($laatsteBiederResult[0]['gebruiker'] != getLoggedInUser($db)['gebruikersnaam'])
+
+                //SELECT gebruiker FROM Bod WHERE voorwerpnummer = 110353566179 ORDER BY bodbedrag DESC
+                $laatsteBiederQuery = $db->prepare("SELECT gebruiker FROM Bod WHERE voorwerpnummer = ? ORDER BY bodbedrag DESC");
+                $laatsteBiederQuery->execute(array($resultVoorwerp['voorwerpnummer']));
+
+                $laatsteBiederResult = $laatsteBiederQuery->fetchAll();
+
+                if(count($laatsteBiederResult) > 0)
                 {
+                  if($laatsteBiederResult[0]['gebruiker'] != getLoggedInUser($db)['gebruikersnaam'])
+                  {
+                    $biedQuery = $db->prepare("INSERT INTO Bod(voorwerpnummer,bodbedrag,gebruiker,boddagtijd) VALUES(?,?,?,GETDATE())");
+                    $biedQuery->execute(array($resultVoorwerp['voorwerpnummer'],$_POST['price'],getLoggedInUser($db)['gebruikersnaam']));
+
+                    $_SESSION['warning']['succesvol_geboden'] = true;
+                    header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
+                    exit();
+                  }
+                  else {
+                    $_SESSION['warning']['overbied_jezelf'] = true;
+                    header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
+                    exit();
+                  }
+                }
+                else {
+
                   $biedQuery = $db->prepare("INSERT INTO Bod(voorwerpnummer,bodbedrag,gebruiker,boddagtijd) VALUES(?,?,?,GETDATE())");
                   $biedQuery->execute(array($resultVoorwerp['voorwerpnummer'],$_POST['price'],getLoggedInUser($db)['gebruikersnaam']));
 
-                  header("Refresh:0");
-                }
-                else {
-                  echo 'Je kunt niet zelf overbieden';
+                  $_SESSION['warning']['succesvol_geboden'] = true;
+                  header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
+                  exit();
                 }
               }
               else {
-                $biedQuery = $db->prepare("INSERT INTO Bod(voorwerpnummer,bodbedrag,gebruiker,boddagtijd) VALUES(?,?,?,GETDATE())");
-                $biedQuery->execute(array($resultVoorwerp['voorwerpnummer'],$_POST['price'],getLoggedInUser($db)['gebruikersnaam']));
-
-                header("Refresh:0");
+                $_SESSION['warning']['prijs_telaag'] = true;
+                header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
+                exit();
               }
             }
-            else {
-              echo 'Dit bedrag is te laag';
-            }
+          }
+          else {
+              $_SESSION['warning']['geengetal_prijs'] = true;
+              header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
+              exit();
           }
         }
         else {
-          echo 'Dit is geen bedrag';
+          $_SESSION['warning']['empty_prijs'] = true;
+          header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
+          exit();
         }
       }
-      else {
-        echo 'Bedrag is te laag';
-      }
+
 
     }
 }
@@ -305,17 +328,62 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                 <p>Hoogste bod:  <b><?php echo ($resultVoorwerp['hoogsteBod'] != null) ? '&euro;'.$resultVoorwerp['hoogsteBod'] : 'Er is nog niet geboden';?></b></p>
                               </div>
                               <?php if(isUserLoggedIn($db)){
+
+                                if(isset($_SESSION['warning']['empty_prijs']) && $_SESSION['warning']['empty_prijs'] === true)
+                                {
                                 ?>
-                                <form method="POST" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
-                                  <div class="input-group" >
-                                     <span class="input-group-addon">&euro;</span>
-                                     <input style="height:36px;"class="form-control" type="number" required name="price" min="<?php echo $resultVoorwerp['minimaalBod']; ?>" value="<?php echo $resultVoorwerp['minimaalBod']; ?>" step="any">
-                                     <span class="input-group-btn">
-                                       <button class="btn btn-orange" type="submit"><img src="images/hamerwit.png" class="auction-hammer"></button>
-                                     </span>
-                                   </div>
-                                 </form>
+                                  <p class="bg-danger notifcation-fix" style="margin-left:0px;margin-right:0px;">De prijs kan niet leeg zijn.</p>
                                 <?php
+                                  $_SESSION['warning'] = null;
+                                }else if(isset($_SESSION['warning']['geengetal_prijs']) && $_SESSION['warning']['geengetal_prijs'] === true)
+                                {
+                                ?>
+                                  <p class="bg-danger notifcation-fix" style="margin-left:0px;margin-right:0px;">De opgegeven prijs is geen geldige prijs.</p>
+                                <?php
+                                  $_SESSION['warning'] = null;
+                                }else if(isset($_SESSION['warning']['prijs_telaag']) && $_SESSION['warning']['prijs_telaag'] === true)
+                                {
+                                ?>
+                                  <p class="bg-danger notifcation-fix" style="margin-left:0px;margin-right:0px;">De opgegeven prijs is te laag.</p>
+                                <?php
+                                  $_SESSION['warning'] = null;
+                                }else if(isset($_SESSION['warning']['overbied_jezelf']) && $_SESSION['warning']['overbied_jezelf'] === true)
+                                {
+                                ?>
+                                  <p class="bg-danger notifcation-fix" style="margin-left:0px;margin-right:0px;">Je kan jezelf niet overbieden.</p>
+                                <?php
+                                  $_SESSION['warning'] = null;
+                                }else if(isset($_SESSION['warning']['inactief_account']) && $_SESSION['warning']['inactief_account'] === true)
+                                {
+                                ?>
+                                  <p class="bg-warning notifcation-fix" style="margin-left:0px;margin-right:0px;">Jouw account is nog niet geverifieerd doe dit eerst om te kunnen bieden.</p>
+                                <?php
+                                  $_SESSION['warning'] = null;
+                                }else if(isset($_SESSION['warning']['succesvol_geboden']) && $_SESSION['warning']['succesvol_geboden'] === true)
+                                {
+                                ?>
+                                  <p class="bg-success notifcation-fix" style="margin-left:0px;margin-right:0px;">Je hebt succesvol geboden.</p>
+                                <?php
+                                  $_SESSION['warning'] = null;
+                                }
+                                if(getLoggedInUser($db)['statusID'] == 1){
+                                  ?>
+                                  <p class="bg-warning notifcation-fix" style="margin-left:0px;margin-right:0px;">Jouw account is nog niet geverifieerd doe dit eerst om te kunnen bieden.</p>
+                                  <?php
+                                }
+                                else {
+                                  ?>
+                                  <form method="POST" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
+                                    <div class="input-group" >
+                                       <span class="input-group-addon">&euro;</span>
+                                       <input style="height:36px;"class="form-control" type="number" required name="price" min="<?php echo $resultVoorwerp['minimaalBod']; ?>" value="<?php echo $resultVoorwerp['minimaalBod']; ?>" step="any">
+                                       <span class="input-group-btn">
+                                         <button class="btn btn-orange" type="submit"><img src="images/hamerwit.png" class="auction-hammer"></button>
+                                       </span>
+                                     </div>
+                                   </form>
+                                  <?php
+                                }
                               }else {
                                 ?>
                                 <p style="font-size:18px;margin-top:20px;">Om te bieden op deze veiling moet je ingelogd zijn, doe dat <a href="login.php">hier</a>.</p>
@@ -384,8 +452,6 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
     <?php }} ?>
 </div>
 <?php include 'php/includes/footer.php' ?>
-
-
   <!-- Bootstrap core JavaScript
   ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
@@ -428,5 +494,5 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
 </body>
 </html>
 <?php
-$_SESSION['warning'] = null;
+//$_SESSION['warning'] = null;
 ?>
