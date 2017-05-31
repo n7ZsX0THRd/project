@@ -1,13 +1,21 @@
 <?PHP
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: bied_geschiedenis.php
+  purpose:
+  Load auction bid history
+*/
 session_start();
 
-include ('../../php/database.php');
-include ('../../php/user.php');
+include_once ('../../php/database.php');
+include_once ('../../php/user.php');
 pdo_connect();
 
 $resultVoorwerp = null;
 
-
+// Function to calculate time elapsed
 function time_elapsed_string($datetime, $full = false) {
     $now = new DateTime;
     $ago = new DateTime($datetime);
@@ -40,69 +48,12 @@ function time_elapsed_string($datetime, $full = false) {
 if (isset($_GET['voorwerpnummer'])) {
   $voorwerpnummer = htmlspecialchars($_GET['voorwerpnummer']);
 
-  $data = $db->prepare("SELECT
-v.voorwerpnummer,
-  v.titel,
-  v.beschrijving,
-  v.startprijs,
-  v.betalingswijze,
-  v.betalingsinstructie,
-  v.postcode,
-  v.plaatsnaam,
-  v.land,
-  v.looptijd,
-  v.looptijdbegin,
-  v.verzendkosten,
-  v.verzendinstructie,
-  v.verkoper,
-  v.koper,
-  v.looptijdeinde,
-  v.veilinggesloten,
-  v.verkoopprijs,
-  vir.rubrieknummer as rn,
-  l.lnd_Landnaam as landNaam,
-  dbo.fnGetMinBid(v.voorwerpnummer) AS minimaalBod,
-  dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod
-  FROM Voorwerp v
-  JOIN VoorwerpInRubriek vir
-    ON vir.voorwerpnummer = v.voorwerpnummer
-  JOIN Landen l
-    ON l.lnd_Code = v.land
-    WHERE v.voorwerpnummer=?");
-  $data->execute([$voorwerpnummer]);
-
-  $resultVoorwerplist=$data->fetchAll();
-
-  if(count($resultVoorwerplist) === 0){
-    header("Location: index.php"); // voorwerpnummer ongeldig
-  }
-  else {
-    $resultVoorwerp = $resultVoorwerplist[0];
-
-    $data2 = $db->prepare("SELECT TOP 3 v.voorwerpnummer, titel, looptijdeinde, Foto.bestandsnaam
-                           FROM Voorwerp v
-                           CROSS APPLY
-                           (
-                               SELECT  TOP 1 Bestand.bestandsnaam
-                               FROM    Bestand
-                               WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
-                           ) Foto
-                           WHERE verkoper = ?
-                           AND v.voorwerpnummer != ?
-                           AND v.looptijdeinde > GETDATE()
-                           ");
-    $data2->execute(array($resultVoorwerp['verkoper'],$resultVoorwerp['voorwerpnummer']));
-    $meerVanVerkoper = $data2->fetchAll();
-
-    $rubriek = $resultVoorwerp['rn'];
-
-    $data = $db->prepare("
-SELECT TOP 4 bestandsnaam FROM Bestand b WHERE b.voorwerpnummer = ? ");
-    $data->execute([$voorwerpnummer]);
-
-    $resultImages=$data->fetchAll();
-
-  }
+  $bidHistoryQuery = $db->prepare("SELECT b.voorwerpnummer,b.bodbedrag,b.boddagtijd,g.gebruikersnaam,g.bestandsnaam FROM Bod b
+  	JOIN
+  		Gebruikers g
+  			ON g.gebruikersnaam = b.gebruiker
+  WHERE voorwerpnummer = ? ORDER BY boddagtijd ASC");
+  $bidHistoryQuery->execute(array($voorwerpnummer));
 
 }
 
@@ -112,12 +63,7 @@ else {
 }
 
 
-$bidHistoryQuery = $db->prepare("SELECT b.voorwerpnummer,b.bodbedrag,b.boddagtijd,g.gebruikersnaam,g.bestandsnaam FROM Bod b
-	JOIN
-		Gebruikers g
-			ON g.gebruikersnaam = b.gebruiker
-WHERE voorwerpnummer = ? ORDER BY boddagtijd ASC");
-$bidHistoryQuery->execute(array($resultVoorwerp['voorwerpnummer']));
+
 
 ?>
 
@@ -125,14 +71,18 @@ $bidHistoryQuery->execute(array($resultVoorwerp['voorwerpnummer']));
             <?php
 
               $loggedInUser = '';
-
+              // Get current loggedIn user username
               if(isUserLoggedIn($db))
                 $loggedInUser = getLoggedInUser($db)['gebruikersnaam'];
 
               //echo $loggedInUser;
               $index = 0;
+              // Loop over bidHistory
               foreach($bidHistoryQuery->fetchAll() as $row){
                 $index++;
+
+                // If username is equal to currently logged in user
+                // show user on the right
                 if($row['gebruikersnaam'] == $loggedInUser){
                 ?>
                 <li class="right clearfix"><span class="chat-img pull-right">
@@ -185,7 +135,7 @@ $bidHistoryQuery->execute(array($resultVoorwerp['voorwerpnummer']));
                 <?php
               }
             }
-
+            // Show message if bid count == 0
             if($index == 0)
               echo '<center><strong style="font-size:18px;">Hier is nog niet op geboden</strong></center>';
             ?>

@@ -1,8 +1,19 @@
 <?php
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: upload.php
+  purpose:
+    Upload profilepicture for user
+*/
 session_start();
-include ('database.php');
-include ('user.php');
+include_once ('database.php');
+include_once ('user.php');
 pdo_connect();
+// Start session,
+// include database and user functions
+// connect to database
 
 $email = $_SESSION['email'];
 $queryGebruikersnaam="SELECT TOP(1) gebruikersnaam FROM Gebruikers WHERE emailadres = '$email'";

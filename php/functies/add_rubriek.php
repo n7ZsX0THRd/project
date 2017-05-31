@@ -1,6 +1,17 @@
-<?php // add a new rubriek to a parent rubriek, if there's no other sub rubriek in the parent rubriek it will make a new rubriek overig 
-include ('../../php/database.php');
+<?php
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: add_rubriek.php
+  purpose:
+  POST function to add rubriek
+*/
+// add a new rubriek to a parent rubriek,
+//if there's no other sub rubriek in the parent rubriek it will make a new rubriek overig
+include_once ('../../php/database.php');
 pdo_connect();
+// Include database and with database
 
 if (!empty($_POST))
     {
@@ -9,7 +20,7 @@ if (!empty($_POST))
 
     global $db;
 
-    $data = $db->prepare("  SELECT TOP 1 volgnr 
+    $data = $db->prepare("  SELECT TOP 1 volgnr
                             FROM Rubriek WHERE parentRubriek = ?
                             ORDER BY volgnr DESC");
                                 $data->execute(array($rubriek_parentNummer));
@@ -36,10 +47,10 @@ if (!empty($_POST))
                                 WHERE rubrieknaam='Overig' AND parentRubriek =  179198 AND volgnr = 0;");
                                 $data->execute(array());
         $result=$data->fetchAll();
-        $rubriek_nummer_overig=$result[0]['rubrieknummer'];  
+        $rubriek_nummer_overig=$result[0]['rubrieknummer'];
 
-        $data = $db->prepare("  UPDATE VoorwerpInRubriek 
-                                SET rubrieknummer =  179203  
+        $data = $db->prepare("  UPDATE VoorwerpInRubriek
+                                SET rubrieknummer =  179203
                                 WHERE rubrieknummer = 4352;");
                                 $data->execute(array($rubriek_naam, $rubriek_parentNummer, $rubriek_parentNummer));
         $result=$data->fetchAll();

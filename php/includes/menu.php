@@ -1,4 +1,12 @@
 <?php
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: menu.php
+  purpose:
+    Main Menu
+*/
 ?>
 <ul class="nav navbar-nav header-navbar">
   <!--<li class="active"><a href="#">Home</a></li>

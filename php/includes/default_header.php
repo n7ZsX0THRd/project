@@ -1,3 +1,13 @@
+<?php
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: default_header.php
+  purpose:
+  Load HTML HEAD
+*/
+?>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">

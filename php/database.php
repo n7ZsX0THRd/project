@@ -1,6 +1,13 @@
 <?php
+/*
+  iProject Groep 2
+  30-05-2017
 
-include ('mail.php');
+  file: database.php
+  purpose:
+    Database functions
+*/
+include_once ('mail.php');
 
 //Making a connection with the database
 function pdo_connect() {
@@ -22,6 +29,7 @@ function block_user($gebruikersnaam) {
         $dbs = $db->prepare("SELECT emailadres FROM Gebruikers WHERE gebruikersnaam = ? ");
         $dbs->execute(array($gebruikersnaam));
         $result = $dbs->fetchAll()[0];
+        // Block user Query
 
         $to = $result[0];
         $subject = 'Je account is geblokkeerd';
@@ -50,6 +58,7 @@ function block_user($gebruikersnaam) {
             </td>
         </tr>';
         sendMail($to,$subject,$message);
+        //SendMail to user
         return true;
     } catch (PDOException $e) {
         //echo "Could not block user, ".$e->getMessage();
@@ -119,14 +128,15 @@ function unBlock_user($gebruikersnaam) {
                 </td>
             </tr>';
             sendMail($to,$subject,$message);
+            //Sendmail to user
         }
         return true;
     } catch (PDOException $e) {
-        $to = 'guusbouw@hotmail.com';
-        $subject = "Je account is gedeblokkeerd";
-        $message= $e;
-        $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
-        mail($to, $subject, $message, $headers);
+        //$to = 'guusbouw@hotmail.com';
+        //$subject = "Je account is gedeblokkeerd";
+        //$message= $e;
+        //$headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
+        //mail($to, $subject, $message, $headers);
         return false;
     }
 }
@@ -203,13 +213,13 @@ WHERE gebruikersnaam = (SELECT Gebruikers.gebruikersnaam
       }
 
   } catch (PDOException $e) {
-      $to = 'otisvdm@hotmail.com';
+      /*$to = 'otisvdm@hotmail.com';
                 $subject = "PDOexception eenmaalandermaal";
                 $message= '
                 '.$e.'
                 ';
                 $headers = 'From: noreply@iproject2.icasites.nl' . "\r\n";
-                mail($to, $subject, $message, $headers);
+                mail($to, $subject, $message, $headers);*/
       return 0;
   }
 }
@@ -311,12 +321,6 @@ function unique_mail($mail,$db) {
   else {
     return false;
   }
-}
-
-function send_message($data) { // WHY
-  //header("Location: google.com");
-  echo "lol";
-
 }
 
 

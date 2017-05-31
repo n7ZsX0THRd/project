@@ -1,11 +1,21 @@
 <?php
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: rubrieken_overzicht.php
+  purpose:
+  Show rubrieken
+*/
 session_start();
 
-include ('php/database.php');
-include ('php/user.php');
+include_once ('php/database.php');
+include_once ('php/user.php');
 pdo_connect();
+// database and user functions
+// connect to database
 
-
+// Function to get neighbor item in array
 function array_neighbor($arr, $key)
 {
    $keys = array_keys($arr);
@@ -29,7 +39,7 @@ function array_neighbor($arr, $key)
    return $return;
 }
 
-
+// Check if user is administrator
 $beheerder = false;
 if(isUserBeheerder($db)) {
     $beheerder = true;
@@ -37,36 +47,83 @@ if(isUserBeheerder($db)) {
     $beheerder = false;
 }
 
+// Check if user requested post
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
-  if(isset($_POST['key']) && isset($_POST['new_name']) && !empty($_POST['new_name'])){
+  // check if user is owner
+  if($beheerder)
+  {
+      // check if key isset and new name isset and not empty
+      if(isset($_POST['key']) && isset($_POST['new_name']) && !empty($_POST['new_name'])){
 
-    $data = $db->prepare("UPDATE Rubriek
-                            SET rubrieknaam = ?
-                            WHERE rubrieknummer = ?;");
-    try{
-      $data->execute(array($_POST['new_name'],$_POST['key']));
-      $_SESSION['warning']['changed'] = true;
-      //echo 'SUCCES';
-    }
-    catch(Exception $e){
-      $_SESSION['warning']['error'] = $_POST['key'];
-      //echo 'FAILED';
-    }
-  }
-  else {
-    $_SESSION['warning']['error'] = $_POST['key'];
-  }
+        $data = $db->prepare("UPDATE Rubriek
+                                SET rubrieknaam = ?
+                                WHERE rubrieknummer = ?;");
+         // Query to update rubrieknaam
 
+        try{
+          $data->execute(array($_POST['new_name'],$_POST['key']));
+          $_SESSION['warning']['changed'] = true; //Changed succesfull show notifcation
+          //echo 'SUCCES';
+        }
+        catch(Exception $e){
+          $_SESSION['warning']['error'] = $_POST['key']; // Something went wrong, show warning
+          //echo 'FAILED';
+        }
+      }
+      else {
+        $_SESSION['warning']['error'] = $_POST['key']; // Something went wrong, show warning
+      }
+  }
 }
 
+global $db;
+$data = $db->query("SELECT *
+                    FROM Rubriek
+                    WHERE parentRubriek = -1 or parentRubriek IN (
+                                                    SELECT rubrieknummer
+                                                    FROM Rubriek
+                                                    WHERE parentRubriek = -1 )
+                    ORDER BY parentRubriek ASC, volgnr ASC, rubrieknaam ASC");
+// Select Rubrieken from Rubriek database
+// with child rubrieks
+
+$result = $data->fetchAll();
+$count=count($result);
+//print_r($result);
+$rubrieken = [];
+// Create array of rubrieken
+for ($row = 0; $row < $count; $row++) {
+    //echo "<p><b>Row number $row</b></p>";
+    if ($result[$row]['parentRubriek']==-1){ //hoofdrubriek
+        $nummer = $result[$row]['rubrieknummer'];
+        $rubrieken[$nummer][] = $result[$row];
+        //echo "<li>".$result[$row]['rubrieknaam']."</li>";
+    } else { //subruriek
+        $parentNummer = $result[$row]['parentRubriek'];
+        $rubriekNummer = $result[$row]['rubrieknummer'];
+        $rubriekStatus = $result[$row]['inactief'];
+
+        $rubriekNaam = $result[$row]['rubrieknaam'];
+        $volgnr = $result[$row]['volgnr'];
+
+        $rubriek_gegevens['volgnr']= $volgnr;
+        $rubriek_gegevens['rubrieknaam'] = $rubriekNaam;
+        $rubriek_gegevens['status'] = $rubriekStatus;
+
+        $rubrieken[$parentNummer][$rubriekNummer] = $rubriek_gegevens;
+    }
+}
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
 
-        <?php include 'php/includes/default_header.php'; ?>
+        <?php
+          include 'php/includes/default_header.php';
+          // Include default head
+        ?>
         <title>Rubrieken overzicht - Eenmaal Andermaal</title>
         <link href="css/rubriek_overzicht.css" rel="stylesheet">
 
@@ -74,65 +131,29 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
   <body>
 
-    <?php include 'php/includes/header.php' ?>
+    <?php
+      include 'php/includes/header.php';
+      //include navigation
+    ?>
         <main class="container">
 
 
             <?php
-
+            // If this session isset, rubriek name is succesfully changed
             if(isset($_SESSION['warning']['changed']) && $_SESSION['warning']['changed'] === true){
             ?>
               <p class="bg-success notifcation-fix" style="padding:5px;">De naam van de rubriek is succesvol gewijzigd.</p>
             <?php
             }
-
-            global $db;
-            $data = $db->query("SELECT *
-                                FROM Rubriek
-                                WHERE parentRubriek = -1 or parentRubriek IN (
-                                                                SELECT rubrieknummer
-                                                                FROM Rubriek
-                                                                WHERE parentRubriek = -1 )
-                                ORDER BY parentRubriek ASC, volgnr ASC, rubrieknaam ASC");
-                                /*
-                while ($row = $data->fetch()){
-                    echo "$row[rubrieknaam]</br>";
-                }*/
-
-                $result = $data->fetchAll();
-                $count=count($result);
-                //print_r($result);
-                $rubrieken = [];
-                for ($row = 0; $row < $count; $row++) {
-                    //echo "<p><b>Row number $row</b></p>";
-                    if ($result[$row]['parentRubriek']==-1){ //hoofdrubriek
-                        $nummer = $result[$row]['rubrieknummer'];
-                        $rubrieken[$nummer][] = $result[$row];
-                        //echo "<li>".$result[$row]['rubrieknaam']."</li>";
-                    } else { //subruriek
-                        $parentNummer = $result[$row]['parentRubriek'];
-                        $rubriekNummer = $result[$row]['rubrieknummer'];
-                        $rubriekStatus = $result[$row]['inactief'];
-
-                        $rubriekNaam = $result[$row]['rubrieknaam'];
-                        $volgnr = $result[$row]['volgnr'];
-
-                        $rubriek_gegevens['volgnr']= $volgnr;
-                        $rubriek_gegevens['rubrieknaam'] = $rubriekNaam;
-                        $rubriek_gegevens['status'] = $rubriekStatus;
-
-                        $rubrieken[$parentNummer][$rubriekNummer] = $rubriek_gegevens;
-                    }
-                }
-
-                ?>
+            ?>
                 <nav aria-label="Page navigation example">
                     <ul id="sticky" class="pagination">
                     <?php
+                        // Loop over all chars from alphabet
+                        // Check if char has rubrieks, otherwise block this char in navigation row
                         foreach(range('A','Z') as $char) {
                             $nRubrieken = 0;
                             foreach($rubrieken as $rubriek){
-
                                 $firstChar =substr ($rubriek[0]['rubrieknaam'] , 0 , 1 );
                                 if ($char==$firstChar){
                                     $nRubrieken ++;
@@ -150,6 +171,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                     </ul>
                 </nav>
                 <?php
+                // Loop over all chars from alphabet
+                // Show all rubrieks 
                 foreach(range('A','Z') as $char) {
                     $nRubrieken = 0;
                     foreach($rubrieken as $rubriek){
@@ -170,13 +193,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             echo '<h2>';
                             if($beheerder) {
                                 ?>
-                                  <!--
-                                    <form class="btn-group" action="php/functies/change_rubrieknaam.php" method="POST">
-                                        <input type="hidden" name="rubriek_nummer" value="<?php $rubriek_nummer ?>" >
-                                        <input type="hidden" name="rubriek_naam" value="<?php $rubriek_naam ?>">
-                                        <button type="submit" class="btn btn-secondary glyphicon glyphicon-edit"></button>
-                                    </form>
-                                  -->
                                     <div class="btn-group" style="display:inline-block;">
                                       <button type="button" class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Acties

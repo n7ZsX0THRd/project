@@ -1,15 +1,30 @@
 <?php
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: registreer.php
+  purpose:
+  Registrer user
+*/
 session_start();
 
-include ('php/database.php');
-include ('php/user.php');
+include_once ('php/database.php');
+include_once ('php/user.php');
 pdo_connect();
+// Start session,
+// include database and user functions
+// connect to database
 
 if(isUserLoggedIn($db))
   header('location: index.php');
+// If user is loggedin redirect to homepage
 
 $secret_questions = $db->query("SELECT ID,vraag FROM GeheimeVragen ORDER BY vraag ASC");
 $landen = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
+// Query to select all secret questions and countries
+// from database, for dropdown in register
+
 
 $required_register_fields = Array (
   'r_username' => 'Gebruikersnaam',
@@ -32,72 +47,94 @@ $required_register_fields = Array (
   'r_secret_question_answer' => 'Geheime vraag antwoord',
   'r_terms_of_use' => 'Gebruikersvoorwaarden'
 );
-
+// List of required fields for registration with dutch name
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+  // If user requested register POST
 
-  $missing = array();
+  $missing = array(); // Array of fields empty or not set
 
+
+  // Loop over $required_register_fields and check if they are set and or empty
   foreach($required_register_fields as $key => $value)
   {
-    if(isset($_POST[$key]) === false || empty($_POST[$key]))
+    if(isset($_POST[$key]) === false || empty($_POST[$key])) // If key is empty or not set push to $missing
       array_push($missing, $value);
   }
+
+  // if missing count == 0 all fields are filled
   if(count($missing) > 0)
   {
     $_SESSION['warning']['show_required_fields_warning'] = true;
     $_SESSION['warning']['missing_fields'] = $missing;
-  }
+  } // Set settings to show warning
   else
   {
-    if($_POST['r_password'] !== $_POST['r_password_confirm'])
+    if($_POST['r_password'] !== $_POST['r_password_confirm']) // Check if given passwords are not equal
     {
       $_SESSION['warning']['incorrect_passwords'] = true;
+      // Set settings to show warning
     }
     else
     {
-      if($_POST['r_email'] !== $_POST['r_email_confirm'])
+      if($_POST['r_email'] !== $_POST['r_email_confirm']) // Check if given emails are not equal
       {
         $_SESSION['warning']['incorrect_email'] = true;
+        // Set settings to show warning
       }
       else
       {
-        if(checkdate(intval($_POST['r_birthmonth']), intval($_POST['r_birthday']), intval($_POST['r_birthyear'])) === false)
+        if(checkdate(intval($_POST['r_birthmonth']), intval($_POST['r_birthday']), intval($_POST['r_birthyear'])) === false) // Check if given birthdate is valid date
         {
           $_SESSION['warning']['invalid_birthdate'] = true;
         }
         else
         {
+          // Check if username is between 2 and 20 character and doesn't contain any special characters.
           if(strlen($_POST['r_username']) >= 2 && strlen($_POST['r_username']) <= 20 && preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $_POST['r_username']) == false){
 
-            if(strlen($_POST['r_password']) < 8 || strlen($_POST['r_password']) > 20){//!preg_match('/^(?=[a-z])(?=[A-Z])[a-zA-Z]{8,}$/', $_POST['r_password'])) {
+            // Check if password shorter than 8 characters or longer than 20
+            if(strlen($_POST['r_password']) < 8 || strlen($_POST['r_password']) > 20){
               $_SESSION['warning']['invalid_password'] = true;
             }
             else {
+              // Query, select username from database to check if username is unique
               $dbs = $db->prepare("SELECT TOP(1) gebruikersnaam FROM Gebruikers WHERE gebruikersnaam = ?");
               $dbs->execute(array($_POST['r_username']));
 
+              // if count != 0 username is invalid and already in use
               if(count($dbs->fetchAll()) != 0)
               {
+                // Set session to show warning,  if username already in use
                 $_SESSION['warning']['invalid_username'] = true;
               }
               else {
+                // Username is unique continue
+
+                // Select email from database to check if username is unique
                 $dbs = $db->prepare("SELECT TOP(1) emailadres FROM Gebruikers WHERE emailadres = ?");
                 $dbs->execute(array($_POST['r_email']));
 
+                // if count != 0 email is invalid and already in use
                 if(count($dbs->fetchAll()) != 0)
                 {
+                  // Set session to show warning,  if email already in use
                   $_SESSION['warning']['invalid_email'] = true;
                 }
                 else {
 
+                    // Check if adresregel2 is empty or unset, and set value to null
                     if(isset($_POST['r_adressregel2']) == false || empty($_POST['r_adressregel2']))
                       $_POST['r_adressregel2'] = null;
 
+                    // Create user
                     if(create_user($_POST,$db))
                     {
+                      // Create random verification code
                       $random = rand(100000,999999);
                       $code = create_verification_for_user(array('gebruikersnaam' => $_POST['r_username'],'verificatiecode' => $random), $db);
+                      // insert verification into database
+                      // $code != 0 insert was succesfull, and send email to user.
                       if($code != 0) {
                           $to = $_POST['r_email'];
                           $subject = 'Activatiecode voor EenmaalAndermaal';
@@ -136,7 +173,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                           sendMail($to,$subject,$message);
                       }
                       $_SESSION['email'] = $_POST['r_email'];
-                      header('location: index.php');
+                      // Account succesfull created, set session for login
+                      header('location: index.php');// Redirect homepage
                     }
                     else{
                       //echo 'ER IS IETS FOUT GEGAAN';
@@ -147,6 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
           }
           else {
               $_SESSION['warning']['username_invalid'] = true;
+              // Set session to show notifcation of invalid username
           }
         }
       }
@@ -158,7 +197,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 <html lang="en">
   <head>
 
-        <?php include 'php/includes/default_header.php'; ?>
+        <?php
+          include 'php/includes/default_header.php';
+          // Include default head
+        ?>
 
         <title>Registreren - Eenmaal Andermaal</title>
 
@@ -166,7 +208,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
   </head>
   <body>
 
-    <?php include 'php/includes/header.php' ?>
+    <?php
+      include 'php/includes/header.php';
+      // Include navigation
+    ?>
 <div class="container">
       <div class="row">
         <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 loginscherm">
@@ -176,6 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             <form class="form-horizontal" method="post" enctype="multipart/form-data" action="">
             <div class="login">
                   <?php
+                   // Show notifcations for missing fields
                     if(isset($_SESSION['warning']['show_required_fields_warning']) && $_SESSION['warning']['show_required_fields_warning'] === true){
                   ?>
                     <div class="bg-danger" style="padding:5px;margin-bottom:5px;">Je mist een aantal velden:
@@ -281,6 +327,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                       <select class="form-control" name="r_country">
                         <option <?php if(isset($_POST['r_country']) === false){ echo 'selected'; } ?> disabled>Land</option>
                         <?php
+                          // Loop over countries
                           while ($land_code = $landen->fetch()){
                         ?>
                           <option value="<?php echo $land_code['lnd_Code'];?>" <?php if(isset($_POST['r_country']) && $_POST['r_country'] == $land_code['lnd_Code']){  echo 'selected'; } ?>><?php echo $land_code['lnd_Landnaam'];?></option>
@@ -355,31 +402,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
       </div>
     </div>
 
-<?php include 'php/includes/footer.php' ?>
+<?php
+  include 'php/includes/footer.php';
+  // Include footer
+?>
 
-
-
-
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
-<script src="bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
-<script>
-/*
-$("li.toggle-sub").click(function(evt) {
-
-  evt.preventDefault();
-  $(this).children("span").toggleClass('glyphicon-menu-right');
-  $(this).children("span").toggleClass('glyphicon-menu-down');
-  $(this).children(".sub").toggle();
-});
-*/
-</script>
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
+  <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>
 </html>
 <?php

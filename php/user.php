@@ -1,4 +1,15 @@
 <?php
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: user.php
+  purpose:
+    Functions for user control,
+    getLoggedInUser
+    isUserLoggedIn
+    isUserBeheerder
+*/
 
 function getLoggedInUser($db){
   if(isset($_SESSION['email']) && !empty($_SESSION['email'])){

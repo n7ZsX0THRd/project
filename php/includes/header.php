@@ -1,4 +1,13 @@
+<?php
+/*
+  iProject Groep 2
+  30-05-2017
 
+  file: header.php
+  purpose:
+  Navigation
+*/
+?>
     <nav class="navbar navbar-inverse navbar-fixed-top header-style">
       <div class="container">
         <div class="navbar-header">

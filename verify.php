@@ -1,25 +1,37 @@
 <?php
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: verify.php
+  purpose:
+  Verify user account
+*/
 session_start();
 
-include ('php/database.php');
-include ('php/user.php');
+include_once ('php/database.php');
+include_once ('php/user.php');
 pdo_connect();
+// include database and user functions
+// connect with database
 
+// If all get parameters are set
 if(isset($_GET['gebruikersnaam']) && !empty($_GET['gebruikersnaam']) && isset($_GET['code']) && !empty($_GET['code'])){
     // Verify data
     $gebruikersnaam = $_GET['gebruikersnaam'];
     $code = $_GET['code'];
 }else{
     // Invalid approach
+    // redirect to homepage
     header ('location: index.php');
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <?php
         include ('php/includes/default_header.php');
+        // Include default head
         ?>
 
         <title>Verifieer - Eenmaal Andermaal</title>
@@ -28,6 +40,7 @@ if(isset($_GET['gebruikersnaam']) && !empty($_GET['gebruikersnaam']) && isset($_
     <body>
         <?php
         include ('php/includes/header.php');
+        // include navigation
         ?>
 
         <div class="container">
@@ -70,9 +83,11 @@ if(isset($_GET['gebruikersnaam']) && !empty($_GET['gebruikersnaam']) && isset($_
 
                     } else {
                         echo 'Je code klopt niet!';
+                        // Incorrect key
                     }
                   }else {
                       echo 'Je activatiecode is verlopen.';
+                      // Key expired
                   }
 
 
@@ -83,6 +98,7 @@ if(isset($_GET['gebruikersnaam']) && !empty($_GET['gebruikersnaam']) && isset($_
 
         <?php
         include ('php/includes/footer.php');
+        // include footer
         ?>
 
         <!-- Bootstrap core JavaScript

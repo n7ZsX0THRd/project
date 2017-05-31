@@ -1,20 +1,37 @@
 <?PHP
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: veiling.php
+  purpose:
+  Show auctions with details, with an option to bid
+*/
 session_start();
 
-include ('php/database.php');
-include ('php/user.php');
+include_once ('php/database.php');
+include_once ('php/user.php');
 pdo_connect();
+// Include database, user functions
+// Connect to database
 
-
+//Create variables for rootRubriek,rubriek and
+// resultVoorwerp
+// With resultImages
+// resulted by GET parameter voorwerpnummer
 $resultVoorwerp = null;
 $resultImages = null;
 $rubriek = -1;
 $rootRubriek = -1;
 
 
+
 if (isset($_GET['voorwerpnummer'])) {
   $voorwerpnummer = htmlspecialchars($_GET['voorwerpnummer']);
+  //echo $voorwerpnummer;
 
+  //Query, select all information from auctions
+  // where voorwerpnummer = $GET voorwerpnummer
   $data = $db->prepare("SELECT
   v.voorwerpnummer,
   v.titel,
@@ -39,21 +56,24 @@ if (isset($_GET['voorwerpnummer'])) {
   dbo.fnGetMinBid(v.voorwerpnummer) AS minimaalBod,
   dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod
   FROM Voorwerp v
-  JOIN VoorwerpInRubriek vir
+  LEFT JOIN VoorwerpInRubriek vir
     ON vir.voorwerpnummer = v.voorwerpnummer
-  JOIN Landen l
+  LEFT JOIN Landen l
     ON l.lnd_Code = v.land
     WHERE v.voorwerpnummer=?");
   $data->execute([$voorwerpnummer]);
 
   $resultVoorwerplist=$data->fetchAll();
 
+  // If auction not found redirect to homepage
   if(count($resultVoorwerplist) === 0){
     header("Location: index.php"); // voorwerpnummer ongeldig
   }
   else {
+    // resultVoorwerp = first record from resultList
     $resultVoorwerp = $resultVoorwerplist[0];
 
+    // Select 3 sales from same seller
     $data2 = $db->prepare("SELECT TOP 3 v.voorwerpnummer, titel, looptijdeinde, Foto.bestandsnaam
                            FROM Voorwerp v
                            CROSS APPLY
@@ -68,11 +88,11 @@ if (isset($_GET['voorwerpnummer'])) {
                            ");
     $data2->execute(array($resultVoorwerp['verkoper'],$resultVoorwerp['voorwerpnummer']));
     $meerVanVerkoper = $data2->fetchAll();
-
+    // fill variable $meerVanVerkoper with data from database
     $rubriek = $resultVoorwerp['rn'];
 
-    $data = $db->prepare("
-SELECT TOP 4 bestandsnaam FROM Bestand b WHERE b.voorwerpnummer = ? ");
+    //Query select 4 images for auction
+    $data = $db->prepare("SELECT TOP 4 bestandsnaam FROM Bestand b WHERE b.voorwerpnummer = ? ");
     $data->execute([$voorwerpnummer]);
 
     $resultImages=$data->fetchAll();
@@ -82,21 +102,29 @@ SELECT TOP 4 bestandsnaam FROM Bestand b WHERE b.voorwerpnummer = ? ");
 }
 else {
     // Geen voorwerpnummer opgegeven, redirect index.php
-    header("Location: index.php");
+    //header("Location: index.php");
 }
 
+//Requested post method
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+    // User trying to bid on auction
     if(isUserLoggedIn($db)){
+      // check if user is logged in
 
       if(getLoggedInUser($db)['statusID'] == 1){
+        // if user is blocked, set session for notifcation
+        // refresh page
         $_SESSION['warning']['inactief_account'] = true;
         header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']); // USER IS INACTIEF
         exit();
       }
       else {
 
+        // check if price isset and not empty
         if(isset($_POST['price']) && !empty($_POST['price']))
         {
+          // Check if given price is numeric
           if(is_numeric($_POST['price'])){
 
             $highestBiedQuery = $db->prepare("SELECT dbo.fnGetMinBid(?) AS highestBid;");
@@ -104,29 +132,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             $resultHighest = $highestBiedQuery->fetchAll();
 
+            // Check if query resulted
             if(count($resultHighest) > 0)
             {
+              // Check if current offer is higher than highestbid
               if(((float)$_POST['price']) >= ((float)$resultHighest[0]['highestBid']))
               {
-
                 //SELECT gebruiker FROM Bod WHERE voorwerpnummer = 110353566179 ORDER BY bodbedrag DESC
                 $laatsteBiederQuery = $db->prepare("SELECT gebruiker FROM Bod WHERE voorwerpnummer = ? ORDER BY bodbedrag DESC");
                 $laatsteBiederQuery->execute(array($resultVoorwerp['voorwerpnummer']));
 
                 $laatsteBiederResult = $laatsteBiederQuery->fetchAll();
-
+                // Get username from highestBid
                 if(count($laatsteBiederResult) > 0)
                 {
+                  //Check if username from highestBid is not the same as current user
                   if($laatsteBiederResult[0]['gebruiker'] != getLoggedInUser($db)['gebruikersnaam'])
                   {
                     $biedQuery = $db->prepare("INSERT INTO Bod(voorwerpnummer,bodbedrag,gebruiker,boddagtijd) VALUES(?,?,?,GETDATE())");
                     $biedQuery->execute(array($resultVoorwerp['voorwerpnummer'],$_POST['price'],getLoggedInUser($db)['gebruikersnaam']));
 
+                    // Set session for succesfull and refresh
                     $_SESSION['warning']['succesvol_geboden'] = true;
                     header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
                     exit();
                   }
                   else {
+                    // Set session for overbid and refresh
                     $_SESSION['warning']['overbied_jezelf'] = true;
                     header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
                     exit();
@@ -134,15 +166,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 }
                 else {
 
+                  //Place bid, since nobody else as bid yet
                   $biedQuery = $db->prepare("INSERT INTO Bod(voorwerpnummer,bodbedrag,gebruiker,boddagtijd) VALUES(?,?,?,GETDATE())");
                   $biedQuery->execute(array($resultVoorwerp['voorwerpnummer'],$_POST['price'],getLoggedInUser($db)['gebruikersnaam']));
 
+                  // Set session for succesfull and refresh
                   $_SESSION['warning']['succesvol_geboden'] = true;
                   header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
                   exit();
                 }
               }
               else {
+                // the given price isn't a valid numeric value
+                // set session for notifcation and refresh page to update potential updates
                 $_SESSION['warning']['prijs_telaag'] = true;
                 header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
                 exit();
@@ -150,12 +186,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             }
           }
           else {
+              // the given price isn't a valid numeric value
+              // set session for notifcation and refresh page to update potential updates
               $_SESSION['warning']['geengetal_prijs'] = true;
               header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
               exit();
           }
         }
         else {
+          // Price is empty,
+          // set session for notifcation and refresh page to update potential updates
           $_SESSION['warning']['empty_prijs'] = true;
           header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
           exit();
@@ -168,7 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 $breadCrumbQuery = $db->prepare("SELECT * FROM dbo.fnRubriekOuders(?) ORDER BY volgorde DESC");
 $breadCrumbQuery->execute(array(htmlspecialchars($rubriek)));
 $breadCrumb = $breadCrumbQuery->fetchAll();
-
+//Query for breadcrumb of current article
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -223,12 +263,12 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
         }
         ?>
         <div class="row content_top_offset">
-          <div class="col-lg-12 timer_row" >
-            <div class="veiling-countdown">
-              <h1 id="productCountDown" class="orange">&nbsp;</h1>
-            </div>
+          <div class="col-lg-12 timer_row">
             <div class="veiling-titel">
               <h2><?php echo ($resultVoorwerp != null) ? $resultVoorwerp['titel'] : ''; ?></h2>
+            </div>
+            <div class="veiling-countdown">
+              <h1 id="productCountDown" class="orange">&nbsp;</h1>
             </div>
           </div>
             <!-- Nav tabs -->
@@ -250,6 +290,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
 
                                         <?php
                                           $first = true;
+                                          //Foreach over images from current auction
                                           foreach($resultImages as $row){
                                             ?>
                                             <div class="item <?php echo ($first) ? 'active' : '' ;?>">
@@ -266,6 +307,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                         <?php
                                           $first = true;
                                           $index = 0;
+                                          //Foreach over images from current auction
                                           foreach($resultImages as $row){
                                             ?>
                                             <li class="<?php echo ($first) ? 'active' : '' ;?>" data-slide-to="<?php echo $index; ?>" data-target="#article-photo-carousel">
@@ -279,6 +321,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                       </ol>
                                     </div>
                                     <br>
+                                    <!-- SHOW CURRENT AUCTION INFO -->
                                     <p>Land: <b><?php echo (!empty($resultVoorwerp['landNaam']))?$resultVoorwerp['landNaam']:"Onbekend";?></b></p>
                                     <p>Plaatsnaam: <b><?php echo (!empty($resultVoorwerp['plaatsnaam']))?$resultVoorwerp['plaatsnaam']:"Onbekend";?></b></p>
                                     <p>Postcode: <b><?php echo (!empty($resultVoorwerp['postcode']))?$resultVoorwerp['postcode']:"Onbekend";?></b></p>
@@ -296,6 +339,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                     <?php if(isset($resultVoorwerp['verzendinstructie']) && !empty($resultVoorwerp['verzendinstructie'])){ ?>
                                       <p>Verzendinstructie: <b><?php echo $resultVoorwerp['verzendinstructie']?></b></p>
                                     <?php }?>
+                                    <!-- SHOW CURRENT AUCTION INFO END -->
                                 </div>
                             </div>
                             <div class="col-lg-8" style="margin-left:40px; margin-top:20px; width:60%">
@@ -303,32 +347,41 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                               <div style="padding: 5px;border: 1px solid;border-radius: 5px; border-color: #5484a4">
                                 <?php
                                 if($resultVoorwerp != null){
-                                    $allowedTags = '<br><p><h1><h2><h3><h4><h5><h6><ul><li><ol><span><b><i><strong><small><mark><em><ins><sub><sup><del>';
+                                      // Allowed HTML elements in description
+                                      $allowedTags = '<br><p><h1><h2><h3><h4><h5><h6><ul><li><ol><span><b><i><strong><small><mark><em><ins><sub><sup><del>';
 
+                                      // Replace script and style elements
                                       $text = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $resultVoorwerp['beschrijving']);
                                       $text = preg_replace('/(<(script|style)\b[^>]*>).*?(<\/\2>)/is', "$1$3", $text);
 
-                                      $stripped_text = strip_tags($text);//,$allowedTags
-
+                                      $stripped_text = strip_tags($text,$allowedTags);
                                       $stripped_text = str_replace ("<p><br></p>", "", $stripped_text);
+                                      //Strip html elements
+                                      //and replace <p><br></p> with nothing
 
+                                      // Check if stripped text is longer > 0
                                       if(strlen($stripped_text) > 0)
                                         echo $stripped_text;
                                       else {
-                                        echo 'Deze veiling heeft geen beschrijving';
+                                        echo 'Deze veiling heeft geen beschrijving'; // Show message
                                       }
 
                                 }
                                  ?>
                               </div>
+                              <!--  SHOW SELLER INFO -->
                               <div class="text-left" style="margin-top:15px;border-top:1px solid #E6E6E6;">
                                 <br>
                                 <p>Verkoper:     <b><?php echo ($resultVoorwerp != null) ? $resultVoorwerp['verkoper'] : ''; ?></b><p>
                                 <p>Startbedrag:  <b>€<?php echo ($resultVoorwerp != null) ? $resultVoorwerp['startprijs'] : ''; ?></b></p>
                                 <p>Hoogste bod:  <b><?php echo ($resultVoorwerp['hoogsteBod'] != null) ? '&euro;'.$resultVoorwerp['hoogsteBod'] : 'Er is nog niet geboden';?></b></p>
                               </div>
-                              <?php if(isUserLoggedIn($db)){
+                              <!--  SHOW SELLER INFO END -->
+                              <?php
+                              // if user is logged In show option to bid
+                              if(isUserLoggedIn($db)){
 
+                                // show notification if user tried to place an offer
                                 if(isset($_SESSION['warning']['empty_prijs']) && $_SESSION['warning']['empty_prijs'] === true)
                                 {
                                 ?>
@@ -366,12 +419,14 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                 <?php
                                   $_SESSION['warning'] = null;
                                 }
+                                //if user is inactive, show message
                                 if(getLoggedInUser($db)['statusID'] == 1){
                                   ?>
                                   <p class="bg-warning notifcation-fix" style="margin-left:0px;margin-right:0px;">Jouw account is nog niet geverifieerd doe dit eerst om te kunnen bieden.</p>
                                   <?php
                                 }
                                 else {
+                                  // show input field for offer
                                   ?>
                                   <form method="POST" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
                                     <div class="input-group" >
@@ -385,8 +440,9 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                   <?php
                                 }
                               }else {
+                                // Show message to login if user isn't logged in
                                 ?>
-                                <p style="font-size:18px;margin-top:20px;">Om te bieden op deze veiling moet je ingelogd zijn, doe dat <a href="login.php">hier</a>.</p>
+                                <p class="bg-warning notifcation-fix" style="margin-left:0px;margin-right:0px;">Om te bieden op deze veiling moet je ingelogd zijn, doe dat <a href="login.php">hier</a>.</p>
                                 <?php
                               }?>
                             </div>
@@ -396,6 +452,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                 <div class="col-lg-12">
                   <div class="panel-body" id="bieden_content">
                         <!-- CONTENT FROM AJAX -->
+                        <!-- Bid History Body, content get's loaded by ajax when user clicks BidHistory button the tabs-->
                 </div>
                 </div>
               </div>
@@ -407,6 +464,8 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
 
   <br>
   <?php
+    // If seller has multiple auctions
+    //Show them
     if(!empty($meerVanVerkoper)) {
    ?>
   <h2>

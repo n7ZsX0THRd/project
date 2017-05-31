@@ -1,4 +1,12 @@
 <?php
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: mail.php
+  purpose:
+  sendMail, function to send mail to a user
+*/
 
 function sendMail($to,$subject,$content){
   $headers = "From: " .'"Eenmaal Andermaal" <noreply@iproject2.icasites.nl>'. "\r\n";

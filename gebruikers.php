@@ -1,19 +1,31 @@
 <?php
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: gebruikers.php
+  purpose:
+  Show list of all users in the database, features to sort users by all columns.
+  Search live in the selection.
+*/
 session_start();
 $_SESSION['menu']['sub'] = 'bp';
-
-include ('php/database.php');
-include ('php/user.php');
+// Set session for sidebar, this will make sure the title = 'Beheerpanel' is highlighted
+include_once ('php/database.php');
+include_once ('php/user.php');
 pdo_connect();
+// Include database, and include user functions.
+// Connect to database
 
-
+// If user is not loggedIn or administrator redirect to homepage
 if(isUserBeheerder($db) == false){
   header("Location: index.php");
 }
 
+//Get details of logged In user
 $result = getLoggedInUser($db);
 
-
+// Default selection
 $selectie = array( // default values when there's no get request'
   "sorteerOp" => "achternaam",
   "pagina" => 0,
@@ -128,23 +140,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 <!DOCTYPE html>
 <html lang="en">
   <head>
-        <?php include 'php/includes/default_header.php'; ?>
+        <?php
+          include 'php/includes/default_header.php';
+          // Include default head
+        ?>
         <link href="css/dashboard.css" rel="stylesheet">
         <title>Beheerpanel - Eenmaal Andermaal</title>
   </head>
 
   <body>
-
-
     <?php
     include 'php/includes/header.php';
-    //echo http_build_query($selectie) . "\n";
+    //include navigation
     ?>
     <div class="container">
       <div class="row">
         <div class="col-md-3 col-lg-2 col-sm-4 sidebar">
           <?php
             include 'php/includes/sidebar.php';
+            // Include website sidebar
           ?>
           <hr class="menu-hr">
           <form action="gebruikers.php" method="get" class="form-check" >
@@ -452,9 +466,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
           </div>
         </div>
       </div>
+    </div>
     <!-- /.container -->
     <?php
       include 'php/includes/footer.php';
+      // Include footer
     ?>
 
         <!-- Bootstrap core JavaScript

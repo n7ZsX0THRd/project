@@ -1,61 +1,86 @@
 <?php
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: index.php
+  purpose:
+  Show list of soon ending auctions
+  Show auctions with a lot bids
+  Show new auctions
+*/
 session_start();
 
-include ('php/database.php');
-include ('php/user.php');
+include_once ('php/database.php');
+include_once ('php/user.php');
 pdo_connect();
+// Include database, and include user functions.
+// Connect to database
 
-if(isset($_GET['mail'])==true) {
-    $dbs= $db->prepare("SELECT gebruikersnaam FROM Gebruikers WHERE emailadres=?");
-            $dbs->execute(array($_SESSION['email']));
-            $gebruikersnaam = $dbs->fetchAll()[0]['gebruikersnaam'];
+// If user logged in and requested new verification email
+if(isUserLoggedIn($db))
+{
+  if(isset($_GET['mail'])==true) {
+          // Check if email isset in get
 
-            $random = rand(100000,999999);
-              $code = update_verification_for_user(array('email' => $_SESSION['email'],'verificatiecode' => $random), $db);
-              if($code != 0) {
-                $to = $_SESSION['email'];
-                $subject = 'Nieuwe activatiecode voor EenmaalAndermaal';
-                $message = '
-                <tr>
-                    <td align="center" bgcolor="#FFFFFF" style="padding: 40px 30px 40px 30px;">
-                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
-                            <tr>
-                                <td style="color:#023042">
-                                    Beste '.$gebruikersnaam.',
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 20px 0 0 0; color:#023042">
-                                    <p>Er is een nieuwe activatiecode voor je aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 20px 0 0 0; color:#023042">
-                                    <p>De link is gekoppeld aan het volgende emailadres:<br>E-mail: '.$_SESSION['email'].'</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 20px 0 0 0; color:#023042">
-                                    <p>Klik op deze link om je account te activeren:<br><a href="http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$gebruikersnaam.'&code='.$code.'">http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$gebruikersnaam.'&code='.$code.'</a></p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 20px 0 20px 0; color:#023042">
-                                    <p>Met vriendelijke groeten,<br>Team EenmaalAndermaal</p>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>';
-                sendMail($to,$subject,$message);
-              }
-    $nieuwe_mail = 1;
+          $random = rand(100000,999999);
+          // Create new verifcationcode
+
+          $code = update_verification_for_user(array('email' => $_SESSION['email'],'verificatiecode' => $random), $db);
+          // Update verifcation for user
+          if($code != 0) {
+
+            $gebruikersnaam = getLoggedInUser($db)['gebruikersnaam'];
+            // Get username from loggedIn user, for email
+
+            $to = $_SESSION['email'];
+            $subject = 'Nieuwe activatiecode voor EenmaalAndermaal';
+            // Email body and subject
+            $message = '
+            <tr>
+                <td align="center" bgcolor="#FFFFFF" style="padding: 40px 30px 40px 30px;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
+                        <tr>
+                            <td style="color:#023042">
+                                Beste '.$gebruikersnaam.',
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 20px 0 0 0; color:#023042">
+                                <p>Er is een nieuwe activatiecode voor je aangemaakt, je kunt inloggen met de volgende gegevens nadat je je account hebt geverifieerd door op onderstaande link te klikken.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 20px 0 0 0; color:#023042">
+                                <p>De link is gekoppeld aan het volgende emailadres:<br>E-mail: '.$_SESSION['email'].'</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 20px 0 0 0; color:#023042">
+                                <p>Klik op deze link om je account te activeren:<br><a href="http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$gebruikersnaam.'&code='.$code.'">http://iproject2.icasites.nl/verify.php?gebruikersnaam='.$gebruikersnaam.'&code='.$code.'</a></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 20px 0 20px 0; color:#023042">
+                                <p>Met vriendelijke groeten,<br>Team EenmaalAndermaal</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>';
+            sendMail($to,$subject,$message);
+            // Use sendMail function from mail.php to send email
+          }
+      $nieuwe_mail = 1;
+  }
 }
-$rubriekID = -1;
-$childrenRubriekenQuery = $db->prepare("SELECT rubrieknummer, rubrieknaam FROM Rubriek WHERE parentRubriek = ? ORDER BY volgnr ASC, rubrieknaam ASC");
-$childrenRubriekenQuery->execute(array(htmlspecialchars($rubriekID)));
+// Select all child rubrieks from parent rubriek
+$childrenRubriekenQuery = $db->prepare("SELECT rubrieknummer, rubrieknaam FROM Rubriek WHERE parentRubriek = -1 ORDER BY volgnr ASC, rubrieknaam ASC");
+$childrenRubriekenQuery->execute();
 $childrenRubrieken = $childrenRubriekenQuery->fetchAll();
 
+
+// Query to select top 3 soon ending auctions
 $lastChanceQuery = $db->prepare("SELECT TOP 3 v.voorwerpnummer,v.looptijdeinde,v.titel,Foto.bestandsnaam FROM Voorwerp v CROSS APPLY
         (
         SELECT  TOP 1 Bestand.bestandsnaam
@@ -64,7 +89,9 @@ $lastChanceQuery = $db->prepare("SELECT TOP 3 v.voorwerpnummer,v.looptijdeinde,v
         ) Foto
 		WHERE DATEADD(MI,30,GETDATE()) < v.looptijdeinde ORDER BY v.looptijdeinde ASC");
 $lastChanceQuery->execute();
+// Execute query
 
+// Query to select new auctions
 $newItemsQuery = $db->prepare("SELECT TOP 4 v.voorwerpnummer,v.titel,v.looptijdeinde,Foto.bestandsnaam FROM Voorwerp v CROSS APPLY
         (
         SELECT  TOP 1 Bestand.bestandsnaam
@@ -72,21 +99,27 @@ $newItemsQuery = $db->prepare("SELECT TOP 4 v.voorwerpnummer,v.titel,v.looptijde
         WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
         ) Foto ORDER BY v.looptijdbegin DESC");
 $newItemsQuery->execute();
-
+// Execute query
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
 
-        <?php include 'php/includes/default_header.php'; ?>
+        <?php
+          include 'php/includes/default_header.php';
+          // Include default head
+        ?>
 
         <title>Veilingsite - Eenmaal Andermaal</title>
   </head>
 
   <body>
 
-    <?php include 'php/includes/header.php' ?>
+    <?php
+      include 'php/includes/header.php'
+      // Include navigation
+    ?>
 
   <div id="myCarousel" class="carousel slide" data-ride="carousel" style="margin-top:-20px;">
   <!-- Indicators -->
@@ -111,6 +144,7 @@ $newItemsQuery->execute();
               <h4 class="carousel-header">Laatste kans</h4>
             </div>
             <?php
+            // Loop over soon ending auctions and show them in slider
             foreach($lastChanceQuery->fetchAll() as $row)
             {
                 ?>
@@ -122,7 +156,7 @@ $newItemsQuery->execute();
                   </div>
                   <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
                     <div class="veilingthumb" style="background-image:url('<?php echo $row['bestandsnaam']; ?>');">
-                      <p>Resterende tijd: <?php echo $row['looptijdeinde']; ?></p>
+                      <p>Resterende tijd: &bnsp;<?php //echo $row['looptijdeinde']; ?></p>
                     </div>
                   </a>
                 </div>
@@ -134,39 +168,42 @@ $newItemsQuery->execute();
         </div>
       </div>
     </div>
-  </div>
-
-    <?php if (isUserLoggedIn($db)){
+  </div> <!-- END SLIDER -->
+    <?php
+    // Check if user is LoggedIn and check if account is verified.
+    // If not veriefied, show option to send another email
+    if (isUserLoggedIn($db)){
         $user = getLoggedInUser($db);
         if($user['statusID'] == 1){
           ?>
-  <div class="container banner-top-container">
-      <div class="row">
-        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-          <div class="bg-warning banner-top">
-              Hey <?php echo $user['voornaam']; ?>, je hebt jouw account nog niet geverifieerd. <br>
-              Er is een e-mail naar <?php echo $_SESSION['email']; ?> gestuurd. <br>
-              Geen e-mail gekregen? Controleer je ongewenst box of stuur een nieuwe e-mail. <br>
-              <a href="?mail" type="submit" class="btn btn-orange">Stuur opnieuw!</a> <br>
-              <?php
-              if($nieuwe_mail == 1) {
-                  echo 'Er is een nieuwe activatie e-mail verstuurd.';
-              }
-              ?>
-              Klopt het e-mailadres niet? Wijzig deze dan <a href="profiel.php">hier</a>.
+            <div class="container banner-top-container">
+                <div class="row">
+                  <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                    <div class="bg-warning banner-top">
+                        Hey <?php echo $user['voornaam']; ?>, je hebt jouw account nog niet geverifieerd. <br>
+                        Er is een e-mail naar <?php echo $_SESSION['email']; ?> gestuurd. <br>
+                        Geen e-mail gekregen? Controleer je ongewenst box of stuur een nieuwe e-mail. <br>
+                        <a href="?mail" type="submit" class="btn btn-orange">Stuur opnieuw!</a> <br>
+                        <?php
+                        if(isset($nieuwe_mail) && $nieuwe_mail == 1) {
+                            echo 'Er is een nieuwe activatie e-mail verstuurd.';
+                        }
+                        ?>
+                        Klopt het e-mailadres niet? Wijzig deze dan <a href="profiel.php">hier</a>.
 
-          </div>
-        </div>
-      </div>
-    </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
     <?php
-    }
-  }
+        }
+      }
     ?>
     <div class="container">
       <div class="row">
         <div class="col-md-3 col-lg-2 col-sm-4 sidebar">
           <?php
+            // If user is loggedIn show user sidebar, otherwise show all child rubrieks from the rootrubriek
             if(isUserLoggedIn($db))
               include 'php/includes/sidebar.php';
             else {
@@ -178,6 +215,7 @@ $newItemsQuery->execute();
                   </li>
                   <ul class="sub">
                     <?php
+                      // Loop over child rubrieks from root rubriek
                       foreach($childrenRubrieken as $row)
                       {
                         ?>
@@ -252,6 +290,7 @@ $newItemsQuery->execute();
                 <div class="row item-row">
                   <?php
 
+                  // Loop over new auctions
                   foreach($newItemsQuery->fetchAll() as $row){
                     ?>
                     <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
@@ -266,6 +305,7 @@ $newItemsQuery->execute();
                        </div>
                     </div>
                     <script>
+                    // Function to update the count downs of the auctions
                     var countDownDate = new Date('<?php echo $row['looptijdeinde']; ?>').getTime();
 
                     var x = setInterval(function() {
@@ -301,7 +341,10 @@ $newItemsQuery->execute();
     </div>
     </div>
 
-    <?php include 'php/includes/footer.php' ?>
+    <?php
+    include 'php/includes/footer.php';
+    // Include footer
+    ?>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

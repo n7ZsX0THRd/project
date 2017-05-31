@@ -1,4 +1,12 @@
 <?php
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: sidebar.php
+  purpose:
+  Left sidebar for loggedIn User
+*/
   $result = getLoggedInUser($db);
 ?>
 

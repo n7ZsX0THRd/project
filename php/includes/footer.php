@@ -1,3 +1,13 @@
+<?php
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: footer.php
+  purpose:
+  Page footer
+*/
+?>
 <a id="to-top" href="#" class="btn btn-dark btn-lg"><i class="fa fa-chevron-up fa-fw fa-1x"></i></a>
 <div class="footer">
   <div class="container">

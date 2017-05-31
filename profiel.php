@@ -1,18 +1,34 @@
 <?PHP
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: profiel.php
+  purpose:
+  Show user profile,
+  Edit profile information and change email/password/profileimage
+*/
 session_start();
+// Start session
 $_SESSION['menu']['sub'] = 'ma';
+// Set menu session, to highlight My Account link in side menu
 
-include ('php/database.php');
-include ('php/user.php');
+include_once ('php/database.php');
+include_once ('php/user.php');
 pdo_connect();
+// Include database, and user functions.
+// Connect with database
 
+// If user is logged In redirect to login page
 if(isUserLoggedIn($db) == false){
   header ("Location: login.php");
 }
 
+// Select countries from database, to show in dropdown
 $landcodes = $db->query("SELECT lnd_code FROM Landen ORDER BY lnd_code ASC");
 $email = $_SESSION['email'];
 $result = getLoggedInUser($db);
+// Get loggedIn user info
 
 $gebruiker = $result['gebruikersnaam'];
 
@@ -22,9 +38,9 @@ $telefoonnummersQuery = $db->prepare("SELECT volgnr,telefoonnummer FROM Gebruike
 $telefoonnummersQuery->execute(array($gebruiker));
 
 $telefoonnummers = $telefoonnummersQuery->fetchAll();
+// Select phonenumbers from database for this user
 
-//var_dump($telefoonnummers);
-
+// If user has no profile image show default
 if(!empty($result['bestandsnaam'])) {
   $image = $result['bestandsnaam'];
 }
@@ -32,12 +48,18 @@ else {
   $image = "geenfoto/geenfoto.png";
 }
 
+
+// If user requested email/password change or profile info change
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
   //var_dump($_POST);
 
   $_POST['p_username']=$result['gebruikersnaam'];
+  // add username to post field;
+
   if(isset($_POST['form_name'])){
+
+      // If form name == changeprofile user requested a profile changes
       if($_POST['form_name']=='changeprofile'){
 
         $dataquery= $db->prepare("SELECT TOP(1) wachtwoord FROM Gebruikers WHERE gebruikersnaam=?");
@@ -104,9 +126,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             }
         }
 
-
-
-    }else if($_POST['form_name']=='changepassword'){
+    }
+    // If form_name  === change password user requested password change
+    else if($_POST['form_name']=='changepassword'){
 
       $_SESSION['warning']['changingpassword'] = true;
 
@@ -142,6 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         $_SESSION['warning']['incorrect_pw'] = true;
       }
     }
+    // if form_name == changeemailadres user requested emailchange
     else if($_POST['form_name']=='changeemailadres'){
 
       $_SESSION['warning']['changingemailadres'] = true;
@@ -278,9 +301,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
   }
 
 
-
+// If get foto isset, user changed profile image
 if(isset($_GET['foto'])){
   $_SESSION['warning']['changingprofile']=true;
+  // If change foto change == succes show nothing
   if($_GET['foto']=='succes'){
     $_SESSION['warning']['changingprofile']=false;
   }
@@ -291,7 +315,10 @@ if(isset($_GET['foto'])){
 <html lang="en">
   <head>
 
-        <?php include 'php/includes/default_header.php'; ?>
+        <?php
+          include 'php/includes/default_header.php';
+          // Include default head
+        ?>
 
         <title>Profiel - Eenmaal Andermaal</title>
 
@@ -299,9 +326,10 @@ if(isset($_GET['foto'])){
         <link href="css/profilestyle.css" rel="stylesheet">
   </head>
   <body>
-
-    <?php include 'php/includes/header.php' ?>
-
+    <?php
+      include 'php/includes/header.php';
+      // Include navigation
+    ?>
 <div class="container">
   <div class="row">
     <div class="col-md-4 col-lg-2 col-sm-4 sidebar">
@@ -584,7 +612,8 @@ if(isset($_GET['foto'])){
                     }
                     ?>
             			</div>
-                <?php }else{ ?>
+                <?php
+                }else{ ?>
 
                     <?php
                     if(empty($telefoonnummers) == false){
@@ -602,14 +631,10 @@ if(isset($_GET['foto'])){
                     }
 
                       //echo $result2['telefoonnummer'];
-                    ?>
-
-                <?php } ?>
+                 }?>
               </div>
-
           </div>
           <div class="col-lg-6">
-
               <div class="form-group">
                 <div class="row">
                   <div class="col-lg-7">
@@ -623,7 +648,6 @@ if(isset($_GET['foto'])){
                           <?php echo $result['emailadres']?>
                       </div>
                   </div>
-
                   <div class="col-lg-1">
                   </div>
                   <div class="col-lg-4">
@@ -633,9 +657,7 @@ if(isset($_GET['foto'])){
                       </div>
                     </div>
                   </div>
-
                 </div>
-
                 <div class="row">
                   <div class="col-lg-12">
                      <div class="form-group">
@@ -655,38 +677,46 @@ if(isset($_GET['foto'])){
                   </div>
                 </div>
               </div>
-
           </div>
-
         </div>
-
         <div class="row">
           <div class="col-lg-12">
             <hr>
           </div>
           <div class="col-lg-offset-6 col-lg-6">
             <div class="form-group">
-              <?php if (isset($_GET['wijzig'])==true){  ?>
-              <label for="formpass">Bevestig huidige wachtwoord</label>
-              <input name="confirmpass" type="password" class="form-control"  placeholder="Wachtwoord">
-              <?php } ?>
+              <?php
+                if (isset($_GET['wijzig'])==true){
+              ?>
+                <label for="formpass">Bevestig huidige wachtwoord</label>
+                <input name="confirmpass" type="password" class="form-control"  placeholder="Wachtwoord">
+              <?php
+                }
+              ?>
             </div>
           </div>
           <div class="col-lg-offset-3 col-lg-9">
-
-
             <div class="text-right">
-              <?php if (isset($_GET['wijzig'])==false){  ?>
-
-              <!-- Trigger the popup with a button -->
-              <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#emailadres">Wijzig emailadres</button>
-              <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#wachtwoord">Wijzig wachtwoord</button>
-              <a href="?wijzig" type="submit" class="btn btn-orange">Wijzig gegevens</a>
-
-              <?php }else{ ?>
-              <a href="?" type="submit" class="btn btn-orange">Annuleren</a>
-              <button type="submit" class="btn btn-orange" >Wijzingen opslaan</button>
-              <?php } ?>
+              <?php
+                // If user is chaning profile, show Save and Cancel button.
+                // Else show change email/password/profile
+                if (isset($_GET['wijzig'])==false)
+                {
+              ?>
+                <!-- Trigger the popup with a button -->
+                <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#emailadres">Wijzig emailadres</button>
+                <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#wachtwoord">Wijzig wachtwoord</button>
+                <a href="?wijzig" type="submit" class="btn btn-orange">Wijzig gegevens</a>
+              <?php
+                }
+                  else
+                {
+              ?>
+                <a href="?" type="submit" class="btn btn-orange">Annuleren</a>
+                <button type="submit" class="btn btn-orange" >Wijzingen opslaan</button>
+              <?php
+                }
+              ?>
             </div>
           </form>
           </div>
@@ -694,168 +724,107 @@ if(isset($_GET['foto'])){
       </div>
     </div>
   </div>
-
-  <form action="php/upload.php" method="post" enctype="multipart/form-data">
-    <div id="profielfoto" class="modal fade" role="dialog">
-      <div class="modal-dialog" role="document">
-         <div class="modal-content">
-           <div class="modal-header">
-             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-             <h4 class="modal-title" id="myModalLabel">Verander profielfoto</h4>
-           </div>
-           <div class="modal-body">
-              <?php if(isset($_GET['foto'])){
-                switch ($_GET['foto']) {
-                  case 'format':
-                      echo'<p class="bg-danger" style="padding: 5px;">Foto moet .jpg .png of .gif zijn</p>';
-                      break;
-                  case 'error':
-                      echo'<p class="bg-danger" style="padding: 5px;">Dit bestand kan niet worden geupload</p>';
-                      break;
-                  case 'size':
-                      echo'<p class="bg-danger" style="padding: 5px;">Bestand is te groot</p>';
-                      break;
-                  case 'size':
-                      echo'<p class="bg-danger" style="padding: 5px;">Alleen afbeeldingen uploaden</p>';
-                      break;
-                    }
-              } ?>
-             <div class="form-group">
-               <label for="exampleInputFile">Upload een foto</label>
-              <input type="file" name="fileToUpload" id="fileToUpload">
-               <p class="help-block">Upload alleen bestanden met png of jpg als bestandstype.</p>
-             </div>
-           </div>
-           <div class="modal-footer">
-             <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
-             <input type="submit" class="btn btn-orange" value="Upload" name="submit">
+</div>
+<!-- CONTAINER END -->
+<form action="php/upload.php" method="post" enctype="multipart/form-data">
+  <div id="profielfoto" class="modal fade" role="dialog">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+         <div class="modal-header">
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+           <h4 class="modal-title" id="myModalLabel">Verander profielfoto</h4>
+         </div>
+         <div class="modal-body">
+            <?php
+            // Show notifcations for chaning profile image
+            if(isset($_GET['foto'])){
+              switch ($_GET['foto']) {
+                case 'format':
+                    echo'<p class="bg-danger" style="padding: 5px;">Foto moet .jpg .png of .gif zijn</p>';
+                    break;
+                case 'error':
+                    echo'<p class="bg-danger" style="padding: 5px;">Dit bestand kan niet worden geupload</p>';
+                    break;
+                case 'size':
+                    echo'<p class="bg-danger" style="padding: 5px;">Bestand is te groot</p>';
+                    break;
+                case 'size':
+                    echo'<p class="bg-danger" style="padding: 5px;">Alleen afbeeldingen uploaden</p>';
+                    break;
+                  }
+            } ?>
+           <div class="form-group">
+             <label for="exampleInputFile">Upload een foto</label>
+            <input type="file" name="fileToUpload" id="fileToUpload">
+             <p class="help-block">Upload alleen bestanden met png of jpg als bestandstype.</p>
            </div>
          </div>
+         <div class="modal-footer">
+           <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
+           <input type="submit" class="btn btn-orange" value="Upload" name="submit">
+         </div>
        </div>
-    </div>
-  </form>
+     </div>
+  </div>
 </form>
 <!-- popup -->
 <form name="emailadreswijzig" method="post" enctype="multipart/form-data" action="">
   <input type="hidden" name="form_name" value="changeemailadres"/>
-<div id="emailadres" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-sm">
-    <!-- popup content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Wijzig uw emailadres</h4>
-      </div>
-      <div class="modal-body">
-        <?php
-        if(isset($_SESSION['warning']['incorrect_pw']) && $_SESSION['warning']['incorrect_pw'] === true)
-        {
-        ?>
-          <p class="bg-danger" style="padding: 5px;">Het wachtwoord komt niet overeen met uw account</p>
-        <?php
-        }
-        else if(isset($_SESSION['warning']['ea_not_equal']) && $_SESSION['warning']['ea_not_equal'] === true)
-        {
-        ?>
-          <p class="bg-danger" style="padding: 5px;">De opgegeven emailadressen komen niet overeen</p>
-        <?php
-        }
-        else if(isset($_SESSION['warning']['ea_exists']) && $_SESSION['warning']['ea_exists'] === true)
-        {
-        ?>
-          <p class="bg-danger notifcation-fix">Opgegeven emailadres is al in gebruik</p>
-        <?php
-        }
-        else if(isset($_SESSION['warning']['ea_not_valid']) && $_SESSION['warning']['ea_not_valid'] === true)
-        {
-        ?>
-          <p class="bg-danger" style="padding: 5px;">Het opgegeven emailadres voldoet niet aan de eisen</p>
-        <?php
-        }
-        else if(isset($_SESSION['warning']['succes']) && $_SESSION['warning']['succes'] === true)
-        {
-        ?>
-          <p class="bg-success" style="padding: 5px;">emailadres succesvol gewijzigd</p>
-        <?php
-        }
-
-        //pw_not_equal
-        ?>
-          <div class="form-group">
-            <div class="form-group">
-              <label for="formpass">Wachtwoord</label>
-              <input name="passchange" type="password" class="form-control"  placeholder="Wachtwoord">
-            </div>
-            <div class="form-group">
-              <label for="formpass">Nieuwe emailadres</label>
-              <input name="confirmmail" type="emailadres" class="form-control"  placeholder="emailadres">
-            </div>
-            <div class="form-group">
-              <input name="confirmmailcheck" type="emailadres" class="form-control"  placeholder="Herhaal nieuwe emailadres">
-            </div>
-          </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
-        <button type="submit" class="btn btn-orange">Veranderen</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-</form>
-
-</form>
-  <!-- popup -->
-  <form name="wachtwoordwijzig" method="post" enctype="multipart/form-data" action="">
-    <input type="hidden" name="form_name" value="changepassword"/>
-  <div id="wachtwoord" class="modal fade" role="dialog">
+  <div id="emailadres" class="modal fade" role="dialog">
     <div class="modal-dialog modal-sm">
       <!-- popup content-->
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Wijzig uw wachtwoord</h4>
+          <h4 class="modal-title">Wijzig uw emailadres</h4>
         </div>
         <div class="modal-body">
           <?php
+          // Show warnings/notifications for changing email
           if(isset($_SESSION['warning']['incorrect_pw']) && $_SESSION['warning']['incorrect_pw'] === true)
           {
           ?>
-            <p class="bg-danger" style="padding: 5px;">Het wachtwoord komt niet overeen met uw huidige wachtwoord</p>
+            <p class="bg-danger" style="padding: 5px;">Het wachtwoord komt niet overeen met uw account</p>
           <?php
           }
-          else if(isset($_SESSION['warning']['pw_not_equal']) && $_SESSION['warning']['pw_not_equal'] === true)
+          else if(isset($_SESSION['warning']['ea_not_equal']) && $_SESSION['warning']['ea_not_equal'] === true)
           {
           ?>
-            <p class="bg-danger" style="padding: 5px;">De opgegeven wachtwoorden komen niet overeen</p>
+            <p class="bg-danger" style="padding: 5px;">De opgegeven emailadressen komen niet overeen</p>
+          <?php
+          }
+          else if(isset($_SESSION['warning']['ea_exists']) && $_SESSION['warning']['ea_exists'] === true)
+          {
+          ?>
+            <p class="bg-danger notifcation-fix">Opgegeven emailadres is al in gebruik</p>
+          <?php
+          }
+          else if(isset($_SESSION['warning']['ea_not_valid']) && $_SESSION['warning']['ea_not_valid'] === true)
+          {
+          ?>
+            <p class="bg-danger" style="padding: 5px;">Het opgegeven emailadres voldoet niet aan de eisen</p>
           <?php
           }
           else if(isset($_SESSION['warning']['succes']) && $_SESSION['warning']['succes'] === true)
           {
           ?>
-            <p class="bg-success" style="padding: 5px;">Wachtwoord succesvol gewijzigd</p>
+            <p class="bg-success" style="padding: 5px;">emailadres succesvol gewijzigd</p>
           <?php
           }
-          else if(isset($_SESSION['warning']['pw_not_valid']) && $_SESSION['warning']['pw_not_valid'] === true)
-          {
-          ?>
-            <p class="bg-danger" style="padding: 5px;">Het opgegeven wachtwoord is te kort/lang. Minimaal 8 karakters en maximaal 20.</p>
-          <?php
-          }
+
           //pw_not_equal
           ?>
             <div class="form-group">
               <div class="form-group">
-                <label for="formpass">Huidige wachtwoord</label>
+                <label for="formpass">Wachtwoord</label>
                 <input name="passchange" type="password" class="form-control"  placeholder="Wachtwoord">
               </div>
               <div class="form-group">
-                <label for="formpass">Nieuwe wachtwoord</label>
-                <input name="confirmpass" type="password" class="form-control"  placeholder="Wachtwoord">
+                <label for="formpass">Nieuwe emailadres</label>
+                <input name="confirmmail" type="emailadres" class="form-control"  placeholder="emailadres">
               </div>
               <div class="form-group">
-                <input name="confirmpasscheck" type="password" class="form-control"  placeholder="Herhaal nieuwe wachtwoord">
+                <input name="confirmmailcheck" type="emailadres" class="form-control"  placeholder="Herhaal nieuwe emailadres">
               </div>
             </div>
         </div>
@@ -866,74 +835,74 @@ if(isset($_GET['foto'])){
       </div>
     </div>
   </div>
-
-  </form>
-
 </form>
+
 <!-- popup -->
-<form name="question" method="post" enctype="multipart/form-data" action="">
-  <input type="hidden" name="form_name" value="changepassword"/>
-<div id="question" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-sm">
-    <!-- popup content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Wijzig uw wachtwoord</h4>
-      </div>
-      <div class="modal-body">
-        <?php
-        if(isset($_SESSION['warning']['incorrect_pw']) && $_SESSION['warning']['incorrect_pw'] === true)
-        {
-        ?>
-          <p class="bg-danger" style="padding: 5px;">Het wachtwoord komt niet overeen met uw huidige wachtwoord</p>
-        <?php
-        }
-        else if(isset($_SESSION['warning']['pw_not_equal']) && $_SESSION['warning']['pw_not_equal'] === true)
-        {
-        ?>
-          <p class="bg-danger" style="padding: 5px;">De opgegeven wachtwoorden komen niet overeen</p>
-        <?php
-        }
-        else if(isset($_SESSION['warning']['succes']) && $_SESSION['warning']['succes'] === true)
-        {
-        ?>
-          <p class="bg-success" style="padding: 5px;">Wachtwoord succesvol gewijzigd</p>
-        <?php
-        }
-        //pw_not_equal
-        ?>
-          <div class="form-group">
-            <div class="form-group">
-              <label for="formpass">Huidige wachtwoord</label>
-              <input name="passchange" type="password" class="form-control"  placeholder="Wachtwoord">
-            </div>
-            <div class="form-group">
-              <label for="formpass">Nieuwe wachtwoord</label>
-              <input name="confirmpass" type="password" class="form-control"  placeholder="Wachtwoord">
-            </div>
-            <div class="form-group">
-              <input name="confirmpasscheck" type="password" class="form-control"  placeholder="Herhaal nieuwe wachtwoord">
-            </div>
+<form name="wachtwoordwijzig" method="post" enctype="multipart/form-data" action="">
+    <input type="hidden" name="form_name" value="changepassword"/>
+    <div id="wachtwoord" class="modal fade" role="dialog">
+      <div class="modal-dialog modal-sm">
+        <!-- popup content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Wijzig uw wachtwoord</h4>
           </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
-        <button type="submit" class="btn btn-orange">Veranderen</button>
+          <div class="modal-body">
+            <?php
+            // Show notifications for chaning password
+            if(isset($_SESSION['warning']['incorrect_pw']) && $_SESSION['warning']['incorrect_pw'] === true)
+            {
+            ?>
+              <p class="bg-danger" style="padding: 5px;">Het wachtwoord komt niet overeen met uw huidige wachtwoord</p>
+            <?php
+            }
+            else if(isset($_SESSION['warning']['pw_not_equal']) && $_SESSION['warning']['pw_not_equal'] === true)
+            {
+            ?>
+              <p class="bg-danger" style="padding: 5px;">De opgegeven wachtwoorden komen niet overeen</p>
+            <?php
+            }
+            else if(isset($_SESSION['warning']['succes']) && $_SESSION['warning']['succes'] === true)
+            {
+            ?>
+              <p class="bg-success" style="padding: 5px;">Wachtwoord succesvol gewijzigd</p>
+            <?php
+            }
+            else if(isset($_SESSION['warning']['pw_not_valid']) && $_SESSION['warning']['pw_not_valid'] === true)
+            {
+            ?>
+              <p class="bg-danger" style="padding: 5px;">Het opgegeven wachtwoord is te kort/lang. Minimaal 8 karakters en maximaal 20.</p>
+            <?php
+            }
+            //pw_not_equal
+            ?>
+              <div class="form-group">
+                <div class="form-group">
+                  <label for="formpass">Huidige wachtwoord</label>
+                  <input name="passchange" type="password" class="form-control"  placeholder="Wachtwoord">
+                </div>
+                <div class="form-group">
+                  <label for="formpass">Nieuwe wachtwoord</label>
+                  <input name="confirmpass" type="password" class="form-control"  placeholder="Wachtwoord">
+                </div>
+                <div class="form-group">
+                  <input name="confirmpasscheck" type="password" class="form-control"  placeholder="Herhaal nieuwe wachtwoord">
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Annuleer</button>
+            <button type="submit" class="btn btn-orange">Veranderen</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-
 </form>
-</div>
-      <?php include 'php/includes/footer.php' ?>
-
-</div>
-
-
-
-
+<?php
+  include 'php/includes/footer.php';
+  // Include footer
+?>
 <script>function myAjax(actionvar) {
       $.ajax({
            type: "POST",
@@ -941,97 +910,102 @@ if(isset($_GET['foto'])){
            data:{action:actionvar},
            success:function(html) {
              window.location.href = "profiel.php";
-             //alert(html);
            }
       });
  }
  </script>
-<?php if( isset($_SESSION['warning']['changingpassword']) && $_SESSION['warning']['changingpassword'] == true){
-?>
-<script type="text/javascript">
-           $(window).load(function(){
-               $('#wachtwoord').modal('show');
-           });
-       </script>
-  <?php
-}?>
-
-<?php if( isset($_SESSION['warning']['changingemailadres']) && $_SESSION['warning']['changingemailadres'] == true){
-?>
-<script type="text/javascript">
-           $(window).load(function(){
-               $('#emailadres').modal('show');
-           });
-       </script>
-  <?php
-}?>
-
-<?php if( isset($_SESSION['warning']['changingprofile']) && $_SESSION['warning']['changingprofile'] == true){
-?>
-<script type="text/javascript">
-           $(window).load(function(){
-               $('#profielfoto').modal('show');
-           });
-</script>
 <?php
-}?>
+// if user changing password,
+// show changepassword modal
+if( isset($_SESSION['warning']['changingpassword']) && $_SESSION['warning']['changingpassword'] == true){
+?>
+  <script type="text/javascript">
+             $(window).load(function(){
+                 $('#wachtwoord').modal('show');
+             });
+  </script>
+<?php
+}
+?>
 
-<script type="text/javascript">
+<?php
+// if user is changingemailadres
+// show changingemailadres modal
+if( isset($_SESSION['warning']['changingemailadres']) && $_SESSION['warning']['changingemailadres'] == true){
+?>
+  <script type="text/javascript">
+     $(window).load(function(){
+         $('#emailadres').modal('show');
+     });
+  </script>
+<?php
+}
+?>
 
+<?php
+// if changingprofile and error
+// show changingprofile modal
+if( isset($_SESSION['warning']['changingprofile']) && $_SESSION['warning']['changingprofile'] == true){
+?>
+  <script type="text/javascript">
+       $(window).load(function(){
+           $('#profielfoto').modal('show');
+       });
+  </script>
+<?php
+}
+?>
+  <script type="text/javascript">
+  (function ($) {
+      $(function () {
 
-(function ($) {
-    $(function () {
+          var addFormGroup = function (event) {
+              event.preventDefault();
 
-        var addFormGroup = function (event) {
-            event.preventDefault();
+              var $formGroup = $(this).closest('.form-group');
+              var $multipleFormGroup = $formGroup.closest('.multiple-form-group');
+              var $formGroupClone = $formGroup.clone();
 
-            var $formGroup = $(this).closest('.form-group');
-            var $multipleFormGroup = $formGroup.closest('.multiple-form-group');
-            var $formGroupClone = $formGroup.clone();
+              $(this)
+                  .toggleClass('btn-default btn-add btn-danger btn-remove')
+                  .css("marginTop", '0px')
+                  .html('–');
 
-            $(this)
-                .toggleClass('btn-default btn-add btn-danger btn-remove')
-                .css("marginTop", '0px')
-                .html('–');
+              $formGroupClone.find('input').val('');
+              $formGroupClone.insertAfter($formGroup);
 
-            $formGroupClone.find('input').val('');
-            $formGroupClone.insertAfter($formGroup);
+              var $lastFormGroupLast = $multipleFormGroup.find('.form-group:last');
+              if ($multipleFormGroup.data('max') <= countFormGroup($multipleFormGroup)) {
+                  $lastFormGroupLast.find('.btn-add').attr('disabled', true);
+              }
+          };
 
-            var $lastFormGroupLast = $multipleFormGroup.find('.form-group:last');
-            if ($multipleFormGroup.data('max') <= countFormGroup($multipleFormGroup)) {
-                $lastFormGroupLast.find('.btn-add').attr('disabled', true);
-            }
-        };
+          var removeFormGroup = function (event) {
+              event.preventDefault();
 
-        var removeFormGroup = function (event) {
-            event.preventDefault();
+              var $formGroup = $(this).closest('.form-group');
+              var $multipleFormGroup = $formGroup.closest('.multiple-form-group');
 
-            var $formGroup = $(this).closest('.form-group');
-            var $multipleFormGroup = $formGroup.closest('.multiple-form-group');
+              var $lastFormGroupLast = $multipleFormGroup.find('.form-group:last');
+              if ($multipleFormGroup.data('max') >= countFormGroup($multipleFormGroup)) {
+                  $lastFormGroupLast.find('.btn-add').attr('disabled', false);
+              }
 
-            var $lastFormGroupLast = $multipleFormGroup.find('.form-group:last');
-            if ($multipleFormGroup.data('max') >= countFormGroup($multipleFormGroup)) {
-                $lastFormGroupLast.find('.btn-add').attr('disabled', false);
-            }
+              $formGroup.remove();
+          };
 
-            $formGroup.remove();
-        };
+          var countFormGroup = function ($form) {
+              return $form.find('.form-group').length;
+          };
 
-        var countFormGroup = function ($form) {
-            return $form.find('.form-group').length;
-        };
+          $(document).on('click', '.btn-add', addFormGroup);
+          $(document).on('click', '.btn-remove', removeFormGroup);
 
-        $(document).on('click', '.btn-add', addFormGroup);
-        $(document).on('click', '.btn-remove', removeFormGroup);
-
-    });
-})(jQuery);
-
-
-</script>
-
+      });
+  })(jQuery);
+  </script>
 </body>
 </html>
 <?php
-$_SESSION['warning'] = null;
+  $_SESSION['warning'] = null;
 ?>

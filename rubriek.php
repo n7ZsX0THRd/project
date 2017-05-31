@@ -1,92 +1,76 @@
-<?PHP
+<?php
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: rubriek.php
+  purpose:
+  Show rubrieks,
+  and search for auctions.
+*/
 session_start();
 
-include ('php/database.php');
-include ('php/user.php');
+include_once ('php/database.php');
+include_once ('php/user.php');
 pdo_connect();
+// include database and user functions
+// Connect to database
 
-$rootRubriek = -1;
-$rubriekID = $rootRubriek;
-$filter = 'price_asc';
+$rootRubriek = -1;// Root rubriek
+$rubriekID = $rootRubriek; // Set default rubriekID to rootRubriek
+$filter = 'price_asc'; // Set default filter price_asc
 
+//Array of available_filters
 $available_filters = array('price_asc','price_desc','rate_asc','rate_desc','time_asc','time_desc','count_asc','count_desc');
 
-if ($_SERVER['REQUEST_METHOD'] == 'GET'){ // Disabled, doesn't work with POST Request from search form
+if ($_SERVER['REQUEST_METHOD'] == 'GET'){
+
+  // Check if rubriek isset in GET
   if(isset($_GET['rubriek']) && !empty($_GET['rubriek']))
   {
       $dbs = $db->prepare("SELECT TOP(1) rubrieknummer FROM Rubriek WHERE rubrieknummer = ?");
       $dbs->execute(array(htmlspecialchars($_GET['rubriek'])));
       $resultCount = count($dbs->fetchAll());
 
+      // check if rubriek in get is a valid rubriek
       if($resultCount == 1)
         $rubriekID = $_GET['rubriek'];
+      // if valid rubriek, change current rubriek to rubriek from get
   }
+  // if filter isset in get, and exists in array of available_filters update filter to filter from get
   if(isset($_GET['filter']) && !empty($_GET['filter']) && in_array($_GET['filter'],$available_filters)){
     $filter = $_GET['filter'];
   }
 }
 
+// Select currentRubriek info from database
 $rubriekQuery = $db->prepare("SELECT TOP(1) rubrieknummer,rubrieknaam,parentRubriek,volgnr FROM Rubriek WHERE rubrieknummer = ?");
 $rubriekQuery->execute(array(htmlspecialchars($rubriekID)));
 $rubriek = $rubriekQuery->fetchAll()[0];
 
-
+// Select child rubrieks from current rubriek.
 $childrenRubriekenQuery = $db->prepare("SELECT rubrieknummer, rubrieknaam FROM Rubriek WHERE parentRubriek = ? ORDER BY volgnr ASC, rubrieknaam ASC");
 $childrenRubriekenQuery->execute(array(htmlspecialchars($rubriekID)));
 $childrenRubrieken = $childrenRubriekenQuery->fetchAll();
 
+//Select currentRubriek parents
 $breadCrumbQuery = $db->prepare("SELECT * FROM dbo.fnRubriekOuders(?) ORDER BY volgorde DESC");
 $breadCrumbQuery->execute(array(htmlspecialchars($rubriekID)));
 $breadCrumb = $breadCrumbQuery->fetchAll();
 
 $filter_SQL = '';
 $search_SQL = '';
-
 $search_Value = '';
+// Default search_value search_sql and filter_sql
 
-$voorwerpCountQuery = $db->prepare("SELECT
-v.voorwerpnummer,
-v.looptijdeinde
-FROM Voorwerp v
-	JOIN
-		VoorwerpInRubriek vir
-			ON v.voorwerpnummer = vir.voorwerpnummer
-	JOIN
-		Rubriek r
-			ON r.rubrieknummer = vir.rubrieknummer
-	WHERE EXISTS
-	(
-	 SELECT * FROM
-	 Rubriek
-     WHERE dbo.fnRubriekIsAfstammelingVan(rubrieknummer,?) = 1
-	   AND vir.rubrieknummer = rubriek.rubrieknummer
-	)".$search_SQL." AND v.looptijdeinde > GETDATE()");
+// If search isset, set search_sql
+if(isset($_GET['search']) && !empty($_GET['search'])){
 
-$voorwerpCountQuery->execute(array($rubriek['rubrieknummer']));
-
-$voorwerpenCount = count($voorwerpCountQuery->fetchAll());
-
-$lastPage = floor($voorwerpenCount/30) - 1;
-
-$pageNumber = 1;
-if(isset($_GET['page'])){
-  if($_GET['page'] >= 1 && $_GET['page'] <= $lastPage)
-  {
-    $pageNumber = $_GET['page'];
-  }
+  $search_SQL = "AND v.titel LIKE '%".$_GET['search']."%'";
+  $search_Value = $_GET['search'];
 }
 
-//$available_filters = array('price_asc','price_desc','rate_asc','rate_desc','time_asc','time_desc','count_asc','count_desc');
-
-//if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-
-  if(isset($_GET['search']) && !empty($_GET['search'])){
-
-    $search_SQL = "AND v.titel LIKE '%".$_GET['search']."%'";
-    $search_Value = $_GET['search'];
-  }
-
-//}
+//Switch over filter
 switch ($filter) {
     case 'price_asc':
           $filter_SQL = 'v.startprijs ASC';
@@ -101,8 +85,48 @@ switch ($filter) {
           $filter_SQL = 'v.looptijdeinde DESC';
         break;
 }
+// Set sql part for specific filter
+$voorwerpCountQuery = $db->prepare("SELECT v.voorwerpnummer
+  FROM Voorwerp v
+  	JOIN
+  		VoorwerpInRubriek vir
+  			ON v.voorwerpnummer = vir.voorwerpnummer
+  	JOIN
+  		Rubriek r
+  			ON r.rubrieknummer = vir.rubrieknummer
+    CROSS APPLY
+          (
+          SELECT  TOP 1 Bestand.bestandsnaam
+          FROM    Bestand
+          WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
+          ) Foto
+  	WHERE EXISTS
+  	(
+  	 SELECT rubrieknummer FROM
+  	 Rubriek
+       WHERE (dbo.fnRubriekIsAfstammelingVan(rubrieknummer,?) = 1 OR rubrieknummer = ?)
+  	   AND vir.rubrieknummer = rubriek.rubrieknummer
+  	)
+  ".$search_SQL."  AND v.looptijdeinde > GETDATE()");
+
+$voorwerpCountQuery->execute(array($rubriekID,$rubriekID));
+
+$voorwerpenCount = count($voorwerpCountQuery->fetchAll());
+// Select count of found auctions
 
 
+$lastPage = floor($voorwerpenCount/30) - 1;
+//Calculate amount of pages for navigation
+
+$pageNumber = 1;// Set pageNumber to 1 as default
+if(isset($_GET['page'])){
+  if($_GET['page'] >= 1 && $_GET['page'] <= $lastPage)
+  {
+    $pageNumber = $_GET['page'];
+    // Set pageNumber to pageNumber from get if valid
+  }
+}
+// Select auctions from database based on filters
 $voorwerpSelectSQL = "SELECT
 v.voorwerpnummer,
 v.titel,
@@ -139,15 +163,18 @@ FETCH NEXT 30 ROWS ONLY";
 
 
 $voorwerpenQuery = $db->prepare($voorwerpSelectSQL);
-
-$voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknummer'],$pageNumber-1)); // RUBRIEK ID, START NUMBER, END NUMBER
+$voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknummer'],$pageNumber-1));
+// RUBRIEK ID, START NUMBER, END NUMBER
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
 
-        <?php include 'php/includes/default_header.php'; ?>
+        <?php
+          include 'php/includes/default_header.php';
+          // Include default head
+        ?>
 
         <title>Rubriek - Eenmaal Andermaal</title>
 
@@ -156,20 +183,24 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
   </head>
   <body>
 
-    <?php include 'php/includes/header.php' ?>
+    <?php
+      include 'php/includes/header.php';
+      // Include navigation
+    ?>
 
 <div class="container">
   <div class="row">
     <div class="col-md-4 col-lg-2 col-sm-4 sidebar" >
       <h3></h3>
-
-
       <ul class="menubar">
         <?php
+        // Check if current rubriek not equal to parent rubriek
         if($rubriek['rubrieknummer'] != -1){
 
+            // if currentRubriek has childrubrieks == false
             if(count($childrenRubrieken) == 0)
             {
+              // Select parent rubriek for title
               $parentQuery = $db->prepare("SELECT rubrieknummer, rubrieknaam, parentRubriek FROM Rubriek WHERE rubrieknummer = ? ORDER BY volgnr ASC, rubrieknaam ASC");
               $parentQuery->execute(array(htmlspecialchars($rubriek['parentRubriek'])));
               $parent = $parentQuery->fetchAll();
@@ -177,7 +208,7 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
               {
               ?>
                 <li class="toggle-sub active">
-                  <a href="rubriek.php?rubriek=<?php echo $parent[0]['parentRubriek']; ?>"><?php echo $parent[0]['rubrieknaam']; ?></a>
+                  <a href="rubriek.php?rubriek=<?php echo $parent[0]['rubrieknummer']; ?>"><?php echo $parent[0]['rubrieknaam']; ?></a>
                 </li>
               <?php
               }
@@ -190,6 +221,7 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
               <?php
             }
         }else{
+          // Show title with content 'Rubrieken'
           ?>
           <li class="toggle-sub active">
             <a href="">Rubrieken</a>
@@ -198,7 +230,6 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
         }?>
         <ul class="sub">
           <?php
-
             if(count($childrenRubrieken) == 0)
             {
 
@@ -207,7 +238,6 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
               $childrenRubrieken = $childrenRubriekenQuery->fetchAll();
 
             }
-
 
             foreach($childrenRubrieken as $row)
             {
@@ -225,6 +255,7 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
     <div class="col-md-8 col-lg-10 col-sm-8">
       <div class="container-fluid  content_col">
         <?php
+        // If breadCrumb exists
         if(count($breadCrumb) != 0)
         {
         ?>
@@ -236,18 +267,19 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
                 <span class="glyphicon glyphicon-menu-right"></span>
                   <a href="rubriek.php">Rubrieken</a>
                 <?php
+                  // Show default breadCrumb for rubriek page
 
-
-                    foreach($breadCrumb as $row)
+                  // foreach breadCrumb add breadCrumbPart
+                  foreach($breadCrumb as $row)
+                  {
+                    if($row['rubrieknummer'] != $rootRubriek)
                     {
-                      if($row['rubrieknummer'] != $rootRubriek)
-                      {
-                      ?>
-                        <span class="glyphicon glyphicon-menu-right"></span>
-                        <a href="rubriek.php?rubriek=<?php echo $row['rubrieknummer']; ?>"><?php echo $row['rubrieknaam']; ?></a>
-                      <?php
-                      }
+                    ?>
+                      <span class="glyphicon glyphicon-menu-right"></span>
+                      <a href="rubriek.php?rubriek=<?php echo $row['rubrieknummer']; ?>"><?php echo $row['rubrieknaam']; ?></a>
+                    <?php
                     }
+                  }
                 ?>
               </p>
           </div>
@@ -266,11 +298,13 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
                 </span>
               </div>
             </form>
+            <!-- SEARCH FORM END -->
               <p style="display:inline-block;margin-top:20px;">
                   Sorteer op:
                   <div style="margin-left:10px;" class="btn-group" role="group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <?php
+                      // Switch over current field, and set as selected in button
                       switch ($filter) {
                           case 'price_asc':
                                 echo 'Hoogste bod <span class="glyphicon glyphicon-sort-by-attributes"></span>';
@@ -310,6 +344,8 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
           </div>
           <?php
             $count = 0;
+
+            // Foreach auction, show auctions
             foreach($voorwerpenQuery as $row)
             {
           ?>
@@ -333,9 +369,7 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
             </div>
           <?php
             $count++;
-
               if($count == 4){
-
                 echo '<div class="clearfix visible-lg-block"></div>';
                 $count = 0;
               }
@@ -345,8 +379,10 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
         <div class="row page-navigation">
           <p>
             <?php
+            // If $voorwerpenCount > 30 multiple pages exists, show navigation
             if($voorwerpenCount > 30)
             {
+              // if pageNumber >=2 show 'previous' button
               if($pageNumber >=2){
                 ?>
                 <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=<?php echo ($pageNumber-1); ?>&filter=<?php echo $filter; ?>&search=<?php echo $search_Value; ?>"> <i class="noselect"><span class="glyphicon glyphicon-triangle-left"></span> Vorige</i></a>
@@ -354,7 +390,7 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
               }
             ?>
             <?php
-
+            // if more than 2 pages exists , show '01' button
             if($lastPage >= 2){
               ?>
                 <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=1&filter=<?php echo $filter; ?>&search=<?php echo $search_Value; ?>" class="circle noselect"><i class="circle noselect <?php echo ($pageNumber == 1) ? 'selected' : '' ;?>">01</i></a>
@@ -363,9 +399,11 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
 
             if($lastPage >= 5)
             {
+              // Show dots between navigation buttons and first page buttons
               if($pageNumber - 5 >= 0 ){
                 echo '...';
               }
+              // Show 5 buttons for navigation around current page
               for($i = $pageNumber - 2; $i < $pageNumber+ 3; $i++)
               {
                 if($i >= 2 && $i <= $lastPage -1)
@@ -375,11 +413,13 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
                   <?php
                 }
               }
+              // Show dots between navigation buttons and last page buttons
               if($lastPage - 4 >= $pageNumber ){
                 echo '...';
               }
             }
 
+            // if more than 2 pages exists, show 'lastPage' button
             if($lastPage >= 2){
               ?>
                 <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=<?php echo $lastPage ?>&filter=<?php echo $filter; ?>&search=<?php echo $search_Value; ?>" class="circle noselect"><i class="circle noselect <?php echo ($pageNumber == $lastPage) ? 'selected' : '' ;?>"><?php echo sprintf("%02d", $lastPage); ?></i></a>
@@ -387,6 +427,7 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
             }
             ?>
             <?php
+             // if currentPage < lastPage show 'next' page button
               if($pageNumber < $lastPage){
                 ?>
                 <a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer'];?>&page=<?php echo ($pageNumber+1); ?>&filter=<?php echo $filter; ?>&search=<?php echo $search_Value; ?>"> <i class="noselect">Volgende <span class="glyphicon glyphicon-triangle-right"></span></i></a>
@@ -401,7 +442,10 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
   </div>
 
 </div>
-<?php include 'php/includes/footer.php' ?>
+<?php
+  include 'php/includes/footer.php';
+  //include footer
+?>
 
 
   <!-- Bootstrap core JavaScript
@@ -414,7 +458,6 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
   <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
   <script>
   var x = setInterval(function() {
-
 
     $( "h3#looptijdeinde" ).each(function( index ) {
         var countDownDate = new Date($( this ).data("looptijd")).getTime();
@@ -430,7 +473,6 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
         + minutes + "m " + seconds + "s ");
 
         if (distance < 0) {
-          //clearInterval(x);
           $( this ).text("Gesloten");
         }
     });
@@ -440,12 +482,6 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
   $('.dropdown-toggle').dropdown()
 
   </script>
-  <script src="js/jquery.sticky.js"></script>
-  <script>
-    $(document).ready(function(){
-      $("#sticky_sidebar").sticky({topSpacing:70});
-    });
-    </script>
 </body>
 </html>
 <?php

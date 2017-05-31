@@ -1,16 +1,30 @@
 <?php
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: gebruiker.php
+  purpose:
+  Page for administrator to view info of a specific user.
+*/
   session_start();
   $_SESSION['menu']['sub'] = 'bp';
-  include ('php/database.php');
-  include ('php/user.php');
+  include_once ('php/database.php');
+  include_once ('php/user.php');
   pdo_connect();
+  // Include database, and include user functions.
+  // Connect to database
 
   if(isUserBeheerder($db) == false){
     header("Location: index.php");
   }
+  // If user is not an administrator redirect to homepage
+
+  // Get administrator details
   $result = getLoggedInUser($db);
 
 
+  // If Request method == GET load user data
   if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (!empty($_GET)) {
         $gebruikersnaam = htmlspecialchars($_GET['gebruikersnaam']);
@@ -40,22 +54,25 @@
         $resultUser=$data->fetchAll();
         $resultUserPhone=$data2->fetchAll();
 
+        // If user is not found redirect back to gebruikers.php
         if(count($resultUser) === 0){
           header("Location: gebruikers.php"); // Username ongeldig
         }
 
 
+        // Check if user is blocked
         if ($resultUser[0]['statusID']==3){
             $blocked = true;
         } else {
             $blocked = false;
         }
 
+        // Check if an user has an image if image not found or empty, show default user image
         if(!empty($resultUser[0]['bestandsnaam'])) {
           $image = $resultUser[0]['bestandsnaam'];
           $file = 'images/users/'.$image;
           if (!file_exists( $file )){
-            $image = '404.png';
+            $image = "geenfoto/geenfoto.png";
           }
         }
         else {
@@ -65,10 +82,8 @@
       else {
           // Geen username opgegeven, redirect gebruikers.php
           header("Location: gebruikers.php");
+          // Get empty
       }
-  }
-  if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-      send_message($_POST);
   }
 
 ?>
@@ -78,22 +93,30 @@
   <head>
     <?php
       include 'php/includes/default_header.php';
+      // Include default page head
     ?>
     <link href="css/profilestyle.css" rel="stylesheet">
-    <title>Beheerpanel - EenmaalAndermaal</title>
+    <title>Beheerpagina - EenmaalAndermaal</title>
   </head>
 
   <body>
 
-    <?php include 'php/includes/header.php' ?>
+    <?php
+      include 'php/includes/header.php';
+      // Include page navigation header
+    ?>
 
     <div class="container">
         <div class="row">
           <div class="col-md-3 col-lg-2 col-sm-4 sidebar">
-            <?php include 'php/includes/sidebar.php'; ?>
+            <?php
+            include 'php/includes/sidebar.php';
+            // Include website sidebar
+            ?>
           </div>
           <div class="col-md-9 col-lg-10 col-sm-8">
             <div class="container-fluid  content_col">
+              <!-- Breadcrumb -->
               <div class="row navigation-row">
                   <p>
                     <a href="index.php">
@@ -105,6 +128,7 @@
                     <a href="<?php echo $_SERVER['REQUEST_URI']; ?>">Gebruiker</a>
                   </p>
               </div>
+              <!-- Breadcrumb END -->
               <div class="row">
                 <h1> Beheer gebruiker: <?php echo $gebruikersnaam ?></h1>
               </div>
@@ -268,6 +292,7 @@
                   <div class="text-right">
                     <div class="profielbutton-group">
                       <?php
+                        // If user is blocked show deblock button otherwise show block button
                         if ($blocked){ ?>
                             <button class="btn btn-danger" data-toggle="modal" data-target="#myModalDeBlock" >
                               <i class="glyphicon glyphicon-ban-circle"></i>
@@ -289,7 +314,9 @@
         </div>
 
     </div>
-    </div>
+    <!-- CONTAINER END -->
+
+    <!-- DeBlock user modal -->
     <div class="modal fade bs-example-modal-sm" id="myModalBlock" tabindex="-1" role="dialog" aria-labelledby="myModalBlock">
       <div class="modal-dialog modal-sm" role="document">
          <div class="modal-content">
@@ -304,7 +331,9 @@
          </div>
        </div>
     </div>
+    <!-- DeBlock user modal END-->
 
+    <!-- Block user modal -->
     <div class="modal fade bs-example-modal-sm" id="myModalDeBlock" tabindex="-1" role="dialog" aria-labelledby="myModalBlock">
       <div class="modal-dialog modal-sm" role="document">
          <div class="modal-content">
@@ -319,8 +348,10 @@
          </div>
        </div>
     </div>
+    <!-- Block user modal END-->
    <?php
     include 'php/includes/footer.php';
+    // Include page footer
    ?>
 
     <!-- Bootstrap core JavaScript
