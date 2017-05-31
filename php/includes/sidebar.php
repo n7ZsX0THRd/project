@@ -1,7 +1,5 @@
 <?php
   $result = getLoggedInUser($db);
-
-
 ?>
 
 <h3></h3>
