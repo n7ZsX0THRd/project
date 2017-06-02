@@ -81,7 +81,7 @@ if (isset($_GET['voorwerpnummer'])) {
   	   LEFT JOIN
   		   Gebruikers g
   			    ON g.gebruikersnaam = b.gebruiker
-      WHERE voorwerpnummer = 181584992252
+      WHERE voorwerpnummer = ?
 	  ORDER BY b.bodbedrag DESC
 	 ) as S
 ORDER BY s.boddagtijd ASC");
