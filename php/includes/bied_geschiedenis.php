@@ -82,7 +82,7 @@ if (isset($_GET['voorwerpnummer'])) {
   		   Gebruikers g
   			    ON g.gebruikersnaam = b.gebruiker
       WHERE voorwerpnummer = 181584992252
-	  ORDER BY b.bodbedrag ASC
+	  ORDER BY b.bodbedrag DESC
 	 ) as S
 ORDER BY s.boddagtijd ASC");
   $bidHistoryQuery->execute(array($voorwerpnummer));
