@@ -194,7 +194,7 @@ for ($row = 0; $row < $count; $row++) {
                             if($beheerder) {
                                 ?>
                                     <div class="btn-group" style="display:inline-block;">
-                                      <button type="button" class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      <button type="button" style="background-color: #ea8220" class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Acties
                                         <span class="caret"></span>
                                         <span class="sr-only">Toggle Dropdown</span>
@@ -288,7 +288,7 @@ for ($row = 0; $row < $count; $row++) {
                                                       <input type="hidden" name="volgnr_B" value="<?php echo $volgnr_before ?>" >
                                                       <input type="hidden" name="rubriek_nummer_A" value="<?php echo $rubriek_nummer_current ?>" >
                                                       <input type="hidden" name="rubriek_nummer_B" value="<?php echo $rubriek_nummer_before ?>" >
-                                                      <button type="submit" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-chevron-up"></span></button>
+                                                      <button type="submit" style="background-color: #ea8220" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-chevron-up"></span></button>
                                               </form>
 
                                               <?php
@@ -300,12 +300,12 @@ for ($row = 0; $row < $count; $row++) {
                                                   <input type="hidden" name="volgnr_B" value="<?php echo $volgnr_after ?>" >
                                                   <input type="hidden" name="rubriek_nummer_A" value="<?php echo $rubriek_nummer_current ?>" >
                                                   <input type="hidden" name="rubriek_nummer_B" value="<?php echo $rubriek_nummer_after ?>" >
-                                                  <button type="submit" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-chevron-down"></span></button>
+                                                  <button type="submit" style="background-color: #ea8220" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-chevron-down"></span></button>
                                                 </form>
                                               <?php
                                             }
                                           ?>
-                                          <button type="button" class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                          <button type="button" style="background-color: #ea8220" class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             Acties
                                             <span class="caret"></span>
                                             <span class="sr-only">Toggle Dropdown</span>
