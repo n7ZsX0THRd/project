@@ -134,8 +134,8 @@ v.startprijs,
 vir.rubrieknummer,
 r.parentRubriek,
 v.looptijdeinde,
-Foto.bestandsnaam
-
+Foto.bestandsnaam,
+dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod
 FROM Voorwerp v
 	JOIN
 		VoorwerpInRubriek vir
@@ -361,7 +361,8 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
                   <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>"><h3 class="item-row-titel"><?php echo $row['titel']?></h3></a>
 
                   <h3 style="font-size:14px;" class="orange" id="looptijdeinde" data-looptijd="<?php echo $row['looptijdeinde']?>">&nbsp;</h3>
-                  <p>Start prijs: <strong>&euro;<?php echo $row['startprijs']?></strong></p>
+                  <p>Start prijs: <strong>&euro;<?php echo number_format($row['startprijs'], 2, ',', ' ')?></strong></p>
+                  <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', ' '): 'Er is nog niet geboden';?></strong></p>
                   <p style="position:absolute; bottom:0px;right:0px;width:150px;"><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bieden</a></p>
 
                 </div>

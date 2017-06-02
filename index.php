@@ -81,7 +81,14 @@ $childrenRubrieken = $childrenRubriekenQuery->fetchAll();
 
 
 // Query to select top 3 soon ending auctions
-$lastChanceQuery = $db->prepare("SELECT TOP 3 v.voorwerpnummer,v.looptijdeinde,v.titel,Foto.bestandsnaam FROM Voorwerp v CROSS APPLY
+$lastChanceQuery = $db->prepare("SELECT TOP 3
+        v.voorwerpnummer,
+        v.looptijdeinde,
+        v.titel,
+        Foto.bestandsnaam,
+        dbo.fnGetMinBid(v.voorwerpnummer) AS minimaalBod,
+        dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod
+      FROM Voorwerp v CROSS APPLY
         (
         SELECT  TOP 1 Bestand.bestandsnaam
         FROM    Bestand
@@ -92,7 +99,14 @@ $lastChanceQuery->execute();
 // Execute query
 
 // Query to select new auctions
-$newItemsQuery = $db->prepare("SELECT TOP 4 v.voorwerpnummer,v.titel,v.looptijdeinde,Foto.bestandsnaam FROM Voorwerp v CROSS APPLY
+$newItemsQuery = $db->prepare("SELECT TOP 4
+        v.voorwerpnummer,
+        v.titel,
+        v.looptijdeinde,
+        Foto.bestandsnaam,
+        dbo.fnGetMinBid(v.voorwerpnummer) AS minimaalBod,
+        dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod
+      FROM Voorwerp v CROSS APPLY
         (
         SELECT  TOP 1 Bestand.bestandsnaam
         FROM    Bestand
@@ -295,11 +309,28 @@ $newItemsQuery->execute();
                     ?>
                     <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                        <div class="thumbnail">
-                        <h3 style="padding-left: 10px;word-wrap: break-word;overflow: hidden;height:24px;"><?php echo $row['titel']; ?></h3>
-                        <div class="thumb_image" style="background-image:url(<?php echo $row['bestandsnaam']; ?>);"></div>
+                        <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
+                          <h3 style="padding-left: 10px;word-wrap: break-word;overflow: hidden;height:24px;"><?php echo $row['titel']; ?></h3>
+                        </a>
+                        <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
+                          <div class="thumb_image" style="background-image:url(<?php echo $row['bestandsnaam']; ?>);"></div>
+                        </a>
                         <div class="caption captionfix">
                           <h3 id="count_<?php echo $row['voorwerpnummer']; ?>">&nbsp;</h3>
-                          <p>Huidige bod: <strong>€NogNiet.-</strong></p>
+                          <?php
+                          if($row['hoogsteBod'] != null){
+                            ?>
+                              <p>Hoogste bod: <strong><?php echo '&euro;'.number_format($row['hoogsteBod'], 2, ',', ' ')?></strong></p>
+                            <?php
+                          }
+                          else
+                          {
+                            ?>
+                              <p>Start prijs: <strong><?php echo '&euro;'.number_format($row['minimaalBod'], 2, ',', ' ')?></strong></p>
+                            <?php
+                          }
+                          ?>
+
                           <p><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                         </div>
                        </div>

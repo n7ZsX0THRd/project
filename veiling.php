@@ -321,31 +321,137 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                       </ol>
                                     </div>
                                     <br>
-                                    <!-- SHOW CURRENT AUCTION INFO -->
-                                    <p>Land: <b><?php echo (!empty($resultVoorwerp['landNaam']))?$resultVoorwerp['landNaam']:"Onbekend";?></b></p>
-                                    <p>Plaatsnaam: <b><?php echo (!empty($resultVoorwerp['plaatsnaam']))?$resultVoorwerp['plaatsnaam']:"Onbekend";?></b></p>
-                                    <p>Postcode: <b><?php echo (!empty($resultVoorwerp['postcode']))?$resultVoorwerp['postcode']:"Onbekend";?></b></p>
+                                    <?php
+                                    // if user is logged In show option to bid
+                                    if(isUserLoggedIn($db)){
+
+                                      // show notification if user tried to place an offer
+                                      if(isset($_SESSION['warning']['empty_prijs']) && $_SESSION['warning']['empty_prijs'] === true)
+                                      {
+                                      ?>
+                                        <p class="bg-danger notifcation-fix" style="margin-left:0px;margin-right:0px;">De prijs kan niet leeg zijn.</p>
+                                      <?php
+                                        $_SESSION['warning'] = null;
+                                      }else if(isset($_SESSION['warning']['geengetal_prijs']) && $_SESSION['warning']['geengetal_prijs'] === true)
+                                      {
+                                      ?>
+                                        <p class="bg-danger notifcation-fix" style="margin-left:0px;margin-right:0px;">De opgegeven prijs is geen geldige prijs.</p>
+                                      <?php
+                                        $_SESSION['warning'] = null;
+                                      }else if(isset($_SESSION['warning']['prijs_telaag']) && $_SESSION['warning']['prijs_telaag'] === true)
+                                      {
+                                      ?>
+                                        <p class="bg-danger notifcation-fix" style="margin-left:0px;margin-right:0px;">De opgegeven prijs is te laag.</p>
+                                      <?php
+                                        $_SESSION['warning'] = null;
+                                      }else if(isset($_SESSION['warning']['overbied_jezelf']) && $_SESSION['warning']['overbied_jezelf'] === true)
+                                      {
+                                      ?>
+                                        <p class="bg-danger notifcation-fix" style="margin-left:0px;margin-right:0px;">Je kan jezelf niet overbieden.</p>
+                                      <?php
+                                        $_SESSION['warning'] = null;
+                                      }else if(isset($_SESSION['warning']['inactief_account']) && $_SESSION['warning']['inactief_account'] === true)
+                                      {
+                                      ?>
+                                        <p class="bg-warning notifcation-fix" style="margin-left:0px;margin-right:0px;">Jouw account is nog niet geverifieerd doe dit eerst om te kunnen bieden.</p>
+                                      <?php
+                                        $_SESSION['warning'] = null;
+                                      }else if(isset($_SESSION['warning']['succesvol_geboden']) && $_SESSION['warning']['succesvol_geboden'] === true)
+                                      {
+                                      ?>
+                                        <p class="bg-success notifcation-fix" style="margin-left:0px;margin-right:0px;">Je hebt succesvol geboden.</p>
+                                      <?php
+                                        $_SESSION['warning'] = null;
+                                      }
+                                      //if user is inactive, show message
+                                      if(getLoggedInUser($db)['statusID'] == 1){
+                                        ?>
+                                        <p class="bg-warning notifcation-fix" style="margin-left:0px;margin-right:0px;">Jouw account is nog niet geverifieerd doe dit eerst om te kunnen bieden.</p>
+                                        <?php
+                                      }
+                                      else {
+                                        // show input field for offer
+                                        ?>
+                                        <form method="POST" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
+                                          <div class="input-group" >
+                                             <span class="input-group-addon">&euro;</span>
+                                             <input style="height:36px;"class="form-control" type="number" required name="price" min="<?php echo number_format($resultVoorwerp['minimaalBod'], 2, '.', ' '); ?>" value="<?php echo number_format($resultVoorwerp['minimaalBod'], 2, '.', ' '); ?>" step="any">
+                                             <span class="input-group-btn">
+                                               <button class="btn btn-orange" type="submit"><img src="images/hamerwit.png" class="auction-hammer"></button>
+                                             </span>
+                                           </div>
+                                         </form>
+                                         <br/>
+                                        <?php
+                                      }
+                                    }else {
+                                      // Show message to login if user isn't logged in
+                                      ?>
+                                      <p class="bg-warning notifcation-fix" style="margin-left:0px;margin-right:0px;">Om te bieden op deze veiling moet je ingelogd zijn, doe dat <a href="login.php">hier</a>.</p>
+                                      <?php
+                                    }?>
+                                    <!--  SHOW SELLER INFO -->
                                     <br>
-                                    <?php if(isset($resultVoorwerp['betalingswijze']) && !empty($resultVoorwerp['betalingswijze'])){ ?>
-                                      <p>Betalingswijze: <b><?php echo $resultVoorwerp['betalingswijze']?></b></p>
-                                    <?php }?>
-                                    <?php if(isset($resultVoorwerp['betalingsinstructie']) && !empty($resultVoorwerp['betalingsinstructie'])){ ?>
-                                      <p>Betalingsinstructie: <b><?php echo $resultVoorwerp['betalingsinstructie']?></b> </p>
-                                    <?php }?>
-                                    <br>
-                                    <?php if(isset($resultVoorwerp['verzendkosten']) && !empty($resultVoorwerp['verzendkosten'])){ ?>
-                                      <p>Verzendkosten: <b><?php echo $resultVoorwerp['verzendkosten']?></b></p>
-                                    <?php }?>
-                                    <?php if(isset($resultVoorwerp['verzendinstructie']) && !empty($resultVoorwerp['verzendinstructie'])){ ?>
-                                      <p>Verzendinstructie: <b><?php echo $resultVoorwerp['verzendinstructie']?></b></p>
-                                    <?php }?>
-                                    <!-- SHOW CURRENT AUCTION INFO END -->
+                                    <table style="width:100%">
+                                      <tr class="border_bottom">
+                                        <td>Verkoper:</td>
+                                        <td><b><?php echo ($resultVoorwerp != null) ? $resultVoorwerp['verkoper'] : ''; ?></b></td>
+                                      </tr>
+                                      <tr class="border_bottom">
+                                        <td>Startbedrag:</td>
+                                        <td><b><?php echo ($resultVoorwerp != null) ? '&euro;'.number_format($resultVoorwerp['startprijs'], 2, ',', ' ') : ''; ?></b></td>
+                                      </tr>
+                                      <tr class="border_bottom">
+                                        <td>Hoogste bod:</td>
+                                        <td><b><?php echo ($resultVoorwerp['hoogsteBod'] != null) ? '&euro;'.number_format($resultVoorwerp['hoogsteBod'], 2, ',', ' ') : 'Er is nog niet geboden';?></b></td>
+                                      </tr>
+                                      <tr class="border_bottom">
+                                        <td>Land:</td>
+                                        <td><b><?php echo (!empty($resultVoorwerp['landNaam']))?$resultVoorwerp['landNaam']:"Onbekend";?></b></td>
+                                      </tr>
+                                      <tr class="border_bottom">
+                                        <td>Plaatsnaam:</td>
+                                        <td><b><?php echo (!empty($resultVoorwerp['plaatsnaam']))?$resultVoorwerp['plaatsnaam']:"Onbekend";?></b></td>
+                                      </tr>
+                                      <tr class="border_bottom">
+                                        <td>Postcode:</td>
+                                        <td><b><?php echo (!empty($resultVoorwerp['postcode']))?$resultVoorwerp['postcode']:"Onbekend";?></b></td>
+                                      </tr>
+                                      <?php if(isset($resultVoorwerp['betalingswijze']) && !empty($resultVoorwerp['betalingswijze'])){ ?>
+                                      <tr class="border_bottom">
+                                        <td>Betalingswijze:</td>
+                                        <td><b><?php echo $resultVoorwerp['betalingswijze']?></b></td>
+                                      </tr>
+                                      <?php }?>
+                                      <?php if(isset($resultVoorwerp['betalingsinstructie']) && !empty($resultVoorwerp['betalingsinstructie'])){ ?>
+                                      <tr class="border_bottom">
+                                        <td>Betalingsinstructie:</td>
+                                        <td><b><?php echo $resultVoorwerp['betalingsinstructie']?></b></td>
+                                      </tr>
+                                      <?php }?>
+                                      <?php if(isset($resultVoorwerp['verzendkosten']) && !empty($resultVoorwerp['verzendkosten'])){ ?>
+                                        <tr class="border_bottom">
+                                          <td>Verzendkosten:</td>
+                                          <td><b><?php echo $resultVoorwerp['verzendkosten']?></b></td>
+                                        </tr>
+                                      <?php }?>
+                                      <?php if(isset($resultVoorwerp['verzendinstructie']) && !empty($resultVoorwerp['verzendinstructie'])){ ?>
+                                        <tr class="border_bottom">
+                                          <td>Verzendinstructie:</td>
+                                          <td><b><?php echo $resultVoorwerp['verzendkosten']?></b></td>
+                                        </tr>
+                                      <?php }?>
+                                    </table>
                                 </div>
                             </div>
                             <div class="col-lg-8" style="margin-left:40px; margin-top:20px; width:60%">
 
                               <div style="padding: 5px;border: 1px solid;border-radius: 5px; border-color: #5484a4">
+
+
                                 <?php
+
+
                                 if($resultVoorwerp != null){
                                       // Allowed HTML elements in description
                                       $allowedTags = '<br><p><h1><h2><h3><h4><h5><h6><ul><li><ol><span><b><i><strong><small><mark><em><ins><sub><sup><del>';
@@ -369,82 +475,6 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                 }
                                  ?>
                               </div>
-                              <!--  SHOW SELLER INFO -->
-                              <div class="text-left" style="margin-top:15px;border-top:1px solid #E6E6E6;">
-                                <br>
-                                <p>Verkoper:     <b><?php echo ($resultVoorwerp != null) ? $resultVoorwerp['verkoper'] : ''; ?></b><p>
-                                <p>Startbedrag:  <b>€<?php echo ($resultVoorwerp != null) ? $resultVoorwerp['startprijs'] : ''; ?></b></p>
-                                <p>Hoogste bod:  <b><?php echo ($resultVoorwerp['hoogsteBod'] != null) ? '&euro;'.$resultVoorwerp['hoogsteBod'] : 'Er is nog niet geboden';?></b></p>
-                              </div>
-                              <!--  SHOW SELLER INFO END -->
-                              <?php
-                              // if user is logged In show option to bid
-                              if(isUserLoggedIn($db)){
-
-                                // show notification if user tried to place an offer
-                                if(isset($_SESSION['warning']['empty_prijs']) && $_SESSION['warning']['empty_prijs'] === true)
-                                {
-                                ?>
-                                  <p class="bg-danger notifcation-fix" style="margin-left:0px;margin-right:0px;">De prijs kan niet leeg zijn.</p>
-                                <?php
-                                  $_SESSION['warning'] = null;
-                                }else if(isset($_SESSION['warning']['geengetal_prijs']) && $_SESSION['warning']['geengetal_prijs'] === true)
-                                {
-                                ?>
-                                  <p class="bg-danger notifcation-fix" style="margin-left:0px;margin-right:0px;">De opgegeven prijs is geen geldige prijs.</p>
-                                <?php
-                                  $_SESSION['warning'] = null;
-                                }else if(isset($_SESSION['warning']['prijs_telaag']) && $_SESSION['warning']['prijs_telaag'] === true)
-                                {
-                                ?>
-                                  <p class="bg-danger notifcation-fix" style="margin-left:0px;margin-right:0px;">De opgegeven prijs is te laag.</p>
-                                <?php
-                                  $_SESSION['warning'] = null;
-                                }else if(isset($_SESSION['warning']['overbied_jezelf']) && $_SESSION['warning']['overbied_jezelf'] === true)
-                                {
-                                ?>
-                                  <p class="bg-danger notifcation-fix" style="margin-left:0px;margin-right:0px;">Je kan jezelf niet overbieden.</p>
-                                <?php
-                                  $_SESSION['warning'] = null;
-                                }else if(isset($_SESSION['warning']['inactief_account']) && $_SESSION['warning']['inactief_account'] === true)
-                                {
-                                ?>
-                                  <p class="bg-warning notifcation-fix" style="margin-left:0px;margin-right:0px;">Jouw account is nog niet geverifieerd doe dit eerst om te kunnen bieden.</p>
-                                <?php
-                                  $_SESSION['warning'] = null;
-                                }else if(isset($_SESSION['warning']['succesvol_geboden']) && $_SESSION['warning']['succesvol_geboden'] === true)
-                                {
-                                ?>
-                                  <p class="bg-success notifcation-fix" style="margin-left:0px;margin-right:0px;">Je hebt succesvol geboden.</p>
-                                <?php
-                                  $_SESSION['warning'] = null;
-                                }
-                                //if user is inactive, show message
-                                if(getLoggedInUser($db)['statusID'] == 1){
-                                  ?>
-                                  <p class="bg-warning notifcation-fix" style="margin-left:0px;margin-right:0px;">Jouw account is nog niet geverifieerd doe dit eerst om te kunnen bieden.</p>
-                                  <?php
-                                }
-                                else {
-                                  // show input field for offer
-                                  ?>
-                                  <form method="POST" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
-                                    <div class="input-group" >
-                                       <span class="input-group-addon">&euro;</span>
-                                       <input style="height:36px;"class="form-control" type="number" required name="price" min="<?php echo $resultVoorwerp['minimaalBod']; ?>" value="<?php echo $resultVoorwerp['minimaalBod']; ?>" step="any">
-                                       <span class="input-group-btn">
-                                         <button class="btn btn-orange" type="submit"><img src="images/hamerwit.png" class="auction-hammer"></button>
-                                       </span>
-                                     </div>
-                                   </form>
-                                  <?php
-                                }
-                              }else {
-                                // Show message to login if user isn't logged in
-                                ?>
-                                <p class="bg-warning notifcation-fix" style="margin-left:0px;margin-right:0px;">Om te bieden op deze veiling moet je ingelogd zijn, doe dat <a href="login.php">hier</a>.</p>
-                                <?php
-                              }?>
                             </div>
               </div>
               <div role="tabpanel" class="tab-pane" id="bieden">
@@ -549,6 +579,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
   $('#bied_refresh').click(function(){
     $( "#bieden_content" ).load( "php/includes/bied_geschiedenis.php?voorwerpnummer=<?php echo $resultVoorwerp['voorwerpnummer'];?>" );
   });
+
   </script>
 </body>
 </html>

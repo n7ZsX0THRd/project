@@ -25,24 +25,40 @@ function time_elapsed_string($datetime, $full = false) {
     $diff->d -= $diff->w * 7;
 
     $string = array(
-        'y' => 'year',
-        'm' => 'month',
+        'y' => 'jaar',
+        'm' => 'maand',
         'w' => 'week',
-        'd' => 'day',
-        'h' => 'hour',
-        'i' => 'minute',
-        's' => 'second',
+        'd' => 'dag',
+        'h' => 'uur',
+        'i' => 'minuut',
+        's' => 'seconde',
+    );
+    $stringMV = array(
+        'y' => 'jaren',
+        'm' => 'maanden',
+        'w' => 'weken',
+        'd' => 'dagen',
+        'h' => 'uren',
+        'i' => 'minuten',
+        's' => 'seconden',
     );
     foreach ($string as $k => &$v) {
         if ($diff->$k) {
-            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+            if($diff->$k > 1)
+            {
+              $v = $diff->$k . ' ' . $stringMV[$k];
+            }
+            else
+            {
+              $v = $diff->$k . ' ' . $v;
+            }
         } else {
             unset($string[$k]);
         }
     }
 
     if (!$full) $string = array_slice($string, 0, 1);
-    return $string ? implode(', ', $string) . ' ago' : 'just now';
+    return $string ? implode(', ', $string) . ' geleden' : 'zojuist';
 }
 
 if (isset($_GET['voorwerpnummer'])) {
@@ -87,7 +103,7 @@ else {
                 ?>
                 <li class="right clearfix"><span class="chat-img pull-right">
                   <?php
-                  if(file_exists('images/users/'.$row['bestandsnaam'])) {
+                  if(file_exists('../../images/users/'.$row['bestandsnaam'])) {
                     ?>
                     <img width="50" height="50" style="background-image:url(images/users/<?php echo $row['bestandsnaam']; ?>);background-size:contain;" class="img-circle" />
                     <?php
@@ -103,7 +119,7 @@ else {
                             <strong class="pull-right primary-font"><?php echo $row['gebruikersnaam']; ?></strong>
                         </div>
                         <p style="float:right;">
-                             &euro;<?php echo $row['bodbedrag']; ?> geboden
+                             &euro;<?php echo number_format($row['bodbedrag'], 2, ',', ' '); ?> geboden
                         </p>
                     </div>
                 </li>
@@ -112,9 +128,9 @@ else {
                 ?>
                 <li class="left clearfix"><span class="chat-img pull-left">
                   <?php
-                  if(file_exists('images/users/'.$row['bestandsnaam'])) {
+                  if(file_exists('../../images/users/'.$row['bestandsnaam'])) {
                     ?>
-                    <img width="50" height="50" style="background-image:url(images/users/<?php echo $row['bestandsnaam']; ?>);background-size:contain;" class="img-circle" />
+                    <img width="50" height="50" style="background-image:url('images/users/<?php echo $row['bestandsnaam']; ?>'');background-size:contain;" class="img-circle" />
                     <?php
                   }else {
                     ?>
@@ -128,7 +144,7 @@ else {
                                  <span class="glyphicon glyphicon-time"></span><?php echo time_elapsed_string($row['boddagtijd']); ?></small>
                          </div>
                          <p>
-                            &euro;<?php echo $row['bodbedrag']; ?> geboden
+                            &euro;<?php echo number_format($row['bodbedrag'], 2, ',', ' '); ?> geboden
                          </p>
                      </div>
                  </li>
