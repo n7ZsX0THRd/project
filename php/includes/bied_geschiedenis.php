@@ -60,15 +60,31 @@ function time_elapsed_string($datetime, $full = false) {
     if (!$full) $string = array_slice($string, 0, 1);
     return $string ? implode(', ', $string) . ' geleden' : 'zojuist';
 }
+function URL_exists($url){
+   $headers=get_headers($url);
+   return stripos($headers[0],"200 OK")?true:false;
+}
+
 
 if (isset($_GET['voorwerpnummer'])) {
   $voorwerpnummer = htmlspecialchars($_GET['voorwerpnummer']);
 
-  $bidHistoryQuery = $db->prepare("SELECT b.voorwerpnummer,b.bodbedrag,b.boddagtijd,g.gebruikersnaam,g.bestandsnaam FROM Bod b
-  	JOIN
-  		Gebruikers g
-  			ON g.gebruikersnaam = b.gebruiker
-  WHERE voorwerpnummer = ? ORDER BY boddagtijd ASC");
+  $bidHistoryQuery = $db->prepare("SELECT * FROM
+    (
+	SELECT TOP 10
+        b.voorwerpnummer,
+        b.bodbedrag,
+        b.boddagtijd,
+        g.gebruikersnaam,
+        g.bestandsnaam
+      FROM Bod b
+  	   LEFT JOIN
+  		   Gebruikers g
+  			    ON g.gebruikersnaam = b.gebruiker
+      WHERE voorwerpnummer = 181584992252
+	  ORDER BY b.bodbedrag ASC
+	 ) as S
+ORDER BY s.boddagtijd ASC");
   $bidHistoryQuery->execute(array($voorwerpnummer));
 
 }
@@ -96,20 +112,20 @@ else {
               // Loop over bidHistory
               foreach($bidHistoryQuery->fetchAll() as $row){
                 $index++;
-
+                $profileImage = "http://iproject2.icasites.nl/images/users/".$row['bestandsnaam'];
                 // If username is equal to currently logged in user
                 // show user on the right
                 if($row['gebruikersnaam'] == $loggedInUser){
                 ?>
                 <li class="right clearfix"><span class="chat-img pull-right">
                   <?php
-                  if(file_exists('../../images/users/'.$row['bestandsnaam'])) {
+                  if(URL_exists($profileImage) == true) {
                     ?>
-                    <img width="50" height="50" style="background-image:url('images/users/<?php echo $row['bestandsnaam']; ?>');background-size:contain;" class="img-circle" />
+                    <img width="50" height="50" style="background-image:url('<?php echo $profileImage; ?>');background-size:cover;" class="img-circle" />
                     <?php
                   }else {
                     ?>
-                    <img width="50" height="50" style="background-image:url('images/users/geenfoto/geenfoto.png');background-size:contain;" class="img-circle" />
+                    <img width="50" height="50" style="background-image:url('http://iproject2.icasites.nl/images/users/geenfoto/geenfoto.png');background-size:cover;" class="img-circle" />
                     <?php
                   }?>
                 </span>
@@ -119,7 +135,7 @@ else {
                             <strong class="pull-right primary-font"><?php echo $row['gebruikersnaam']; ?></strong>
                         </div>
                         <p style="float:right;">
-                             &euro;<?php echo number_format($row['bodbedrag'], 2, ',', ' '); ?> geboden
+                             &euro;<?php echo number_format($row['bodbedrag'], 2, ',', ''); ?> geboden
                         </p>
                     </div>
                 </li>
@@ -128,13 +144,13 @@ else {
                 ?>
                 <li class="left clearfix"><span class="chat-img pull-left">
                   <?php
-                  if(file_exists('../../images/users/'.$row['bestandsnaam'])) {
+                  if(URL_exists($profileImage) == true) {
                     ?>
-                    <img width="50" height="50" style="background-image:url('images/users/<?php echo $row['bestandsnaam']; ?>'');background-size:contain;" class="img-circle" />
+                    <img width="50" height="50" style="background-image:url('<?php echo $profileImage; ?>');background-size:cover;" class="img-circle" />
                     <?php
                   }else {
                     ?>
-                    <img width="50" height="50" style="background-image:url('images/users/geenfoto/geenfoto.png');background-size:contain;" class="img-circle" />
+                    <img width="50" height="50" style="background-image:url('http://iproject2.icasites.nl/images/users/geenfoto/geenfoto.png');background-size:cover;" class="img-circle" />
                     <?php
                   }?>
                  </span>
@@ -144,7 +160,7 @@ else {
                                  <span class="glyphicon glyphicon-time"></span><?php echo time_elapsed_string($row['boddagtijd']); ?></small>
                          </div>
                          <p>
-                            &euro;<?php echo number_format($row['bodbedrag'], 2, ',', ' '); ?> geboden
+                            &euro;<?php echo number_format($row['bodbedrag'], 2, ',', ''); ?> geboden
                          </p>
                      </div>
                  </li>

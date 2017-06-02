@@ -238,7 +238,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
           <div class="row navigation-row">
               <p>
                 <a class="btn btn-default" href="javascript:history.go(-1)">
-                <span class="glyphicon glyphicon-arrow-left"></span>  Overzicht
+                <span class="glyphicon glyphicon-arrow-left"></span>  Terug
                 </a>
                 <a href="index.php" style="padding-left:20px;">
                   <span class="glyphicon glyphicon-home "></span>
@@ -375,7 +375,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                         <form method="POST" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
                                           <div class="input-group" >
                                              <span class="input-group-addon">&euro;</span>
-                                             <input style="height:36px;"class="form-control" type="number" required name="price" min="<?php echo number_format($resultVoorwerp['minimaalBod'], 2, '.', ' '); ?>" value="<?php echo number_format($resultVoorwerp['minimaalBod'], 2, '.', ' '); ?>" step="any">
+                                             <input style="height:36px;"class="form-control" type="number" required name="price" min="<?php echo number_format($resultVoorwerp['minimaalBod'], 2, '.', ''); ?>" value="<?php echo number_format($resultVoorwerp['minimaalBod'], 2, '.', ''); ?>" step="any">
                                              <span class="input-group-btn">
                                                <button class="btn btn-orange" type="submit"><img src="images/hamerwit.png" class="auction-hammer"></button>
                                              </span>
@@ -399,11 +399,11 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                       </tr>
                                       <tr class="border_bottom">
                                         <td>Startbedrag:</td>
-                                        <td><b><?php echo ($resultVoorwerp != null) ? '&euro;'.number_format($resultVoorwerp['startprijs'], 2, ',', ' ') : ''; ?></b></td>
+                                        <td><b><?php echo ($resultVoorwerp != null) ? '&euro;'.number_format($resultVoorwerp['startprijs'], 2, ',', '') : ''; ?></b></td>
                                       </tr>
                                       <tr class="border_bottom">
                                         <td>Hoogste bod:</td>
-                                        <td><b><?php echo ($resultVoorwerp['hoogsteBod'] != null) ? '&euro;'.number_format($resultVoorwerp['hoogsteBod'], 2, ',', ' ') : 'Er is nog niet geboden';?></b></td>
+                                        <td><b><?php echo ($resultVoorwerp['hoogsteBod'] != null) ? '&euro;'.number_format($resultVoorwerp['hoogsteBod'], 2, ',', '') : 'Er is nog niet geboden';?></b></td>
                                       </tr>
                                       <tr class="border_bottom">
                                         <td>Land:</td>
