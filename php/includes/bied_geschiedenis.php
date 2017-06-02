@@ -105,11 +105,11 @@ else {
                   <?php
                   if(file_exists('../../images/users/'.$row['bestandsnaam'])) {
                     ?>
-                    <img width="50" height="50" style="background-image:url(images/users/<?php echo $row['bestandsnaam']; ?>);background-size:contain;" class="img-circle" />
+                    <img width="50" height="50" style="background-image:url('images/users/<?php echo $row['bestandsnaam']; ?>');background-size:contain;" class="img-circle" />
                     <?php
                   }else {
                     ?>
-                    <img width="50" height="50" style="background-image:url(images/users/geenfoto/geenfoto.png);background-size:contain;" class="img-circle" />
+                    <img width="50" height="50" style="background-image:url('images/users/geenfoto/geenfoto.png');background-size:contain;" class="img-circle" />
                     <?php
                   }?>
                 </span>
@@ -134,7 +134,7 @@ else {
                     <?php
                   }else {
                     ?>
-                    <img width="50" height="50" style="background-image:url(images/users/geenfoto/geenfoto.png);background-size:contain;" class="img-circle" />
+                    <img width="50" height="50" style="background-image:url('images/users/geenfoto/geenfoto.png');background-size:contain;" class="img-circle" />
                     <?php
                   }?>
                  </span>
