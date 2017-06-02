@@ -73,10 +73,10 @@ if(isset($_GET['search']) && !empty($_GET['search'])){
 //Switch over filter
 switch ($filter) {
     case 'price_asc':
-          $filter_SQL = 'v.startprijs ASC';
+          $filter_SQL = 'hoogsteBod ASC';
         break;
     case 'price_desc':
-          $filter_SQL = 'v.startprijs DESC';
+          $filter_SQL = 'hoogsteBod DESC';
         break;
     case 'time_asc':
           $filter_SQL = 'v.looptijdeinde ASC';
@@ -84,30 +84,54 @@ switch ($filter) {
     case 'time_desc':
           $filter_SQL = 'v.looptijdeinde DESC';
         break;
+    case 'count_asc':
+          $filter_SQL = 'aantalBiedingen ASC';
+        break;
+    case 'count_desc':
+          $filter_SQL = 'aantalBiedingen DESC';
+        break;
 }
 // Set sql part for specific filter
-$voorwerpCountQuery = $db->prepare("SELECT v.voorwerpnummer
-  FROM Voorwerp v
-  	JOIN
-  		VoorwerpInRubriek vir
-  			ON v.voorwerpnummer = vir.voorwerpnummer
-  	JOIN
-  		Rubriek r
-  			ON r.rubrieknummer = vir.rubrieknummer
-    CROSS APPLY
-          (
-          SELECT  TOP 1 Bestand.bestandsnaam
-          FROM    Bestand
-          WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
-          ) Foto
-  	WHERE EXISTS
-  	(
-  	 SELECT rubrieknummer FROM
-  	 Rubriek
-       WHERE (dbo.fnRubriekIsAfstammelingVan(rubrieknummer,?) = 1 OR rubrieknummer = ?)
-  	   AND vir.rubrieknummer = rubriek.rubrieknummer
-  	)
-  ".$search_SQL."  AND v.looptijdeinde > GETDATE()");
+$voorwerpCountQuery = $db->prepare("SELECT
+  v.voorwerpnummer,
+  v.titel,
+  v.startprijs,
+  vir.rubrieknummer,
+  r.parentRubriek,
+  v.looptijdeinde,
+  Foto.bestandsnaam
+FROM Voorwerp v
+	JOIN
+		VoorwerpInRubriek vir
+			ON v.voorwerpnummer = vir.voorwerpnummer
+	JOIN
+		Rubriek r
+			ON r.rubrieknummer = vir.rubrieknummer
+  LEFT JOIN
+    		Bod b
+    			ON b.voorwerpnummer = v.voorwerpnummer
+  CROSS APPLY
+        (
+        SELECT  TOP 1 Bestand.bestandsnaam
+        FROM    Bestand
+        WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
+        ) Foto
+	WHERE EXISTS
+	(
+	 SELECT rubrieknummer FROM
+	 Rubriek
+     WHERE (dbo.fnRubriekIsAfstammelingVan(rubrieknummer,?) = 1 OR rubrieknummer = ?)
+	   AND vir.rubrieknummer = rubriek.rubrieknummer
+	)
+".$search_SQL."  AND v.looptijdeinde > GETDATE()
+GROUP BY
+	v.voorwerpnummer,
+	v.titel,
+	v.startprijs,
+	vir.rubrieknummer,
+	r.parentRubriek,
+	v.looptijdeinde,
+	Foto.bestandsnaam");
 
 $voorwerpCountQuery->execute(array($rubriekID,$rubriekID));
 
@@ -128,14 +152,15 @@ if(isset($_GET['page'])){
 }
 // Select auctions from database based on filters
 $voorwerpSelectSQL = "SELECT
-v.voorwerpnummer,
-v.titel,
-v.startprijs,
-vir.rubrieknummer,
-r.parentRubriek,
-v.looptijdeinde,
-Foto.bestandsnaam,
-dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod
+  v.voorwerpnummer,
+  v.titel,
+  v.startprijs,
+  vir.rubrieknummer,
+  r.parentRubriek,
+  v.looptijdeinde,
+  Foto.bestandsnaam,
+  dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod,
+  COUNT(b.voorwerpnummer) AS aantalBiedingen
 FROM Voorwerp v
 	JOIN
 		VoorwerpInRubriek vir
@@ -143,6 +168,9 @@ FROM Voorwerp v
 	JOIN
 		Rubriek r
 			ON r.rubrieknummer = vir.rubrieknummer
+  LEFT JOIN
+    		Bod b
+    			ON b.voorwerpnummer = v.voorwerpnummer
   CROSS APPLY
         (
         SELECT  TOP 1 Bestand.bestandsnaam
@@ -157,6 +185,14 @@ FROM Voorwerp v
 	   AND vir.rubrieknummer = rubriek.rubrieknummer
 	)
 ".$search_SQL."  AND v.looptijdeinde > GETDATE()
+GROUP BY
+	v.voorwerpnummer,
+	v.titel,
+	v.startprijs,
+	vir.rubrieknummer,
+	r.parentRubriek,
+	v.looptijdeinde,
+	Foto.bestandsnaam
 ORDER BY ".$filter_SQL." ,v.titel
 OFFSET 30*? ROWS
 FETCH NEXT 30 ROWS ONLY";
@@ -318,6 +354,12 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
                           case 'time_desc':
                                 echo 'Resterende tijd <span class="glyphicon glyphicon-sort-by-attributes-alt"></span>';
                               break;
+                          case 'count_asc':
+                                echo 'Aantal biedingen <span class="glyphicon glyphicon-sort-by-attributes"></span>';
+                              break;
+                          case 'count_desc':
+                                echo 'Aantal biedingen <span class="glyphicon glyphicon-sort-by-attributes-alt"></span>';
+                              break;
                       }
                       ?>
                       <span class="caret"></span>
@@ -329,13 +371,14 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
                         <li><a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer']; ?>&page=<?php echo $pageNumber; ?>&filter=time_asc&search=<?php echo $search_Value; ?>">Resterende tijd <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
                         <li><a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer']; ?>&page=<?php echo $pageNumber; ?>&filter=time_desc&search=<?php echo $search_Value; ?>">Resterende tijd <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
                         <!--
+                          <li role="separator" class="divider"></li>
+                          <li><a href="#">Beoordeling verkoper <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
+                          <li><a href="#">Beoordeling verkoper <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
+                        -->
                       <li role="separator" class="divider"></li>
-                        <li><a href="#">Beoordeling verkoper <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
-                        <li><a href="#">Beoordeling verkoper <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
-                      <li role="separator" class="divider"></li>
-                        <li><a href="#">Aantal biedingen <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
-                        <li><a href="#">Aantal biedingen <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
-                      -->
+                        <li><a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer']; ?>&page=<?php echo $pageNumber; ?>&filter=count_asc&search=<?php echo $search_Value; ?>">Aantal biedingen <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
+                        <li><a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer']; ?>&page=<?php echo $pageNumber; ?>&filter=count_desc&search=<?php echo $search_Value; ?>">Aantal biedingen <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
+
                     </ul>
                   </div>
               </p>
@@ -363,6 +406,7 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
                   <h3 style="font-size:14px;" class="orange" id="looptijdeinde" data-looptijd="<?php echo $row['looptijdeinde']?>">&nbsp;</h3>
                   <p>Start prijs: <strong>&euro;<?php echo number_format($row['startprijs'], 2, ',', ' ')?></strong></p>
                   <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', ' '): 'Er is nog niet geboden';?></strong></p>
+                  <p>Aantal keer geboden: <strong><?php echo $row['aantalBiedingen'];?></strong></p>
                   <p style="position:absolute; bottom:0px;right:0px;width:150px;"><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bieden</a></p>
 
                 </div>
