@@ -193,16 +193,39 @@ $populairItemsQuery->execute();
                 ?>
                 <div class="col-lg-4">
                   <div>
-                    <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
+                    <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" alt="<?php echo $row['titel']; ?>">
                       <h4 style="word-wrap: break-word;overflow:hidden;width:100%;height:19px;"> <?php echo $row['titel']; ?> </h4>
                     </a>
                   </div>
-                  <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
+                  <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" alt="<?php echo $row['titel']; ?>">
                     <div class="veilingthumb" style="background-image:url('<?php echo $row['bestandsnaam']; ?>');">
-                      <p>Resterende tijd: &nbsp;<?php //echo $row['looptijdeinde']; ?></p>
+                      <p>Resterende tijd: <span id="count3_<?php echo $row['voorwerpnummer']; ?>"> &nbsp;<?php //echo $row['looptijdeinde']; ?></span></p>
                     </div>
                   </a>
                 </div>
+                <script>
+                // Function to update the count downs of the auctions
+                var countDownDate = new Date('<?php echo $row['looptijdeinde']; ?>').getTime();
+
+                var x = setInterval(function() {
+
+                  var now = new Date().getTime();
+                  var distance = countDownDate - now;
+
+                  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                  document.getElementById("count3_<?php echo $row['voorwerpnummer']; ?>").innerHTML = days + "d " + hours + "h "
+                  + minutes + "m " + seconds + "s ";
+
+                  if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementById("count3_<?php echo $row['voorwerpnummer']; ?>").innerHTML = "Gesloten";
+                  }
+                }, 1000);
+                </script>
                 <?php
             }
 
@@ -288,10 +311,10 @@ $populairItemsQuery->execute();
                       ?>
                       <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                          <div class="thumbnail">
-                          <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
+                          <a alt="<?php echo $row['titel']; ?>" href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
                             <h3 style="padding-left: 10px;word-wrap: break-word;overflow: hidden;height:24px;"><?php echo $row['titel']; ?></h3>
                           </a>
-                          <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
+                          <a alt="<?php echo $row['titel']; ?>" href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
                             <div class="thumb_image" style="background-image:url(<?php echo $row['bestandsnaam']; ?>);"></div>
                           </a>
                           <div class="caption captionfix">
@@ -310,7 +333,7 @@ $populairItemsQuery->execute();
                             }
                             ?>
 
-                            <p><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                            <p><a alt="<?php echo $row['titel']; ?>" href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                           </div>
                          </div>
                       </div>
@@ -352,10 +375,10 @@ $populairItemsQuery->execute();
                     ?>
                     <div class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                        <div class="thumbnail">
-                        <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
+                        <a alt="<?php echo $row['titel']; ?>" href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
                           <h3 style="padding-left: 10px;word-wrap: break-word;overflow: hidden;height:24px;"><?php echo $row['titel']; ?></h3>
                         </a>
-                        <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
+                        <a alt="<?php echo $row['titel']; ?>" href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
                           <div class="thumb_image" style="background-image:url(<?php echo $row['bestandsnaam']; ?>);"></div>
                         </a>
                         <div class="caption captionfix">
@@ -374,7 +397,7 @@ $populairItemsQuery->execute();
                           }
                           ?>
 
-                          <p><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bieden</a></p>
+                          <p><a alt="<?php echo $row['titel']; ?>" href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bieden</a></p>
                         </div>
                        </div>
                     </div>
