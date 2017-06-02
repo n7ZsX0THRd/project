@@ -93,8 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
   }else if($_POST['form_name'] == 'login'){
 
-    echo 'LOGIN';
-    var_dump($_POST);
+   //echo 'LOGIN';
+   //var_dump($_POST);
    // If requested post = login;
 
    $email = $_POST['l_naam'];
