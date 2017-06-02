@@ -81,20 +81,27 @@ $childrenRubrieken = $childrenRubriekenQuery->fetchAll();
 
 
 // Query to select top 3 soon ending auctions
-$lastChanceQuery = $db->prepare("SELECT TOP 3
-        v.voorwerpnummer,
-        v.looptijdeinde,
-        v.titel,
-        Foto.bestandsnaam,
-        dbo.fnGetMinBid(v.voorwerpnummer) AS minimaalBod,
-        dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod
-      FROM Voorwerp v CROSS APPLY
-        (
-        SELECT  TOP 1 Bestand.bestandsnaam
-        FROM    Bestand
-        WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
-        ) Foto
-		WHERE DATEADD(MI,30,GETDATE()) < v.looptijdeinde ORDER BY v.looptijdeinde ASC");
+$lastChanceQuery = $db->prepare("SELECT TOP 3 * FROM
+(
+	SELECT
+		v.voorwerpnummer,
+		v.looptijdeinde,
+		v.titel,
+		Foto.bestandsnaam,
+		dbo.fnGetMinBid(v.voorwerpnummer) AS minimaalBod,
+		dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod
+	FROM Voorwerp v
+		CROSS APPLY
+		(
+			SELECT  TOP 1
+				Bestand.bestandsnaam
+			FROM    Bestand
+			WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
+		)
+		Foto
+	WHERE DATEADD(MI,30,GETDATE()) < v.looptijdeinde
+) AS s
+ORDER BY looptijdeinde ASC");
 $lastChanceQuery->execute();
 // Execute query
 
@@ -199,33 +206,10 @@ $populairItemsQuery->execute();
                   </div>
                   <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" alt="<?php echo $row['titel']; ?>">
                     <div class="veilingthumb" style="background-image:url('<?php echo $row['bestandsnaam']; ?>');">
-                      <p>Resterende tijd: <span id="count3_<?php echo $row['voorwerpnummer']; ?>"> &nbsp;<?php //echo $row['looptijdeinde']; ?></span></p>
+                      <p>Resterende tijd: <span id="countdown" data-looptijd="<?php echo $row['looptijdeinde'];?>"> &nbsp;<?php //echo $row['looptijdeinde']; ?></span></p>
                     </div>
                   </a>
                 </div>
-                <script>
-                // Function to update the count downs of the auctions
-                var countDownDate = new Date('<?php echo $row['looptijdeinde']; ?>').getTime();
-
-                var x = setInterval(function() {
-
-                  var now = new Date().getTime();
-                  var distance = countDownDate - now;
-
-                  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                  document.getElementById("count3_<?php echo $row['voorwerpnummer']; ?>").innerHTML = days + "d " + hours + "h "
-                  + minutes + "m " + seconds + "s ";
-
-                  if (distance < 0) {
-                    clearInterval(x);
-                    document.getElementById("count3_<?php echo $row['voorwerpnummer']; ?>").innerHTML = "Gesloten";
-                  }
-                }, 1000);
-                </script>
                 <?php
             }
 
@@ -318,7 +302,7 @@ $populairItemsQuery->execute();
                             <div class="thumb_image" style="background-image:url(<?php echo $row['bestandsnaam']; ?>);"></div>
                           </a>
                           <div class="caption captionfix">
-                            <h3 id="count2_<?php echo $row['voorwerpnummer']; ?>">&nbsp;</h3>
+                            <h3><span id="countdown" data-looptijd="<?php echo $row['looptijdeinde'];?>">&nbsp;</span></h3>
                             <?php
                             if($row['hoogsteBod'] != null){
                               ?>
@@ -337,29 +321,6 @@ $populairItemsQuery->execute();
                           </div>
                          </div>
                       </div>
-                      <script>
-                      // Function to update the count downs of the auctions
-                      var countDownDate = new Date('<?php echo $row['looptijdeinde']; ?>').getTime();
-
-                      var x = setInterval(function() {
-
-                        var now = new Date().getTime();
-                        var distance = countDownDate - now;
-
-                        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                        document.getElementById("count2_<?php echo $row['voorwerpnummer']; ?>").innerHTML = days + "d " + hours + "h "
-                        + minutes + "m " + seconds + "s ";
-
-                        if (distance < 0) {
-                          clearInterval(x);
-                          document.getElementById("count2_<?php echo $row['voorwerpnummer']; ?>").innerHTML = "Gesloten";
-                        }
-                      }, 1000);
-                      </script>
                       <?php
                     }
                     ?>
@@ -382,7 +343,7 @@ $populairItemsQuery->execute();
                           <div class="thumb_image" style="background-image:url(<?php echo $row['bestandsnaam']; ?>);"></div>
                         </a>
                         <div class="caption captionfix">
-                          <h3 id="count_<?php echo $row['voorwerpnummer']; ?>">&nbsp;</h3>
+                          <h3><span id="countdown" data-looptijd="<?php echo $row['looptijdeinde'];?>">&nbsp;</span></h3>
                           <?php
                           if($row['hoogsteBod'] != null){
                             ?>
@@ -451,5 +412,29 @@ $populairItemsQuery->execute();
     <script src="bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script>
+    var x = setInterval(function() {
+
+      $( "span#countdown" ).each(function( index ) {
+          var countDownDate = new Date($( this ).data("looptijd")).getTime();
+          var now = new Date().getTime();
+          var distance = countDownDate - now;
+
+          var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          $( this ).text(days + "d " + hours + "h "
+          + minutes + "m " + seconds + "s ");
+
+          if (distance < 0) {
+            $( this ).text("Gesloten");
+          }
+      });
+
+    }, 1000);
+
+    </script>
   </body>
 </html>
