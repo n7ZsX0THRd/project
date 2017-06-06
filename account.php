@@ -55,7 +55,7 @@ $_SESSION['menu']['sub'] = 'ma';
               <h1 style="margin-bottom: 4%" > Mijn Account </h1>
               <div class="row item-row">
                 <!--  My BIDS -->
-                <div  style="cursor:pointer" onclick="window.location='index.php';" class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                <div onclick="window.location='index.php';" class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                   <div class="thumbnail">
                     <img class="account_icons"src=
                     "images/money.png"/>
@@ -66,7 +66,7 @@ $_SESSION['menu']['sub'] = 'ma';
                 </div>
                 <!--  My BIDS END -->
                 <!--  My Favorites -->
-                <div style="cursor:pointer" onclick="window.location='index.php';"  class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                <div onclick="window.location='index.php';"  class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                   <div class="thumbnail">
                     <img class="account_icons" src=
                     "images/star.png"/>
@@ -77,7 +77,7 @@ $_SESSION['menu']['sub'] = 'ma';
                 </div>
                 <!--  My Favorites END -->
                 <!--  Settings -->
-                <div style="cursor:pointer" onclick="window.location='profiel.php';" class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                <div onclick="window.location='profiel.php';" class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                   <div class="thumbnail">
                     <img class="account_icons" src=
                     "images/menu.png"/>
@@ -88,7 +88,7 @@ $_SESSION['menu']['sub'] = 'ma';
                 </div>
                 <!--  Settings END -->
                 <!--  Sign Off -->
-                <div style="cursor:pointer" onclick="window.location='php/logout.php';"  class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                <div onclick="window.location='php/logout.php';"  class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                   <div class="thumbnail">
                     <img class="account_icons" src=
                     "images/logout.png"/>
