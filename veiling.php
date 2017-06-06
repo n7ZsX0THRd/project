@@ -144,32 +144,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
                 $laatsteBiederResult = $laatsteBiederQuery->fetchAll();
                 // Get username from highestBid
-                if(count($laatsteBiederResult) > 0)
+                if(count($laatsteBiederResult) > 0 && $laatsteBiederResult[0]['gebruiker'] != getLoggedInUser($db)['gebruikersnaam'])
                 {
                   //Check if username from highestBid is not the same as current user
-                  if($laatsteBiederResult[0]['gebruiker'] != getLoggedInUser($db)['gebruikersnaam'])
+                  if($resultVoorwerp['v.veilinggesloten'] == 0)
                   {
+                    $biedQuery = $db->prepare("INSERT INTO Bod(voorwerpnummer,bodbedrag,gebruiker,boddagtijd) VALUES(?,?,?,GETDATE())");
+                    $biedQuery->execute(array($resultVoorwerp['voorwerpnummer'],$_POST['price'],getLoggedInUser($db)['gebruikersnaam']));
 
-                    if($resultVoorwerp['v.veilinggesloten'] == 0)
-                    {
-                      $biedQuery = $db->prepare("INSERT INTO Bod(voorwerpnummer,bodbedrag,gebruiker,boddagtijd) VALUES(?,?,?,GETDATE())");
-                      $biedQuery->execute(array($resultVoorwerp['voorwerpnummer'],$_POST['price'],getLoggedInUser($db)['gebruikersnaam']));
-
-                      // Set session for succesfull and refresh
-                      $_SESSION['warning']['succesvol_geboden'] = true;
-                      header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
-                      exit();
-                    }
-                    else {
-                      $_SESSION['warning']['voorwerp_gesloten'] = true;
-                      header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
-                      exit();
-                    }
-
+                    // Set session for succesfull and refresh
+                    $_SESSION['warning']['succesvol_geboden'] = true;
+                    header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
+                    exit();
                   }
                   else {
-                    // Set session for overbid and refresh
-                    $_SESSION['warning']['overbied_jezelf'] = true;
+                    $_SESSION['warning']['voorwerp_gesloten'] = true;
                     header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
                     exit();
                   }
@@ -177,11 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 else {
 
                   //Place bid, since nobody else as bid yet
-                  $biedQuery = $db->prepare("INSERT INTO Bod(voorwerpnummer,bodbedrag,gebruiker,boddagtijd) VALUES(?,?,?,GETDATE())");
-                  $biedQuery->execute(array($resultVoorwerp['voorwerpnummer'],$_POST['price'],getLoggedInUser($db)['gebruikersnaam']));
-
-                  // Set session for succesfull and refresh
-                  $_SESSION['warning']['succesvol_geboden'] = true;
+                  $_SESSION['warning']['overbied_jezelf'] = true;
                   header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
                   exit();
                 }
