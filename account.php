@@ -55,7 +55,7 @@ $_SESSION['menu']['sub'] = 'ma';
               <h1 style="margin-bottom: 4%" > Mijn Account </h1>
               <div class="row item-row">
                 <!--  My BIDS -->
-                <div onclick="window.location='index.php';" class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                <div onclick="window.location='biedingen.php';" class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                   <div class="thumbnail">
                     <img class="account_icons"src=
                     "images/money.png"/>
