@@ -66,7 +66,7 @@ $search_Value = '';
 // If search isset, set search_sql
 if(isset($_GET['search']) && !empty($_GET['search'])){
 
-  $search_SQL = "AND v.titel LIKE '%".$_GET['search']."%'";
+  $search_SQL = "AND v.titel LIKE '%". str_replace("'", "''", $_GET['search'])."%'";
   $search_Value = $_GET['search'];
 }
 
