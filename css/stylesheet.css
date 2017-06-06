@@ -742,7 +742,19 @@ p, div {
   margin-top: 270px;
   font-size: 2.4em;
 }
+
 .minimalMargin{
   margin-top:5px;
   margin-bottom:5px;
+}
+
+
+
+input[type="text"]:valid {
+    color: green;
+}
+
+
+input[type="text"]:invalid {
+    color: red;
 }

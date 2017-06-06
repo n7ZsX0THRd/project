@@ -166,6 +166,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             <label><input type="radio" name="gebruiker-soort" value="koper"
             <?php if($selectie["gebruiker-soort"]=="koper"){ echo 'checked';} ?> >
              Kopers</label><br>
+            <label><input type="radio" name="gebruiker-soort" value="IBVerkoper"
+            <?php if($selectie["gebruiker-soort"]=="IBVerkoper"){ echo 'checked';} ?> >
+             In behandeling verkoper</label><br>
             <label><input type="radio" name="gebruiker-soort" value="verkoper"
             <?php if($selectie["gebruiker-soort"]=="verkoper"){ echo 'checked';} ?> >
              Verkopers</label><br>

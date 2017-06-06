@@ -40,12 +40,8 @@ function array_neighbor($arr, $key)
 }
 
 // Check if user is administrator
-$beheerder = false;
-if(isUserBeheerder($db)) {
-    $beheerder = true;
-} else {
-    $beheerder = false;
-}
+$beheerder = (boolean) isUserBeheerder($db);
+
 
 // Check if user requested post
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
