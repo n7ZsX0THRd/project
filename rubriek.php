@@ -73,10 +73,10 @@ if(isset($_GET['search']) && !empty($_GET['search'])){
 //Switch over filter
 switch ($filter) {
     case 'price_asc':
-          $filter_SQL = 'hoogsteBod ASC';
+          $filter_SQL = 'hoogsteBod ASC , v.startprijs ASC';
         break;
     case 'price_desc':
-          $filter_SQL = 'hoogsteBod DESC';
+          $filter_SQL = 'hoogsteBod DESC , v.startprijs DESC';
         break;
     case 'time_asc':
           $filter_SQL = 'v.looptijdeinde ASC';
