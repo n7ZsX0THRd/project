@@ -360,5 +360,59 @@ function swap_rubriek_volgnr($volgnr_A, $volgnr_B, $rubriek_nummer_A, $rubriek_n
                                                             ");
             $data->execute(array($volgnr_A, $rubriek_nummer_B));
 }
+function create_auction($data,$db){  //db is global!!
+  try {
+      $allowedTags = '<br><p><h1><h2><h3><h4><h5><h6><ul><li><ol><span><b><i><strong><small><mark><em><ins><sub><sup><del>';
+
+      $dbs = $db->prepare("INSERT INTO Voorwerp(
+          	titel,
+          	beschrijving,
+          	startprijs,
+          	betalingswijze,
+          	betalingsinstructie,
+          	postcode,
+          	plaatsnaam,
+          	land,
+          	looptijd,
+          	looptijdbegin,
+          	verzendkosten,
+          	verzendinstructie,
+          	verkoper
+          )
+          VALUES(
+              ?,
+              ?,
+              ?,
+              ?,
+              ?,
+              ?,
+              ?,
+              ?,
+              ?,
+              GETDATE(),
+              ?,
+              ?,
+              ?
+            )");
+      $dbs->execute(array(
+          $data['vt_title'],
+          strip_tags($data['vt_description'],$allowedTags),
+          (float)$data['vt_startPrice'],
+          $data['vt_payment'],
+          $data['vt_paymentInstruction'],
+          $data['vt_zipcode'],
+          $data['vt_city'],
+          $data['vt_country'],
+          $data['vt_auctionTime'],
+          (float)$data['vt_send'],
+          $data['vt_sendInstructions'],
+          $data['vt_seller']
+        ));
+      $count = $dbs->fetchAll()[0]['count'];
+
+  } catch (PDOException $e) {
+      return $e;
+  }
+}
 
 ?>

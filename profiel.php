@@ -349,7 +349,7 @@ if(isset($_GET['foto'])){
             </p>
         </div>
 
-        <div class="row content_top_offset">
+        <div class="row ">
           <?php if(isset($_SESSION['warning']['false_pass']) && $_SESSION['warning']['false_pass'] === true)
           {
           ?>

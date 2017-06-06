@@ -31,7 +31,7 @@
       <a href="">Laatste bieding</a>
     </li>
     <li>
-      <a href="">Verkopen</a>
+      <a href="veilingtoevoegen.php">Verkopen</a>
     </li>
   </ul>
   <li class="toggle-sub <?php if($_SESSION['menu']['sub'] === 'ma'){ echo 'active'; }?>">

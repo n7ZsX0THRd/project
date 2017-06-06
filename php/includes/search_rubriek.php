@@ -17,7 +17,7 @@ pdo_connect();
 if (isset($_GET['search'])) {
   $searchInput = $_GET['search'];
 
-  $searchRubriekQuery = $db->prepare("SELECT DISTINCT TOP 10
+  $searchRubriekQuery = $db->prepare("SELECT DISTINCT TOP 20
   	r.rubrieknummer AS parentId,
   	r.rubrieknaam AS parent,
   	r4.rubrieknaam AS child,

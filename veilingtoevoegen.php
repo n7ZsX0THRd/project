@@ -26,14 +26,23 @@ $_SESSION['menu']['sub'] = 'dr';
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
   var_dump($_POST);
+  $_POST['vt_seller'] = getLoggedInUser($db)['gebruikersnaam'];
+  $result = create_auction($_POST,$db);
+  print '<br><br>';
+  var_dump($result->getCode());
+  print '<br><br>';
+  var_dump($result);
 }
+
+$queryPaymentMethods = $db->query("SELECT ID,betalingswijze FROM Betalingswijzen ORDER BY ID ASC");
+$queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
 ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
       <?php include 'php/includes/default_header.php'; ?>
       <link href="css/veiling.css" rel="stylesheet">
-      <title>Mijn Account - Eenmaal Andermaal</title>
+      <title>Verkopen - Eenmaal Andermaal</title>
 
   </head>
 
@@ -65,62 +74,146 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 <a href="">Verkopen</a>
               </p>
           </div>
-          <div class="row content_top_offset">
+          <div class="row">
             <form action="" method="post">
               <div class="col-lg-12">
                   <div class="form-group">
                     <div class="row">
-                      <div class="col-lg-7">
-                        <label for="exampleInputEmail1">Titel</label>
-                        <input name="p_adres2" type="text" class="form-control" id="exampleInputEmail1" placeholder="Titel (verplicht)" value="">
+                      <div class="col-lg-6">
+                        <label for="vt_title">Titel</label>
+                        <input name="vt_title" type="text" class="form-control" id="vt_title" placeholder="Titel (verplicht)" value="">
                         <p></p>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-lg-12">
                         <div class="form-group">
-                          <label for="exampleInputFile">Beschrijving</label>
-
-                          <textarea class="form-control" rows="10" style="max-width:100%;" placeholder="Beschrijving (verplicht)" name="p_biografie"  maxlength="1024" ></textarea>
+                          <label for="vt_description">Beschrijving</label>
+                          <textarea class="form-control" rows="10" id="vt_description" name="vt_description" style="max-width:100%;" placeholder="Beschrijving (verplicht)" maxlength="1024" ></textarea>
                         </div>
+                        <!--
+                          1,3,5,7,10
+                        -->
+                        <div class="row">
+                          <div class="col-lg-6">
+                            <label for="vt_startPrice">Startprijs</label>
+                            <div class="input-group">
+                               <span class="input-group-addon">€</span>
+                               <input class="form-control" type="number" id="vt_startPrice" required name="vt_startPrice" value="0.00" step="any">
+                             </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <label for="vt_auctionTime">Looptijd</label>
+                            <select name="vt_auctionTime" class="form-control" id="vt_auctionTime">
+                              <option disabled>Looptijd</p>
+                              <option value="1">1 dag</option>
+                              <option value="3">3 dagen</option>
+                              <option value="5">5 dagen</option>
+                              <option value="7" selected>7 dagen</option>
+                              <option value="10">10 dagen</option>
+                            </select>
+                          </div>
+                        </div>
+                        <p></p>
+                        <hr>
                         <div class="form-group">
-
-                         <button type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-orange">Rubriek toevoegen</button>   <p><i>Tot 2 rubrieken gratis, minimaal 1</i></p>
-                         <div class="form-group" id="notification">
+                           <label>Rubrieken</label>
+                           <p><i><button type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-orange">Rubriek toevoegen</button>   Tot 2 rubrieken gratis, minimaal 1</i></p>
+                           <div class="form-group" id="notification">
+                           </div>
+                           <div class="form-group" id="resultedRubriek">
+                           </div>
                          </div>
-                         <div class="form-group" id="resultedRubriek">
-
-
-                         </div>
-                       </div>
                       </div>
                     </div>
                   </div>
               </div>
               <div class="col-lg-12">
+                <hr>
                 <div class="row">
-                  <div class="col-lg-4">
-                    <input type='file' name="file" onchange="readURL(this,'#blah');" />
-                    <input type='file' name="file2" onchange="readURL(this,'#blah2');" />
-                    <input type='file' name="file3" onchange="readURL(this,'#blah3');" />
-                    <input type='file' name="file4" onchange="readURL(this,'#blah4');" />
+
+                  <div class="col-lg-6">
+                    <label>Foto's</label>
+                    <input type="file" class="btn" name="vt_images[]" onchange="readURL(this,'#f1');" />
+                    <input type="file" class="btn" name="vt_images[]" onchange="readURL(this,'#f2');" />
+                    <input type="file" class="btn" name="vt_images[]" onchange="readURL(this,'#f3');" />
+                    <input type="file" class="btn" name="vt_images[]" onchange="readURL(this,'#f4');" />
                   </div>
-                  <div class="col-lg-8">
+                  <div class="col-lg-6">
                     <div class="row">
                       <div class="col-lg-6" style="padding-left:0px;padding-right:0px;">
-                        <img id="blah" />
+                        <img id="f1" />
                       </div>
                       <div class="col-lg-6" style="padding-left:0px;padding-right:0px;">
-                        <img id="blah2" />
+                        <img id="f2" />
                       </div>
                       <div class="col-lg-6" style="padding-left:0px;padding-right:0px;">
-                        <img id="blah3" />
+                        <img id="f3" />
                       </div>
                       <div class="col-lg-6" style="padding-left:0px;padding-right:0px;">
-                        <img id="blah4" />
+                        <img id="f4" />
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <hr>
+                <div class="row content_top_offset">
+                  <div class="col-lg-6">
+                    <label for="vt_payment">Betalingswijze</label>
+                    <select class="form-control" id="vt_payment" name="vt_payment">
+                      <option disabled selected>Betalingswijze</p>
+                      <?php
+                        foreach($queryPaymentMethods as $row)
+                        {
+                      ?>
+                          <option value="<?php echo $row['ID']; ?>"><?php echo $row['betalingswijze']; ?></option>
+                      <?php
+                        }
+                      ?>
+                    </select>
+                    <p></p>
+                    <label for="vt_paymentInstruction">Betalingsinstructie</label>
+                    <input name="vt_paymentInstruction" id="vt_paymentInstruction" type="text" class="form-control" placeholder="Betalingsinstructie" value="">
+                    <p></p>
+                    <label for="vt_city">Plaatsnaam</label>
+                    <input name="vt_city" id="vt_city" type="text" class="form-control" placeholder="Plaatsnaam (verplicht)" value="">
+                    <p></p>
+                    <label for="vt_zipcode">Postcode</label>
+                    <input name="vt_zipcode" id="vt_zipcode" type="text" class="form-control" placeholder="Postcode (verplicht)" value="">
+                    <p></p>
+                    <label for="vt_country">Land</label>
+                    <select class="form-control" id="vt_country" name="vt_country">
+                      <option disabled selected>Land</p>
+                      <?php
+                        foreach($queryCountries as $row)
+                        {
+                      ?>
+                          <option value="<?php echo $row['lnd_Code']; ?>"><?php echo $row['lnd_Landnaam']; ?></option>
+                      <?php
+                        }
+                      ?>
+                    </select>
+                    <p></p>
+                    <label for="vt_send">Verzendkosten</label>
+                    <div class="input-group">
+                       <span class="input-group-addon">€</span>
+                       <input class="form-control" type="number" id="vt_send" required name="vt_send" value="0.00" step="any">
+                    </div>
+                    <p></p>
+                    <label for="vt_sendInstructions">Verzendinstructies</label>
+                    <input name="vt_sendInstructions" id="vt_sendInstructions" type="text" class="form-control" placeholder="Verzendinstructies" value="">
+                    <p></p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <hr>
+              </div>
+              <div class="col-lg-12">
+                <div class="text-right">
+                  <button type="submit" class="btn btn-orange">Veiling starten</button>
                 </div>
               </div>
             </form>
@@ -147,7 +240,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Annuleren</button>
             </div>
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
