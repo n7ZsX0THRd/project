@@ -40,18 +40,27 @@ if (isset($_GET['search'])) {
   ORDER BY r.rubrieknaam");
   $searchRubriekQuery->execute(array('%'.$searchInput.'%'));
 
+  $result = $searchRubriekQuery->fetchAll();
 }
 else {
     exit();
 }
-echo '<ul>';
-foreach($searchRubriekQuery->fetchAll() as $row)
+echo '<p></p>';
+if(count($result) > 0)
 {
+  echo '<ul class="rubriek_search">';
+  foreach($result as $row)
+  {
+    ?>
+      <li class="rubriek_search" data-dismiss="modal" id="add_rubriek" data-parentnaam="<?php echo $row['parent']?>" data-rubrieknaam="<?php echo $row['child']?>"  data-rubriekid="<?php echo $row['childId']?>"><?php echo $row['parent'];?> <span class="glyphicon glyphicon-menu-right"></span> <?php echo $row['child'];?></li>
+    <?php
+  }
+  echo '</ul>';
+}
+else {
   ?>
-    <li><?php echo $row['parent'];?> > <?php echo $row['child'];?></li>
+    <p class="bg-warning" style="padding:5px;margin-top:10px;">Geen rubrieken gevonden</p>
   <?php
 }
-echo '</ul>';
-
 
 ?>

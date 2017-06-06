@@ -23,14 +23,18 @@ if(isUserLoggedIn($db) == false)
 $_SESSION['menu']['sub'] = 'dr';
 // Set session for sidebar menu,
 // dr -> Direct Regelen
+
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+  var_dump($_POST);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
       <?php include 'php/includes/default_header.php'; ?>
-      <link href="css/dashboard.css" rel="stylesheet">
-      <link href="css/login.css" rel="stylesheet">
+      <link href="css/veiling.css" rel="stylesheet">
       <title>Mijn Account - Eenmaal Andermaal</title>
+
   </head>
 
   <body>
@@ -62,7 +66,7 @@ $_SESSION['menu']['sub'] = 'dr';
               </p>
           </div>
           <div class="row content_top_offset">
-
+            <form action="" method="post">
               <div class="col-lg-12">
                   <div class="form-group">
                     <div class="row">
@@ -82,22 +86,55 @@ $_SESSION['menu']['sub'] = 'dr';
                         <div class="form-group">
 
                          <button type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-orange">Rubriek toevoegen</button>   <p><i>Tot 2 rubrieken gratis, minimaal 1</i></p>
+                         <div class="form-group" id="notification">
+                         </div>
+                         <div class="form-group" id="resultedRubriek">
+
+
+                         </div>
                        </div>
                       </div>
                     </div>
                   </div>
               </div>
+              <div class="col-lg-12">
+                <div class="row">
+                  <div class="col-lg-4">
+                    <input type='file' name="file" onchange="readURL(this,'#blah');" />
+                    <input type='file' name="file2" onchange="readURL(this,'#blah2');" />
+                    <input type='file' name="file3" onchange="readURL(this,'#blah3');" />
+                    <input type='file' name="file4" onchange="readURL(this,'#blah4');" />
+                  </div>
+                  <div class="col-lg-8">
+                    <div class="row">
+                      <div class="col-lg-6" style="padding-left:0px;padding-right:0px;">
+                        <img id="blah" />
+                      </div>
+                      <div class="col-lg-6" style="padding-left:0px;padding-right:0px;">
+                        <img id="blah2" />
+                      </div>
+                      <div class="col-lg-6" style="padding-left:0px;padding-right:0px;">
+                        <img id="blah3" />
+                      </div>
+                      <div class="col-lg-6" style="padding-left:0px;padding-right:0px;">
+                        <img id="blah4" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
       </div>
       <!-- CONTAINER END -->
     </div>
-    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div id="rubriek_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title">Modal title</h4>
+              <h4 class="modal-title">Rubriek zoeken</h4>
             </div>
             <div class="modal-body">
               <div class="input-group">
@@ -130,12 +167,54 @@ $_SESSION['menu']['sub'] = 'dr';
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
     <script>
-    $( "#rubriekSearchInput" ).keydown(function(){
-        console.log("KEY UP SEARCH BUTTON");
+    jQuery.fn.exists = function(){ return this.length > 0; }
+
+    $( "#searchButton" ).click(function(event){
           var search = $("#rubriekSearchInput").val();
           if(search.length > 1)
             $( "#result_search" ).load( "php/includes/search_rubriek.php?search=" + search);
     });
+    $("#rubriekSearchInput").keyup(function(event){
+        if(event.keyCode == 13){
+            $("#searchButton").click();
+        }
+    });
+    $(document).on("click", '#add_rubriek', function(event) {
+        //alert("new link clicked!");
+
+        if ($('#' + $(event.target).data( "rubriekid" )).exists() == false) {
+          $('#resultedRubriek').append('<div id="' + $(event.target).data( "rubriekid" ) + '"><input type="hidden" name="rubrieken[]" value="' + $(event.target).data( "rubrieknaam" ) + '" /><p><a class="btn btn-default" id="remove" style="margin-right:10px;"><span class="glyphicon glyphicon-minus"></span></a>' + $(event.target).data( "parentnaam" ) + ' <span class="glyphicon glyphicon-menu-right"></span> ' + $(event.target).data( "rubrieknaam" ) + '</p></div>');
+          $('#result_search').empty();
+          $('#rubriekSearchInput').val("");
+          $('#notification').empty();
+        }
+        else {
+          $('#notification').append('<p class="bg-warning" style="padding:5px;">Je kunt niet twee keer hetzelfde rubriek toevoegen</p>');
+
+        }
+    });
+    $(document).on("click", '#remove', function(event) {
+        //alert("new link clicked!");
+        $(event.target).parent().parent().remove();
+    });
+    function readURL(input,target) {
+       if (input.files && input.files[0]) {
+           var reader = new FileReader();
+
+           reader.onload = function (e) {
+               $(target)
+                   .css("background-image", "url("+e.target.result+")")
+                   .css("background-size", "contain")
+                   .css("background-position", "center")
+                   .css("background-repeat", "no-repeat")
+                   .css("width","100%")
+                   .css("padding-bottom","100%")
+                   .css("border","1px solid #E7E7E7");
+           };
+
+           reader.readAsDataURL(input.files[0]);
+       }
+   }
     </script>
   </body>
 </html>

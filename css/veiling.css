@@ -124,3 +124,19 @@ tr.border_bottom{
   height:25px;
   border-bottom:1px solid #E6E6E6;
 }
+ul.rubriek_search{
+  list-style-type: none;
+}
+li.rubriek_search{
+  list-style-type: none;
+  margin-left:-40px;
+  padding:3px;
+  border:1px solid #e6e6e6;
+  padding-left:10px;
+
+  margin-top:3px;
+  cursor:pointer;
+}
+li.rubriek_search:hover{
+  background-color:#e7e7e7;
+}
