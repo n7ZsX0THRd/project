@@ -742,3 +742,14 @@ p, div {
   margin-top: 270px;
   font-size: 2.4em;
 }
+
+
+input[type="text"]:valid {
+    color: green;
+}
+
+
+input[type="text"]:invalid {
+    color: red;
+}
+
