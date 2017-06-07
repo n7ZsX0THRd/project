@@ -46,12 +46,17 @@ $dataquery= $db->prepare("SELECT DISTINCT V.titel,
                           WHERE gebruiker=?");
 $dataquery->execute(array($username));
 
-$dataqueryoverboden= $db->prepare("SELECT DISTINCT V.titel,
+$dataqueryoverboden= $db->prepare("SELECT *
+FROM(
+SELECT DISTINCT V.titel,
                                           v.voorwerpnummer,
                                           bodbedrag, boddagtijd,
                                           looptijdeinde,
                                           foto.bestandsnaam,
-                                          dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod
+                                          dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod,
+										  ROW_NUMBER() OVER (PARTITION BY v.voorwerpnummer
+									   	  ORDER BY v.voorwerpnummer)
+										  AS rn
                           FROM Bod B
                           INNER JOIN voorwerp V
                           ON B.voorwerpnummer = V.voorwerpnummer
@@ -62,7 +67,12 @@ $dataqueryoverboden= $db->prepare("SELECT DISTINCT V.titel,
                                  WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
 								                 ) Foto
                           WHERE gebruiker=?
-                          AND dbo.fnGetHoogsteBod(v.voorwerpnummer) > bodbedrag");
+                          AND dbo.fnGetHoogsteBod(v.voorwerpnummer) > bodbedrag
+						  ) tmp
+						  WHERE rn = 1
+
+
+");
 $dataqueryoverboden->execute(array($username));
 
 $dataquerygewonnen= $db->prepare("SELECT DISTINCT V.titel,
