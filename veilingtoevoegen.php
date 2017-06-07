@@ -283,7 +283,9 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
                       <div class="col-lg-12">
                         <div class="form-group">
                           <label for="vt_description">Beschrijving</label>
-                          <textarea class="form-control" rows="10" id="vt_description" name="vt_description" style="max-width:100%;" placeholder="Beschrijving (verplicht)" maxlength="1024" ><?php if (isset($_POST['vt_description'])){ echo $_POST['vt_description']; }?></textarea>
+
+                          <textarea class="form-control" rows="10" id="vt_description" name="vt_description" style="max-width:100%;" placeholder="Beschrijving (verplicht)"><?php if (isset($_POST['vt_description'])){ echo $_POST['vt_description']; }?></textarea>
+
                         </div>
                         <!--
                           1,3,5,7,10

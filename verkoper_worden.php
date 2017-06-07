@@ -93,9 +93,10 @@ if ($result[0]['verkoper']==1){
           $result=$data->fetchAll();
 
           if ($codeCorrect==$result[0]['activatiecode']){
-            $codeCorrect=true;
+            $page='bevestigd';
+          }else{
+            $page='onjuiste-code';
           }
-
         }
       }
   }
@@ -161,7 +162,7 @@ if ($result[0]['verkoper']==1){
           <!-- login gegevens -->
           <div class="login">
             <form action="" method="POST">
-
+            <i>Deze gegevens zijn nodig om uw identiteit te controleren</i>
                       <div class="row">
             <label class="col-lg-12">Controle optie</label>
             <label class="post">
@@ -247,6 +248,20 @@ if ($result[0]['verkoper']==1){
           <?php
           // activatie code invoeren
         break;
+        case 'onjuiste-code':
+          ?>
+          <h3>Oops!</h3>
+          <p>De code klopt niet, probeer het opnieuw<br>
+          <form ction="" method="POST" id="my_form">
+          <!-- Your Form -->
+          <input type="hidden" name="page" value="activeren">    
+          <a href="javascript:{}" onclick="document.getElementById('my_form').submit(); return false;">probeer het opnieuw</a>
+          </form>
+          <br></p>
+ 
+          <?php
+          // activatie code invoeren
+        break;
         case 'alVerkoper':
           ?>
           <h3>&#x1F4B0 &#x1F4B0 &#x1F4B0</h3>
@@ -259,8 +274,8 @@ if ($result[0]['verkoper']==1){
         case 'inactief':
           ?>
           <h3>Oops!</h3>
-          <p>Uw heeft uw email adres nog niet geregistreerd.<br>
-          <a href="#">Doe het nu!</a>
+          <p>Je hebt jouw account nog niet geverifieerd.<br>
+          <a href="index.php?mail">Stuur mij opnieuw een mail!</a>
           <br></p>
  
           <?php
