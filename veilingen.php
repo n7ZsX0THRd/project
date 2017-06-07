@@ -53,7 +53,9 @@ $dataquery= $db->prepare("  SELECT V.titel,
                                      V.startprijs,
                                      B.bodbedrag,
                                      dbo.fnGetHoogsteBod(v.voorwerpnummer),
-                                     foto.bestandsnaam");
+                                     foto.bestandsnaam,
+                                     V.looptijdbegin
+                            ORDER BY V.looptijdbegin DESC");
 $dataquery->execute(array($username));
 
 $dataqueryverlopen= $db->prepare("SELECT V.titel,
