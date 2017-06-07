@@ -15,6 +15,15 @@ include_once('php/user.php');
 pdo_connect();
 // Connect with database
 
+define ("MAX_SIZE","9000");
+function getExtension($str)
+{
+         $i = strrpos($str,".");
+         if (!$i) { return ""; }
+         $l = strlen($str) - $i;
+         $ext = substr($str,$i+1,$l);
+         return $ext;
+}
 
 // If user is not logged In redirect to homepage
 if(isUserLoggedIn($db) == false)
@@ -25,13 +34,81 @@ $_SESSION['menu']['sub'] = 'dr';
 // dr -> Direct Regelen
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
-  var_dump($_POST);
+  //var_dump($_POST);
   $_POST['vt_seller'] = getLoggedInUser($db)['gebruikersnaam'];
-  $result = create_auction($_POST,$db);
+
+  $uploaddir = "uploads/"; //image upload directory
+
+  //set the image extentions
+  $valid_formats = array("jpg", "png", "bmp","jpeg");
+  $index = 0;
+  $succesfullUploadedPhotos = false;
+  foreach ($_FILES['vt_images']['name'] as $name => $value)
+  {
+    $_POST['vt_images'][$index] = NULL;
+
+    if(strlen($value) > 3)
+    {
+
+      $filename = stripslashes($_FILES['vt_images']['name'][$name]);
+      $size=filesize($_FILES['vt_images']['tmp_name'][$name]);
+      //get the extension of the file in a lower case format
+        $ext = getExtension($filename);
+        $ext = strtolower($ext);
+
+       if(in_array($ext,$valid_formats))
+       {
+         if ($size < (MAX_SIZE*1024))
+         {
+         $image_name=time().$filename;
+         echo "<img src='".$uploaddir.$image_name."' class='imgList'>";
+         $newname=$uploaddir.$image_name;
+
+         if (move_uploaded_file($_FILES['vt_images']['tmp_name'][$name], $newname))
+         {
+           $time=time();
+             //insert in database
+         //mysql_query("INSERT INTO user_uploads(image_name,user_id_fk,created) VALUES('$image_name','$session_id','$time')");
+            $_POST['vt_images'][$index] = $uploaddir.$image_name;
+            $succesfullUploadedPhotos = true;
+         }
+         else
+         {
+          echo '<span class="imgList">You have exceeded the size limit! so moving unsuccessful! </span>';
+          $succesfullUploadedPhotos = false;
+          }
+
+         }
+         else
+         {
+          echo '<span class="imgList">You have exceeded the size limit!</span>';
+          $succesfullUploadedPhotos = false;
+
+         }
+
+        }
+        else
+       {
+           echo '<span class="imgList">Unknown extension!</span>';
+           $succesfullUploadedPhotos = false;
+       }
+    }
+
+     $index++;
+ }
+
+ if($succesfullUploadedPhotos)
+ {
+   $result = create_auction($_POST,$db);
+   var_dump($result);
+ }
+
+  /*
   print '<br><br>';
   var_dump($result->getCode());
   print '<br><br>';
   var_dump($result);
+  */
 }
 
 $queryPaymentMethods = $db->query("SELECT ID,betalingswijze FROM Betalingswijzen ORDER BY ID ASC");
@@ -75,11 +152,11 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
               </p>
           </div>
           <div class="row">
-            <form action="" method="post">
+            <form action="" method="post" enctype="multipart/form-data">
               <div class="col-lg-12">
                   <div class="form-group">
                     <div class="row">
-                      <div class="col-lg-6">
+                      <div class="col-lg-12">
                         <label for="vt_title">Titel</label>
                         <input name="vt_title" type="text" class="form-control" id="vt_title" placeholder="Titel (verplicht)" value="">
                         <p></p>
@@ -276,7 +353,7 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
         //alert("new link clicked!");
 
         if ($('#' + $(event.target).data( "rubriekid" )).exists() == false) {
-          $('#resultedRubriek').append('<div id="' + $(event.target).data( "rubriekid" ) + '"><input type="hidden" name="rubrieken[]" value="' + $(event.target).data( "rubrieknaam" ) + '" /><p><a class="btn btn-default" id="remove" style="margin-right:10px;"><span class="glyphicon glyphicon-minus"></span></a>' + $(event.target).data( "parentnaam" ) + ' <span class="glyphicon glyphicon-menu-right"></span> ' + $(event.target).data( "rubrieknaam" ) + '</p></div>');
+          $('#resultedRubriek').append('<div id="' + $(event.target).data( "rubriekid" ) + '"><input type="hidden" name="vt_rubrieken[]" value="' + $(event.target).data( "rubriekid" ) + '" /><p><a class="btn btn-default" id="remove" style="margin-right:10px;"><span class="glyphicon glyphicon-minus"></span></a>' + $(event.target).data( "parentnaam" ) + ' <span class="glyphicon glyphicon-menu-right"></span> ' + $(event.target).data( "rubrieknaam" ) + '</p></div>');
           $('#result_search').empty();
           $('#rubriekSearchInput').val("");
           $('#notification').empty();

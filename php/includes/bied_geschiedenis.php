@@ -84,7 +84,7 @@ if (isset($_GET['voorwerpnummer'])) {
       WHERE voorwerpnummer = ?
 	  ORDER BY b.bodbedrag DESC
 	 ) as S
-ORDER BY s.boddagtijd ASC");
+ORDER BY s.boddagtijd DESC");
   $bidHistoryQuery->execute(array($voorwerpnummer));
 
 }
