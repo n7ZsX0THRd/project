@@ -81,24 +81,20 @@ $dataquerygewonnen= $db->prepare("SELECT DISTINCT V.titel,
                           AND v.veilinggesloten = 1");
 $dataquerygewonnen->execute(array($username));
 
-$dataqueryverloren= $db->prepare("SELECT DISTINCT V.titel,
-                                          v.voorwerpnummer,
-                                          bodbedrag, boddagtijd,
-                                          looptijdeinde,
-                                          foto.bestandsnaam,
-                                          dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod
-                          FROM Bod B
-                          INNER JOIN voorwerp V
-                          ON B.voorwerpnummer = V.voorwerpnummer
-						                     CROSS APPLY
-								                 (
-								                 SELECT  TOP 1 Bestand.bestandsnaam
-								                 FROM    Bestand
-                                 WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
-								                 ) Foto
-                          WHERE gebruiker=?
-                          AND bodbedrag != dbo.fnGetHoogsteBod(v.voorwerpnummer)
-                          AND v.veilinggesloten = 1");
+$dataqueryverloren= $db->prepare("SELECT titel, MAX(bodbedrag) as bodbedragMAX, V.looptijdeinde, bestandsnaam, B.voorwerpnummer, dbo.fnGetHoogsteBod(b.voorwerpnummer) AS hoogsteBod
+							FROM Bod AS B
+							INNER JOIN Voorwerp AS V ON
+							B.voorwerpnummer = V.voorwerpnummer
+								CROSS APPLY
+										(
+										SELECT  TOP 1 Bestand.bestandsnaam
+										FROM    Bestand
+										WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
+										) Foto
+							WHERE gebruiker = ?
+							AND v.veilinggesloten = 1
+							GROUP BY titel, B.voorwerpnummer, V.looptijdeinde, bestandsnaam, B.voorwerpnummer
+							HAVING dbo.fnGetHoogsteBod(B.voorwerpnummer) > MAX(bodbedrag)");
 $dataqueryverloren->execute(array($username));
 
 $dataqueryresult = $dataquery->fetchAll();
