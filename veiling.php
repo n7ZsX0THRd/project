@@ -520,10 +520,10 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
       </a>
     </div>
     <script>
-    var countDownDate = new Date('<?php echo $row['looptijdeinde']; ?>').getTime();
+
 
     var x = setInterval(function() {
-
+    var countDownDate = new Date('<?php echo $row['looptijdeinde']; ?>').getTime();
       var now = new Date().getTime();
       var distance = countDownDate - now;
 
