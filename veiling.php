@@ -140,35 +140,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               // Check if current offer is higher than highestbid
               if(((float)$_POST['price']) >= ((float)$resultHighest[0]['highestBid']))
               {
-                //SELECT gebruiker FROM Bod WHERE voorwerpnummer = 110353566179 ORDER BY bodbedrag DESC
-                $laatsteBiederQuery = $db->prepare("SELECT gebruiker FROM Bod WHERE voorwerpnummer = ? ORDER BY bodbedrag DESC");
-                $laatsteBiederQuery->execute(array($resultVoorwerp['voorwerpnummer']));
-
-                $laatsteBiederResult = $laatsteBiederQuery->fetchAll();
-                // Get username from highestBid
-                if(count($laatsteBiederResult) > 0 && $laatsteBiederResult[0]['gebruiker'] != getLoggedInUser($db)['gebruikersnaam'])
+                if(((float)$_POST['price']) <= 999999999.99)
                 {
-                  //Check if username from highestBid is not the same as current user
-                  if($resultVoorwerp['v.veilinggesloten'] == 0)
-                  {
-                    $biedQuery = $db->prepare("INSERT INTO Bod(voorwerpnummer,bodbedrag,gebruiker,boddagtijd) VALUES(?,?,?,GETDATE())");
-                    $biedQuery->execute(array($resultVoorwerp['voorwerpnummer'],$_POST['price'],getLoggedInUser($db)['gebruikersnaam']));
+                  //SELECT gebruiker FROM Bod WHERE voorwerpnummer = 110353566179 ORDER BY bodbedrag DESC
+                  $laatsteBiederQuery = $db->prepare("SELECT gebruiker FROM Bod WHERE voorwerpnummer = ? ORDER BY bodbedrag DESC");
+                  $laatsteBiederQuery->execute(array($resultVoorwerp['voorwerpnummer']));
 
-                    // Set session for succesfull and refresh
-                    $_SESSION['warning']['succesvol_geboden'] = true;
-                    header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
-                    exit();
+                  $laatsteBiederResult = $laatsteBiederQuery->fetchAll();
+                  // Get username from highestBid
+                  if((count($laatsteBiederResult) > 0 && $laatsteBiederResult[0]['gebruiker'] != getLoggedInUser($db)['gebruikersnaam']) || count($laatsteBiederResult) == 0)
+                  {
+                    //Check if username from highestBid is not the same as current user
+                    if($resultVoorwerp['veilinggesloten'] == 0)
+                    {
+                      if($resultVoorwerp['verkoper'] !== getLoggedInUser($db)['gebruikersnaam'])
+                      {
+                        $biedQuery = $db->prepare("INSERT INTO Bod(voorwerpnummer,bodbedrag,gebruiker,boddagtijd) VALUES(?,?,?,GETDATE())");
+                        $biedQuery->execute(array($resultVoorwerp['voorwerpnummer'],$_POST['price'],getLoggedInUser($db)['gebruikersnaam']));
+
+                        // Set session for succesfull and refresh
+                        $_SESSION['warning']['succesvol_geboden'] = true;
+                        header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
+                        exit();
+                      }
+                      else {
+                        $_SESSION['warning']['eigen_veiling'] = true;
+                        header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
+                        exit();
+                      }
+                    }
+                    else {
+                      $_SESSION['warning']['voorwerp_gesloten'] = true;
+                      header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
+                      exit();
+                    }
                   }
                   else {
-                    $_SESSION['warning']['voorwerp_gesloten'] = true;
+
+                    //Place bid, since nobody else as bid yet
+                    $_SESSION['warning']['overbied_jezelf'] = true;
                     header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
                     exit();
                   }
+
                 }
                 else {
-
-                  //Place bid, since nobody else as bid yet
-                  $_SESSION['warning']['overbied_jezelf'] = true;
+                  $_SESSION['warning']['prijs_tehoog'] = true;
                   header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
                   exit();
                 }
@@ -341,6 +358,12 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                         <p class="bg-danger notifcation-fix" style="margin-left:0px;margin-right:0px;">De opgegeven prijs is te laag.</p>
                                       <?php
                                         $_SESSION['warning'] = null;
+                                      }else if(isset($_SESSION['warning']['prijs_tehoog']) && $_SESSION['warning']['prijs_tehoog'] === true)
+                                      {
+                                      ?>
+                                        <p class="bg-danger notifcation-fix" style="margin-left:0px;margin-right:0px;">De opgegeven prijs is te hoog. Je kunt niet meer bieden dan &euro;999999999,99</p>
+                                      <?php
+                                        $_SESSION['warning'] = null;
                                       }else if(isset($_SESSION['warning']['overbied_jezelf']) && $_SESSION['warning']['overbied_jezelf'] === true)
                                       {
                                       ?>
@@ -357,6 +380,13 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                       {
                                       ?>
                                         <p class="bg-warning notifcation-fix" style="margin-left:0px;margin-right:0px;">Je kunt niet meer bieden op dit voorwerp, de veiling is gesloten.</p>
+                                      <?php
+                                        $_SESSION['warning'] = null;
+                                      }
+                                      else if(isset($_SESSION['warning']['eigen_veiling']) && $_SESSION['warning']['eigen_veiling'] === true)
+                                      {
+                                      ?>
+                                        <p class="bg-warning notifcation-fix" style="margin-left:0px;margin-right:0px;">Je kunt niet op je eigen veiling bieden.</p>
                                       <?php
                                         $_SESSION['warning'] = null;
                                       }else if(isset($_SESSION['warning']['succesvol_geboden']) && $_SESSION['warning']['succesvol_geboden'] === true)
