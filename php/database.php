@@ -361,52 +361,46 @@ function swap_rubriek_volgnr($volgnr_A, $volgnr_B, $rubriek_nummer_A, $rubriek_n
             $data->execute(array($volgnr_A, $rubriek_nummer_B));
 }
 function create_auction($data,$db){  //db is global!!
+  var_dump($data);
   try {
       $allowedTags = '<br><p><h1><h2><h3><h4><h5><h6><ul><li><ol><span><b><i><strong><small><mark><em><ins><sub><sup><del>';
 
-      $dbs = $db->prepare("INSERT INTO Voorwerp(
-          	titel,
-          	beschrijving,
-          	startprijs,
-          	betalingswijze,
-          	betalingsinstructie,
-          	postcode,
-          	plaatsnaam,
-          	land,
-          	looptijd,
-          	looptijdbegin,
-          	verzendkosten,
-          	verzendinstructie,
-          	verkoper
-          )
-          VALUES(
-              ?,
-              ?,
-              ?,
-              ?,
-              ?,
-              ?,
-              ?,
-              ?,
-              ?,
-              GETDATE(),
-              ?,
-              ?,
-              ?
-            )");
+      $dbs = $db->prepare("EXEC dbo.InsertVeiling
+	@titel = ?,
+	@beschrijving = ?,
+	@startprijs = ?,
+	@looptijd = ?,
+	@verzendkosten = ?,
+	@verzendinstructie = ?,
+	@betalingswijze = ?,
+	@betalingsinstructie = ?,
+	@postcode = ?,
+	@plaatsnaam = ?,
+	@land = ?,
+	@verkoper = ?,
+	@rubriekList = ?,
+	@foto1 = ?,
+	@foto2 = ?,
+	@foto3 = ?,
+	@foto4 = ?");
       $dbs->execute(array(
           $data['vt_title'],
           strip_tags($data['vt_description'],$allowedTags),
           (float)$data['vt_startPrice'],
-          $data['vt_payment'],
+          $data['vt_auctionTime'],
+          (float)$data['vt_send'],
+          $data['vt_sendInstructions'],
+          (int)$data['vt_payment'],
           $data['vt_paymentInstruction'],
           $data['vt_zipcode'],
           $data['vt_city'],
           $data['vt_country'],
-          $data['vt_auctionTime'],
-          (float)$data['vt_send'],
-          $data['vt_sendInstructions'],
-          $data['vt_seller']
+          $data['vt_seller'],
+          implode(",",$data['vt_rubrieken']),
+          $data['vt_images'][0],
+          $data['vt_images'][1],
+          $data['vt_images'][2],
+          $data['vt_images'][3]
         ));
       $count = $dbs->fetchAll()[0]['count'];
 

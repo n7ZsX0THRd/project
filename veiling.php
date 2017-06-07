@@ -32,12 +32,12 @@ if (isset($_GET['voorwerpnummer'])) {
 
   //Query, select all information from auctions
   // where voorwerpnummer = $GET voorwerpnummer
-  $data = $db->prepare("SELECT
+  $data = $db->prepare("SELECT TOP 1
   v.voorwerpnummer,
   v.titel,
   v.beschrijving,
   v.startprijs,
-  v.betalingswijze,
+  bw.betalingswijze AS betalingswijze,
   v.betalingsinstructie,
   v.postcode,
   v.plaatsnaam,
@@ -58,6 +58,8 @@ if (isset($_GET['voorwerpnummer'])) {
   FROM Voorwerp v
   LEFT JOIN VoorwerpInRubriek vir
     ON vir.voorwerpnummer = v.voorwerpnummer
+  JOIN Betalingswijzen bw
+	ON bw.ID = v.betalingswijze
   LEFT JOIN Landen l
     ON l.lnd_Code = v.land
     WHERE v.voorwerpnummer=?");
@@ -144,32 +146,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
                 $laatsteBiederResult = $laatsteBiederQuery->fetchAll();
                 // Get username from highestBid
-                if(count($laatsteBiederResult) > 0)
+                if(count($laatsteBiederResult) > 0 && $laatsteBiederResult[0]['gebruiker'] != getLoggedInUser($db)['gebruikersnaam'])
                 {
                   //Check if username from highestBid is not the same as current user
-                  if($laatsteBiederResult[0]['gebruiker'] != getLoggedInUser($db)['gebruikersnaam'])
+                  if($resultVoorwerp['v.veilinggesloten'] == 0)
                   {
+                    $biedQuery = $db->prepare("INSERT INTO Bod(voorwerpnummer,bodbedrag,gebruiker,boddagtijd) VALUES(?,?,?,GETDATE())");
+                    $biedQuery->execute(array($resultVoorwerp['voorwerpnummer'],$_POST['price'],getLoggedInUser($db)['gebruikersnaam']));
 
-                    if($resultVoorwerp['v.veilinggesloten'] == 0)
-                    {
-                      $biedQuery = $db->prepare("INSERT INTO Bod(voorwerpnummer,bodbedrag,gebruiker,boddagtijd) VALUES(?,?,?,GETDATE())");
-                      $biedQuery->execute(array($resultVoorwerp['voorwerpnummer'],$_POST['price'],getLoggedInUser($db)['gebruikersnaam']));
-
-                      // Set session for succesfull and refresh
-                      $_SESSION['warning']['succesvol_geboden'] = true;
-                      header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
-                      exit();
-                    }
-                    else {
-                      $_SESSION['warning']['voorwerp_gesloten'] = true;
-                      header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
-                      exit();
-                    }
-
+                    // Set session for succesfull and refresh
+                    $_SESSION['warning']['succesvol_geboden'] = true;
+                    header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
+                    exit();
                   }
                   else {
-                    // Set session for overbid and refresh
-                    $_SESSION['warning']['overbied_jezelf'] = true;
+                    $_SESSION['warning']['voorwerp_gesloten'] = true;
                     header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
                     exit();
                   }
@@ -177,11 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 else {
 
                   //Place bid, since nobody else as bid yet
-                  $biedQuery = $db->prepare("INSERT INTO Bod(voorwerpnummer,bodbedrag,gebruiker,boddagtijd) VALUES(?,?,?,GETDATE())");
-                  $biedQuery->execute(array($resultVoorwerp['voorwerpnummer'],$_POST['price'],getLoggedInUser($db)['gebruikersnaam']));
-
-                  // Set session for succesfull and refresh
-                  $_SESSION['warning']['succesvol_geboden'] = true;
+                  $_SESSION['warning']['overbied_jezelf'] = true;
                   header("Location: veiling.php?voorwerpnummer=".$resultVoorwerp['voorwerpnummer']);
                   exit();
                 }
@@ -448,13 +435,13 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                       <?php if(isset($resultVoorwerp['verzendkosten']) && !empty($resultVoorwerp['verzendkosten'])){ ?>
                                         <tr class="border_bottom">
                                           <td>Verzendkosten:</td>
-                                          <td><b><?php echo $resultVoorwerp['verzendkosten']?></b></td>
+                                          <td><b><?php echo '&euro;'.number_format($resultVoorwerp['verzendkosten'], 2, ',', '')?></b></td>
                                         </tr>
                                       <?php }?>
                                       <?php if(isset($resultVoorwerp['verzendinstructie']) && !empty($resultVoorwerp['verzendinstructie'])){ ?>
                                         <tr class="border_bottom">
                                           <td>Verzendinstructie:</td>
-                                          <td><b><?php echo $resultVoorwerp['verzendkosten']?></b></td>
+                                          <td><b><?php echo $resultVoorwerp['verzendinstructie']?></b></td>
                                         </tr>
                                       <?php }?>
                                     </table>
@@ -593,6 +580,9 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
     }
   }, 1000);
   $('#bied_refresh').click(function(){
+    $( "#bieden_content" ).load( "php/includes/bied_geschiedenis.php?voorwerpnummer=<?php echo $resultVoorwerp['voorwerpnummer'];?>" );
+  });
+  $(document).ready(function(){
     $( "#bieden_content" ).load( "php/includes/bied_geschiedenis.php?voorwerpnummer=<?php echo $resultVoorwerp['voorwerpnummer'];?>" );
   });
 
