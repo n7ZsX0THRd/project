@@ -67,6 +67,13 @@
             $blocked = false;
         }
 
+        // Check if the user wants to become a verkoper
+        if ($resultUser[0]['typegebruiker']==4){
+            $brief = true;
+        } else {
+            $brief = false;
+        }
+
         // Check if an user has an image if image not found or empty, show default user image
         if(!empty($resultUser[0]['bestandsnaam'])) {
           $image = $resultUser[0]['bestandsnaam'];
@@ -291,6 +298,24 @@
 
                   <div class="text-right">
                     <div class="profielbutton-group">
+                    <?php
+                        // 
+                        if ($brief){ ?>
+                          <form action="post.php" method="POST">
+                            <input type="hidden" name="voornaam" value="<?php echo $resultUser[0]['voornaam'] ?>">
+                            <input type="hidden" name="achternaam" value="<?php echo $resultUser[0]['achternaam'] ?>">
+                            <input type="hidden" name="adresregel1" value="<?php echo $resultUser[0]['adresregel1'] ?>">
+                            <input type="hidden" name="postcode" value="<?php echo $resultUser[0]['postcode'] ?>">
+                            <input type="hidden" name="plaats" value="<?php echo $resultUser[0]['plaatsnaam'] ?>">
+                            <input type="hidden" name="activatiecode" value="<?php echo rand(100000, 999999) ?>">
+
+                            <button type="submit" name=Submit class="btn btn-niagara"  >
+                                <i class="glyphicon glyphicon-envelope"></i>
+                                Activatie brief
+                            </button>
+                          </form>
+                            <?php
+                        }  ?>
                       <?php
                         // If user is blocked show deblock button otherwise show block button
                         if ($blocked){ ?>
