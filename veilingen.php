@@ -28,91 +28,64 @@ $_SESSION['menu']['sub'] = 'ma';
 
 
 $username = getLoggedInUser($db)['gebruikersnaam'];
-$dataquery= $db->prepare("SELECT V.titel,
-                                          v.voorwerpnummer,
-                                          bodbedrag, boddagtijd,
-                                          looptijdeinde,
-                                          foto.bestandsnaam,
-                                          dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod
-                          FROM Bod B
-                          INNER JOIN voorwerp V
-                          ON B.voorwerpnummer = V.voorwerpnummer
-						                     CROSS APPLY
-								                 (
-								                 SELECT  TOP 1 Bestand.bestandsnaam
-								                 FROM    Bestand
-                                 WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
-								                 ) Foto
-                          WHERE gebruiker=?
-                          AND bodbedrag = dbo.fnGetHoogsteBod(v.voorwerpnummer)
-                          AND v.veilinggesloten = 0");
+$dataquery= $db->prepare("  SELECT V.titel,
+                                   V.voorwerpnummer,
+                                   V.looptijdeinde,
+                                   V.startprijs,
+                                   B.bodbedrag,
+                                   dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod,
+                                   foto.bestandsnaam,
+                                   COUNT(b.bodbedrag) AS aantalbiedingen
+                            FROM Voorwerp V
+                            LEFT JOIN Bod B
+                            ON b.voorwerpnummer = v.voorwerpnummer
+                                CROSS APPLY
+                                (
+                                SELECT  TOP 1 Bestand.bestandsnaam
+                                FROM    Bestand
+                                WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
+                                ) Foto
+                            WHERE V.verkoper = ?
+                            AND  v.veilinggesloten = 0
+                            GROUP BY V.voorwerpnummer,
+                                     V.Titel,
+                                     V.looptijdeinde,
+                                     V.startprijs,
+                                     B.bodbedrag,
+                                     dbo.fnGetHoogsteBod(v.voorwerpnummer),
+                                     foto.bestandsnaam");
 $dataquery->execute(array($username));
 
-$dataqueryoverboden= $db->prepare("SELECT DISTINCT V.titel,
-                                          v.voorwerpnummer,
-                                          bodbedrag, boddagtijd,
-                                          looptijdeinde,
-                                          foto.bestandsnaam,
-                                          dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod
-                          FROM Bod B
-                          INNER JOIN voorwerp V
-                          ON B.voorwerpnummer = V.voorwerpnummer
-						                     CROSS APPLY
-								                 (
-								                 SELECT  TOP 1 Bestand.bestandsnaam
-								                 FROM    Bestand
-                                 WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
-								                 ) Foto
-                          WHERE gebruiker=?
-                          AND dbo.fnGetHoogsteBod(v.voorwerpnummer) > bodbedrag
-                          AND v.veilinggesloten = 0
-                          ORDER BY bodbedrag DESC");
-$dataqueryoverboden->execute(array($username));
+$dataqueryverlopen= $db->prepare("SELECT V.titel,
+                                   V.voorwerpnummer,
+                                   V.looptijdeinde,
+                                   B.bodbedrag,
+                                   dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod,
+                                   foto.bestandsnaam,
+                                   COUNT(b.bodbedrag) AS aantalbiedingen
+                            FROM Voorwerp V
+                            LEFT JOIN Bod B
+                            ON b.voorwerpnummer = v.voorwerpnummer
+                                CROSS APPLY
+                                (
+                                SELECT  TOP 1 Bestand.bestandsnaam
+                                FROM    Bestand
+                                WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
+                                ) Foto
+                            WHERE V.verkoper = ?
+                            AND  v.veilinggesloten = 1
+                            GROUP BY V.voorwerpnummer,
+                                     V.titel,
+                                     V.looptijdeinde,
+                                     B.bodbedrag,
+                                     dbo.fnGetHoogsteBod(v.voorwerpnummer),
+                                     foto.bestandsnaam");
+$dataqueryverlopen->execute(array($username));
 
-$dataquerygewonnen= $db->prepare("SELECT DISTINCT V.titel,
-                                          v.voorwerpnummer,
-                                          bodbedrag, boddagtijd,
-                                          looptijdeinde,
-                                          foto.bestandsnaam,
-                                          dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod
-                          FROM Bod B
-                          INNER JOIN voorwerp V
-                          ON B.voorwerpnummer = V.voorwerpnummer
-						                     CROSS APPLY
-								                 (
-								                 SELECT  TOP 1 Bestand.bestandsnaam
-								                 FROM    Bestand
-                                 WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
-								                 ) Foto
-                          WHERE gebruiker=?
-                          AND bodbedrag = dbo.fnGetHoogsteBod(v.voorwerpnummer)
-                          AND v.veilinggesloten = 1");
-$dataquerygewonnen->execute(array($username));
-
-$dataqueryverloren= $db->prepare("SELECT DISTINCT V.titel,
-                                          v.voorwerpnummer,
-                                          bodbedrag, boddagtijd,
-                                          looptijdeinde,
-                                          foto.bestandsnaam,
-                                          dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod
-                          FROM Bod B
-                          INNER JOIN voorwerp V
-                          ON B.voorwerpnummer = V.voorwerpnummer
-						                     CROSS APPLY
-								                 (
-								                 SELECT  TOP 1 Bestand.bestandsnaam
-								                 FROM    Bestand
-                                 WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
-								                 ) Foto
-                          WHERE gebruiker=?
-                          AND bodbedrag != dbo.fnGetHoogsteBod(v.voorwerpnummer)
-                          AND v.veilinggesloten = 1");
-$dataqueryverloren->execute(array($username));
 
 $dataqueryresult = $dataquery->fetchAll();
-$dataqueryoverbodenresult = $dataqueryoverboden->fetchAll();
-$dataquerygewonnenresult = $dataquerygewonnen->fetchAll();
-$dataqueryverlorenresult = $dataqueryverloren->fetchAll();
+$dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
+
 
 ?>
 
@@ -162,7 +135,7 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
                       <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Lopende veilingen (<?php echo count($dataqueryresult) ?>)</a></li>
-                      <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Gesloten veilingen (<?php echo count($dataqueryoverbodenresult) ?>)</a></li>
+                      <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Gesloten veilingen (<?php echo count($dataqueryverlopenresult) ?>)</a></li>
                     </ul>
 
                     <!-- HUIDIGE BIEDINGEN -->
@@ -184,7 +157,8 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                               <div class="col-lg-9 col-xs-9 col-sm-8 col-md-8" style="position:relative;flex: 1;">
                                 <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>"><h3 class="item-row-titel"><?php echo $row['titel']?></h3></a>
                                 <h3 style="font-size:14px;" class="orange" id="looptijdeinde" data-looptijd="<?php echo $row['looptijdeinde']?>">&nbsp;</h3>
-                                <p>Uw Bod: <strong>&euro;<?php echo number_format($row['bodbedrag'], 2, ',', '')?></strong></p>
+                                <p>Aantal biedingen: <strong><?php echo $row['aantalbiedingen']?></strong></p>
+                                <p>Startprijs: <strong><?php echo $row['startprijs']?></strong></p>
                                 <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', ''): 'Er is nog niet geboden';?></strong></p>
                                 <p style="position:absolute; bottom:0px;right:0px;width:150px;"><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bekijken</a></p>
                               </div>
@@ -192,7 +166,7 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                           </div>
                           <?php }
                           if($indexhuidig==0){
-                              echo '<br><p><strong style="font-size:18px; padding-left:15px;">U heeft nog niet geboden</strong></p>';
+                              echo '<br><p><strong style="font-size:18px; padding-left:15px;">U heeft nog geen veilingen</strong></p>';
                           }
                           ?>
                         </div>
@@ -200,9 +174,9 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                       <!-- OVERBODEN BIEDINGEN -->
                       <div role="tabpanel" class="tab-pane" id="profile">
                         <?php
-                        $indexoverboden=0;
-                          foreach($dataqueryoverbodenresult as $row){
-                            $indexoverboden ++;
+                        $indexverlopen=0;
+                          foreach($dataqueryverlopenresult as $row){
+                            $indexverlopen ++;
                             ?>
                             <div class="col-sm-12 col-md-12 col-lg-12 col-sm-12">
                               <div class="row item-thumb" style="display: flex;">
@@ -222,8 +196,8 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                               </div>
                             </div>
                             <?php }
-                            if($indexoverboden==0){
-                                echo '<br><p><strong style="font-size:18px; padding-left:15px;">U bent nog niet overboden</strong></p>';
+                            if($indexverlopen==0){
+                                echo '<br><p><strong style="font-size:18px; padding-left:15px;">Nog geen veilingen afgelopen</strong></p>';
                             }
                             ?>
                           </div>
