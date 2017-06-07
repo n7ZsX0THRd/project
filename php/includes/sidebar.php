@@ -39,10 +39,10 @@
   </li>
   <ul class="sub">
     <li>
-      <a href="biedingen.php">Mijn biedingen</a>
+      <a href="biedingen.php">Biedingen</a>
     </li>
     <li>
-      <a href="">Mijn favorieten</a>
+      <a href="veilingen.php">Veilingen</a>
     </li>
     <li>
       <a href="profiel.php">Instellingen</a>
