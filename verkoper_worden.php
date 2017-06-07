@@ -23,7 +23,18 @@ $error = 0;
 
 
 $page = '';
-if ($user["statusID"]==1){ //Als de gebruier inactief is
+
+
+$data = $db->prepare("SELECT count(typegebruiker) as 'verkoper' FROM Gebruikers WHERE gebruikersnaam = ? AND typegebruiker = 2
+
+                    ");
+                              
+        $data->execute(array($gebruikersnaam));
+        $result=$data->fetchAll();
+
+if ($result[0]['verkoper']==1){
+  $page = 'alVerkoper';
+} else if ($user["statusID"]==1){ //Als de gebruier inactief is
   $page = 'inactief';
 } else if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
@@ -41,6 +52,13 @@ if ($user["statusID"]==1){ //Als de gebruier inactief is
                               
         $data->execute(array($gebruikersnaam, $banknaam, $creditcardnummer));
 
+        $data = $db->prepare("  UPDATE Gebruikers
+                                SET typegebruiker = 2
+                                WHERE gebruikersnaam = ?;  
+                            ");
+                              
+        $data->execute(array($gebruikersnaam));
+
         $page='bevestigd';
       } else if ($_POST["page"]=="post"){
 
@@ -53,13 +71,35 @@ if ($user["statusID"]==1){ //Als de gebruier inactief is
                               
         $data->execute(array($gebruikersnaam, $banknaam, $bankrekeningnummer)); 
 
+        $data = $db->prepare("  UPDATE Gebruikers
+                                SET typegebruiker = 4
+                                WHERE gebruikersnaam = ?;  
+                            ");
+                              
+        $data->execute(array($gebruikersnaam));
+
         $page='verwerking';
       }
+      
+      if ($_POST["page"]=="code-controle"){
+        $codeCorrect=false;
+        if(isset($_POST["code"]) && !empty($_POST["code"])){
+          $ingevoerdeCode=htmlspecialchars($_POST["code"]);
 
+          $data = $db->prepare("  SELECT TOP(1) activatiecode FROM Verkopers WHERE gebruikersnaam = ?;  
+                            ");
+                              
+          $data->execute(array($gebruikersnaam));
+          $result=$data->fetchAll();
+
+          if ($codeCorrect==$result[0]['activatiecode']){
+            $codeCorrect=true;
+          }
+
+        }
+      }
+  }
 }
-}
-
-
 
 
  if(!isUserLoggedIn($db))
@@ -174,7 +214,7 @@ if ($user["statusID"]==1){ //Als de gebruier inactief is
               <div class="input-group-addon"><span class="glyphicon glyphicon glyphicon-lock" aria-hidden="true"></span></div>
                 <input type="text" pattern="[0-9]{6}" class="form-control" id="code" placeholder="Code" name="code" value="">
             </div>
-
+            <input type="hidden" name="page" value="code-controle">
           <div class="bevestig">
             <div class="row">
               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -187,6 +227,7 @@ if ($user["statusID"]==1){ //Als de gebruier inactief is
           <?php
           // activatie code invoeren
         break;
+        
         case 'bevestigd':
           ?>
           <h3>Succes!</h3>
@@ -201,6 +242,15 @@ if ($user["statusID"]==1){ //Als de gebruier inactief is
           ?>
           <h3>Succes!</h3>
           <p>Uw aanvraag is ontvangen, de gegevens worden gecontroleerd. binnenkort ontvangt u een brief met instructies om het account te activeren.<br> 
+          <br></p>
+ 
+          <?php
+          // activatie code invoeren
+        break;
+        case 'alVerkoper':
+          ?>
+          <h3>&#x1F4B0 &#x1F4B0 &#x1F4B0</h3>
+          <p>U bent al geregistreerd als verkoper<br> 
           <br></p>
  
           <?php
