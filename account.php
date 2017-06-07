@@ -60,18 +60,18 @@ $_SESSION['menu']['sub'] = 'ma';
                     <img class="account_icons"src=
                     "images/money.png"/>
                     <div class="caption captionfix">
-                      <h3 style="text-align: center" >Mijn biedingen</h3>
+                      <h3 style="text-align: center" >Biedingen</h3>
                     </div>
                   </div>
                 </div>
                 <!--  My BIDS END -->
                 <!--  My Favorites -->
-                <div onclick="window.location='index.php';"  class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
+                <div onclick="window.location='veilingen.php';"  class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                   <div class="thumbnail">
                     <img class="account_icons" src=
                     "images/star.png"/>
                     <div class="caption captionfix">
-                      <h3 style="text-align: center" >Mijn favorieten</h3>
+                      <h3 style="text-align: center" >Veilingen</h3>
                     </div>
                   </div>
                 </div>
@@ -82,7 +82,7 @@ $_SESSION['menu']['sub'] = 'ma';
                     <img class="account_icons" src=
                     "images/menu.png"/>
                     <div class="caption captionfix">
-                      <h3 style="text-align: center" >Instellingen</h3>
+                      <h3 style="text-align: center" >Gegevens</h3>
                     </div>
                   </div>
                 </div>

@@ -337,6 +337,7 @@ if(isset($_GET['foto'])){
     </div>
     <div class="col-md-8 col-lg-10 col-sm-8">
       <div class="container-fluid  content_col">
+        <h1 style="margin-bottom: 4%" >Gegevens</h1>
         <div class="row navigation-row">
             <p>
               <a href="index.php">
@@ -345,7 +346,7 @@ if(isset($_GET['foto'])){
               <span class="glyphicon glyphicon-menu-right"></span>
               <a href="account.php">Mijn Account</a>
               <span class="glyphicon glyphicon-menu-right"></span>
-              <a href="profiel.php">Instellingen</a>
+              <a href="profiel.php">Gegevens</a>
             </p>
         </div>
 
