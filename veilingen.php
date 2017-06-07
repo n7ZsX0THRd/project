@@ -160,7 +160,7 @@ $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
                                 <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>"><h3 class="item-row-titel"><?php echo $row['titel']?></h3></a>
                                 <h3 style="font-size:14px;" class="orange" id="looptijdeinde" data-looptijd="<?php echo $row['looptijdeinde']?>">&nbsp;</h3>
                                 <p>Aantal biedingen: <strong><?php echo $row['aantalbiedingen']?></strong></p>
-                                <p>Startprijs: <strong><?php echo $row['startprijs']?></strong></p>
+                                <p>Startprijs: <strong>&euro;<?php echo $row['startprijs']?></strong></p>
                                 <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', ''): 'Er is nog niet geboden';?></strong></p>
                                 <p style="position:absolute; bottom:0px;right:0px;width:150px;"><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bekijken</a></p>
                               </div>
