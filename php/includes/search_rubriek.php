@@ -17,7 +17,7 @@ pdo_connect();
 if (isset($_GET['search'])) {
   $searchInput = $_GET['search'];
 
-  $searchRubriekQuery = $db->prepare("SELECT DISTINCT TOP 20
+  $searchRubriekQuery = $db->prepare("SELECT DISTINCT
   	r.rubrieknummer AS parentId,
   	r.rubrieknaam AS parent,
   	r4.rubrieknaam AS child,
@@ -36,9 +36,9 @@ if (isset($_GET['search'])) {
   		ON r2.rubrieknummer = r3.parentRubriek
   	WHERE r2.parentRubriek IS NOT NULL
   )
-  AND r4.rubrieknaam LIKE ?
+  AND r4.rubrieknaam LIKE ? OR r.rubrieknaam LIKE ?
   ORDER BY r.rubrieknaam");
-  $searchRubriekQuery->execute(array('%'.$searchInput.'%'));
+  $searchRubriekQuery->execute(array('%'.$searchInput.'%','%'.$searchInput.'%'));
 
   $result = $searchRubriekQuery->fetchAll();
 }
