@@ -15,30 +15,50 @@ pdo_connect();
 // Include database, and include user functions.
 // Connect to database
 
+$user= getLoggedInUser($db);
+//echo var_dump($user);
+$gebruikersnaam=$user["gebruikersnaam"];
+
 $error = 0;
 
 
 $page = '';
+if ($user["statusID"]==1){ //Als de gebruier inactief is
+  $page = 'inactief';
+} else if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
+  if(isset($_POST["page"]) && !empty($_POST["page"])){
 
-  if(isset($_POST["controle"]) && !empty($_POST["controle"])){
-        if ($_POST["controle"]=="creditcard"){
-          $page='bevestigd';
-        } else if ($_POST["controle"]=="post"){
-          $page='verwerking';
-        }
-  } else {
-
-    if(isset($_POST['page']) && !empty($_POST['page'])){
       $page=$_POST['page'];
-    }
 
-  }
+      if ($_POST["page"]=="creditcard"){
+
+        $creditcardnummer=htmlspecialchars($_POST["creditcardnummer"]);
+        $banknaam=htmlspecialchars($_POST["bank"]);
+        $data = $db->prepare("  INSERT INTO Verkopers (gebruikersnaam, banknaam, rekeningnummer, creditcardnummer, controleoptienaam)
+                                VALUES (?, ?, 'NVT', ?, 'creditcard'); 
+                            ");
+                              
+        $data->execute(array($gebruikersnaam, $banknaam, $creditcardnummer));
+
+        $page='bevestigd';
+      } else if ($_POST["page"]=="post"){
+
+        $bankrekeningnummer=htmlspecialchars($_POST["bankrekeningnummer"]);
+        $banknaam=htmlspecialchars($_POST["bank"]);
+
+        $data = $db->prepare("  INSERT INTO Verkopers (gebruikersnaam, banknaam, rekeningnummer, creditcardnummer, controleoptienaam)
+                                VALUES (?, ?, ?, 'NVT', 'post'); 
+                            ");
+                              
+        $data->execute(array($gebruikersnaam, $banknaam, $bankrekeningnummer)); 
+
+        $page='verwerking';
+      }
 
 }
+}
 
-$page = 'bevestigd';
 
 
 
@@ -60,6 +80,28 @@ $page = 'bevestigd';
         <title>Word Verkoper - Eenmaal Andermaal</title>
 
         <link href="css/login.css" rel="stylesheet">
+        <link href="css/formulier.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script>
+        $(document).ready(function(){
+            $(".creditcard").click(function(){
+              $("#input-creditcard").show();
+                $("#input-post").hide();
+            });
+            $(".post").click(function(){
+                $("#input-post").show();
+                $("#input-creditcard").hide();
+            });
+        });
+
+        jQuery(function ($) {
+            var $inputs = $('input[name=bankrekeningnummer],input[name=creditcardnummer]');
+            $inputs.on('input', function () {
+                // Set the required property of the other input to false if this input is not empty.
+                $inputs.not(this).prop('required', !$(this).val().length);
+            });
+        });
+        </script>
 
   </head>
   <body>
@@ -78,27 +120,40 @@ $page = 'bevestigd';
     ?>
           <!-- login gegevens -->
           <div class="login">
-            <form action="activatie.php" method="POST">
+            <form action="" method="POST">
+
+                      <div class="row">
+            <label class="col-lg-12">Controle optie</label>
+            <label class="post">
+              <input class="col-lg-4 col-md-4 col-sm-4" type="radio" name="page" value="post" checked> Post
+            </label>
+            
+            <label class="creditcard">
+              <input class="col-lg-4 col-md-4 col-sm-4" type="radio" name="page" value="creditcard"> Creditcard
+            </label>
+            <br>
+            <br>
+          </div>
+
               <div class="input-group">
                 <div class="input-group-addon"><span class="glyphicon glyphicon glyphicon-piggy-bank" aria-hidden="true" background="#f0f0f0"></span></div>
                   <input type="text" pattern="^[A-Za-z_ ]{1,15}$" class="form-control" id="bank" name="bank" placeholder="Bank"  required>
               </div>
               <br>
-              <div class="input-group">
+              <div  id="input-creditcard"  style="display:none;" class="input-group">
                 <div class="input-group-addon"><span class="glyphicon glyphicon glyphicon glyphicon-credit-card" aria-hidden="true"></span></div>
-                  <input type="text" pattern="[0-9]{13,16}" class="form-control" id="creditcardnummer" placeholder="Creditcard nummer" name="creditcardnummer"  required>
+                  <input type="text" pattern="[0-9]{13,16}" class="form-control" id="creditcardnummer" placeholder="Creditcard nummer" name="creditcardnummer" value=""  required>
+                  <!-- test with http://www.getcreditcardnumbers.com/ -->
+                  <br>
+              </div>
+              <div  id="input-post"  class="input-group">
+                <div class="input-group-addon"><span class="glyphicon glyphicon glyphicon glyphicon-credit-card" aria-hidden="true"></span></div>
+                  <input type="text" pattern="[0-9]{13,16}" class="form-control" id="bankrekeningnummer" placeholder="Bankrekening nummer" name="bankrekeningnummer" value="" required>
                   <!-- test with http://www.getcreditcardnumbers.com/ -->
                   <br>
               </div>
               <br>
             </div>
-
-
-          <div class="row">
-            <label class="col-lg-12">Controle optie</label>
-              <input class="col-lg-4 col-md-4 col-sm-4" type="radio" name="controle" value="post" required> Post<br>
-              <input class="col-lg-4 col-md-4 col-sm-4" type="radio" name="controle" value="creditcard"> Creditcard<br>
-          </div>
 
             <div class="bevestig">
               <div class="row">
@@ -146,6 +201,16 @@ $page = 'bevestigd';
           ?>
           <h3>Succes!</h3>
           <p>Uw aanvraag is ontvangen, de gegevens worden gecontroleerd. binnenkort ontvangt u een brief met instructies om het account te activeren.<br> 
+          <br></p>
+ 
+          <?php
+          // activatie code invoeren
+        break;
+        case 'inactief':
+          ?>
+          <h3>Oops!</h3>
+          <p>Uw heeft uw email adres nog niet geregistreerd.<br>
+          <a href="#">Doe het nu!</a>
           <br></p>
  
           <?php

@@ -1,0 +1,13 @@
+
+input[type="text"]:valid {
+    color: green;
+}
+
+
+input[type="text"]:invalid {
+    color: red;
+}
+
+.post {
+    margin-left: 20px;
+}
