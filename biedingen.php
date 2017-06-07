@@ -12,6 +12,7 @@ session_start();
 // Include database connection and user functins
 include_once('php/database.php');
 include_once('php/user.php');
+
 pdo_connect();
 // Connect with database
 
@@ -28,7 +29,7 @@ $_SESSION['menu']['sub'] = 'ma';
 
 
 $username = getLoggedInUser($db)['gebruikersnaam'];
-$dataquery= $db->prepare("SELECT DISTINCT V.titel,
+$dataquery= $db->prepare("SELECT V.titel,
                                           v.voorwerpnummer,
                                           bodbedrag, boddagtijd,
                                           looptijdeinde,
@@ -43,37 +44,27 @@ $dataquery= $db->prepare("SELECT DISTINCT V.titel,
 								                 FROM    Bestand
                                  WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
 								                 ) Foto
-                          WHERE gebruiker=?");
+                          WHERE gebruiker=?
+                          AND bodbedrag = dbo.fnGetHoogsteBod(v.voorwerpnummer)
+                          AND v.veilinggesloten = 0");
 $dataquery->execute(array($username));
 
-$dataqueryoverboden= $db->prepare("SELECT *
-FROM(
-SELECT DISTINCT V.titel,
-                                          v.voorwerpnummer,
-                                          bodbedrag, boddagtijd,
-                                          looptijdeinde,
-                                          foto.bestandsnaam,
-                                          dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod,
-										  ROW_NUMBER() OVER (PARTITION BY v.voorwerpnummer
-									   	  ORDER BY v.voorwerpnummer)
-										  AS rn
-                          FROM Bod B
-                          INNER JOIN voorwerp V
-                          ON B.voorwerpnummer = V.voorwerpnummer
-						                     CROSS APPLY
-								                 (
-								                 SELECT  TOP 1 Bestand.bestandsnaam
-								                 FROM    Bestand
-                                 WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
-								                 ) Foto
-                          WHERE gebruiker=?
-                          AND dbo.fnGetHoogsteBod(v.voorwerpnummer) > bodbedrag
-						  ) tmp
-						  WHERE rn = 1
-
-
-");
+$dataqueryoverboden= $db->prepare(" SELECT titel, MAX(bodbedrag) as bodbedragMAX, V.looptijdeinde, bestandsnaam, B.voorwerpnummer, dbo.fnGetHoogsteBod(b.voorwerpnummer) AS hoogsteBod
+FROM Bod AS B
+INNER JOIN Voorwerp AS V ON
+B.voorwerpnummer = V.voorwerpnummer
+	CROSS APPLY
+            (
+            SELECT  TOP 1 Bestand.bestandsnaam
+            FROM    Bestand
+            WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
+            ) Foto
+WHERE gebruiker = ?
+AND v.veilinggesloten = 0
+GROUP BY titel, B.voorwerpnummer, V.looptijdeinde, bestandsnaam, B.voorwerpnummer
+HAVING dbo.fnGetHoogsteBod(B.voorwerpnummer) > MAX(bodbedrag)");
 $dataqueryoverboden->execute(array($username));
+
 
 $dataquerygewonnen= $db->prepare("SELECT DISTINCT V.titel,
                                           v.voorwerpnummer,
@@ -151,12 +142,23 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
       <div class="col-md-9 col-lg-10 col-sm-8">
         <div class="container-fluid content_col">
           <div class="row">
-              <h1 style="margin-bottom: 4%" > Mijn Biedingen </h1>
+              <h1 style="margin-bottom: 4%" >Biedingen</h1>
+              <div class="row navigation-row">
+                  <p>
+                    <a href="index.php">
+                      <span class="glyphicon glyphicon-home "></span>
+                    </a>
+                    <span class="glyphicon glyphicon-menu-right"></span>
+                    <a href="account.php">Mijn Account</a>
+                    <span class="glyphicon glyphicon-menu-right"></span>
+                    <a href="biedingen.php">Biedingen</a>
+                  </p>
+              </div>
               <div class="row item-row">
                 <div>
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
-                      <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Huidige biedingen (<?php echo count($dataqueryresult) ?>)</a></li>
+                      <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Hoogste bod (<?php echo count($dataqueryresult) ?>)</a></li>
                       <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Overboden (<?php echo count($dataqueryoverbodenresult) ?>)</a></li>
                       <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Gewonnen (<?php echo count($dataquerygewonnenresult) ?>)</a></li>
                       <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Verloren (<?php echo count($dataqueryverlorenresult) ?>)</a></li>
@@ -212,7 +214,7 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                                 <div class="col-lg-9 col-xs-9 col-sm-8 col-md-8" style="position:relative;flex: 1;">
                                   <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>"><h3 class="item-row-titel"><?php echo $row['titel']?></h3></a>
                                   <h3 style="font-size:14px;" class="orange" id="looptijdeinde" data-looptijd="<?php echo $row['looptijdeinde']?>">&nbsp;</h3>
-                                  <p>Uw Bod: <strong>&euro;<?php echo number_format($row['bodbedrag'], 2, ',', '')?></strong></p>
+                                  <p>Uw Bod: <strong>&euro;<?php echo number_format($row['bodbedragMAX'], 2, ',', '')?></strong></p>
                                   <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', ''): 'Er is nog niet geboden';?></strong></p>
                                   <p style="position:absolute; bottom:0px;right:0px;width:150px;"><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bekijken</a></p>
                                 </div>
