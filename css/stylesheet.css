@@ -268,9 +268,21 @@ p, div {
 }
 
 .content_col>.navigation-row {
-  margin-top: 25px;
-}
 
+}
+.content_col>.navigation-row.fix{
+  margin-left:-15px;
+  margin-right:-15px;
+  margin-bottom:10px;
+}
+.content_col>.navigation-row>h1 {
+  font-size: 2.2em;
+  width: 100%;
+  color: #023042;
+  text-align: left;
+  border-bottom: 2px solid #023042;
+  padding-bottom: 1px;
+}
 .content_col>.navigation-row>p {
   font-size: 16px;
 }
@@ -746,15 +758,4 @@ p, div {
 .minimalMargin{
   margin-top:5px;
   margin-bottom:5px;
-}
-
-
-
-input[type="text"]:valid {
-    color: green;
-}
-
-
-input[type="text"]:invalid {
-    color: red;
 }

@@ -119,20 +119,20 @@ $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
 
       <div class="col-md-9 col-lg-10 col-sm-8">
         <div class="container-fluid content_col">
-          <div class="row">
-              <h1 style="margin-bottom: 4%" >Veilingen</h1>
-              <div class="row navigation-row">
-                  <p>
-                    <a href="index.php">
-                      <span class="glyphicon glyphicon-home "></span>
-                    </a>
-                    <span class="glyphicon glyphicon-menu-right"></span>
-                    <a href="account.php">Mijn Account</a>
-                    <span class="glyphicon glyphicon-menu-right"></span>
-                    <a href="veilingen.php">Veilingen</a>
-                  </p>
-              </div>
-              <div class="row item-row">
+          <div class="row navigation-row fix">
+              <h1 style="margin-bottom: 10px" >Veilingen</h1>
+              <p>
+                <a href="index.php">
+                  <span class="glyphicon glyphicon-home "></span>
+                </a>
+                <span class="glyphicon glyphicon-menu-right"></span>
+                <a href="account.php">Mijn Account</a>
+                <span class="glyphicon glyphicon-menu-right"></span>
+                <a href="veilingen.php">Veilingen</a>
+              </p>
+          </div>
+
+              <div class="row content_top_offset">
                 <div>
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
@@ -212,7 +212,6 @@ $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
 
 
              </div>
-          </div>
 
 
       </div>

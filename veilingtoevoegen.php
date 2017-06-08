@@ -163,13 +163,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
       }
    }
  }
-
-  /*
-  print '<br><br>';
-  var_dump($result->getCode());
-  print '<br><br>';
-  var_dump($result);
-  */
 }
 
 $queryPaymentMethods = $db->query("SELECT ID,betalingswijze FROM Betalingswijzen ORDER BY ID ASC");
@@ -201,18 +194,19 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
       </div>
       <div class="col-md-9 col-lg-10 col-sm-8">
         <div class="container-fluid content_col">
-          <div class="row navigation-row">
+          <div class="row navigation-row fix">
+              <h1 style="margin-bottom: 10px" >Verkopen</h1>
               <p>
                 <a href="index.php">
                   <span class="glyphicon glyphicon-home "></span>
                 </a>
                 <span class="glyphicon glyphicon-menu-right"></span>
-                <a href="">Direct Regelen</a>
+                <a href="">Direct regelen</a>
                 <span class="glyphicon glyphicon-menu-right"></span>
-                <a href="">Verkopen</a>
+                <a href="gebruikers.php">Verkopen</a>
               </p>
           </div>
-          <div class="row">
+          <div class="row content_top_offset">
             <div class="col-lg-12">
             <?php
             if(isset($_SESSION['warning']['formaterror']))
@@ -314,7 +308,8 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
                         <hr>
                         <div class="form-group">
                            <label>Rubrieken</label>
-                           <p><i><button type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-orange">Rubriek toevoegen</button>   Tot 2 rubrieken gratis, minimaal 1</i></p>
+                           <p><i>Tot 2 rubrieken gratis, minimaal 1</i></p>
+                           <button type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-orange">Rubriek toevoegen</button>
                            <div class="form-group" id="notification">
                            </div>
                            <div class="form-group" id="resultedRubriek">
@@ -422,7 +417,6 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
     </div>
     <div id="rubriek_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
       <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -443,7 +437,6 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
             </div>
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-      </div>
     </div>
 
     <?php
@@ -463,7 +456,7 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
 
     $( "#searchButton" ).click(function(event){
           var search = $("#rubriekSearchInput").val();
-          if(search.length > 1)
+          if(search.length > 0)
             $( "#result_search" ).load( "php/includes/search_rubriek.php?search=" + search);
     });
     $("#rubriekSearchInput").keyup(function(event){
@@ -473,9 +466,26 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
     });
     $(document).on("click", '#add_rubriek', function(event) {
         //alert("new link clicked!");
+        console.log(this);
 
-        if ($('#' + $(event.target).data( "rubriekid" )).exists() == false) {
-          $('#resultedRubriek').append('<div id="' + $(event.target).data( "rubriekid" ) + '"><input type="hidden" name="vt_rubrieken[]" value="' + $(event.target).data( "rubriekid" ) + '" /><p><a class="btn btn-default" id="remove" style="margin-right:10px;"><span class="glyphicon glyphicon-minus"></span></a>' + $(event.target).data( "parentnaam" ) + ' <span class="glyphicon glyphicon-menu-right"></span> ' + $(event.target).data( "rubrieknaam" ) + '</p></div>');
+        var clickedObject = $(this);
+
+        if ($('#' + clickedObject.data( "rubriekid" )).exists() == false) {
+
+          $('#resultedRubriek').append(
+              '<div id="' +
+              clickedObject.data( "rubriekid" ) +
+              '"><input type="hidden" name="vt_rubrieken[]" value="' +
+              clickedObject.data( "rubriekid" ) +
+              '" /><p><a class="btn btn-default" id="remove" style="margin-right:10px;"><span class="glyphicon glyphicon-minus"></span></a>' +
+              clickedObject.data( "parentparentnaam" ) +
+              ' <span class="glyphicon glyphicon-menu-right"></span> ' +
+              clickedObject.data( "parentnaam" ) +
+              ' <span class="glyphicon glyphicon-menu-right"></span> ' +
+              clickedObject.data( "rubrieknaam" ) +
+              '</p></div>'
+          );
+
           $('#result_search').empty();
           $('#rubriekSearchInput').val("");
           $('#notification').empty();

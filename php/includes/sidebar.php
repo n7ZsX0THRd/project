@@ -45,7 +45,7 @@
       <a href="veilingen.php">Veilingen</a>
     </li>
     <li>
-      <a href="profiel.php">Instellingen</a>
+      <a href="profiel.php">Gegevens</a>
     </li>
     <li>
       <a href="php/logout.php">Uitloggen</a>

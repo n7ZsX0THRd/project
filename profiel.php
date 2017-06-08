@@ -337,8 +337,8 @@ if(isset($_GET['foto'])){
     </div>
     <div class="col-md-8 col-lg-10 col-sm-8">
       <div class="container-fluid  content_col">
-        <h1 style="margin-bottom: 4%" >Gegevens</h1>
-        <div class="row navigation-row">
+        <div class="row navigation-row fix">
+            <h1 style="margin-bottom: 10px" >Gegevens</h1>
             <p>
               <a href="index.php">
                 <span class="glyphicon glyphicon-home "></span>
@@ -350,7 +350,7 @@ if(isset($_GET['foto'])){
             </p>
         </div>
 
-        <div class="row ">
+        <div class="row content_top_offset">
           <?php if(isset($_SESSION['warning']['false_pass']) && $_SESSION['warning']['false_pass'] === true)
           {
           ?>
