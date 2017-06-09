@@ -50,6 +50,7 @@ $dataquery= $db->prepare("  SELECT		titel,
 								GROUP BY	titel, 
 											B.voorwerpnummer, 
 											V.looptijdeinde, 
+											V.startprijs,
 											bestandsnaam, 
 											B.voorwerpnummer, 
 											V.looptijdbegin
