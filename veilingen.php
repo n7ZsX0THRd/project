@@ -52,7 +52,7 @@ $dataquery= $db->prepare("  SELECT		titel,
 											V.looptijdeinde, 
 											V.startprijs,
 											bestandsnaam, 
-											B.voorwerpnummer, 
+											V.voorwerpnummer, 
 											V.looptijdbegin
 								ORDER BY V.looptijdbegin DESC");
 $dataquery->execute(array($username));
