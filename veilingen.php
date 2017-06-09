@@ -31,8 +31,9 @@ $username = getLoggedInUser($db)['gebruikersnaam'];
 $dataquery= $db->prepare("  SELECT		titel,
 											MAX(bodbedrag) as bodbedragMAX, 
 											V.looptijdeinde,
+											V.startprijs,
 											bestandsnaam, 
-											B.voorwerpnummer, 
+											V.voorwerpnummer, 
 											dbo.fnGetHoogsteBod(b.voorwerpnummer) AS hoogsteBod,
 											COUNT(b.bodbedrag) AS aantalbiedingen
 								FROM Voorwerp AS V
