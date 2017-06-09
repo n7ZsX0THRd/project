@@ -94,6 +94,23 @@ if ($result[0]['verkoper']==1){
 
           if ($ingevoerdeCode==$result[0]['activatiecode']){
             $page='bevestigd';
+
+            $data = $db->prepare("  
+                                  UPDATE Verkopers
+                                  SET activatiecode = NULL, startdatum = NULL
+                                  WHERE gebruikersnaam= ?; 
+                              ");
+                                
+            $data->execute(array($gebruikersnaam));
+
+            $data = $db->prepare("  
+                                  UPDATE Gebruikers
+                                  SET typegebruiker = 2
+                                  WHERE gebruikersnaam= ?;  
+                              ");
+                                
+            $data->execute(array($gebruikersnaam));
+
           }else{
             $page='onjuiste-code';
           }
