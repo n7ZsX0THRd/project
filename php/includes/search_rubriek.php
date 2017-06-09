@@ -36,6 +36,8 @@ WHERE
 		OR
 		r3.rubrieknaam LIKE ?
 	)
+  AND
+    r.inactief = 0
 ORDER BY
 	parentparent ASC,
 	parent ASC,
@@ -52,6 +54,10 @@ else {
   $countedResults = 0;
   foreach($result as $row)
   {
+    if(isset($row['parentparent']) && $row['parentparent']  == 'Root')
+      $row['parentparent'] = "Rubrieken";
+    if(isset($row['parent']) && $row['parent']  == 'Root')
+      $row['parent'] = "Rubrieken";
     ?>
       <li class="rubriek_search" data-dismiss="modal" id="add_rubriek" data-parentparentnaam="<?php echo $row['parentparent']?>" data-parentnaam="<?php echo $row['parent']?>" data-rubrieknaam="<?php echo $row['child']?>"  data-rubriekid="<?php echo $row['childID']?>">
         <?php
