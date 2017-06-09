@@ -35,6 +35,7 @@ $dataquery= $db->prepare("  SELECT DISTINCT V.titel,
                                    B.bodbedrag,
                                    dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod,
                                    foto.bestandsnaam,
+                                   V.looptijdbegin,
                                    COUNT(b.bodbedrag) AS aantalbiedingen
                             FROM Voorwerp V
                             LEFT JOIN Bod B
