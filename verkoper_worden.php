@@ -92,7 +92,7 @@ if ($result[0]['verkoper']==1){
           $data->execute(array($gebruikersnaam));
           $result=$data->fetchAll();
 
-          if ($codeCorrect==$result[0]['activatiecode']){
+          if ($ingevoerdeCode==$result[0]['activatiecode']){
             $page='bevestigd';
           }else{
             $page='onjuiste-code';
