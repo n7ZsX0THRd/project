@@ -42,6 +42,7 @@ $dataquery= $db->prepare(" SELECT titel, MAX(bodbedrag) as bodbedragMAX, V.loopt
 						WHERE gebruiker = ?
 						AND v.veilinggesloten = 0
 						GROUP BY titel, B.voorwerpnummer, V.looptijdeinde, bestandsnaam, B.voorwerpnummer, V.looptijdbegin
+						HAVING MAX(bodbedrag) = dbo.fnGetHoogsteBod(b.voorwerpnummer)
             ORDER BY V.looptijdbegin DESC");
 
 $dataquery->execute(array($username));
