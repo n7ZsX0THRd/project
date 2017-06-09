@@ -182,7 +182,11 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                           </div>
                           <?php }
                           if($indexhuidig==0){
-                              echo '<br><p><strong style="font-size:18px; padding-left:15px;">U heeft nog niet geboden</strong></p>';
+                            ?>
+                            <p class="bg-warning" style="padding:5px;margin-top:15px;">
+                                Je hebt nog niet geboden<br>
+                            </p>
+                            <?php
                           }
                           ?>
                         </div>
@@ -213,7 +217,11 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                             </div>
                             <?php }
                             if($indexoverboden==0){
-                                echo '<br><p><strong style="font-size:18px; padding-left:15px;">U bent nog niet overboden</strong></p>';
+                              ?>
+                              <p class="bg-warning" style="padding:5px;margin-top:15px;">
+                                  Je bent nog niet overboden<br>
+                              </p>
+                              <?php
                             }
                             ?>
                           </div>
@@ -244,7 +252,11 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                           </div>
                           <?php }
                           if($indexgewonnen==0){
-                              echo '<br><p><strong style="font-size:18px; padding-left:15px;">U heeft nog niets gewonnen</strong></p>';
+                            ?>
+                            <p class="bg-warning" style="padding:5px;margin-top:15px;">
+                                Je hebt nog geen veilingen gewonnen<br>
+                            </p>
+                            <?php
                           }
                           ?>
                           </div>
@@ -275,7 +287,11 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                           </div>
                           <?php }
                           if($indexverloren==0){
-                              echo '<br><p><strong style="font-size:18px; padding-left:15px;">U heeft nog niets verloren</strong></p>';
+                            ?>
+                            <p class="bg-warning" style="padding:5px;margin-top:15px;">
+                                Je hebt nog geen veilingen verloren<br>
+                            </p>
+                            <?php
                           } ?>
                       </div>
                     </div>

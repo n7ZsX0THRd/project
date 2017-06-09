@@ -29,6 +29,15 @@ function getExtension($str)
 if(isUserLoggedIn($db) == false)
   header("Location: index.php");
 
+$result = getLoggedInUser($db);
+
+if($result['typegebruiker'] == 1 || $result['typegebruiker'] == 4)
+{
+  header("Location: verkoper_worden.php");
+  exit();
+}
+
+
 $_SESSION['menu']['sub'] = 'dr';
 // Set session for sidebar menu,
 // dr -> Direct Regelen
@@ -45,7 +54,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
   $index = 0;
   $succesfullUploadedPhotos = false;
 
-  if(isset($_FILES['vt_images']))
+  if(isset($_FILES['vt_images']) == false)
   {
     $_SESSION['warning']['no_images'] = true;
   }
@@ -274,23 +283,24 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
               echo '<p class="bg-warning" style="padding:5px;">Er is een onbekende fout opgetreden</p>';
             }
             ?>
+              <i>De velden met een * zijn verplicht</i>
             </div>
             <form action="" method="post" enctype="multipart/form-data">
               <div class="col-lg-12">
                   <div class="form-group">
                     <div class="row">
                       <div class="col-lg-12">
-                        <label for="vt_title">Titel</label>
-                        <input name="vt_title" type="text" class="form-control" id="vt_title" placeholder="Titel (verplicht)" value="<?php if (isset($_POST['vt_title'])){ echo $_POST['vt_title']; }?>">
+                        <label for="vt_title">Titel*</label>
+                        <input name="vt_title" type="text" class="form-control" id="vt_title" placeholder="Titel" value="<?php if (isset($_POST['vt_title'])){ echo $_POST['vt_title']; }?>">
                         <p></p>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-lg-12">
                         <div class="form-group">
-                          <label for="vt_description">Beschrijving</label>
+                          <label for="vt_description">Beschrijving*</label>
 
-                          <textarea class="form-control" rows="10" id="vt_description" name="vt_description" style="max-width:100%;" placeholder="Beschrijving (verplicht)"><?php if (isset($_POST['vt_description'])){ echo $_POST['vt_description']; }?></textarea>
+                          <textarea class="form-control" rows="10" id="vt_description" name="vt_description" style="max-width:100%;" placeholder="Beschrijving"><?php if (isset($_POST['vt_description'])){ echo $_POST['vt_description']; }?></textarea>
 
                         </div>
                         <!--
@@ -298,14 +308,14 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
                         -->
                         <div class="row">
                           <div class="col-lg-6">
-                            <label for="vt_startPrice">Startprijs</label>
+                            <label for="vt_startPrice">Startprijs*</label>
                             <div class="input-group">
                                <span class="input-group-addon">€</span>
                                <input class="form-control" type="number" id="vt_startPrice" required name="vt_startPrice" value="<?php if (isset($_POST['vt_startPrice'])){ echo $_POST['vt_startPrice']; }else{echo '0.00'; }?>" step="any">
                              </div>
                           </div>
                           <div class="col-lg-6">
-                            <label for="vt_auctionTime">Looptijd</label>
+                            <label for="vt_auctionTime">Looptijd*</label>
                             <select name="vt_auctionTime" class="form-control" id="vt_auctionTime">
                               <option disabled>Looptijd</p>
                               <option value="1">1 dag</option>
@@ -319,7 +329,7 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
                         <p></p>
                         <hr>
                         <div class="form-group">
-                           <label>Rubrieken</label>
+                           <label>Rubrieken*</label>
                            <p><i>Tot 2 rubrieken gratis, minimaal 1</i></p>
                            <button type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-orange">Rubriek toevoegen</button>
                            <div class="form-group" id="notification">
@@ -336,7 +346,7 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
                 <div class="row">
 
                   <div class="col-lg-6">
-                    <label>Foto's</label>
+                    <label>Foto's*</label>
                     <p><i>Toegestaande bestandstypen: <?php echo implode(', ',$valid_formats);?></i></p>
                     <input type="file" class="btn" name="vt_images[]" onchange="readURL(this,'#f1');" />
                     <input type="file" class="btn" name="vt_images[]" onchange="readURL(this,'#f2');" />
@@ -383,13 +393,13 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
                     <label for="vt_paymentInstruction">Betalingsinstructie</label>
                     <input name="vt_paymentInstruction" id="vt_paymentInstruction" type="text" class="form-control" placeholder="Betalingsinstructie" value="<?php if (isset($_POST['vt_paymentInstruction'])){ echo $_POST['vt_paymentInstruction']; }?>">
                     <p></p>
-                    <label for="vt_city">Plaatsnaam</label>
-                    <input name="vt_city" id="vt_city" type="text" class="form-control" placeholder="Plaatsnaam (verplicht)" value="<?php if (isset($_POST['vt_city'])){ echo $_POST['vt_city']; }?>">
+                    <label for="vt_city">Plaatsnaam*</label>
+                    <input name="vt_city" id="vt_city" type="text" class="form-control" placeholder="Plaatsnaam" value="<?php if (isset($_POST['vt_city'])){ echo $_POST['vt_city']; }?>">
                     <p></p>
-                    <label for="vt_zipcode">Postcode</label>
-                    <input name="vt_zipcode" id="vt_zipcode" type="text" class="form-control" placeholder="Postcode (verplicht)" value="<?php if (isset($_POST['vt_zipcode'])){ echo $_POST['vt_zipcode']; }?>">
+                    <label for="vt_zipcode">Postcode*</label>
+                    <input name="vt_zipcode" id="vt_zipcode" type="text" class="form-control" placeholder="Postcode" value="<?php if (isset($_POST['vt_zipcode'])){ echo $_POST['vt_zipcode']; }?>">
                     <p></p>
-                    <label for="vt_country">Land</label>
+                    <label for="vt_country">Land*</label>
                     <select class="form-control" id="vt_country" name="vt_country">
                       <option disabled selected>Land</p>
                       <?php

@@ -169,6 +169,12 @@ else {
             }
             // Show message if bid count == 0
             if($index == 0)
-              echo '<center><strong style="font-size:18px;">Hier is nog niet op geboden</strong></center>';
+            {
+              ?>
+              <p class="bg-warning" style="padding:5px;margin-top:15px;">
+                  Er is nog niet geboden op deze veiling.<br>
+              </p>
+              <?php
+            }
             ?>
          </ul>
