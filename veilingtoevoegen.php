@@ -44,59 +44,67 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
   $index = 0;
   $succesfullUploadedPhotos = false;
-  foreach ($_FILES['vt_images']['name'] as $name => $value)
+
+  if(isset($_FILES['vt_images']))
   {
-    $_POST['vt_images'][$index] = NULL;
-
-    if(strlen($value) > 3)
+    $_SESSION['warning']['no_images'] = true;
+  }
+  else {
+    foreach ($_FILES['vt_images']['name'] as $name => $value)
     {
+      $_POST['vt_images'][$index] = NULL;
 
-      $filename = stripslashes($_FILES['vt_images']['name'][$name]);
-      $size=filesize($_FILES['vt_images']['tmp_name'][$name]);
-      //get the extension of the file in a lower case format
-        $ext = getExtension($filename);
-        $ext = strtolower($ext);
+      if(strlen($value) > 3)
+      {
 
-       if(in_array($ext,$valid_formats))
-       {
-           if ($size < (MAX_SIZE*1024))
-           {
-             $image_name=time().$filename;
-             $newname=$uploaddir.$image_name;
+        $filename = stripslashes($_FILES['vt_images']['name'][$name]);
+        $size=filesize($_FILES['vt_images']['tmp_name'][$name]);
+        //get the extension of the file in a lower case format
+          $ext = getExtension($filename);
+          $ext = strtolower($ext);
 
-             if (move_uploaded_file($_FILES['vt_images']['tmp_name'][$name], $newname))
+         if(in_array($ext,$valid_formats))
+         {
+             if ($size < (MAX_SIZE*1024))
              {
-                $time=time();
-                $_POST['vt_images'][$index] = $uploaddir.$image_name;
-                $succesfullUploadedPhotos = true;
+               $image_name=time().$filename;
+               $newname=$uploaddir.$image_name;
+
+               if (move_uploaded_file($_FILES['vt_images']['tmp_name'][$name], $newname))
+               {
+                  $time=time();
+                  $_POST['vt_images'][$index] = $uploaddir.$image_name;
+                  $succesfullUploadedPhotos = true;
+               }
+               else
+               {
+                  $_SESSION['warning']['uploadFailed'] = $filename;
+                  $succesfullUploadedPhotos = false;
+               }
+
              }
              else
              {
-                $_SESSION['warning']['uploadFailed'] = $filename;
-                $succesfullUploadedPhotos = false;
+              $_SESSION['warning']['filesize'] = $filename;
+              $succesfullUploadedPhotos = false;
              }
 
+          }
+          else
+          {
+             $_SESSION['warning']['formaterror'] = $filename;
+             $succesfullUploadedPhotos = false;
            }
-           else
-           {
-            $_SESSION['warning']['filesize'] = $filename;
-            $succesfullUploadedPhotos = false;
-           }
+      }
 
-        }
-        else
-        {
-           $_SESSION['warning']['formaterror'] = $filename;
-           $succesfullUploadedPhotos = false;
-         }
-    }
+       $index++;
+   }
+  }
 
-     $index++;
- }
  $didCreateAuction = false;
  if($succesfullUploadedPhotos)
  {
-   if(empty($_POST['vt_title']) || strlen(trim($_POST['vt_title'])) < 2 || strlen(trim($_POST['vt_title'])) > 70 )
+   if(empty($_POST['vt_title']) || strlen(trim($_POST['vt_title'])) < 2 || strlen(trim($_POST['vt_title'])) > 70 || preg_match('/[!\'^£$%&*()}{@#~?><>,|=_+¬-]/', $_POST['vt_paymentInstruction']))
    {
      $_SESSION['warning']['titel_invalid'] = true;
    }
@@ -209,7 +217,11 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
           <div class="row content_top_offset">
             <div class="col-lg-12">
             <?php
-            if(isset($_SESSION['warning']['formaterror']))
+            if(isset($_SESSION['warning']['no_images']) && $_SESSION['warning']['no_images'] == true)
+            {
+              echo '<p class="bg-danger" style="padding:5px;">Upload een afbeelding</p>';
+            }
+            else if(isset($_SESSION['warning']['formaterror']))
             {
               echo '<p class="bg-danger" style="padding:5px;">Het bestand '.$_SESSION['warning']['formaterror'].' heeft een ongeldig bestandsformaat.</p>';
             }
@@ -223,7 +235,7 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
             }
             else if(isset($_SESSION['warning']['titel_invalid']) && $_SESSION['warning']['titel_invalid'] == true)
             {
-              echo '<p class="bg-danger" style="padding:5px;">De titel moet minimaal 2 en maximaal 70 karakters lang zijn.</p>';
+              echo '<p class="bg-danger" style="padding:5px;">De titel moet minimaal 2 en maximaal 70 karakters lang zijn en a-Z & 0-9.</p>';
             }
             else if(isset($_SESSION['warning']['description_invalid']) && $_SESSION['warning']['description_invalid'] == true)
             {

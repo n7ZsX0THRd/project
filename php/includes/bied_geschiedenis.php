@@ -135,7 +135,7 @@ else {
                             <strong class="pull-right primary-font"><?php echo $row['gebruikersnaam']; ?></strong>
                         </div>
                         <p style="float:right;">
-                             &euro;<?php echo number_format($row['bodbedrag'], 2, ',', ''); ?> geboden
+                             &euro;<?php echo number_format($row['bodbedrag'], 2, ',', '.'); ?> geboden
                         </p>
                     </div>
                 </li>
@@ -160,7 +160,7 @@ else {
                                  <span class="glyphicon glyphicon-time"></span><?php echo time_elapsed_string($row['boddagtijd']); ?></small>
                          </div>
                          <p>
-                            &euro;<?php echo number_format($row['bodbedrag'], 2, ',', ''); ?> geboden
+                            &euro;<?php echo number_format($row['bodbedrag'], 2, ',', '.'); ?> geboden
                          </p>
                      </div>
                  </li>

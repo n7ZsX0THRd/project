@@ -457,11 +457,11 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                       </tr>
                                       <tr class="border_bottom">
                                         <td>Startbedrag:</td>
-                                        <td><b><?php echo ($resultVoorwerp != null) ? '&euro;'.number_format($resultVoorwerp['startprijs'], 2, ',', '') : ''; ?></b></td>
+                                        <td><b><?php echo ($resultVoorwerp != null) ? '&euro;'.number_format($resultVoorwerp['startprijs'], 2, ',', '.') : ''; ?></b></td>
                                       </tr>
                                       <tr class="border_bottom">
                                         <td>Hoogste bod:</td>
-                                        <td><b><?php echo ($resultVoorwerp['hoogsteBod'] != null) ? '&euro;'.number_format($resultVoorwerp['hoogsteBod'], 2, ',', '') : 'Er is nog niet geboden';?></b></td>
+                                        <td><b><?php echo ($resultVoorwerp['hoogsteBod'] != null) ? '&euro;'.number_format($resultVoorwerp['hoogsteBod'], 2, ',', '.') : 'Er is nog niet geboden';?></b></td>
                                       </tr>
                                       <tr class="border_bottom">
                                         <td>Land:</td>
@@ -490,7 +490,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                       <?php if(isset($resultVoorwerp['verzendkosten']) && !empty($resultVoorwerp['verzendkosten'])){ ?>
                                         <tr class="border_bottom">
                                           <td>Verzendkosten:</td>
-                                          <td><b><?php echo '&euro;'.number_format($resultVoorwerp['verzendkosten'], 2, ',', '')?></b></td>
+                                          <td><b><?php echo '&euro;'.number_format($resultVoorwerp['verzendkosten'], 2, ',', '.')?></b></td>
                                         </tr>
                                       <?php }?>
                                       <?php if(isset($resultVoorwerp['verzendinstructie']) && !empty($resultVoorwerp['verzendinstructie'])){ ?>
