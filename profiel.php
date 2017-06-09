@@ -156,8 +156,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
               $_SESSION['warning']['succes'] = true;
             }
           }
-
-
       }
       else {
         //print('Wachtwoord komt niet overeen met oud wachtwoord');
@@ -398,8 +396,23 @@ if(isset($_GET['foto'])){
              <p class="bg-danger notifcation-fix">De opgegeven telefoonnummers zijn niet geldig.</p>
           <?php
           }
+          else if(isset($_SESSION['warning']['invalid_birthdate']) && $_SESSION['warning']['invalid_birthdate'] === true)
+          {
+          ?>
+             <p class="bg-danger notifcation-fix">De opgegeven geboortedatum is ongeldig</p>
+          <?php
+          }
+          if(isset($_GET['wijzig']))
+          {
+            echo '<div class="col-lg-12 col-xs-12">';
+            echo '<i>De velden met een * zijn verplicht</i>';
+            echo '</div>';
+          }
+
+
           ?>
           <div class="col-lg-6" style="border-right:1px solid #e7e7e7;">
+
             <form method="post" enctype="multipart/form-data" action="">
               <input type="hidden" name="form_name" value="changeprofile"/>
 
@@ -407,7 +420,7 @@ if(isset($_GET['foto'])){
               <div class="form-group">
                 <div class="row">
                   <div class="col-lg-4">
-                    <label for="exampleInputEmail1">Voornaam</label>
+                    <label for="exampleInputEmail1">Voornaam<?php if(isset($_GET['wijzig'])){echo '*';}?></label>
                     <?php if (isset($_GET['wijzig'])==true){  ?>
                     <input type="text" class="form-control" name="p_firstname" id="exampleInputEmail1" placeholder="Voornaam" value="<?php echo $result['voornaam']?>">
                     <?php }else{ ?>
@@ -417,7 +430,7 @@ if(isset($_GET['foto'])){
                     <?php } ?>
                   </div>
                   <div class="col-lg-8">
-                    <label for="exampleInputEmail1">Achternaam</label>
+                    <label for="exampleInputEmail1">Achternaam<?php if(isset($_GET['wijzig'])){echo '*';}?></label>
                     <?php if (isset($_GET['wijzig'])==true){  ?>
                     <input type="text" name="p_lastname" class="form-control" id="exampleInputEmail1" placeholder="Achternaam" value="<?php echo $result['achternaam']?>">
                     <?php }else{ ?>
@@ -433,7 +446,7 @@ if(isset($_GET['foto'])){
               <div class="form-group">
                 <div class="row">
                   <div class="col-lg-4">
-                    <label for="exampleInputEmail1">Dag</label>
+                    <label for="exampleInputEmail1">Dag<?php if(isset($_GET['wijzig'])){echo '*';}?></label>
                     <?php if (isset($_GET['wijzig'])==true){  ?>
                     <select name="p_birthday" class="form-control">
                       <option selected disabled>Dag</option>
@@ -448,7 +461,7 @@ if(isset($_GET['foto'])){
                     <?php } ?>
                   </div>
                   <div class="col-lg-4">
-                    <label for="exampleInputEmail1">Maand</label>
+                    <label for="exampleInputEmail1">Maand<?php if(isset($_GET['wijzig'])){echo '*';}?></label>
                       <?php
                       $months = array("januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december");
                       if (isset($_GET['wijzig'])==true){  ?>
@@ -473,7 +486,7 @@ if(isset($_GET['foto'])){
                       <?php } ?>
                   </div>
                   <div class="col-lg-4">
-                    <label for="exampleInputEmail1">Jaar</label>
+                    <label for="exampleInputEmail1">Jaar<?php if(isset($_GET['wijzig'])){echo '*';}?></label>
                     <?php if (isset($_GET['wijzig'])==true){  ?>
                     <select name="p_birthyear" class="form-control">
                       <option selected disabled>Jaar</option>
@@ -494,7 +507,7 @@ if(isset($_GET['foto'])){
               <div class="form-group">
                 <div class="row">
                   <div class="col-lg-8">
-                    <label for="exampleInputEmail1">Adres + Huisnr.</label>
+                    <label for="exampleInputEmail1">Adres + Huisnr.<?php if(isset($_GET['wijzig'])){echo '*';}?></label>
                     <?php if (isset($_GET['wijzig'])==true){  ?>
                     <input name="p_adres" type="text" class="form-control" id="exampleInputEmail1" placeholder="Adres" value="<?php echo $result['adresregel1']?>">
                     <?php }else{ ?>
@@ -504,7 +517,7 @@ if(isset($_GET['foto'])){
                     <?php } ?>
                   </div>
                   <div class="col-lg-4">
-                    <label for="exampleInputEmail1">Postcode</label>
+                    <label for="exampleInputEmail1">Postcode<?php if(isset($_GET['wijzig'])){echo '*';}?></label>
                     <?php if (isset($_GET['wijzig'])==true){  ?>
                     <input name="p_zipcode" type="text" class="form-control" id="exampleInputEmail1" placeholder="Postcode" value="<?php echo $result['postcode']?>">
                     <?php }else{ ?>
@@ -539,7 +552,7 @@ if(isset($_GET['foto'])){
               <div class="form-group">
                 <div class="row">
                   <div class="col-lg-8">
-                    <label for="exampleInputEmail1">Woonplaats</label>
+                    <label for="exampleInputEmail1">Woonplaats<?php if(isset($_GET['wijzig'])){echo '*';}?></label>
                     <?php if (isset($_GET['wijzig'])==true){  ?>
                     <input name="p_city" type="text" class="form-control" id="exampleInputEmail1" placeholder="Adres" value="<?php echo $result['plaatsnaam']?>">
                     <?php }else{ ?>
@@ -549,7 +562,7 @@ if(isset($_GET['foto'])){
                     <?php } ?>
                   </div>
                   <div class="col-lg-4">
-                    <label for="exampleInputEmail1">Landcode</label>
+                    <label for="exampleInputEmail1">Landcode<?php if(isset($_GET['wijzig'])){echo '*';}?></label>
                     <?php if (isset($_GET['wijzig'])==true){  ?>
                     <select class="form-control" name="p_land">
                       <option disabled>Land</option>
@@ -572,7 +585,7 @@ if(isset($_GET['foto'])){
 
               <!-- Telefoonnummer -->
               <div class="form-group">
-                <label for="tel">Telefoonnummer</label>
+                <label for="tel">Telefoonnummer<?php if(isset($_GET['wijzig'])){echo '*';}?></label>
                 <?php if (isset($_GET['wijzig'])==true){  ?>
                   <div class="form-group multiple-form-group" data-max="3">
                     <?php
@@ -689,7 +702,7 @@ if(isset($_GET['foto'])){
               <?php
                 if (isset($_GET['wijzig'])==true){
               ?>
-                <label for="formpass">Bevestig huidige wachtwoord</label>
+                <label for="formpass">Bevestig huidige wachtwoord*</label>
                 <input name="confirmpass" type="password" class="form-control"  placeholder="Wachtwoord">
               <?php
                 }

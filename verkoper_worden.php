@@ -15,26 +15,33 @@ pdo_connect();
 // Include database, and include user functions.
 // Connect to database
 
-$user= getLoggedInUser($db);
-//echo var_dump($user);
-$gebruikersnaam=$user["gebruikersnaam"];
+if(isUserLoggedIn($db) == false)
+  header("Location: index.php");
 
+$result = getLoggedInUser($db);
+
+if($result['typegebruiker'] == 2 || $result['typegebruiker'] == 3)
+{
+  header("Location: veilingtoevoegen.php");
+  exit();
+}
+
+
+//echo var_dump($user);
 $error = 0;
 
 
 $page = '';
 
 
-$data = $db->prepare("SELECT count(typegebruiker) as 'verkoper' FROM Gebruikers WHERE gebruikersnaam = ? AND typegebruiker = 2
+$data = $db->prepare("SELECT count(typegebruiker) as 'verkoper' FROM Gebruikers WHERE gebruikersnaam = ? AND typegebruiker = 2");
 
-                    ");
-                              
-        $data->execute(array($gebruikersnaam));
-        $result=$data->fetchAll();
+        $data->execute(array($result['gebruikersnaam']));
+        $resultQ=$data->fetchAll();
 
-if ($result[0]['verkoper']==1){
+if ($resultQ[0]['verkoper']==1){
   $page = 'alVerkoper';
-} else if ($user["statusID"]==1){ //Als de gebruier inactief is
+} else if ($result["statusID"]==1){ //Als de gebruier inactief is
   $page = 'inactief';
 } else if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
@@ -47,17 +54,17 @@ if ($result[0]['verkoper']==1){
         $creditcardnummer=htmlspecialchars($_POST["creditcardnummer"]);
         $banknaam=htmlspecialchars($_POST["bank"]);
         $data = $db->prepare("  INSERT INTO Verkopers (gebruikersnaam, banknaam, rekeningnummer, creditcardnummer, controleoptienaam)
-                                VALUES (?, ?, 'NVT', ?, 'creditcard'); 
+                                VALUES (?, ?, 'NVT', ?, 'creditcard');
                             ");
-                              
-        $data->execute(array($gebruikersnaam, $banknaam, $creditcardnummer));
+
+        $data->execute(array($result['gebruikersnaam'], $banknaam, $creditcardnummer));
 
         $data = $db->prepare("  UPDATE Gebruikers
                                 SET typegebruiker = 2
-                                WHERE gebruikersnaam = ?;  
+                                WHERE gebruikersnaam = ?;
                             ");
-                              
-        $data->execute(array($gebruikersnaam));
+
+        $data->execute(array($result['gebruikersnaam']));
 
         $page='bevestigd';
       } else if ($_POST["page"]=="post"){
@@ -66,50 +73,50 @@ if ($result[0]['verkoper']==1){
         $banknaam=htmlspecialchars($_POST["bank"]);
 
         $data = $db->prepare("  INSERT INTO Verkopers (gebruikersnaam, banknaam, rekeningnummer, creditcardnummer, controleoptienaam)
-                                VALUES (?, ?, ?, 'NVT', 'post'); 
+                                VALUES (?, ?, ?, 'NVT', 'post');
                             ");
-                              
-        $data->execute(array($gebruikersnaam, $banknaam, $bankrekeningnummer)); 
+
+        $data->execute(array($result['gebruikersnaam'], $banknaam, $bankrekeningnummer));
 
         $data = $db->prepare("  UPDATE Gebruikers
                                 SET typegebruiker = 4
-                                WHERE gebruikersnaam = ?;  
+                                WHERE gebruikersnaam = ?;
                             ");
-                              
-        $data->execute(array($gebruikersnaam));
+
+        $data->execute(array($result['gebruikersnaam']));
 
         $page='verwerking';
       }
-      
+
       if ($_POST["page"]=="code-controle"){
         $codeCorrect=false;
         if(isset($_POST["code"]) && !empty($_POST["code"])){
           $ingevoerdeCode=htmlspecialchars($_POST["code"]);
 
-          $data = $db->prepare("  SELECT TOP(1) activatiecode FROM Verkopers WHERE gebruikersnaam = ?;  
+          $data = $db->prepare("  SELECT TOP(1) activatiecode FROM Verkopers WHERE gebruikersnaam = ?;
                             ");
-                              
-          $data->execute(array($gebruikersnaam));
+
+          $data->execute(array($result['gebruikersnaam']));
           $result=$data->fetchAll();
 
           if ($ingevoerdeCode==$result[0]['activatiecode']){
             $page='bevestigd';
 
-            $data = $db->prepare("  
+            $data = $db->prepare("
                                   UPDATE Verkopers
                                   SET activatiecode = NULL, startdatum = NULL
-                                  WHERE gebruikersnaam= ?; 
+                                  WHERE gebruikersnaam= ?;
                               ");
-                                
-            $data->execute(array($gebruikersnaam));
 
-            $data = $db->prepare("  
+            $data->execute(array($result['gebruikersnaam']));
+
+            $data = $db->prepare("
                                   UPDATE Gebruikers
                                   SET typegebruiker = 2
-                                  WHERE gebruikersnaam= ?;  
+                                  WHERE gebruikersnaam= ?;
                               ");
-                                
-            $data->execute(array($gebruikersnaam));
+
+            $data->execute(array($result['gebruikersnaam']));
 
           }else{
             $page='onjuiste-code';
@@ -118,13 +125,6 @@ if ($result[0]['verkoper']==1){
       }
   }
 }
-
-
- if(!isUserLoggedIn($db))
-   header('location: index.php');
-  // If the user is logged In, redirect to homepage.
-  // No purpose to get on this page
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -135,7 +135,7 @@ if ($result[0]['verkoper']==1){
           // Include default head
         ?>
 
-        <title>Word Verkoper - Eenmaal Andermaal</title>
+        <title>Verkoper worden - Eenmaal Andermaal</title>
 
         <link href="css/login.css" rel="stylesheet">
         <link href="css/formulier.css" rel="stylesheet">
@@ -172,26 +172,30 @@ if ($result[0]['verkoper']==1){
 <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 loginscherm">
 <div class="form-horizontal" >
   <h2>Verkoper worden</h2>
-  <?php 
+  <?php
   switch ($page) {
     case 'registreren':
     ?>
           <!-- login gegevens -->
           <div class="login">
             <form action="" method="POST">
-            <i>Deze gegevens zijn nodig om uw identiteit te controleren</i>
-                      <div class="row">
-            <label class="col-lg-12">Controle optie</label>
-            <label class="post">
-              <input class="col-lg-4 col-md-4 col-sm-4" type="radio" name="page" value="post" checked> Post
-            </label>
-            
-            <label class="creditcard">
-              <input class="col-lg-4 col-md-4 col-sm-4" type="radio" name="page" value="creditcard"> Creditcard
-            </label>
-            <br>
-            <br>
-          </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <strong>Controle optie</strong><br>
+                    <i>Deze gegevens zijn nodig om uw identiteit te controleren</i>
+                </div>
+                <div class="col-lg-12 col-xs-12">
+                  <label class="post">
+                    <input type="radio" name="page" value="post" checked> Post
+                  </label>
+                  <br/>
+                  <label class="creditcard">
+                    <input type="radio" name="page" value="creditcard"> Creditcard
+                  </label>
+                  <br/>
+                </div>
+            </div>
 
               <div class="input-group">
                 <div class="input-group-addon"><span class="glyphicon glyphicon glyphicon-piggy-bank" aria-hidden="true" background="#f0f0f0"></span></div>
@@ -215,7 +219,7 @@ if ($result[0]['verkoper']==1){
 
             <div class="bevestig">
               <div class="row">
-                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xs-offset-6 col-lg-offset-6 col-md-offset-6 col-sm-offset-6">
                   <button type="submit" value="Submit" class="btn btn-orange align-right">Word verkoper</button>
                   <br>
                 </div>
@@ -236,9 +240,9 @@ if ($result[0]['verkoper']==1){
               <input type="hidden" name="page" value="code-controle">
             <div class="bevestig">
               <div class="row">
-                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xs-offset-6 col-lg-offset-6 col-md-offset-6 col-sm-offset-6">
                   <button type="submit" class="btn btn-orange align-right">Bevestig code</button>
-                  
+
                 </div>
               </div>
               <br>
@@ -247,23 +251,23 @@ if ($result[0]['verkoper']==1){
           <?php
           // activatie code invoeren
         break;
-        
+
         case 'bevestigd':
           ?>
           <h3>Succes!</h3>
-          <p>Uw account is geregistreerd als verkoper account! <br> 
+          <p>Uw account is geregistreerd als verkoper account! <br>
           <a href="veilingtoevoegen.php">Begin een veiling</a>
           <br></p>
- 
+
           <?php
           // activatie code invoeren
         break;
         case 'verwerking':
           ?>
           <h3>Succes!</h3>
-          <p>Uw aanvraag is ontvangen, de gegevens worden gecontroleerd. binnenkort ontvangt u een brief met instructies om het account te activeren.<br> 
+          <p>Uw aanvraag is ontvangen, de gegevens worden gecontroleerd. binnenkort ontvangt u een brief met instructies om het account te activeren.<br>
           <br></p>
- 
+
           <?php
           // activatie code invoeren
         break;
@@ -273,56 +277,55 @@ if ($result[0]['verkoper']==1){
           <p>De code klopt niet, probeer het opnieuw<br>
           <form ction="" method="POST" id="my_form">
           <!-- Your Form -->
-          <input type="hidden" name="page" value="activeren">    
+          <input type="hidden" name="page" value="activeren">
           <a href="javascript:{}" onclick="document.getElementById('my_form').submit(); return false;">probeer het opnieuw</a>
           </form>
           <br></p>
- 
-          <?php
+
+          <?phpz
           // activatie code invoeren
         break;
         case 'alVerkoper':
           ?>
           <h3>&#x1F4B0 &#x1F4B0 &#x1F4B0</h3>
-          <p>U bent al geregistreerd als verkoper<br> 
+          <p>U bent al geregistreerd als verkoper<br>
           <br></p>
- 
+
           <?php
           // activatie code invoeren
         break;
         case 'inactief':
           ?>
-          <h3>Oops!</h3>
+          <h3>Oeps!</h3>
           <p>Je hebt jouw account nog niet geverifieerd.<br>
           <a href="index.php?mail">Stuur mij opnieuw een mail!</a>
           <br></p>
- 
+
           <?php
           // activatie code invoeren
         break;
         default:
           // keuze
           ?>
-           <div class="input-group">
-              <label>Ik wil: </label>
-              <div class="row">
-                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                  <form action="" method="POST">
-                    <input type="hidden" name="page" value="registreren">
-                    <button type="submit" class="btn btn-niagara">Verkoper worden</button>
-                  </form>
-                </div>
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <p>Om verkoper te worden, heb je een code nodig.
+                Vraag nu een code aan of controleer jouw code</p>
               </div>
-              <br>
-              <div class="row">
-                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                  <form action="" method="POST">
-                    <input type="hidden" name="page" value="activeren">
-                    <button type="submit" class="btn btn-orange">Mijn code controleren</button>
-                  </form>
-                </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <form action="" method="POST">
+                  <input type="hidden" name="page" value="registreren">
+                  <button type="submit" class="btn btn-niagara" style="margin-top:0px;width:100%;margin-bottom:15px;">Code Aanvragen</button>
+                </form>
               </div>
-              <br>
+              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <form action="" method="POST">
+                  <input type="hidden" name="page" value="activeren">
+                  <button type="submit" class="btn btn-orange" style="width:100%;float:right;margin-bottom:15px;">Code Controleren</button>
+                </form>
+              </div>
             </div>
             <?php
           }

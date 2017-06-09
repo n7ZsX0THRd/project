@@ -216,7 +216,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
       <div class="row">
         <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 loginscherm">
           <h1>Registreren</h1>
-          <p>Welkom op de beste veilingsite van Nederland</p>
+          <i>De velden met een * zijn verplicht</i>
             <div>
             <form class="form-horizontal" method="post" enctype="multipart/form-data" action="">
             <div class="login">
@@ -282,17 +282,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <!-- Gebruiker gegevens -->
                   <div class="input-group">
                       <div class="input-group-addon "><span class="glyphicon glyphicon-user" aria-hidden="true" background="#f0f0f0"></span></div>
-                      <input type="text" class="form-control" id="Tel" name="r_username" value="<?php if(isset($_POST['r_username'])){ echo $_POST['r_username']; } ?>" placeholder="Gebruikersnaam">
-                      <input type="text" class="form-control" id="Voornaam" name="r_firstname" value="<?php if(isset($_POST['r_firstname'])){ echo $_POST['r_firstname']; } ?>" placeholder="Voornaam">
-                      <input type="text" class="form-control" id="Achternaam" name="r_lastname" value="<?php if(isset($_POST['r_lastname'])){ echo $_POST['r_lastname']; } ?>" placeholder="Achternaam">
+                      <input type="text" class="form-control" id="Tel" name="r_username" value="<?php if(isset($_POST['r_username'])){ echo $_POST['r_username']; } ?>" placeholder="Gebruikersnaam*">
+                      <input type="text" class="form-control" id="Voornaam" name="r_firstname" value="<?php if(isset($_POST['r_firstname'])){ echo $_POST['r_firstname']; } ?>" placeholder="Voornaam*">
+                      <input type="text" class="form-control" id="Achternaam" name="r_lastname" value="<?php if(isset($_POST['r_lastname'])){ echo $_POST['r_lastname']; } ?>" placeholder="Achternaam*">
                       <select class="form-control" style="max-width:30%" name="r_birthday">
-                        <option <?php if(isset($_POST['r_birthday']) === false){ echo 'selected'; } ?> disabled>Dag</option>
+                        <option <?php if(isset($_POST['r_birthday']) === false){ echo 'selected'; } ?> disabled>Dag*</option>
                         <?php for ($i = 1; $i <= 31; $i++) { ?>
                             <option value="<?php echo $i; ?>" <?php if(isset($_POST['r_birthday']) && $_POST['r_birthday'] == $i){  echo 'selected'; } ?>><?php echo $i; ?></option>
                         <?php } ?>
                       </select>
                       <select class="form-control" style="max-width:30%" name="r_birthmonth">
-                        <option <?php if(isset($_POST['r_birthmonth']) === false){ echo 'selected'; } ?> disabled>Maand</option>
+                        <option <?php if(isset($_POST['r_birthmonth']) === false){ echo 'selected'; } ?> disabled>Maand*</option>
                         <?php
                         $months = array("januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december");
                         $index = 1;
@@ -306,7 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                         ?>
                       </select>
                       <select class="form-control" style="max-width:40%" name="r_birthyear">
-                        <option <?php if(isset($_POST['r_birthyear']) === false){ echo 'selected'; } ?> disabled>Jaar</option>
+                        <option <?php if(isset($_POST['r_birthyear']) === false){ echo 'selected'; } ?> disabled>Jaar*</option>
                         <?php for ($i = date("Y"); $i >= 1900; $i--) { ?>
                             <option value="<?php echo $i; ?>" <?php if(isset($_POST['r_birthyear']) && $_POST['r_birthyear'] == $i){  echo 'selected'; } ?>><?php echo $i; ?></option>
                         <?php } ?>
@@ -318,14 +318,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <!-- Adres gegevens -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></div>
-                      <input style="max-width:58%" type="adres" class="form-control" id="Adres" name="r_street_name" value="<?php if(isset($_POST['r_street_name'])){ echo $_POST['r_street_name']; } ?>" placeholder="Straat">
-                      <input style="max-width:20%" type="Number" class="form-control" id="Nummer" name="r_street_nr" value="<?php if(isset($_POST['r_street_nr'])){ echo $_POST['r_street_nr']; } ?>" placeholder="Nr.">
+                      <input style="max-width:58%" type="adres" class="form-control" id="Adres" name="r_street_name" value="<?php if(isset($_POST['r_street_name'])){ echo $_POST['r_street_name']; } ?>" placeholder="Straat*">
+                      <input style="max-width:20%" type="Number" class="form-control" id="Nummer" name="r_street_nr" value="<?php if(isset($_POST['r_street_nr'])){ echo $_POST['r_street_nr']; } ?>" placeholder="Nr.*">
                       <input style="max-width:22%" type="text" class="form-control" id="Nummer" name="r_street_addition" value="<?php if(isset($_POST['r_street_addition'])){ echo $_POST['r_street_addition']; } ?>" placeholder="Toev.">
                       <input type="text" class="form-control" id="Adresregel2" placeholder="Adresregel 2" name="r_adressregel2" value="<?php if(isset($_POST['r_adressregel2'])){ echo $_POST['r_adressregel2']; } ?>">
-                      <input type="" class="form-control" id="Postcode" placeholder="Postcode" name="r_zipcode" value="<?php if(isset($_POST['r_zipcode'])){ echo $_POST['r_zipcode']; } ?>" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}">
-                      <input type="text" class="form-control" id="City" placeholder="Plaats" name="r_city" value="<?php if(isset($_POST['r_city'])){ echo $_POST['r_city']; } ?>">
+                      <input type="" class="form-control" id="Postcode" placeholder="Postcode*" name="r_zipcode" value="<?php if(isset($_POST['r_zipcode'])){ echo $_POST['r_zipcode']; } ?>" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}">
+                      <input type="text" class="form-control" id="City" placeholder="Plaats*" name="r_city" value="<?php if(isset($_POST['r_city'])){ echo $_POST['r_city']; } ?>">
                       <select class="form-control" name="r_country">
-                        <option <?php if(isset($_POST['r_country']) === false){ echo 'selected'; } ?> disabled>Land</option>
+                        <option <?php if(isset($_POST['r_country']) === false){ echo 'selected'; } ?> disabled>Land*</option>
                         <?php
                           // Loop over countries
                           while ($land_code = $landen->fetch()){
@@ -341,23 +341,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <!-- Telefoonnummer -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span></div>
-                      <input type="" minlength="10" maxlength="10" class="form-control" id="Tel" name="r_phonenumber" value="<?php if(isset($_POST['r_phonenumber'])){ echo $_POST['r_phonenumber']; } ?>" placeholder="Telefoonnummer">
+                      <input type="" minlength="10" maxlength="10" class="form-control" id="Tel" name="r_phonenumber" value="<?php if(isset($_POST['r_phonenumber'])){ echo $_POST['r_phonenumber']; } ?>" placeholder="Telefoonnummer *">
                   </div>
                   <!-- Einde telefoonnummer -->
 
                   <!-- Email -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-envelope" aria-hidden="true" background="#f0f0f0"></span></div>
-                      <input type="email" class="form-control" id="inputEmail" name="r_email" value="<?php if(isset($_POST['r_email'])){ echo $_POST['r_email']; } ?>" placeholder="Email">
-                      <input type="email" class="form-control" id="inputEmail" name="r_email_confirm" value="<?php if(isset($_POST['r_email_confirm'])){ echo $_POST['r_email_confirm']; } ?>" placeholder="Bevestig email">
+                      <input type="email" class="form-control" id="inputEmail" name="r_email" value="<?php if(isset($_POST['r_email'])){ echo $_POST['r_email']; } ?>" placeholder="Email*">
+                      <input type="email" class="form-control" id="inputEmail" name="r_email_confirm" value="<?php if(isset($_POST['r_email_confirm'])){ echo $_POST['r_email_confirm']; } ?>" placeholder="Bevestig email*">
                   </div>
                   <!-- Einde email -->
 
                   <!-- Wachtwoord -->
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
-                      <input type="password" class="form-control" id="inputPassword" name="r_password" placeholder="Wachtwoord">
-                    <input type="password" class="form-control" id="inputPassword" name="r_password_confirm" placeholder="Bevestig wachtwoord">
+                      <input type="password" class="form-control" id="inputPassword" name="r_password" placeholder="Wachtwoord*">
+                    <input type="password" class="form-control" id="inputPassword" name="r_password_confirm" placeholder="Bevestig wachtwoord*">
                   </div>
                   <!-- Einde wachtwoord -->
 
@@ -365,7 +365,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <div class="input-group">
                       <div class="input-group-addon"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></div>
                       <select class="form-control" name="r_secret_question">
-                        <option <?php if(isset($_POST['r_secret_question']) === false){ echo 'selected'; } ?> disabled>Geheime vraag</option>
+                        <option <?php if(isset($_POST['r_secret_question']) === false){ echo 'selected'; } ?> disabled>Geheime vraag*</option>
                         <?php
                           $secret_questions_db = $secret_questions->fetchAll();
                           var_dump($secret_questions_db);
@@ -376,7 +376,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                           }
                         ?>
                       </select>
-                    <input type="text" class="form-control" id="Antwoord" name="r_secret_question_answer" value="<?php if(isset($_POST['r_secret_question_answer'])){ echo $_POST['r_secret_question_answer']; } ?>" placeholder="Antwoord">
+                    <input type="text" class="form-control" id="Antwoord" name="r_secret_question_answer" value="<?php if(isset($_POST['r_secret_question_answer'])){ echo $_POST['r_secret_question_answer']; } ?>" placeholder="Antwoord*">
                   </div>
                   <!-- Einde geheime vraag -->
             </div>

@@ -171,7 +171,11 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
             {
             ?>
               <div class="row navigation-row fix">
-                  <h1 style="margin-bottom: 10px" >Rubrieken</h1>
+                  <h1 style="margin-bottom: 10px" >Rubrieken
+                    <?php if(getLoggedInUser($db) != null && (getLoggedInUser($db)['typegebruiker'] == 2 || getLoggedInUser($db)['typegebruiker'] == 3)){?>
+                    <a style="float:right;" class="btn btn-orange" href="veilingtoevoegen.php">Veiling Plaatsen</a>
+                    <?php } ?>
+                  </h1>
                   <p>
                     <a href="index.php">
                       <span class="glyphicon glyphicon-home "></span>

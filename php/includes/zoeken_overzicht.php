@@ -221,7 +221,6 @@ $voorwerpenQuery->execute(array($rubriek['rubrieknummer'],$rubriek['rubrieknumme
         ?>
           <p class="bg-warning" style="padding:5px;margin-top:15px;">
               Helaas, er zijn geen veilingen gevonden.<br>
-
           </p>
         <?php
       }

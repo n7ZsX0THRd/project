@@ -30,9 +30,24 @@
     <li>
       <a href="">Laatste bieding</a>
     </li>
-    <li>
-      <a href="veilingtoevoegen.php">Verkopen</a>
-    </li>
+    <?php
+      if($result['typegebruiker'] == 2 || $result['typegebruiker'] == 3)
+      {
+        ?>
+          <li>
+            <a href="veilingtoevoegen.php">Veiling starten</a>
+          </li>
+        <?php
+      }
+      else {
+        ?>
+          <li>
+            <a href="verkoper_worden.php">Verkopen worden</a>
+          </li>
+        <?php
+      }
+    ?>
+
   </ul>
   <li class="toggle-sub <?php if($_SESSION['menu']['sub'] === 'ma'){ echo 'active'; }?>">
     <a href="account.php">Mijn Account</a>

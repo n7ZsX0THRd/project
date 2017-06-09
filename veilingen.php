@@ -168,7 +168,11 @@ $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
                           </div>
                           <?php }
                           if($indexhuidig==0){
-                              echo '<br><p><strong style="font-size:18px; padding-left:15px;">U heeft nog geen veilingen</strong></p>';
+                              ?>
+                              <p class="bg-warning" style="padding:5px;margin-top:15px;">
+                                  Je hebt nog geen veilingen<br>
+                              </p>
+                              <?php
                           }
                           ?>
                         </div>
@@ -199,7 +203,11 @@ $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
                             </div>
                             <?php }
                             if($indexverlopen==0){
-                                echo '<br><p><strong style="font-size:18px; padding-left:15px;">Nog geen veilingen afgelopen</strong></p>';
+                                ?>
+                                <p class="bg-warning" style="padding:5px;margin-top:15px;">
+                                    Je hebt nog geen gesloten veilingen<br>
+                                </p>
+                                <?php
                             }
                             ?>
                           </div>
