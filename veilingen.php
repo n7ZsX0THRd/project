@@ -29,11 +29,11 @@ $_SESSION['menu']['sub'] = 'ma';
 
 $username = getLoggedInUser($db)['gebruikersnaam'];
 $dataquery= $db->prepare("  SELECT		titel,
-											MAX(bodbedrag) as bodbedragMAX, 
+											MAX(bodbedrag) as bodbedragMAX,
 											V.looptijdeinde,
 											V.startprijs,
-											bestandsnaam, 
-											V.voorwerpnummer, 
+											bestandsnaam,
+											V.voorwerpnummer,
 											dbo.fnGetHoogsteBod(b.voorwerpnummer) AS hoogsteBod,
 											COUNT(b.bodbedrag) AS aantalbiedingen
 								FROM Voorwerp AS V
@@ -47,12 +47,12 @@ $dataquery= $db->prepare("  SELECT		titel,
 													) Foto
 								WHERE	V.verkoper = ?
 												AND  v.veilinggesloten = 0
-								GROUP BY	titel, 
-											B.voorwerpnummer, 
-											V.looptijdeinde, 
+								GROUP BY	titel,
+											B.voorwerpnummer,
+											V.looptijdeinde,
 											V.startprijs,
-											bestandsnaam, 
-											V.voorwerpnummer, 
+											bestandsnaam,
+											V.voorwerpnummer,
 											V.looptijdbegin
 								ORDER BY V.looptijdbegin DESC");
 $dataquery->execute(array($username));
@@ -132,6 +132,14 @@ $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
           </div>
 
               <div class="row content_top_offset">
+                <?php
+                  if(isset($_GET['succes']) || isset($_GET['success']))
+                  {
+                    ?>
+                      <p class="bg-success" style="padding:5px;">De veiling is succesvol geplaats.</p>
+                    <?php
+                  }
+                ?>
                 <div>
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
