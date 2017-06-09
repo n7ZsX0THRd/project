@@ -309,8 +309,8 @@
                                               ");
                                   
                           $data->execute(array($gebruikersnaam));
-                          $result=$data->fetchAll();;
-                          if (count($result)==1){
+                          $result=$data->fetchAll();
+                          if (count($result)==1 &&  isset($result[0]['startdatum'])){
                             echo 'Laatste brief aangemaakt op: ';
                             echo $result[0]['startdatum'];
                           }
