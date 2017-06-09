@@ -28,7 +28,7 @@ $_SESSION['menu']['sub'] = 'ma';
 
 
 $username = getLoggedInUser($db)['gebruikersnaam'];
-$dataquery= $db->prepare("  SELECT V.titel,
+$dataquery= $db->prepare("  SELECT DISTINCT V.titel,
                                    V.voorwerpnummer,
                                    V.looptijdeinde,
                                    V.startprijs,
