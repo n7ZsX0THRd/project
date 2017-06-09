@@ -28,35 +28,31 @@ $_SESSION['menu']['sub'] = 'ma';
 
 
 $username = getLoggedInUser($db)['gebruikersnaam'];
-$dataquery= $db->prepare("  SELECT DISTINCT V.titel,
-                                   V.voorwerpnummer,
-                                   V.looptijdeinde,
-                                   V.startprijs,
-                                   B.bodbedrag,
-                                   dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod,
-                                   foto.bestandsnaam,
-                                   V.looptijdbegin,
-                                   COUNT(b.bodbedrag) AS aantalbiedingen
-                            FROM Voorwerp V
-                            LEFT JOIN Bod B
-                            ON b.voorwerpnummer = v.voorwerpnummer
-                                CROSS APPLY
-                                (
-                                SELECT  TOP 1 Bestand.bestandsnaam
-                                FROM    Bestand
-                                WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
-                                ) Foto
-                            WHERE V.verkoper = ?
-                            AND  v.veilinggesloten = 0
-                            GROUP BY V.voorwerpnummer,
-                                     V.Titel,
-                                     V.looptijdeinde,
-                                     V.startprijs,
-                                     B.bodbedrag,
-                                     dbo.fnGetHoogsteBod(v.voorwerpnummer),
-                                     foto.bestandsnaam,
-                                     V.looptijdbegin
-                            ORDER BY V.looptijdbegin DESC");
+$dataquery= $db->prepare("  SELECT		titel,
+											MAX(bodbedrag) as bodbedragMAX, 
+											V.looptijdeinde,
+											bestandsnaam, 
+											B.voorwerpnummer, 
+											dbo.fnGetHoogsteBod(b.voorwerpnummer) AS hoogsteBod,
+											COUNT(b.bodbedrag) AS aantalbiedingen
+								FROM Voorwerp AS V
+											LEFT JOIN Bod B
+											ON b.voorwerpnummer = v.voorwerpnummer
+												CROSS APPLY
+													(
+													SELECT  TOP 1 B.bestandsnaam
+													FROM    Bestand AS B
+													WHERE   B.voorwerpnummer = V.voorwerpnummer
+													) Foto
+								WHERE	V.verkoper = ?
+												AND  v.veilinggesloten = 0
+								GROUP BY	titel, 
+											B.voorwerpnummer, 
+											V.looptijdeinde, 
+											bestandsnaam, 
+											B.voorwerpnummer, 
+											V.looptijdbegin
+								ORDER BY V.looptijdbegin DESC");
 $dataquery->execute(array($username));
 
 $dataqueryverlopen= $db->prepare("SELECT V.titel,
