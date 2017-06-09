@@ -90,6 +90,31 @@ if (isset($_GET['voorwerpnummer'])) {
                            ");
     $data2->execute(array($resultVoorwerp['verkoper'],$resultVoorwerp['voorwerpnummer']));
     $meerVanVerkoper = $data2->fetchAll();
+
+    // Select 3 sales that are recommended
+    $data3 = $db->prepare("SELECT TOP 3 v.voorwerpnummer, titel, looptijdeinde, Foto.bestandsnaam
+                           FROM Voorwerp v
+                           CROSS APPLY
+                           (
+                               SELECT  TOP 1 Bestand.bestandsnaam
+                               FROM    Bestand
+                               WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
+                           ) Foto
+                           WHERE voorwerpnummer IN (
+                                                   SELECT voorwerpnummer
+                                                   FROM VoorwerpInRubriek
+                                                   WHERE rubrieknummer IN (
+                                                                          SELECT rubrieknummer
+                                                                          FROM VoorwerpInRubriek
+                                                                          WHERE voorwerpnummer = ?
+                                                                          )
+                                                   )
+                           AND verkoper != ?
+                           AND v.voorwerpnummer != ?
+                           AND v.looptijdeinde > GETDATE()
+                           ");
+    $data3->execute(array($resultVoorwerp['voorwerpnummer'],$resultVoorwerp['verkoper'],$resultVoorwerp['voorwerpnummer']));
+    $aanbevolen = $data3->fetchAll();
     // fill variable $meerVanVerkoper with data from database
     $rubriek = $resultVoorwerp['rn'];
 
@@ -524,13 +549,12 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
       </div>
     </div>
   </div>
-
-  <br>
   <?php
     // If seller has multiple auctions
     //Show them
     if(!empty($meerVanVerkoper)) {
    ?>
+   <div class="row">
   <h2>
     Meer van deze verkoper
   </h2>
@@ -549,6 +573,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
         </div>
       </a>
     </div>
+
     <script>
 
 
@@ -571,7 +596,65 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
       }
     }, 1000);
     </script>
-    <?php }} ?>
+    <?php }
+    ?>
+  </div>
+    <?php
+  } ?>
+    <br>
+    <?php
+      // If seller has multiple auctions
+      //Show them
+      if(!empty($aanbevolen)) {
+     ?>
+     <div class="row">
+    <h2>
+      Aanbevolen veilingen
+    </h2>
+    <?php
+    foreach($aanbevolen as $row)
+      {?>
+      <div class="col-lg-4">
+        <div>
+          <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
+            <h4 style="word-wrap: break-word;overflow:hidden;width:100%;height:19px;"> <?php echo $row['titel']; ?> </h4>
+          </a>
+        </div>
+        <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
+          <div class="veilingthumb" style="background-image:url('<?php echo $row['bestandsnaam']; ?>');">
+            <p>Resterende tijd: <span id="rest_time_<?php echo $row['voorwerpnummer']; ?>">&nbsp;</span></p>
+          </div>
+        </a>
+      </div>
+
+      <script>
+
+
+      var x = setInterval(function() {
+      var countDownDate = new Date('<?php echo $row['looptijdeinde']; ?>').getTime();
+        var now = new Date().getTime();
+        var distance = countDownDate - now;
+
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("rest_time_<?php echo $row['voorwerpnummer']; ?>").innerHTML = days + "d " + hours + "h "
+        + minutes + "m " + seconds + "s ";
+
+        if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("rest_time_<?php echo $row['voorwerpnummer']; ?>").innerHTML = "Gesloten";
+        }
+      }, 1000);
+      </script>
+
+      <?php }
+      ?>
+        </div>
+      <?php
+    } ?>
 </div>
 <?php include 'php/includes/footer.php' ?>
   <!-- Bootstrap core JavaScript
