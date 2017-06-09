@@ -22,10 +22,7 @@ $resultGebruikersnaam = $db->query($queryGebruikersnaam)->fetchall()[0];
 
 $target_dir = "../images/users/";
 $uploadOk = 1;
-$imageFileType = pathinfo(basename($_FILES["fileToUpload"]["name"]),PATHINFO_EXTENSION);
-$imageFileName = $resultGebruikersnaam[0] . '.' . $imageFileType;
-$queryBestandsnaam="UPDATE Gebruikers SET bestandsnaam = '$imageFileName' WHERE Gebruikersnaam = '$resultGebruikersnaam[0]'";
-$wijzigenBestandsnaam = $db->query($queryBestandsnaam);
+
 $target_file = $target_dir . $imageFileName;
 
 /// Check if image file is a actual image or fake image
@@ -62,6 +59,12 @@ if ($uploadOk == 0) {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
         $wijzigenBestandsnaam;
         //echo "Je profielfoto is geüpload!";
+
+        $imageFileType = pathinfo(basename($_FILES["fileToUpload"]["name"]),PATHINFO_EXTENSION);
+        $imageFileName = $resultGebruikersnaam[0] . '.' . $imageFileType;
+        $queryBestandsnaam="UPDATE Gebruikers SET bestandsnaam = '$imageFileName' WHERE Gebruikersnaam = '$resultGebruikersnaam[0]'";
+        $wijzigenBestandsnaam = $db->query($queryBestandsnaam);
+
         header('Location: ../profiel.php?wijzig&foto=succes', true, 302);
 exit;
     } else {

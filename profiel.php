@@ -771,7 +771,7 @@ if(isset($_GET['foto'])){
           else if(isset($_SESSION['warning']['succes']) && $_SESSION['warning']['succes'] === true)
           {
           ?>
-            <p class="bg-success" style="padding: 5px;">Emailadres succesvol gewijzigd</p>
+            <p class="bg-success" style="padding: 5px;">Emailadres succesvol gewijzigd, verifieer jouw email om jouw account te activeren.</p>
           <?php
           }
 

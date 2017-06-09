@@ -91,11 +91,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         else
         {
           // Check if username is between 2 and 20 character and doesn't contain any special characters.
-          if(strlen($_POST['r_username']) >= 2 && strlen($_POST['r_username']) <= 20 && preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $_POST['r_username']) == false){
+          if(strlen($_POST['r_username']) >= 2 && strlen($_POST['r_username']) <= 20 && preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $_POST['r_username']) == false && strpos($_POST['r_username'], ' ') == 0){
 
+            $_POST['r_zipcode'] = preg_replace('/\s+/', '', $_POST['r_zipcode']);
+
+            //echo $_POST['r_zipcode'];
             // Check if password shorter than 8 characters or longer than 20
             if(strlen($_POST['r_password']) < 8 || strlen($_POST['r_password']) > 20){
               $_SESSION['warning']['invalid_password'] = true;
+            }
+            else if(strlen($_POST['r_zipcode']) < 2 || strlen($_POST['r_zipcode']) > 9 || preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $_POST['r_zipcode']) == true){
+              $_SESSION['warning']['zipcode_invalid'] = true;
             }
             else {
               // Query, select username from database to check if username is unique
@@ -178,6 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                     }
                     else{
                       //echo 'ER IS IETS FOUT GEGAAN';
+                      $_SESSION['warning']['unknown_error'] = true;
                     }
                 }
               }
@@ -275,7 +282,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 else if(isset($_SESSION['warning']['username_invalid']) && $_SESSION['warning']['username_invalid'] === true)
                 {
                 ?>
-                  <p class="bg-danger">De gebruikersnaam voldoet niet aan de eisen, 2-20 karakters tekens. Geen speciale tekens</p>
+                  <p class="bg-danger">De gebruikersnaam voldoet niet aan de eisen, 2-20 karakters tekens. Geen speciale tekens of spaties</p>
+                <?php
+                }
+                else if(isset($_SESSION['warning']['zipcode_invalid']) && $_SESSION['warning']['zipcode_invalid'] === true)
+                {
+                ?>
+                  <p class="bg-danger">De postcode voldoet niet aan de eisen, a-Z,0-9 en geen spaties.Minimaal 2 karakters maximaal 9</p>
+                <?php
+                }
+                else if(isset($_SESSION['warning']['unknown_error']) && $_SESSION['warning']['unknown_error'] === true)
+                {
+                ?>
+                  <p class="bg-danger">Er is een onbekende fout opgetreden, probeer het later opnieuw of controleer uw invoer.</p>
                 <?php
                 }
                 ?>

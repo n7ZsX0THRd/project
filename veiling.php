@@ -26,7 +26,7 @@ $rootRubriek = -1;
 
 
 
-if (isset($_GET['voorwerpnummer'])) {
+if (isset($_GET['voorwerpnummer']) && is_numeric($_GET['voorwerpnummer'])) {
   $voorwerpnummer = htmlspecialchars($_GET['voorwerpnummer']);
   //echo $voorwerpnummer;
 
@@ -129,7 +129,7 @@ if (isset($_GET['voorwerpnummer'])) {
 }
 else {
     // Geen voorwerpnummer opgegeven, redirect index.php
-    //header("Location: index.php");
+    header("Location: index.php");
 }
 
 //Requested post method
