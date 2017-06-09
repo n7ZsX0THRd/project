@@ -41,7 +41,9 @@ $dataquery= $db->prepare(" SELECT titel, MAX(bodbedrag) as bodbedragMAX, V.loopt
 									) Foto
 						WHERE gebruiker = ?
 						AND v.veilinggesloten = 0
-						GROUP BY titel, B.voorwerpnummer, V.looptijdeinde, bestandsnaam, B.voorwerpnummer");
+						GROUP BY titel, B.voorwerpnummer, V.looptijdeinde, bestandsnaam, B.voorwerpnummer, V.looptijdbegin
+            ORDER BY V.looptijdbegin DESC");
+
 $dataquery->execute(array($username));
 
 $dataqueryoverboden= $db->prepare(" SELECT titel, MAX(bodbedrag) as bodbedragMAX, V.looptijdeinde, bestandsnaam, B.voorwerpnummer, dbo.fnGetHoogsteBod(b.voorwerpnummer) AS hoogsteBod
@@ -132,21 +134,19 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
 
       <div class="col-md-9 col-lg-10 col-sm-8">
         <div class="container-fluid content_col">
-          <div class="row">
-              <h1 style="margin-bottom: 4%" >Biedingen</h1>
-              <div class="row navigation-row">
-                  <p>
-                    <a href="index.php">
-                      <span class="glyphicon glyphicon-home "></span>
-                    </a>
-                    <span class="glyphicon glyphicon-menu-right"></span>
-                    <a href="account.php">Mijn Account</a>
-                    <span class="glyphicon glyphicon-menu-right"></span>
-                    <a href="biedingen.php">Biedingen</a>
-                  </p>
-              </div>
-              <div class="row item-row">
-                <div>
+          <div class="row navigation-row fix">
+              <h1 style="margin-bottom: 10px" >Biedingen</h1>
+              <p>
+                <a href="index.php">
+                  <span class="glyphicon glyphicon-home "></span>
+                </a>
+                <span class="glyphicon glyphicon-menu-right"></span>
+                <a href="account.php">Mijn Account</a>
+                <span class="glyphicon glyphicon-menu-right"></span>
+                <a href="biedingen.php">Biedingen</a>
+              </p>
+          </div>
+              <div class="row content_top_offset">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
                       <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Hoogste bod (<?php echo count($dataqueryresult) ?>)</a></li>
@@ -174,8 +174,8 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                               <div class="col-lg-9 col-xs-9 col-sm-8 col-md-8" style="position:relative;flex: 1;">
                                 <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>"><h3 class="item-row-titel"><?php echo $row['titel']?></h3></a>
                                 <h3 style="font-size:14px;" class="orange" id="looptijdeinde" data-looptijd="<?php echo $row['looptijdeinde']?>">&nbsp;</h3>
-                                <p>Uw Bod: <strong>&euro;<?php echo number_format($row['bodbedragMAX'], 2, ',', '')?></strong></p>
-                                <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', ''): 'Er is nog niet geboden';?></strong></p>
+                                <p>Uw Bod: <strong>&euro;<?php echo number_format($row['bodbedragMAX'], 2, ',', '.')?></strong></p>
+                                <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', '.'): 'Er is nog niet geboden';?></strong></p>
                                 <p style="position:absolute; bottom:0px;right:0px;width:150px;"><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bekijken</a></p>
                               </div>
                             </div>
@@ -205,8 +205,8 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                                 <div class="col-lg-9 col-xs-9 col-sm-8 col-md-8" style="position:relative;flex: 1;">
                                   <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>"><h3 class="item-row-titel"><?php echo $row['titel']?></h3></a>
                                   <h3 style="font-size:14px;" class="orange" id="looptijdeinde" data-looptijd="<?php echo $row['looptijdeinde']?>">&nbsp;</h3>
-                                  <p>Uw Bod: <strong>&euro;<?php echo number_format($row['bodbedragMAX'], 2, ',', '')?></strong></p>
-                                  <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', ''): 'Er is nog niet geboden';?></strong></p>
+                                  <p>Uw Bod: <strong>&euro;<?php echo number_format($row['bodbedragMAX'], 2, ',', '.')?></strong></p>
+                                  <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', '.'): 'Er is nog niet geboden';?></strong></p>
                                   <p style="position:absolute; bottom:0px;right:0px;width:150px;"><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bekijken</a></p>
                                 </div>
                               </div>
@@ -236,8 +236,8 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                               <div class="col-lg-9 col-xs-9 col-sm-8 col-md-8" style="position:relative;flex: 1;">
                                 <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>"><h3 class="item-row-titel"><?php echo $row['titel']?></h3></a>
                                 <h3 style="font-size:14px;" class="orange" id="looptijdeinde" data-looptijd="<?php echo $row['looptijdeinde']?>">&nbsp;</h3>
-                                <p>Uw Bod: <strong>&euro;<?php echo number_format($row['bodbedrag'], 2, ',', '')?></strong></p>
-                                <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', ''): 'Er is nog niet geboden';?></strong></p>
+                                <p>Uw Bod: <strong>&euro;<?php echo number_format($row['bodbedrag'], 2, ',', '.')?></strong></p>
+                                <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', '.'): 'Er is nog niet geboden';?></strong></p>
                                 <p style="position:absolute; bottom:0px;right:0px;width:150px;"><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bekijken</a></p>
                               </div>
                             </div>
@@ -267,8 +267,8 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                               <div class="col-lg-9 col-xs-9 col-sm-8 col-md-8" style="position:relative;flex: 1;">
                                 <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>"><h3 class="item-row-titel"><?php echo $row['titel']?></h3></a>
                                 <h3 style="font-size:14px;" class="orange" id="looptijdeinde" data-looptijd="<?php echo $row['looptijdeinde']?>">&nbsp;</h3>
-                                <p>Uw Bod: <strong>&euro;<?php echo number_format($row['bodbedragMAX'], 2, ',', '')?></strong></p>
-                                <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', ''): 'Er is nog niet geboden';?></strong></p>
+                                <p>Uw Bod: <strong>&euro;<?php echo number_format($row['bodbedragMAX'], 2, ',', '.')?></strong></p>
+                                <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', '.'): 'Er is nog niet geboden';?></strong></p>
                                 <p style="position:absolute; bottom:0px;right:0px;width:150px;"><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bekijken</a></p>
                               </div>
                             </div>
@@ -279,14 +279,6 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                           } ?>
                       </div>
                     </div>
-
-                  </div>
-
-
-
-
-
-             </div>
           </div>
 
 

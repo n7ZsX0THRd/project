@@ -53,7 +53,9 @@ $dataquery= $db->prepare("  SELECT V.titel,
                                      V.startprijs,
                                      B.bodbedrag,
                                      dbo.fnGetHoogsteBod(v.voorwerpnummer),
-                                     foto.bestandsnaam");
+                                     foto.bestandsnaam,
+                                     V.looptijdbegin
+                            ORDER BY V.looptijdbegin DESC");
 $dataquery->execute(array($username));
 
 $dataqueryverlopen= $db->prepare("SELECT V.titel,
@@ -117,20 +119,20 @@ $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
 
       <div class="col-md-9 col-lg-10 col-sm-8">
         <div class="container-fluid content_col">
-          <div class="row">
-              <h1 style="margin-bottom: 4%" >Veilingen</h1>
-              <div class="row navigation-row">
-                  <p>
-                    <a href="index.php">
-                      <span class="glyphicon glyphicon-home "></span>
-                    </a>
-                    <span class="glyphicon glyphicon-menu-right"></span>
-                    <a href="account.php">Mijn Account</a>
-                    <span class="glyphicon glyphicon-menu-right"></span>
-                    <a href="veilingen.php">Veilingen</a>
-                  </p>
-              </div>
-              <div class="row item-row">
+          <div class="row navigation-row fix">
+              <h1 style="margin-bottom: 10px" >Veilingen</h1>
+              <p>
+                <a href="index.php">
+                  <span class="glyphicon glyphicon-home "></span>
+                </a>
+                <span class="glyphicon glyphicon-menu-right"></span>
+                <a href="account.php">Mijn Account</a>
+                <span class="glyphicon glyphicon-menu-right"></span>
+                <a href="veilingen.php">Veilingen</a>
+              </p>
+          </div>
+
+              <div class="row content_top_offset">
                 <div>
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
@@ -158,8 +160,8 @@ $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
                                 <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>"><h3 class="item-row-titel"><?php echo $row['titel']?></h3></a>
                                 <h3 style="font-size:14px;" class="orange" id="looptijdeinde" data-looptijd="<?php echo $row['looptijdeinde']?>">&nbsp;</h3>
                                 <p>Aantal biedingen: <strong><?php echo $row['aantalbiedingen']?></strong></p>
-                                <p>Startprijs: <strong><?php echo $row['startprijs']?></strong></p>
-                                <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', ''): 'Er is nog niet geboden';?></strong></p>
+                                <p>Startprijs: <strong>&euro;<?php echo $row['startprijs']?></strong></p>
+                                <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', '.'): 'Er is nog niet geboden';?></strong></p>
                                 <p style="position:absolute; bottom:0px;right:0px;width:150px;"><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bekijken</a></p>
                               </div>
                             </div>
@@ -189,8 +191,8 @@ $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
                                 <div class="col-lg-9 col-xs-9 col-sm-8 col-md-8" style="position:relative;flex: 1;">
                                   <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>"><h3 class="item-row-titel"><?php echo $row['titel']?></h3></a>
                                   <h3 style="font-size:14px;" class="orange" id="looptijdeinde" data-looptijd="<?php echo $row['looptijdeinde']?>">&nbsp;</h3>
-                                  <p>Uw Bod: <strong>&euro;<?php echo number_format($row['bodbedrag'], 2, ',', '')?></strong></p>
-                                  <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', ''): 'Er is nog niet geboden';?></strong></p>
+                                  <p>Uw Bod: <strong>&euro;<?php echo number_format($row['bodbedrag'], 2, ',', '.')?></strong></p>
+                                  <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', '.'): 'Er is nog niet geboden';?></strong></p>
                                   <p style="position:absolute; bottom:0px;right:0px;width:150px;"><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bekijken</a></p>
                                 </div>
                               </div>
@@ -210,7 +212,6 @@ $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
 
 
              </div>
-          </div>
 
 
       </div>

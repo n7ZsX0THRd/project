@@ -51,9 +51,18 @@ $_SESSION['menu']['sub'] = 'ma';
       </div>
       <div class="col-md-9 col-lg-10 col-sm-8">
         <div class="container-fluid content_col">
-          <div class="row">
-              <h1 style="margin-bottom: 4%" > Mijn Account </h1>
-              <div class="row item-row">
+          <div class="row navigation-row fix">
+              <h1 style="margin-bottom: 10px" >Mijn Account</h1>
+              <p>
+                <a href="index.php">
+                  <span class="glyphicon glyphicon-home "></span>
+                </a>
+                <span class="glyphicon glyphicon-menu-right"></span>
+                <a href="account.php">Mijn Account</a>
+              </p>
+          </div>
+          <div class="row content_top_offset">
+              <div class="row">
                 <!--  My BIDS -->
                 <div onclick="window.location='biedingen.php';" class="col-sm-6 col-md-6 col-lg-3 col-sm-6">
                   <div class="thumbnail">

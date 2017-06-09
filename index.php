@@ -306,13 +306,13 @@ $populairItemsQuery->execute();
                             <?php
                             if($row['hoogsteBod'] != null){
                               ?>
-                                <p>Hoogste bod: <strong><?php echo '&euro;'.number_format($row['hoogsteBod'], 2, ',', '')?></strong></p>
+                                <p>Hoogste bod: <br><strong><?php echo '&euro;'.number_format($row['hoogsteBod'], 2, ',', '.')?></strong></p>
                               <?php
                             }
                             else
                             {
                               ?>
-                                <p>Start prijs: <strong><?php echo '&euro;'.number_format($row['minimaalBod'], 2, ',', '')?></strong></p>
+                                <p>Start prijs: <br><strong><?php echo '&euro;'.number_format($row['minimaalBod'], 2, ',', '.')?></strong></p>
                               <?php
                             }
                             ?>
@@ -347,13 +347,13 @@ $populairItemsQuery->execute();
                           <?php
                           if($row['hoogsteBod'] != null){
                             ?>
-                              <p>Hoogste bod: <strong><?php echo '&euro;'.number_format($row['hoogsteBod'], 2, ',', ' ')?></strong></p>
+                              <p>Hoogste bod: <br><strong><?php echo '&euro;'.number_format($row['hoogsteBod'], 2, ',', '.')?></strong></p>
                             <?php
                           }
                           else
                           {
                             ?>
-                              <p>Start prijs: <strong><?php echo '&euro;'.number_format($row['minimaalBod'], 2, ',', ' ')?></strong></p>
+                              <p>Start prijs: <br><strong><?php echo '&euro;'.number_format($row['minimaalBod'], 2, ',', '.')?></strong></p>
                             <?php
                           }
                           ?>

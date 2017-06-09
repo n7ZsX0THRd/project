@@ -44,59 +44,67 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
   $index = 0;
   $succesfullUploadedPhotos = false;
-  foreach ($_FILES['vt_images']['name'] as $name => $value)
+
+  if(isset($_FILES['vt_images']))
   {
-    $_POST['vt_images'][$index] = NULL;
-
-    if(strlen($value) > 3)
+    $_SESSION['warning']['no_images'] = true;
+  }
+  else {
+    foreach ($_FILES['vt_images']['name'] as $name => $value)
     {
+      $_POST['vt_images'][$index] = NULL;
 
-      $filename = stripslashes($_FILES['vt_images']['name'][$name]);
-      $size=filesize($_FILES['vt_images']['tmp_name'][$name]);
-      //get the extension of the file in a lower case format
-        $ext = getExtension($filename);
-        $ext = strtolower($ext);
+      if(strlen($value) > 3)
+      {
 
-       if(in_array($ext,$valid_formats))
-       {
-           if ($size < (MAX_SIZE*1024))
-           {
-             $image_name=time().$filename;
-             $newname=$uploaddir.$image_name;
+        $filename = stripslashes($_FILES['vt_images']['name'][$name]);
+        $size=filesize($_FILES['vt_images']['tmp_name'][$name]);
+        //get the extension of the file in a lower case format
+          $ext = getExtension($filename);
+          $ext = strtolower($ext);
 
-             if (move_uploaded_file($_FILES['vt_images']['tmp_name'][$name], $newname))
+         if(in_array($ext,$valid_formats))
+         {
+             if ($size < (MAX_SIZE*1024))
              {
-                $time=time();
-                $_POST['vt_images'][$index] = $uploaddir.$image_name;
-                $succesfullUploadedPhotos = true;
+               $image_name=time().$filename;
+               $newname=$uploaddir.$image_name;
+
+               if (move_uploaded_file($_FILES['vt_images']['tmp_name'][$name], $newname))
+               {
+                  $time=time();
+                  $_POST['vt_images'][$index] = $uploaddir.$image_name;
+                  $succesfullUploadedPhotos = true;
+               }
+               else
+               {
+                  $_SESSION['warning']['uploadFailed'] = $filename;
+                  $succesfullUploadedPhotos = false;
+               }
+
              }
              else
              {
-                $_SESSION['warning']['uploadFailed'] = $filename;
-                $succesfullUploadedPhotos = false;
+              $_SESSION['warning']['filesize'] = $filename;
+              $succesfullUploadedPhotos = false;
              }
 
+          }
+          else
+          {
+             $_SESSION['warning']['formaterror'] = $filename;
+             $succesfullUploadedPhotos = false;
            }
-           else
-           {
-            $_SESSION['warning']['filesize'] = $filename;
-            $succesfullUploadedPhotos = false;
-           }
+      }
 
-        }
-        else
-        {
-           $_SESSION['warning']['formaterror'] = $filename;
-           $succesfullUploadedPhotos = false;
-         }
-    }
+       $index++;
+   }
+  }
 
-     $index++;
- }
  $didCreateAuction = false;
  if($succesfullUploadedPhotos)
  {
-   if(empty($_POST['vt_title']) || strlen(trim($_POST['vt_title'])) < 2 || strlen(trim($_POST['vt_title'])) > 70 )
+   if(empty($_POST['vt_title']) || strlen(trim($_POST['vt_title'])) < 2 || strlen(trim($_POST['vt_title'])) > 70 || preg_match('/[!\'^£$%&*()}{@#~?><>,|=_+¬-]/', $_POST['vt_paymentInstruction']))
    {
      $_SESSION['warning']['titel_invalid'] = true;
    }
@@ -163,13 +171,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
       }
    }
  }
-
-  /*
-  print '<br><br>';
-  var_dump($result->getCode());
-  print '<br><br>';
-  var_dump($result);
-  */
 }
 
 $queryPaymentMethods = $db->query("SELECT ID,betalingswijze FROM Betalingswijzen ORDER BY ID ASC");
@@ -201,21 +202,26 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
       </div>
       <div class="col-md-9 col-lg-10 col-sm-8">
         <div class="container-fluid content_col">
-          <div class="row navigation-row">
+          <div class="row navigation-row fix">
+              <h1 style="margin-bottom: 10px" >Verkopen</h1>
               <p>
                 <a href="index.php">
                   <span class="glyphicon glyphicon-home "></span>
                 </a>
                 <span class="glyphicon glyphicon-menu-right"></span>
-                <a href="">Direct Regelen</a>
+                <a href="">Direct regelen</a>
                 <span class="glyphicon glyphicon-menu-right"></span>
-                <a href="">Verkopen</a>
+                <a href="gebruikers.php">Verkopen</a>
               </p>
           </div>
-          <div class="row">
+          <div class="row content_top_offset">
             <div class="col-lg-12">
             <?php
-            if(isset($_SESSION['warning']['formaterror']))
+            if(isset($_SESSION['warning']['no_images']) && $_SESSION['warning']['no_images'] == true)
+            {
+              echo '<p class="bg-danger" style="padding:5px;">Upload een afbeelding</p>';
+            }
+            else if(isset($_SESSION['warning']['formaterror']))
             {
               echo '<p class="bg-danger" style="padding:5px;">Het bestand '.$_SESSION['warning']['formaterror'].' heeft een ongeldig bestandsformaat.</p>';
             }
@@ -229,7 +235,7 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
             }
             else if(isset($_SESSION['warning']['titel_invalid']) && $_SESSION['warning']['titel_invalid'] == true)
             {
-              echo '<p class="bg-danger" style="padding:5px;">De titel moet minimaal 2 en maximaal 70 karakters lang zijn.</p>';
+              echo '<p class="bg-danger" style="padding:5px;">De titel moet minimaal 2 en maximaal 70 karakters lang zijn en a-Z & 0-9.</p>';
             }
             else if(isset($_SESSION['warning']['description_invalid']) && $_SESSION['warning']['description_invalid'] == true)
             {
@@ -314,7 +320,8 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
                         <hr>
                         <div class="form-group">
                            <label>Rubrieken</label>
-                           <p><i><button type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-orange">Rubriek toevoegen</button>   Tot 2 rubrieken gratis, minimaal 1</i></p>
+                           <p><i>Tot 2 rubrieken gratis, minimaal 1</i></p>
+                           <button type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-orange">Rubriek toevoegen</button>
                            <div class="form-group" id="notification">
                            </div>
                            <div class="form-group" id="resultedRubriek">
@@ -422,7 +429,6 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
     </div>
     <div id="rubriek_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
       <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -443,7 +449,6 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
             </div>
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-      </div>
     </div>
 
     <?php
@@ -463,7 +468,7 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
 
     $( "#searchButton" ).click(function(event){
           var search = $("#rubriekSearchInput").val();
-          if(search.length > 1)
+          if(search.length > 0)
             $( "#result_search" ).load( "php/includes/search_rubriek.php?search=" + search);
     });
     $("#rubriekSearchInput").keyup(function(event){
@@ -473,9 +478,26 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
     });
     $(document).on("click", '#add_rubriek', function(event) {
         //alert("new link clicked!");
+        console.log(this);
 
-        if ($('#' + $(event.target).data( "rubriekid" )).exists() == false) {
-          $('#resultedRubriek').append('<div id="' + $(event.target).data( "rubriekid" ) + '"><input type="hidden" name="vt_rubrieken[]" value="' + $(event.target).data( "rubriekid" ) + '" /><p><a class="btn btn-default" id="remove" style="margin-right:10px;"><span class="glyphicon glyphicon-minus"></span></a>' + $(event.target).data( "parentnaam" ) + ' <span class="glyphicon glyphicon-menu-right"></span> ' + $(event.target).data( "rubrieknaam" ) + '</p></div>');
+        var clickedObject = $(this);
+
+        if ($('#' + clickedObject.data( "rubriekid" )).exists() == false) {
+
+          $('#resultedRubriek').append(
+              '<div id="' +
+              clickedObject.data( "rubriekid" ) +
+              '"><input type="hidden" name="vt_rubrieken[]" value="' +
+              clickedObject.data( "rubriekid" ) +
+              '" /><p><a class="btn btn-default" id="remove" style="margin-right:10px;"><span class="glyphicon glyphicon-minus"></span></a>' +
+              clickedObject.data( "parentparentnaam" ) +
+              ' <span class="glyphicon glyphicon-menu-right"></span> ' +
+              clickedObject.data( "parentnaam" ) +
+              ' <span class="glyphicon glyphicon-menu-right"></span> ' +
+              clickedObject.data( "rubrieknaam" ) +
+              '</p></div>'
+          );
+
           $('#result_search').empty();
           $('#rubriekSearchInput').val("");
           $('#notification').empty();

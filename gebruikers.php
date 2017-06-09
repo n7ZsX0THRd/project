@@ -247,7 +247,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         </div>
         <div class="col-md-9 col-lg-10 col-sm-8">
           <div class="container-fluid content_col">
-            <div class="row navigation-row">
+            <div class="row navigation-row fix">
+                <h1 style="margin-bottom: 10px" >Gebruikers</h1>
                 <p>
                   <a href="index.php">
                     <span class="glyphicon glyphicon-home "></span>
@@ -255,7 +256,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   <span class="glyphicon glyphicon-menu-right"></span>
                   <a href="">Beheerpanel</a>
                   <span class="glyphicon glyphicon-menu-right"></span>
-                  <a href="">Gebruikers</a>
+                  <a href="gebruikers.php">Gebruikers</a>
                 </p>
             </div>
             <div class="row content_top_offset">
