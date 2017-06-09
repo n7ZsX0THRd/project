@@ -300,11 +300,27 @@
                     <div class="profielbutton-group">
                     <?php
                         // 
-                        if ($brief){ ?>
+                        if ($brief){
+                          $gebruikersnaam=$resultUser[0]['gebruikersnaam'];
+                          $data = $db->prepare("  
+                                                SELECT TOP (1) startdatum 
+                                                FROM Verkopers
+                                                WHERE gebruikersnaam= ?; 
+                                              ");
+                                  
+                          $data->execute(array($gebruikersnaam));
+                          $result=$data->fetchAll();
+                          echo var_dump( $result);
+                          if (count($result)==1){
+                            echo $result[0]['startdatum'];
+                          }
+
+                          ?>
                           <form action="post.php" method="POST">
                             <input type="hidden" name="voornaam" value="<?php echo $resultUser[0]['voornaam'] ?>">
                             <input type="hidden" name="achternaam" value="<?php echo $resultUser[0]['achternaam'] ?>">
-                            <input type="hidden" name="adresregel1" value="<?php echo $resultUser[0]['adresregel1'] ?>">
+                            <input type="hidden" name="gebruikersnaam" value="<?php echo $resultUser[0]['gebruikersnaam'] ?>">
+                            <input type="hidden" name="adresregel" value="<?php echo $resultUser[0]['adresregel1'] ?>">
                             <input type="hidden" name="postcode" value="<?php echo $resultUser[0]['postcode'] ?>">
                             <input type="hidden" name="plaats" value="<?php echo $resultUser[0]['plaatsnaam'] ?>">
                             <input type="hidden" name="activatiecode" value="<?php echo rand(100000, 999999) ?>">

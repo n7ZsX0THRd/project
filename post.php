@@ -1,6 +1,7 @@
 <?php
 require('fpdf.php');
-
+include_once ('php/database.php');
+pdo_connect();
 
 class PDF extends FPDF
 {
@@ -31,14 +32,53 @@ class PDF extends FPDF
     }
 }
 
-$voornaam = 'Maurits';
-$achternaam = 'Muijsert';
+$voornaam = 'Voornaam';
+$achternaam = 'Achternaam';
 $today = getdate();
 $datum = $today['mday'].'-'.$today['mon'].'-'. $today['year'];
-$adresregel = 'adresregel';
-$postcode = 'postcode';
-$plaats = 'plaats';
-$activatiecode = 123456;
+$adresregel = 'Adresregel';
+$postcode = 'Postcode';
+$plaats = 'Plaats';
+$activatiecode = 000000;
+
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+    if(isset($_POST["voornaam"]) && !empty($_POST["voornaam"])){
+        $voornaam=$_POST['voornaam'];
+    }
+
+    if(isset($_POST["achternaam"]) && !empty($_POST["achternaam"])){
+        $achternaam=$_POST['achternaam'];
+    }
+
+    if(isset($_POST["gebruikersnaam"]) && !empty($_POST["gebruikersnaam"])){
+        $gebruikersnaam=$_POST['gebruikersnaam'];
+    }
+
+    if(isset($_POST["adresregel"]) && !empty($_POST["adresregel"])){
+        $adresregel=$_POST['adresregel'];
+    }
+
+    if(isset($_POST["postcode"]) && !empty($_POST["postcode"])){
+        $postcode=$_POST['postcode'];
+    }
+
+    if(isset($_POST["plaats"]) && !empty($_POST["plaats"])){
+        $plaats=$_POST['plaats'];
+    }
+
+    if(isset($_POST["activatiecode"]) && !empty($_POST["activatiecode"])){
+        $activatiecode=$_POST['activatiecode'];
+    }
+}
+global $db;
+
+        $data = $db->prepare("  UPDATE Verkopers
+                                SET activatiecode = ?, startdatum = GETDATE()
+                                WHERE gebruikersnaam= ?; 
+                            ");
+                              
+        $data->execute(array($activatiecode, $gebruikersnaam));
 
 $pdf = new PDF();
 $pdf->AddPage();
