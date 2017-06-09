@@ -189,7 +189,7 @@ if ($result[0]['verkoper']==1){
               </div>
               <div  id="input-post"  class="input-group">
                 <div class="input-group-addon"><span class="glyphicon glyphicon glyphicon glyphicon-credit-card" aria-hidden="true"></span></div>
-                  <input type="text" pattern="[0-9]{13,16}" class="form-control" id="bankrekeningnummer" placeholder="Bankrekening nummer" name="bankrekeningnummer" value="" required>
+                  <input type="text" pattern="[a-zA-Z0-9]{6,34}" class="form-control" id="bankrekeningnummer" placeholder="Bankrekening nummer" name="bankrekeningnummer" value="" required>
                   <!-- test with http://www.getcreditcardnumbers.com/ -->
                   <br>
               </div>
@@ -211,20 +211,22 @@ if ($result[0]['verkoper']==1){
         case 'activeren':
           ?>
           <p>Vul hier de code in die je via post hebt ontvangen</p>
-          <div class="input-group">
-              <div class="input-group-addon"><span class="glyphicon glyphicon glyphicon-lock" aria-hidden="true"></span></div>
-                <input type="text" pattern="[0-9]{6}" class="form-control" id="code" placeholder="Code" name="code" value="">
-            </div>
-            <input type="hidden" name="page" value="code-controle">
-          <div class="bevestig">
-            <div class="row">
-              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <button type="submit" class="btn btn-orange align-right">Bevestig code</button>
-                
+          <form action="" method="POST">
+            <div class="input-group">
+                <div class="input-group-addon"><span class="glyphicon glyphicon glyphicon-lock" aria-hidden="true"></span></div>
+                  <input type="text" pattern="[0-9]{6}" class="form-control" id="code" placeholder="Code" name="code" value="">
               </div>
+              <input type="hidden" name="page" value="code-controle">
+            <div class="bevestig">
+              <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                  <button type="submit" class="btn btn-orange align-right">Bevestig code</button>
+                  
+                </div>
+              </div>
+              <br>
             </div>
-            <br>
-          </div>
+          </form>
           <?php
           // activatie code invoeren
         break;
