@@ -122,9 +122,9 @@
             ?>
           </div>
           <div class="col-md-9 col-lg-10 col-sm-8">
-            <div class="container-fluid  content_col">
-              <!-- Breadcrumb -->
-              <div class="row navigation-row">
+            <div class="container-fluid content_col">
+              <div class="row navigation-row fix">
+                  <h1 style="margin-bottom: 10px" >Gebruiker</h1>
                   <p>
                     <a href="index.php">
                       <span class="glyphicon glyphicon-home "></span>
@@ -132,12 +132,14 @@
                     <span class="glyphicon glyphicon-menu-right"></span>
                     <a href="">Beheerpanel</a>
                     <span class="glyphicon glyphicon-menu-right"></span>
-                    <a href="<?php echo $_SERVER['REQUEST_URI']; ?>">Gebruiker</a>
+                    <a href="gebruikers.php">Gebruikers</a>
+                    <span class="glyphicon glyphicon-menu-right"></span>
+                    <a href="">Gebruiker</a>
                   </p>
               </div>
               <!-- Breadcrumb END -->
               <div class="row">
-                <h1> Beheer gebruiker: <?php echo $gebruikersnaam ?></h1>
+                <h1>Beheer gebruiker: <?php echo $gebruikersnaam ?></h1>
               </div>
               <div class="row content_top_offset">
                 <div class="col-lg-6" style="border-right:1px solid #e7e7e7;">
@@ -299,15 +301,15 @@
                   <div class="text-right">
                     <div class="profielbutton-group">
                     <?php
-                        // 
+                        //
                         if ($brief){
                           $gebruikersnaam=$resultUser[0]['gebruikersnaam'];
-                          $data = $db->prepare("  
-                                                SELECT TOP (1) startdatum 
+                          $data = $db->prepare("
+                                                SELECT TOP (1) startdatum
                                                 FROM Verkopers
-                                                WHERE gebruikersnaam= ?; 
+                                                WHERE gebruikersnaam= ?;
                                               ");
-                                  
+
                           $data->execute(array($gebruikersnaam));
                           $result=$data->fetchAll();
                           if (count($result)==1 &&  isset($result[0]['startdatum'])){
