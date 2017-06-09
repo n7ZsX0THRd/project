@@ -34,12 +34,7 @@ $error = 0;
 $page = '';
 
 
-$data = $db->prepare("SELECT count(typegebruiker) as 'verkoper' FROM Gebruikers WHERE gebruikersnaam = ? AND typegebruiker = 2");
-
-        $data->execute(array($result['gebruikersnaam']));
-        $resultQ=$data->fetchAll();
-
-if ($resultQ[0]['verkoper']==1){
+if ($result['typegebruiker'] == 2){
   $page = 'alVerkoper';
 } else if ($result["statusID"]==1){ //Als de gebruier inactief is
   $page = 'inactief';
@@ -98,26 +93,26 @@ if ($resultQ[0]['verkoper']==1){
 
           $data->execute(array($result['gebruikersnaam']));
           $result=$data->fetchAll();
+          if (isset($ingevoerdeCode) && isset($result[0]['activatiecode'])){
+            if ($ingevoerdeCode==$result[0]['activatiecode']){
+              $page='bevestigd';
 
-          if ($ingevoerdeCode==$result[0]['activatiecode']){
-            $page='bevestigd';
+              $data = $db->prepare("
+                                    UPDATE Verkopers
+                                    SET activatiecode = NULL, startdatum = NULL
+                                    WHERE gebruikersnaam= ?;
+                                ");
 
-            $data = $db->prepare("
-                                  UPDATE Verkopers
-                                  SET activatiecode = NULL, startdatum = NULL
-                                  WHERE gebruikersnaam= ?;
-                              ");
+              $data->execute(array($result['gebruikersnaam']));
 
-            $data->execute(array($result['gebruikersnaam']));
+              $data = $db->prepare("
+                                    UPDATE Gebruikers
+                                    SET typegebruiker = 2
+                                    WHERE gebruikersnaam= ?;
+                                ");
 
-            $data = $db->prepare("
-                                  UPDATE Gebruikers
-                                  SET typegebruiker = 2
-                                  WHERE gebruikersnaam= ?;
-                              ");
-
-            $data->execute(array($result['gebruikersnaam']));
-
+              $data->execute(array($result['gebruikersnaam']));
+            }
           }else{
             $page='onjuiste-code';
           }
@@ -275,14 +270,14 @@ if ($resultQ[0]['verkoper']==1){
           ?>
           <h3>Oops!</h3>
           <p>De code klopt niet, probeer het opnieuw<br>
-          <form ction="" method="POST" id="my_form">
+          <form action="" method="POST" id="my_form">
           <!-- Your Form -->
           <input type="hidden" name="page" value="activeren">
           <a href="javascript:{}" onclick="document.getElementById('my_form').submit(); return false;">probeer het opnieuw</a>
           </form>
           <br></p>
 
-          <?phpz
+          <?php
           // activatie code invoeren
         break;
         case 'alVerkoper':
