@@ -227,7 +227,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                                               </table>
                                           </td>
                                       </tr>';
-                  sendMail($to,$subject,$message);
+                  sendMail($to,$subject,$content);
                   $_SESSION['warning']['succes'] = true;
               //header('location: index.php');
             }
