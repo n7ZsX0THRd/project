@@ -29,9 +29,6 @@ function block_user($gebruikersnaam) {
 								WHERE gebruikersnaam = ?;
 							DELETE FROM Activatiecodes 
 								WHERE gebruikersnaam=?
-							UPDATE Voorwerp
-								SET inactief = 1
-								WHERE gebruikersnaam = ?
 								");
         $dbs->execute(array($gebruikersnaam,$gebruikersnaam,$gebruikersnaam));
         $dbs = $db->prepare("SELECT emailadres FROM Gebruikers WHERE gebruikersnaam = ? ");
@@ -66,8 +63,9 @@ function block_user($gebruikersnaam) {
             </td>
         </tr>';
         sendMail($to,$subject,$message);
-        //SendMail to user
-        return true;
+		//SendMail to user
+		DisableAllAuctions ($gebruikersnaam);
+		return true;
     } catch (PDOException $e) {
         //echo "Could not block user, ".$e->getMessage();
 
@@ -417,6 +415,82 @@ function create_auction($data,$db){  //db is global!!
 
   } catch (PDOException $e) {
       return $e;
+  }
+}
+function DisableAllAuctions ($gebruikersnaam) {
+	try {
+		$dbs = $db->prepare("UPDATE Voorwerp 
+								SET inactief = 1 
+								WHERE verkoper = ?
+							SELECT voorwerpnummer
+								FROM Voorwerp
+								WHERE verkoper = ?");
+        $dbs->execute(array($gebruikersnaam, $gebruikersnaam));
+        $result = $dbs->fetchAll();
+		foreach($result as $voorwerpnummer) {
+			AuctionDisabledBiddersMail ($voorwerpnummer['voorwerpnummer']);
+		}
+	}
+	catch (PDOException $e) {
+      //var_dump($e);
+      return false;
+  }
+	
+}
+function AuctionDisabledBiddersMail ($voorwerpnummer) {
+	try {
+		$dbs = $db->prepare("SELECT DISTINCT G.voornaam, G.emailadres, V.titel
+								FROM Voorwerp AS V
+								INNER JOIN Bod AS B ON
+								V.voorwerpnummer=B.voorwerpnummer
+								INNER JOIN Gebruikers AS G ON
+								B.gebruiker=G.gebruikersnaam
+								WHERE V.voorwerpnummer = ?");
+        $dbs->execute(array($voorwerpnummer));
+        $result = $dbs->fetchAll();
+        // Block user Query
+		$i = 0;
+		while ($i < count($result)) {
+			$voornaam = $result[$i][0];
+			$emailadres = $result[$i][1];
+			$titel = $result[$i][2];
+			echo $voornaam;
+			echo $emailadres;
+			$i++;
+			$to = $emailadres;
+			$subject = 'Veiling gestopt';
+			$message = '
+			<tr>
+				<td align="center" bgcolor="#FFFFFF" style="padding: 40px 30px 40px 30px;">
+					<table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
+						<tr>
+							<td style="color:#023042">
+								Beste '.$voornaam.',
+							</td>
+						</tr>
+						<tr>
+							<td style="padding: 20px 0 0 0; color:#023042">
+								<p>De veiling met de titel:'.$titel.' is beëindigd door EenmaalAndermaal.
+								Hierdoor is geen helaas geen winnaar.</p>
+								<p> Wij hopen u via de email voldoende op de hoogte te hebben gesteld!</p>
+							</td>
+						</tr>
+						<tr>
+							<td style="padding: 10px 0 20px 0; color:#023042">
+								<p>Met vriendelijke groeten,</p>
+								<p>Team EenmaalAndermaal</p>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>';
+			sendMail($to,$subject,$message);
+			return true;
+		}
+	}
+		catch (PDOException $e) {
+      //var_dump($e);
+      return false;
   }
 }
 
