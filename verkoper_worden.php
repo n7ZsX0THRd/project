@@ -3,7 +3,7 @@
   iProject Groep 2
   30-05-2017
 
-  file: login.php
+  file: verkoper_worden.php
   purpose:
   Login user
 */
@@ -25,7 +25,7 @@ if($result['typegebruiker'] == 2 || $result['typegebruiker'] == 3)
   header("Location: veilingtoevoegen.php");
   exit();
 }
-
+var_dump($result);
 
 //echo var_dump($user);
 $error = 0;
@@ -67,16 +67,14 @@ if ($result['typegebruiker'] == 2){
         $bankrekeningnummer=htmlspecialchars($_POST["bankrekeningnummer"]);
         $banknaam=htmlspecialchars($_POST["bank"]);
 
-        $data = $db->prepare("  INSERT INTO Verkopers (gebruikersnaam, banknaam, rekeningnummer, creditcardnummer, controleoptienaam)
-                                VALUES (?, ?, ?, 'NVT', 'post');
-                            ");
+        $data = $db->prepare("INSERT INTO Verkopers (gebruikersnaam, banknaam, rekeningnummer, creditcardnummer, controleoptienaam)
+                                VALUES (?, ?, ?, 'NVT', 'post');");
 
         $data->execute(array($result['gebruikersnaam'], $banknaam, $bankrekeningnummer));
 
-        $data = $db->prepare("  UPDATE Gebruikers
+        $data = $db->prepare("UPDATE Gebruikers
                                 SET typegebruiker = 4
-                                WHERE gebruikersnaam = ?;
-                            ");
+                                WHERE gebruikersnaam = ?;");
 
         $data->execute(array($result['gebruikersnaam']));
 
@@ -88,28 +86,23 @@ if ($result['typegebruiker'] == 2){
         if(isset($_POST["code"]) && !empty($_POST["code"])){
           $ingevoerdeCode=htmlspecialchars($_POST["code"]);
 
-          $data = $db->prepare("  SELECT TOP(1) activatiecode FROM Verkopers WHERE gebruikersnaam = ?;
-                            ");
+          $data = $db->prepare("SELECT TOP(1) activatiecode FROM Verkopers WHERE gebruikersnaam = ?;");
 
           $data->execute(array($result['gebruikersnaam']));
-          $result=$data->fetchAll();
-          if (isset($ingevoerdeCode) && isset($result[0]['activatiecode'])){
-            if ($ingevoerdeCode==$result[0]['activatiecode']){
+          $resultActivatie=$data->fetchAll();
+          if (isset($ingevoerdeCode) && isset($resultActivatie[0]['activatiecode'])){
+            if ($ingevoerdeCode==$resultActivatie[0]['activatiecode']){
               $page='bevestigd';
 
-              $data = $db->prepare("
-                                    UPDATE Verkopers
+              $data = $db->prepare("UPDATE Verkopers
                                     SET activatiecode = NULL, startdatum = NULL
-                                    WHERE gebruikersnaam= ?;
-                                ");
+                                    WHERE gebruikersnaam= ?;");
 
               $data->execute(array($result['gebruikersnaam']));
 
-              $data = $db->prepare("
-                                    UPDATE Gebruikers
+              $data = $db->prepare("UPDATE Gebruikers
                                     SET typegebruiker = 2
-                                    WHERE gebruikersnaam= ?;
-                                ");
+                                    WHERE gebruikersnaam= ?;");
 
               $data->execute(array($result['gebruikersnaam']));
             }
