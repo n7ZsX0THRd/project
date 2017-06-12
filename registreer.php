@@ -103,6 +103,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             else if(strlen($_POST['r_zipcode']) < 2 || strlen($_POST['r_zipcode']) > 9 || preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $_POST['r_zipcode']) == true){
               $_SESSION['warning']['zipcode_invalid'] = true;
             }
+            else if(strlen($_POST['r_street_name']) > 40 || strlen($_POST['r_street_name']) < 2 || preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $_POST['r_username']))
+            {
+              $_SESSION['warning']['adresssregel_invalid'] = true;
+            }
+            else if(isset($_POST['r_street_addition']))
+            {
+              if(strlen($_POST['r_street_addition']) > 4 || strlen($_POST['r_street_addition']) < 0 || preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $_POST['r_street_addition']))
+              {
+                $_SESSION['warning']['street_addition_invalid'] = true;
+              }
+            }
+            else if(is_numeric($_POST['r_street_nr']) == false || (float)$_POST['r_street_nr'] > 9999|| (float)$_POST['r_street_nr'] < 0)
+            {
+              $_SESSION['warning']['streetnr_invalid'] = true;
+            }
             else {
               // Query, select username from database to check if username is unique
               $dbs = $db->prepare("SELECT TOP(1) gebruikersnaam FROM Gebruikers WHERE gebruikersnaam = ?");
@@ -259,6 +274,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 {
                 ?>
                   <p class="bg-danger">De opgegeven geboortedatum is ongeldig</p>
+                <?php
+                }
+                else if(isset($_SESSION['warning']['adresssregel_invalid']) && $_SESSION['warning']['adresssregel_invalid'] === true)
+                {
+                ?>
+                  <p class="bg-danger">De opgegeven straatnaam is ongeldig, minimaal 2 maximaal 40 karakters a-Z en 0-9</p>
+                <?php
+                }
+                else if(isset($_SESSION['warning']['streetnr_invalid']) && $_SESSION['warning']['streetnr_invalid'] === true)
+                {
+                ?>
+                  <p class="bg-danger">Het opgegeven huisnummer is ongeldig, 0-9999</p>
+                <?php
+                }
+                else if(isset($_SESSION['warning']['street_addition_invalid']) && $_SESSION['warning']['street_addition_invalid'] === true)
+                {
+                ?>
+                  <p class="bg-danger">De opgegeven toevoeging is ongeldig, maximaal 4 karakters a-Z en 0-9</p>
                 <?php
                 }
                 else if(isset($_SESSION['warning']['invalid_username']) && $_SESSION['warning']['invalid_username'] === true)

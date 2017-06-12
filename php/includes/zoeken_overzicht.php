@@ -72,14 +72,12 @@ switch ($filter) {
         break;
 }
 // Set sql part for specific filter
-$voorwerpCountQuery = $db->prepare("SELECT
-  v.voorwerpnummer,
-  v.titel,
-  v.startprijs,
-  vir.rubrieknummer,
-  r.parentRubriek,
-  v.looptijdeinde,
-  Foto.bestandsnaam
+$voorwerpCountQuery = $db->prepare("SELECT DISTINCT
+	  v.voorwerpnummer,
+	  v.titel,
+	  v.startprijs,
+	  v.looptijdeinde,
+	  Foto.bestandsnaam
 FROM Voorwerp v
 	JOIN
 		VoorwerpInRubriek vir
@@ -131,14 +129,12 @@ if(isset($_GET['page'])){
   }
 }
 // Select auctions from database based on filters
-$voorwerpSelectSQL = "SELECT
-  v.voorwerpnummer,
-  v.titel,
-  v.startprijs,
-  vir.rubrieknummer,
-  r.parentRubriek,
-  v.looptijdeinde,
-  Foto.bestandsnaam,
+$voorwerpSelectSQL = "SELECT DISTINCT
+	  v.voorwerpnummer,
+	  v.titel,
+	  v.startprijs,
+	  v.looptijdeinde,
+	  Foto.bestandsnaam,
   dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod,
   COUNT(b.voorwerpnummer) AS aantalBiedingen
 FROM Voorwerp v
