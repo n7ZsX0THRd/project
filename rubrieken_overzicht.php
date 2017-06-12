@@ -168,7 +168,7 @@ for ($row = 0; $row < $count; $row++) {
                 </nav>
                 <?php
                 // Loop over all chars from alphabet
-                // Show all rubrieks 
+                // Show all rubrieks
                 foreach(range('A','Z') as $char) {
                     $nRubrieken = 0;
                     foreach($rubrieken as $rubriek){
@@ -200,16 +200,7 @@ for ($row = 0; $row < $count; $row++) {
                                             <form action="php/functies/change_rubriek_status.php" method="POST">
                                               <input type="hidden" name="rubriek_nummer" value="<?php echo $rubriek[0]['rubrieknummer']; ?>" >
                                               <input type="hidden" name="rubriek_status" value="<?php echo $rubriek[0]['inactief']; ?>" >
-                                                <button type="submit" style="color: #333;background-color: #fff;width:100%;">
-                                                  <?php
-                                                  if ((bool)$rubriek[0]['inactief']){ ?>
-                                                       <span class="glyphicon glyphicon-eye-open"></span>
-                                                       <span>Deblokkeer</span>
-                                                 <?php }else{ ?>
-                                                       <span class="glyphicon glyphicon-eye-close"></span>
-                                                       <span>Blokkeer</span>
-                                                <?php } ?>
-                                              </button>
+
                                           </form>
                                         </li>
                                         <li><button data-toggle="modal" data-target="#name_<?php echo $rubriek[0]['rubrieknummer']; ?>" style="color: #333;background-color: #fff;width:100%;">Wijzig rubrieknaam</button></li>
@@ -311,15 +302,7 @@ for ($row = 0; $row < $count; $row++) {
                                                 <form action="php/functies/change_rubriek_status.php" method="POST">
                                                   <input type="hidden" name="rubriek_nummer" value="<?php echo $rubriek_nummer_current ?>" >
                                                   <input type="hidden" name="rubriek_status" value="<?php echo $rubriek_status ?>" >
-                                                    <button type="submit" style="color: #333;background-color: #fff;width:100%;">
-                                                      <?php if ((bool)$rubriek_status){ ?>
-                                                           <span class="glyphicon glyphicon-eye-open"></span>
-                                                           <span>Deblokkeer</span>
-                                                     <?php }else{ ?>
-                                                           <span class="glyphicon glyphicon-eye-close"></span>
-                                                           <span>Blokkeer</span>
-                                                    <?php } ?>
-                                                  </button>
+
                                               </form>
                                             </li>
                                             <li><button data-toggle="modal" data-target="#name_<?php echo $key; ?>" style="color: #333;background-color: #fff;width:100%;">Wijzig rubrieknaam</button></li>
