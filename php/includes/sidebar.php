@@ -27,9 +27,6 @@
     <a href="">Direct regelen</a>
   </li>
   <ul class="sub">
-    <li>
-      <a href="">Laatste bieding</a>
-    </li>
     <?php
       if($result['typegebruiker'] == 2 || $result['typegebruiker'] == 3)
       {
@@ -42,7 +39,7 @@
       else {
         ?>
           <li>
-            <a href="verkoper_worden.php">Verkopen worden</a>
+            <a href="verkoper_worden.php">Verkoper worden</a>
           </li>
         <?php
       }

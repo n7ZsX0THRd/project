@@ -47,12 +47,70 @@
         datepart(year,[geboortedatum]) AS geboortejaar,
         biografie,
         bestandsnaam FROM Gebruikers WHERE gebruikersnaam=?");
-        $data->execute([$gebruikersnaam]);
-        $data2 = $db->prepare("SELECT * FROM Gebruikerstelefoon WHERE gebruikersnaam=?");
-        $data2->execute([$gebruikersnaam]);
+        $data->execute(array($gebruikersnaam));
+
+
+        $telefoonnummers = null;
+
+        $telefoonnummersQuery = $db->prepare("SELECT volgnr,telefoonnummer FROM Gebruikerstelefoon WHERE gebruikersnaam = ? ORDER BY volgnr");
+        $telefoonnummersQuery->execute(array($gebruikersnaam));
+
+        $telefoonnummers = $telefoonnummersQuery->fetchAll();
+
+        $dataqueryopen = $db->prepare("SELECT	titel,
+        											MAX(bodbedrag) as bodbedragMAX,
+        											V.looptijdeinde,
+        											V.startprijs,
+        											bestandsnaam,
+        											V.voorwerpnummer,
+        											dbo.fnGetHoogsteBod(b.voorwerpnummer) AS hoogsteBod,
+        											COUNT(b.bodbedrag) AS aantalbiedingen
+        								FROM Voorwerp AS V
+        											LEFT JOIN Bod B
+        											ON b.voorwerpnummer = v.voorwerpnummer
+        												CROSS APPLY
+        													(
+        													SELECT  TOP 1 B.bestandsnaam
+        													FROM    Bestand AS B
+        													WHERE   B.voorwerpnummer = V.voorwerpnummer
+        													) Foto
+        								WHERE	V.verkoper = ?
+        												AND  v.veilinggesloten = 0
+        								GROUP BY	titel,
+        											B.voorwerpnummer,
+        											V.looptijdeinde,
+        											V.startprijs,
+        											bestandsnaam,
+        											V.voorwerpnummer,
+        											V.looptijdbegin
+        								ORDER BY V.looptijdbegin DESC");
+
+        $dataqueryverlopen= $db->prepare("SELECT V.titel,
+                                           V.voorwerpnummer,
+                                           V.looptijdeinde,
+                                           B.bodbedrag,
+                                           dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod,
+                                           foto.bestandsnaam,
+                                           COUNT(b.bodbedrag) AS aantalbiedingen
+                                    FROM Voorwerp V
+                                    LEFT JOIN Bod B
+                                    ON b.voorwerpnummer = v.voorwerpnummer
+                                        CROSS APPLY
+                                        (
+                                        SELECT  TOP 1 Bestand.bestandsnaam
+                                        FROM    Bestand
+                                        WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
+                                        ) Foto
+                                    WHERE V.verkoper = ?
+                                    AND  v.veilinggesloten = 1
+                                    GROUP BY V.voorwerpnummer,
+                                             V.titel,
+                                             V.looptijdeinde,
+                                             B.bodbedrag,
+                                             dbo.fnGetHoogsteBod(v.voorwerpnummer),
+                                             foto.bestandsnaam");
 
         $resultUser=$data->fetchAll();
-        $resultUserPhone=$data2->fetchAll();
 
         // If user is not found redirect back to gebruikers.php
         if(count($resultUser) === 0){
@@ -92,6 +150,11 @@
           // Get empty
       }
   }
+  else {
+    // Geen username opgegeven, redirect gebruikers.php
+    header("Location: gebruikers.php");
+    // Get empty
+  }
 
 ?>
 
@@ -124,7 +187,7 @@
           <div class="col-md-9 col-lg-10 col-sm-8">
             <div class="container-fluid content_col">
               <div class="row navigation-row fix">
-                  <h1 style="margin-bottom: 10px" >Gebruiker</h1>
+                  <h1 style="margin-bottom: 10px" >Gebruiker: <?php echo $gebruikersnaam ?></h1>
                   <p>
                     <a href="index.php">
                       <span class="glyphicon glyphicon-home "></span>
@@ -138,9 +201,6 @@
                   </p>
               </div>
               <!-- Breadcrumb END -->
-              <div class="row">
-                <h1>Beheer gebruiker: <?php echo $gebruikersnaam ?></h1>
-              </div>
               <div class="row content_top_offset">
                 <div class="col-lg-6" style="border-right:1px solid #e7e7e7;">
                     <!-- Voornaam en achternaam -->
@@ -215,7 +275,7 @@
                                     echo $resultUser[0]['adresregel2'];
                                   }
                                   else {
-                                    echo '<br>';
+                                    echo 'Adresregel2 niet gevonden';
                                   }
                                 ?>
                             </div>
@@ -242,11 +302,21 @@
                     <!-- Telefoonnummer -->
                     <div class="form-group">
                       <label for="tel">Telefoonnummer</label>
-                      <div class="pflijn">
-                          <?php
-                            echo $resultUserPhone[0]['telefoonnummer'];
-                          ?>
-                      </div>
+                      <?php
+                      if(empty($telefoonnummers) == false){
+                        foreach($telefoonnummers as $row)
+                        {
+                          echo '<div class="pflijn" style="margin-bottom:5px;">';
+                            echo $row['telefoonnummer'];
+                          echo '</div>';
+                        }
+                      }
+                      else {
+                        echo '<div class="pflijn">';
+                          echo 'Telefoonnummer niet gevonden.';
+                        echo '</div>';
+                      }
+                      ?>
                     </div>
 
                 </div>
@@ -292,6 +362,157 @@
                 </div>
 
               </div>
+              <?php
+
+              if($resultUser[0]['typegebruiker'] == 2 || $resultUser[0]['typegebruiker'] == 3)
+              {
+                $verkopersQuery = $db->prepare("SELECT banknaam,rekeningnummer,controleoptienaam,creditcardnummer FROM Verkopers  WHERE gebruikersnaam = ?;");
+                $verkopersQuery->execute(array($gebruikersnaam));
+
+                $verkopersInfo = $verkopersQuery->fetchAll();
+
+                $dataqueryopen->execute(array($gebruikersnaam));
+                $dataqueryopenresult = $dataqueryopen->fetchAll();
+
+                $dataqueryverlopen->execute(array($gebruikersnaam));
+                $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
+
+                if(isset($verkopersInfo[0]))
+                {
+                  $verkoperInfo = $verkopersInfo[0];
+                ?>
+                <div class="row">
+                  <div class="col-lg-12">
+                    <hr>
+                  </div>
+                  <div class="col-lg-12">
+                    <ul class="nav nav-tabs" role="tablist">
+                      <li role="presentation" class="active"><a href="#verkoperInfo" aria-controls="verkoperInfo" role="tab" data-toggle="tab">Verkoper Info</a></li>
+                      <li role="presentation"><a href="#actieveVeilingen" aria-controls="actieveVeilingen" role="tab" data-toggle="tab">Actieve veilingen  (<?php echo count($dataqueryopenresult) ?>)</a></li>
+                      <li role="presentation"><a href="#geslotenVeilingen" aria-controls="geslotenVeilingen" role="tab" data-toggle="tab">Gesloten veilingen  (<?php echo count($dataqueryverlopenresult) ?>)</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                      <div role="tabpanel" class="tab-pane active" id="verkoperInfo">
+                        <div class="row">
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <div class="row">
+                                <div class="col-lg-12">
+                                  <br>
+                                  <label>Controleoptie</label>
+                                    <div class="pflijn">
+                                      <?php echo ucfirst($verkoperInfo['controleoptienaam']); ?>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                  <label>Bank</label>
+                                    <div class="pflijn">
+                                      <?php echo ucfirst($verkoperInfo['banknaam']); ?>
+                                    </div>
+                                    <?php
+                                    if($verkoperInfo['controleoptienaam'] == 'post')
+                                    {
+                                      ?>
+                                      <label>Rekeningnummer</label>
+                                        <div class="pflijn">
+                                          <?php echo ucfirst($verkoperInfo['rekeningnummer']); ?>
+                                        </div>
+                                      <?php
+                                    }
+                                    else {
+                                      ?>
+                                      <label>Creditcardnummer</label>
+                                        <div class="pflijn">
+                                          <?php echo ucfirst($verkoperInfo['creditcardnummer']); ?>
+                                        </div>
+                                      <?php
+                                    }
+                                    ?>
+
+                                    <br>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div role="tabpanel" class="tab-pane" id="actieveVeilingen">
+                        <?php
+                        $indexhuidig=0;
+                        foreach($dataqueryopenresult as $row){
+                          $indexhuidig ++;
+                          ?>
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-sm-12">
+                          <div class="row item-thumb" style="display: flex;">
+                            <div class="col-lg-3 col-xs-3 col-sm-4 col-md-4" >
+                              <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
+                                <div class="item-row-image" style="background-image:url(<?php echo $row['bestandsnaam'];?>);">
+                                </div>
+                              </a>
+                            </div>
+                            <div class="col-lg-9 col-xs-9 col-sm-8 col-md-8" style="position:relative;flex: 1;">
+                              <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>"><h3 class="item-row-titel"><?php echo $row['titel']?></h3></a>
+                              <h3 style="font-size:14px;" class="orange" id="looptijdeinde" data-looptijd="<?php echo $row['looptijdeinde']?>">&nbsp;</h3>
+                              <p>Aantal biedingen: <strong><?php echo $row['aantalbiedingen']?></strong></p>
+                              <p>Startprijs: <strong>&euro;<?php echo $row['startprijs']?></strong></p>
+                              <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', '.'): 'Er is nog niet geboden';?></strong></p>
+                              <p style="position:absolute; bottom:0px;right:0px;width:150px;"><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bekijken</a></p>
+                            </div>
+                          </div>
+                        </div>
+                        <?php }
+                        if($indexhuidig==0){
+                            ?>
+                            <p class="bg-warning" style="padding:5px;margin-top:15px;">
+                                Deze verkoper heeft nog geen veilingen<br>
+                            </p>
+                            <?php
+                        }
+                        ?>
+                      </div>
+                      <div role="tabpanel" class="tab-pane" id="geslotenVeilingen">
+                        <?php
+                        $indexverlopen=0;
+                          foreach($dataqueryverlopenresult as $row){
+                            $indexverlopen ++;
+                            ?>
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-sm-12">
+                              <div class="row item-thumb" style="display: flex;">
+                                <div class="col-lg-3 col-xs-3 col-sm-4 col-md-4" >
+                                  <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
+                                    <div class="item-row-image" style="background-image:url(<?php echo $row['bestandsnaam'];?>);">
+                                    </div>
+                                  </a>
+                                </div>
+                                <div class="col-lg-9 col-xs-9 col-sm-8 col-md-8" style="position:relative;flex: 1;">
+                                  <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>"><h3 class="item-row-titel"><?php echo $row['titel']?></h3></a>
+                                  <h3 style="font-size:14px;" class="orange">Gesloten</h3>
+                                  <p>Uw Bod: <strong>&euro;<?php echo number_format($row['bodbedrag'], 2, ',', '.')?></strong></p>
+                                  <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', '.'): 'Er is nog niet geboden';?></strong></p>
+                                  <p style="position:absolute; bottom:0px;right:0px;width:150px;"><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bekijken</a></p>
+                                </div>
+                              </div>
+                            </div>
+                            <?php }
+                            if($indexverlopen==0){
+                                ?>
+                                <p class="bg-warning" style="padding:5px;margin-top:15px;">
+                                    Deze verkoper heeft nog geen gesloten veilingen<br>
+                                </p>
+                                <?php
+                            }
+                            ?>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <?php
+                }
+              }
+              ?>
+
               <div class="row">
                 <div class="col-lg-12">
                   <hr>
@@ -304,11 +525,9 @@
                         //
                         if ($brief){
                           $gebruikersnaam=$resultUser[0]['gebruikersnaam'];
-                          $data = $db->prepare("
-                                                SELECT TOP (1) startdatum
+                          $data = $db->prepare("SELECT TOP (1) startdatum
                                                 FROM Verkopers
-                                                WHERE gebruikersnaam= ?;
-                                              ");
+                                                WHERE gebruikersnaam= ?;");
 
                           $data->execute(array($gebruikersnaam));
                           $result=$data->fetchAll();
@@ -415,5 +634,31 @@
                }
           });
      } </script>
+
+     <script>
+     var x = setInterval(function() {
+
+       $( "h3#looptijdeinde" ).each(function( index ) {
+           var countDownDate = new Date($( this ).data("looptijd")).getTime();
+           var now = new Date().getTime();
+           var distance = countDownDate - now;
+
+           var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+           var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+           var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+           var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+           $( this ).text(days + "d " + hours + "h "
+           + minutes + "m " + seconds + "s ");
+
+           if (distance < 0) {
+             $( this ).text("Gesloten");
+           }
+       });
+
+     }, 1000);
+
+
+     </script>
   </body>
 </html>

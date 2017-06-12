@@ -310,6 +310,17 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
               <h1 id="productCountDown" class="orange">&nbsp;</h1>
             </div>
           </div>
+          <?php
+
+          if($resultVoorwerp != null && $resultVoorwerp['veilinggesloten'] == 1)
+          {
+            ?>
+            <div class="col-lg-12 timer_row">
+              <p class="bg-warning" style="padding:5px;font-size:1.2em;">Deze veiling is gesloten, je kunt hier niet meer op bieden</p>
+            </div>
+            <?php
+          }
+          ?>
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
               <li role="presentation" class="active"><a href="#veiling" aria-controls="veiling" role="tab" data-toggle="tab">Veiling</a></li>
@@ -429,6 +440,8 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                       }
                                       else {
                                         // show input field for offer
+                                        if($resultVoorwerp != null && $resultVoorwerp['veilinggesloten'] != 1)
+                                        {
                                         ?>
                                         <form method="POST" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
                                           <div class="input-group" >
@@ -441,6 +454,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                          </form>
                                          <br/>
                                         <?php
+                                        }
                                       }
                                     }else {
                                       // Show message to login if user isn't logged in

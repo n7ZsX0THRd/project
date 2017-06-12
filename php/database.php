@@ -361,7 +361,7 @@ function swap_rubriek_volgnr($volgnr_A, $volgnr_B, $rubriek_nummer_A, $rubriek_n
             $data->execute(array($volgnr_A, $rubriek_nummer_B));
 }
 function create_auction($data,$db){  //db is global!!
-  var_dump($data);
+  //var_dump($data);
   try {
       $allowedTags = '<br><p><h1><h2><h3><h4><h5><h6><ul><li><ol><span><b><i><strong><small><mark><em><ins><sub><sup><del>';
 
@@ -384,16 +384,16 @@ function create_auction($data,$db){  //db is global!!
 	@foto3 = ?,
 	@foto4 = ?");
       $dbs->execute(array(
-          $data['vt_title'],
+          htmlspecialchars($data['vt_title']),
           strip_tags($data['vt_description'],$allowedTags),
           (float)$data['vt_startPrice'],
           $data['vt_auctionTime'],
           (float)$data['vt_send'],
-          $data['vt_sendInstructions'],
+          htmlspecialchars($data['vt_sendInstructions']),
           (int)$data['vt_payment'],
-          $data['vt_paymentInstruction'],
-          $data['vt_zipcode'],
-          $data['vt_city'],
+          htmlspecialchars($data['vt_paymentInstruction']),
+          htmlspecialchars($data['vt_zipcode']),
+          htmlspecialchars($data['vt_city']),
           $data['vt_country'],
           $data['vt_seller'],
           implode(",",$data['vt_rubrieken']),

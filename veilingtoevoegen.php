@@ -152,9 +152,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
    else {
 
      if(empty($_POST['vt_paymentInstruction']))
-      $_POST['vt_paymentInstruction'] = NULL;
+      $_POST['vt_paymentInstruction'] = null;
      if(empty($_POST['vt_sendInstructions']))
-       $_POST['vt_sendInstructions'] = NULL;
+       $_POST['vt_sendInstructions'] = null;
 
      $result = create_auction($_POST,$db);
 
@@ -168,7 +168,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
      }
 
      $didCreateAuction = true;
-     echo $result->getCode();
+     echo var_dump($result);
    }
 
    if($didCreateAuction === false)
@@ -218,7 +218,7 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
       <div class="col-md-9 col-lg-10 col-sm-8">
         <div class="container-fluid content_col">
           <div class="row navigation-row fix">
-              <h1 style="margin-bottom: 10px" >Verkopen</h1>
+              <h1 style="margin-bottom: 10px" >Veiling starten</h1>
               <p>
                 <a href="index.php">
                   <span class="glyphicon glyphicon-home "></span>
@@ -226,7 +226,7 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
                 <span class="glyphicon glyphicon-menu-right"></span>
                 <a href="">Direct regelen</a>
                 <span class="glyphicon glyphicon-menu-right"></span>
-                <a href="gebruikers.php">Verkopen</a>
+                <a href="veilingtoevoegen.php">Veiling starten</a>
               </p>
           </div>
           <div class="row content_top_offset">
@@ -284,7 +284,7 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
             {
               echo '<p class="bg-danger" style="padding:5px;">De opgegeven verzendkosten zijn ongeldig, de verzondkosten kunnen niet negatief of leeg zijn. En niet hoger dan &euro;9999,99</p>';
             }
-            else if(isset($_SESSION['warning']['unkown_invalid']) && $_SESSION['warning']['unkown_invalid'] == true)
+            else if(isset($_SESSION['warning']['unknown_invalid']) && $_SESSION['warning']['unknown_invalid'] == true)
             {
               echo '<p class="bg-warning" style="padding:5px;">Er is een onbekende fout opgetreden</p>';
             }

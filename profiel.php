@@ -491,7 +491,7 @@ if(isset($_GET['foto'])){
                             echo $result['adresregel2'];
                           }
                           else {
-                            echo '<br>';
+                            echo 'Adresregel2 niet gevonden';
                           }?>
                       </div>
                     <?php } ?>

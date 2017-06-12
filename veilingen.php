@@ -28,7 +28,7 @@ $_SESSION['menu']['sub'] = 'ma';
 
 
 $username = getLoggedInUser($db)['gebruikersnaam'];
-$dataquery= $db->prepare("  SELECT		titel,
+$dataquery= $db->prepare("SELECT	titel,
 											MAX(bodbedrag) as bodbedragMAX,
 											V.looptijdeinde,
 											V.startprijs,
