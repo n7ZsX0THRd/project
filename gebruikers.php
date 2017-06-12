@@ -249,6 +249,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
           <div class="container-fluid content_col">
             <div class="row navigation-row fix">
                 <h1 style="margin-bottom: 10px" >Gebruikers</h1>
+                <a style="float:right;" class="btn btn-orange" href="gewonnen_veilingen.php">Stuur mails gewonnen veilingen</a>
                 <p>
                   <a href="index.php">
                     <span class="glyphicon glyphicon-home "></span>
