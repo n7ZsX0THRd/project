@@ -101,7 +101,7 @@ FROM Voorwerp v
      WHERE (dbo.fnRubriekIsAfstammelingVan(rubrieknummer,?) = 1 OR rubrieknummer = ?)
 	   AND vir.rubrieknummer = rubriek.rubrieknummer
 	)
-".$search_SQL."  AND v.looptijdeinde > GETDATE()
+".$search_SQL."  AND v.looptijdeinde > GETDATE() AND v.inactief = 0
 GROUP BY
 	v.voorwerpnummer,
 	v.titel,
@@ -160,7 +160,7 @@ FROM Voorwerp v
      WHERE (dbo.fnRubriekIsAfstammelingVan(rubrieknummer,?) = 1 OR rubrieknummer = ?)
 	   AND vir.rubrieknummer = rubriek.rubrieknummer
 	)
-".$search_SQL."  AND v.looptijdeinde > GETDATE()
+".$search_SQL."  AND v.looptijdeinde > GETDATE() AND v.inactief = 0
 GROUP BY
 	v.voorwerpnummer,
 	v.titel,

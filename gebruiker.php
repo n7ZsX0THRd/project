@@ -62,6 +62,7 @@
         											V.looptijdeinde,
         											V.startprijs,
         											bestandsnaam,
+                              v.inactief,
         											V.voorwerpnummer,
         											dbo.fnGetHoogsteBod(b.voorwerpnummer) AS hoogsteBod,
         											COUNT(b.bodbedrag) AS aantalbiedingen
@@ -82,13 +83,15 @@
         											V.startprijs,
         											bestandsnaam,
         											V.voorwerpnummer,
-        											V.looptijdbegin
+        											V.looptijdbegin,
+                              v.inactief
         								ORDER BY V.looptijdbegin DESC");
 
         $dataqueryverlopen= $db->prepare("SELECT V.titel,
                                            V.voorwerpnummer,
                                            V.looptijdeinde,
                                            B.bodbedrag,
+                                           v.inactief,
                                            dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod,
                                            foto.bestandsnaam,
                                            COUNT(b.bodbedrag) AS aantalbiedingen
@@ -108,7 +111,8 @@
                                              V.looptijdeinde,
                                              B.bodbedrag,
                                              dbo.fnGetHoogsteBod(v.voorwerpnummer),
-                                             foto.bestandsnaam");
+                                             foto.bestandsnaam,
+                                             v.inactief");
 
         $resultUser=$data->fetchAll();
 
@@ -458,7 +462,10 @@
                               <p>Aantal biedingen: <strong><?php echo $row['aantalbiedingen']?></strong></p>
                               <p>Startprijs: <strong>&euro;<?php echo $row['startprijs']?></strong></p>
                               <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', '.'): 'Er is nog niet geboden';?></strong></p>
-                              <p style="position:absolute; bottom:0px;right:0px;width:150px;"><a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange widebutton" role="button">Bekijken</a></p>
+                              <div style="position:absolute; bottom:0px;right:0px;width:250px;">
+                                <a href="gebruiker.php?gebruikersnaam=<?php echo $gebruikersnaam?>&voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>&action=blokkeer" class="btn btn-niagara"  style="margin-top:0px;"role="button">Sluit veiling</a>
+                                <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange " role="button">Bekijken</a>
+                              </div>
                             </div>
                           </div>
                         </div>

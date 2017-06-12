@@ -265,7 +265,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   <?php if (isset($_GET['mail'])) {
                     ?>
                     <div class="row content_top_offset">
-                      <p class="bg-success" style="padding:5px;">Er is een email gestuurd naar alles winnaar.</p>
+                      <p class="bg-success" style="padding:5px;">Er is een email gestuurd naar alle winnaars.</p>
                     </div>
                     <?php
                   }?>
