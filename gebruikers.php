@@ -17,7 +17,7 @@ pdo_connect();
 // Include database, and include user functions.
 // Connect to database
 
-// If user is not loggedIn or administrator redirect to homepage
+// If user is not loggedIn AND administrator redirect to homepage
 if(isUserBeheerder($db) == false){
   header("Location: index.php");
 }
