@@ -24,10 +24,10 @@ function pdo_connect() {
 function block_user($gebruikersnaam) {
     global $db;
     try {
-        $dbs = $db->prepare(" UPDATE Gebruikers 
-								SET statusID = '3' 
+        $dbs = $db->prepare(" UPDATE Gebruikers
+								SET statusID = '3'
 								WHERE gebruikersnaam = ?;
-							DELETE FROM Activatiecodes 
+							DELETE FROM Activatiecodes
 								WHERE gebruikersnaam=?
 								");
         $dbs->execute(array($gebruikersnaam,$gebruikersnaam,$gebruikersnaam));
@@ -419,12 +419,12 @@ function create_auction($data,$db){  //db is global!!
 }
 function DisableAllAuctions ($gebruikersnaam) {
 	try {
-		$dbs = $db->prepare("UPDATE Voorwerp 
-								SET inactief = 1 
-								WHERE verkoper = ?
+		$dbs = $db->prepare("UPDATE Voorwerp
+								SET inactief = 1
+								WHERE verkoper = ? AND veilinggesloten = 0
 							SELECT voorwerpnummer
 								FROM Voorwerp
-								WHERE verkoper = ?");
+								WHERE verkoper = ? AND veilinggesloten = 0");
         $dbs->execute(array($gebruikersnaam, $gebruikersnaam));
         $result = $dbs->fetchAll();
 		foreach($result as $voorwerpnummer) {
@@ -435,7 +435,7 @@ function DisableAllAuctions ($gebruikersnaam) {
       //var_dump($e);
       return false;
   }
-	
+
 }
 function AuctionDisabledBiddersMail ($voorwerpnummer) {
 	try {
@@ -445,7 +445,7 @@ function AuctionDisabledBiddersMail ($voorwerpnummer) {
 								V.voorwerpnummer=B.voorwerpnummer
 								INNER JOIN Gebruikers AS G ON
 								B.gebruiker=G.gebruikersnaam
-								WHERE V.voorwerpnummer = ?");
+								WHERE V.voorwerpnummer = ? AND v.veilinggesloten = 0");
         $dbs->execute(array($voorwerpnummer));
         $result = $dbs->fetchAll();
         // Block user Query
