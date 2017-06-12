@@ -43,7 +43,7 @@ while ($row = $data->fetch()){
     $verkoperSubject = "Veiling ". $veiling ." is beëindigd";
     $koperSubject = "Veiling ". $veiling ."  heeft u gewonnen!";
     $verkoperContent = "Beste verkoper, <br> Uw veiling is succesvol beëindigd. Het is verkocht aan: ".$koper.". Voor € ".$bedrag." ! <br> Groeten van de beste veilingsite :)";
-    $koperContent = "Beste ".$koper.", <br> U heeft succesvol de veiling: " . $veiling . ". Voor &euro; ".$bedrag." gewonnen! <br> Groeten van de beste veilingsite :)";
+    $koperContent = "Beste ".$koper.", <br> U heeft succesvol de veiling: " . $veiling . " voor &euro; ".$bedrag." gewonnen! <br> Groeten van de beste veilingsite :)";
     
     sendMail($koperMail,$koperSubject,$koperContent);
     if (!endsWith($verkoperMail, 'mail.mail')){
