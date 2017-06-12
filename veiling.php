@@ -41,7 +41,6 @@ if (isset($_GET['voorwerpnummer']) && is_numeric($_GET['voorwerpnummer'])) {
   v.betalingsinstructie,
   v.postcode,
   v.plaatsnaam,
-  v.inactief,
   v.land,
   v.looptijd,
   v.looptijdbegin,
@@ -317,15 +316,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
           {
             ?>
             <div class="col-lg-12 timer_row">
-              <p class="bg-warning" style="padding:5px;">Deze veiling is afgelopen, je kunt hier niet meer op bieden</p>
-            </div>
-            <?php
-          }
-          else   if($resultVoorwerp != null && $resultVoorwerp['inactief'] == 1)
-          {
-            ?>
-            <div class="col-lg-12 timer_row">
-              <p class="bg-warning" style="padding:5px;">Deze veiling is geblokkeerd, je kunt hier niet meer op bieden</p>
+              <p class="bg-warning" style="padding:5px;font-size:1.2em;">Deze veiling is gesloten, je kunt hier niet meer op bieden</p>
             </div>
             <?php
           }
@@ -718,14 +709,10 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
   $('#bied_refresh').click(function(){
     $( "#bieden_content" ).load( "php/includes/bied_geschiedenis.php?voorwerpnummer=<?php echo $resultVoorwerp['voorwerpnummer'];?>" );
   });
-    function loadlink(){
-          $( "#bieden_content" ).load( "php/includes/bied_geschiedenis.php?voorwerpnummer=<?php echo $resultVoorwerp['voorwerpnummer'];?>" );
-    }
+  $(document).ready(function(){
+    $( "#bieden_content" ).load( "php/includes/bied_geschiedenis.php?voorwerpnummer=<?php echo $resultVoorwerp['voorwerpnummer'];?>" );
+  });
 
-    loadlink(); // This will run on page load
-    setInterval(function(){
-        loadlink() // this will run after every 5 seconds
-    }, 5000);
   </script>
 </body>
 </html>
