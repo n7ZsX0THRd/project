@@ -184,7 +184,7 @@ $populairItemsQuery->execute();
     <div class="carousel-inner">
     <div class="item active banner">
         <center class="bannercontent">
-          Veil nu snel al uw oude spullen, en vang er nog een leuk bedrag voor!
+          Veilen en bieden op de beste veilingsite van Nederland!
         </center>
 
     </div>

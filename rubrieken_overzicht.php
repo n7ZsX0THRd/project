@@ -241,14 +241,8 @@ for ($row = 0; $row < $count; $row++) {
                             }
 
 
-                            $beheerderBlockedStyle = '';
 
-                            if($beheerder){
-                              if(((bool)$rubriek[0]['inactief']) == true){
-                                $beheerderBlockedStyle = 'style="color:red;"';
-                              }
-                            }
-                            echo '<span '.$beheerderBlockedStyle.'>'.$rubriek[0]['rubrieknaam'].'</span></h2>';
+                            echo '<span>'.$rubriek[0]['rubrieknaam'].'</span></h2>';
                             echo '<ul class="list-unstyled">';
                             foreach($rubriek as $key => $subRubriek){
                                 if (!$key==0){
