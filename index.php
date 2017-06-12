@@ -118,6 +118,7 @@ $newItemsQuery = $db->prepare("SELECT TOP 4
         SELECT  TOP 1 Bestand.bestandsnaam
         FROM    Bestand
         WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
+        AND     v.veilinggesloten = 0
         ) Foto ORDER BY v.looptijdbegin DESC");
 $newItemsQuery->execute();
 // Execute query
