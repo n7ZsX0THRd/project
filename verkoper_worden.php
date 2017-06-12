@@ -25,14 +25,10 @@ if($result['typegebruiker'] == 2 || $result['typegebruiker'] == 3)
   header("Location: veilingtoevoegen.php");
   exit();
 }
-var_dump($result);
-
-//echo var_dump($user);
+//var_dump($result);
 $error = 0;
 
-
 $page = '';
-
 
 if ($result['typegebruiker'] == 2){
   $page = 'alVerkoper';
