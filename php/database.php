@@ -24,10 +24,10 @@ function pdo_connect() {
 function block_user($gebruikersnaam) {
     global $db;
     try {
-        $dbs = $db->prepare(" UPDATE Gebruikers 
-								SET statusID = '3' 
+        $dbs = $db->prepare(" UPDATE Gebruikers
+								SET statusID = '3'
 								WHERE gebruikersnaam = ?;
-							DELETE FROM Activatiecodes 
+							DELETE FROM Activatiecodes
 								WHERE gebruikersnaam=?
 								");
         $dbs->execute(array($gebruikersnaam,$gebruikersnaam,$gebruikersnaam));
@@ -75,10 +75,7 @@ function block_user($gebruikersnaam) {
 function unBlock_user($gebruikersnaam) {
     global $db;
     try {
-        $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '1' WHERE gebruikersnaam = ?
-							UPDATE Voorwerp
-								SET inactief = 0
-								WHERE gebruikersnaam = ?");
+        $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '1' WHERE gebruikersnaam = ?");
         $dbs->execute(array($gebruikersnaam, $gebruikersnaam));
         $dbs = $db->prepare("SELECT emailadres FROM Gebruikers WHERE gebruikersnaam = ? ");
         $dbs->execute(array($gebruikersnaam));
@@ -419,8 +416,8 @@ function create_auction($data,$db){  //db is global!!
 }
 function DisableAllAuctions ($gebruikersnaam) {
 	try {
-		$dbs = $db->prepare("UPDATE Voorwerp 
-								SET inactief = 1 
+		$dbs = $db->prepare("UPDATE Voorwerp
+								SET inactief = 1
 								WHERE verkoper = ?
 							SELECT voorwerpnummer
 								FROM Voorwerp
@@ -435,7 +432,7 @@ function DisableAllAuctions ($gebruikersnaam) {
       //var_dump($e);
       return false;
   }
-	
+
 }
 function AuctionDisabledBiddersMail ($voorwerpnummer) {
 	try {
