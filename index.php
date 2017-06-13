@@ -262,7 +262,7 @@ $populairItemsQuery->execute();
                 <h3></h3>
                 <ul class="menubar">
                   <li class="toggle-sub active">
-                    <a href="">Rubrieken</a>
+                    <a href="rubriek.php">Rubrieken</a>
                   </li>
                   <ul class="sub">
                     <?php

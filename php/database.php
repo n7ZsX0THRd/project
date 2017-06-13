@@ -75,10 +75,7 @@ function block_user($gebruikersnaam) {
 function unBlock_user($gebruikersnaam) {
     global $db;
     try {
-        $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '1' WHERE gebruikersnaam = ?
-							UPDATE Voorwerp
-								SET inactief = 0
-								WHERE gebruikersnaam = ?");
+        $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '1' WHERE gebruikersnaam = ?");
         $dbs->execute(array($gebruikersnaam, $gebruikersnaam));
         $dbs = $db->prepare("SELECT emailadres FROM Gebruikers WHERE gebruikersnaam = ? ");
         $dbs->execute(array($gebruikersnaam));
@@ -421,7 +418,7 @@ function DisableAllAuctions ($gebruikersnaam) {
 	try {
 		$dbs = $db->prepare("UPDATE Voorwerp
 								SET inactief = 1
-								WHERE verkoper = ? AND veilinggesloten = 0
+                  WHERE verkoper = ? AND veilinggesloten = 0
 							SELECT voorwerpnummer
 								FROM Voorwerp
 								WHERE verkoper = ? AND veilinggesloten = 0");
