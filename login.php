@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
    $result = $data->fetchAll();
    $Totaal = count($result);
-   echo $Totaal;
+   //echo $Totaal;
    if($Totaal == 1) // If user found, verify password...
    {
      if(password_verify($wachtwoord, $result[0]['wachtwoord'])) // Check if password is valid

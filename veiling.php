@@ -709,10 +709,14 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
   $('#bied_refresh').click(function(){
     $( "#bieden_content" ).load( "php/includes/bied_geschiedenis.php?voorwerpnummer=<?php echo $resultVoorwerp['voorwerpnummer'];?>" );
   });
-  $(document).ready(function(){
-    $( "#bieden_content" ).load( "php/includes/bied_geschiedenis.php?voorwerpnummer=<?php echo $resultVoorwerp['voorwerpnummer'];?>" );
-  });
+  function loadlink(){
+          $( "#bieden_content" ).load( "php/includes/bied_geschiedenis.php?voorwerpnummer=<?php echo $resultVoorwerp['voorwerpnummer'];?>" );
+    }
 
+    loadlink(); // This will run on page load
+    setInterval(function(){
+        loadlink() // this will run after every 5 seconds
+    }, 5000);
   </script>
 </body>
 </html>
