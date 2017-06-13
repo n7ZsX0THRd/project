@@ -107,12 +107,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             {
               $_SESSION['warning']['adresssregel_invalid'] = true;
             }
-            else if(isset($_POST['r_street_addition']))
+            else if(strlen($_POST['r_street_addition']) != 0 && (strlen($_POST['r_street_addition']) > 4 || strlen($_POST['r_street_addition']) < 0 || preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $_POST['r_street_addition'])))
             {
-              if(strlen($_POST['r_street_addition']) > 4 || strlen($_POST['r_street_addition']) < 0 || preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $_POST['r_street_addition']))
-              {
-                $_SESSION['warning']['street_addition_invalid'] = true;
-              }
+              $_SESSION['warning']['street_addition_invalid'] = true;
             }
             else if(is_numeric($_POST['r_street_nr']) == false || (float)$_POST['r_street_nr'] > 9999|| (float)$_POST['r_street_nr'] < 0)
             {
