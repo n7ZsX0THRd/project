@@ -27,8 +27,9 @@ $_SESSION['menu']['sub'] = 'ma';
 // Set session for sidebar menu,
 // ma -> my account
 
-
+// Get username
 $username = getLoggedInUser($db)['gebruikersnaam'];
+// Query for getting all the auctions with the users highest bids
 $dataquery= $db->prepare(" SELECT titel, MAX(bodbedrag) as bodbedragMAX, V.looptijdeinde, bestandsnaam, B.voorwerpnummer, dbo.fnGetHoogsteBod(b.voorwerpnummer) AS hoogsteBod
 						FROM Bod AS B
 						INNER JOIN Voorwerp AS V ON
@@ -47,6 +48,7 @@ $dataquery= $db->prepare(" SELECT titel, MAX(bodbedrag) as bodbedragMAX, V.loopt
 
 $dataquery->execute(array($username));
 
+// Query for getting all the auctions where the user bids no is longer the highest
 $dataqueryoverboden= $db->prepare(" SELECT titel, MAX(bodbedrag) as bodbedragMAX, V.looptijdeinde, bestandsnaam, B.voorwerpnummer, dbo.fnGetHoogsteBod(b.voorwerpnummer) AS hoogsteBod
 FROM Bod AS B
 INNER JOIN Voorwerp AS V ON
@@ -63,7 +65,7 @@ GROUP BY titel, B.voorwerpnummer, V.looptijdeinde, bestandsnaam, B.voorwerpnumme
 HAVING dbo.fnGetHoogsteBod(B.voorwerpnummer) > MAX(bodbedrag)");
 $dataqueryoverboden->execute(array($username));
 
-
+// Query for getting all the auctions which are won by the user
 $dataquerygewonnen= $db->prepare("SELECT DISTINCT V.titel,
                                           v.voorwerpnummer,
                                           bodbedrag, boddagtijd,
@@ -84,6 +86,7 @@ $dataquerygewonnen= $db->prepare("SELECT DISTINCT V.titel,
                           AND v.veilinggesloten = 1");
 $dataquerygewonnen->execute(array($username));
 
+// Query for getting all the auctions which are lost by the user
 $dataqueryverloren= $db->prepare("SELECT titel, MAX(bodbedrag) as bodbedragMAX, V.looptijdeinde, bestandsnaam, B.voorwerpnummer, dbo.fnGetHoogsteBod(b.voorwerpnummer) AS hoogsteBod
 							FROM Bod AS B
 							INNER JOIN Voorwerp AS V ON
@@ -100,6 +103,7 @@ $dataqueryverloren= $db->prepare("SELECT titel, MAX(bodbedrag) as bodbedragMAX, 
 							HAVING dbo.fnGetHoogsteBod(B.voorwerpnummer) > MAX(bodbedrag)");
 $dataqueryverloren->execute(array($username));
 
+// setting variables for the query results
 $dataqueryresult = $dataquery->fetchAll();
 $dataqueryoverbodenresult = $dataqueryoverboden->fetchAll();
 $dataquerygewonnenresult = $dataquerygewonnen->fetchAll();
@@ -132,7 +136,7 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
         ?>
       </div>
 
-
+      <!-- CONTENT -->
       <div class="col-md-9 col-lg-10 col-sm-8">
         <div class="container-fluid content_col">
           <div class="row navigation-row fix">
@@ -156,7 +160,7 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                       <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Verloren (<?php echo count($dataqueryverlorenresult) ?>)</a></li>
                     </ul>
 
-                    <!-- HUIDIGE BIEDINGEN -->
+                    <!-- HIGHEST BIDS -->
                     <div class="tab-content">
                       <div role="tabpanel" class="tab-pane active" id="home">
                           <?php
@@ -191,8 +195,9 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                           }
                           ?>
                         </div>
+                      <!-- END HIGHEST BIDS -->
 
-                      <!-- OVERBODEN BIEDINGEN -->
+                      <!-- OVERBID BIDS  -->
                       <div role="tabpanel" class="tab-pane" id="profile">
                         <?php
                         $indexoverboden=0;
@@ -226,8 +231,9 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                             }
                             ?>
                           </div>
+                        <!-- END OVERBID BIDS -->
 
-                      <!-- GEWONNEN BIEDINGEN -->
+                      <!-- WON AUCTIONS -->
                       <div role="tabpanel" class="tab-pane" id="messages">
                         <?php
                         $indexgewonnen=0;
@@ -261,8 +267,9 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                           }
                           ?>
                           </div>
+                        <!-- END WON AUCTIONS -->
 
-                      <!-- VERLOREN BIEDINGEN -->
+                      <!-- LOST AUCTIONS -->
                       <div role="tabpanel" class="tab-pane" id="settings">
                         <?php
                         $indexverloren=0;
@@ -295,6 +302,7 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
                             <?php
                           } ?>
                       </div>
+                      <!-- END LOST AUCTIONS  -->
                     </div>
           </div>
 
@@ -302,11 +310,6 @@ $dataqueryverlorenresult = $dataqueryverloren->fetchAll();
       </div>
       <!-- CONTAINER END -->
     </div>
-
-
-
-
-
 
     <?php
       include 'php/includes/footer.php';
