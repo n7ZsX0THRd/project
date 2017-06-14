@@ -24,8 +24,13 @@ function pdo_connect() {
 function block_user($gebruikersnaam) {
     global $db;
     try {
-        $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '3' WHERE gebruikersnaam = ?;DELETE FROM Activatiecodes WHERE gebruikersnaam=? ");
-        $dbs->execute(array($gebruikersnaam,$gebruikersnaam));
+        $dbs = $db->prepare(" UPDATE Gebruikers
+								SET statusID = '3'
+								WHERE gebruikersnaam = ?;
+							DELETE FROM Activatiecodes
+								WHERE gebruikersnaam=?
+								");
+        $dbs->execute(array($gebruikersnaam,$gebruikersnaam,$gebruikersnaam));
         $dbs = $db->prepare("SELECT emailadres FROM Gebruikers WHERE gebruikersnaam = ? ");
         $dbs->execute(array($gebruikersnaam));
         $result = $dbs->fetchAll()[0];
@@ -58,8 +63,9 @@ function block_user($gebruikersnaam) {
             </td>
         </tr>';
         sendMail($to,$subject,$message);
-        //SendMail to user
-        return true;
+		//SendMail to user
+		DisableAllAuctions ($gebruikersnaam);
+		return true;
     } catch (PDOException $e) {
         //echo "Could not block user, ".$e->getMessage();
 
@@ -70,7 +76,7 @@ function unBlock_user($gebruikersnaam) {
     global $db;
     try {
         $dbs = $db->prepare(" UPDATE Gebruikers SET statusID = '1' WHERE gebruikersnaam = ?");
-        $dbs->execute(array($gebruikersnaam));
+        $dbs->execute(array($gebruikersnaam, $gebruikersnaam));
         $dbs = $db->prepare("SELECT emailadres FROM Gebruikers WHERE gebruikersnaam = ? ");
         $dbs->execute(array($gebruikersnaam));
         $result = $dbs->fetchAll()[0];
@@ -361,7 +367,7 @@ function swap_rubriek_volgnr($volgnr_A, $volgnr_B, $rubriek_nummer_A, $rubriek_n
             $data->execute(array($volgnr_A, $rubriek_nummer_B));
 }
 function create_auction($data,$db){  //db is global!!
-  var_dump($data);
+  //var_dump($data);
   try {
       $allowedTags = '<br><p><h1><h2><h3><h4><h5><h6><ul><li><ol><span><b><i><strong><small><mark><em><ins><sub><sup><del>';
 
@@ -384,16 +390,16 @@ function create_auction($data,$db){  //db is global!!
 	@foto3 = ?,
 	@foto4 = ?");
       $dbs->execute(array(
-          $data['vt_title'],
+          htmlspecialchars($data['vt_title']),
           strip_tags($data['vt_description'],$allowedTags),
           (float)$data['vt_startPrice'],
           $data['vt_auctionTime'],
           (float)$data['vt_send'],
-          $data['vt_sendInstructions'],
+          htmlspecialchars($data['vt_sendInstructions']),
           (int)$data['vt_payment'],
-          $data['vt_paymentInstruction'],
-          $data['vt_zipcode'],
-          $data['vt_city'],
+          htmlspecialchars($data['vt_paymentInstruction']),
+          htmlspecialchars($data['vt_zipcode']),
+          htmlspecialchars($data['vt_city']),
           $data['vt_country'],
           $data['vt_seller'],
           implode(",",$data['vt_rubrieken']),
@@ -406,6 +412,82 @@ function create_auction($data,$db){  //db is global!!
 
   } catch (PDOException $e) {
       return $e;
+  }
+}
+function DisableAllAuctions ($gebruikersnaam) {
+	try {
+		$dbs = $db->prepare("UPDATE Voorwerp
+								SET inactief = 1
+                  WHERE verkoper = ? AND veilinggesloten = 0
+							SELECT voorwerpnummer
+								FROM Voorwerp
+								WHERE verkoper = ? AND veilinggesloten = 0");
+        $dbs->execute(array($gebruikersnaam, $gebruikersnaam));
+        $result = $dbs->fetchAll();
+		foreach($result as $voorwerpnummer) {
+			AuctionDisabledBiddersMail ($voorwerpnummer['voorwerpnummer']);
+		}
+	}
+	catch (PDOException $e) {
+      //var_dump($e);
+      return false;
+  }
+
+}
+function AuctionDisabledBiddersMail ($voorwerpnummer) {
+	try {
+		$dbs = $db->prepare("SELECT DISTINCT G.voornaam, G.emailadres, V.titel
+								FROM Voorwerp AS V
+								INNER JOIN Bod AS B ON
+								V.voorwerpnummer=B.voorwerpnummer
+								INNER JOIN Gebruikers AS G ON
+								B.gebruiker=G.gebruikersnaam
+								WHERE V.voorwerpnummer = ? AND v.veilinggesloten = 0");
+        $dbs->execute(array($voorwerpnummer));
+        $result = $dbs->fetchAll();
+        // Block user Query
+		$i = 0;
+		while ($i < count($result)) {
+			$voornaam = $result[$i][0];
+			$emailadres = $result[$i][1];
+			$titel = $result[$i][2];
+			echo $voornaam;
+			echo $emailadres;
+			$i++;
+			$to = $emailadres;
+			$subject = 'Veiling gestopt';
+			$message = '
+			<tr>
+				<td align="center" bgcolor="#FFFFFF" style="padding: 40px 30px 40px 30px;">
+					<table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
+						<tr>
+							<td style="color:#023042">
+								Beste '.$voornaam.',
+							</td>
+						</tr>
+						<tr>
+							<td style="padding: 20px 0 0 0; color:#023042">
+								<p>De veiling met de titel:'.$titel.' is beëindigd door EenmaalAndermaal.
+								Hierdoor is geen helaas geen winnaar.</p>
+								<p> Wij hopen u via de email voldoende op de hoogte te hebben gesteld!</p>
+							</td>
+						</tr>
+						<tr>
+							<td style="padding: 10px 0 20px 0; color:#023042">
+								<p>Met vriendelijke groeten,</p>
+								<p>Team EenmaalAndermaal</p>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>';
+			sendMail($to,$subject,$message);
+			return true;
+		}
+	}
+		catch (PDOException $e) {
+      //var_dump($e);
+      return false;
   }
 }
 

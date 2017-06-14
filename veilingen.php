@@ -28,8 +28,8 @@ $_SESSION['menu']['sub'] = 'ma';
 
 // Get username
 $username = getLoggedInUser($db)['gebruikersnaam'];
-// Query for getting all the users active auctions
-$dataquery= $db->prepare("  SELECT		titel,
+
+$dataquery= $db->prepare("SELECT	titel,
 											MAX(bodbedrag) as bodbedragMAX,
 											V.looptijdeinde,
 											V.startprijs,

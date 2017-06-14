@@ -99,7 +99,7 @@ $lastChanceQuery = $db->prepare("SELECT TOP 3 * FROM
 			WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
 		)
 		Foto
-	WHERE DATEADD(MI,30,GETDATE()) < v.looptijdeinde
+	WHERE DATEADD(MI,30,GETDATE()) < v.looptijdeinde  AND v.inactief = 0
 ) AS s
 ORDER BY looptijdeinde ASC");
 $lastChanceQuery->execute();
@@ -118,7 +118,7 @@ $newItemsQuery = $db->prepare("SELECT TOP 4
         SELECT  TOP 1 Bestand.bestandsnaam
         FROM    Bestand
         WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
-        AND     v.veilinggesloten = 0
+        AND     v.veilinggesloten = 0  AND v.inactief = 0
         ) Foto ORDER BY v.looptijdbegin DESC");
 $newItemsQuery->execute();
 // Execute query
@@ -141,7 +141,7 @@ FROM Voorwerp v
   ) Foto
 	INNER JOIN Bod b
 		ON b.voorwerpnummer = v.voorwerpnummer
-WHERE DATEADD(MI,30,GETDATE()) < v.looptijdeinde
+WHERE DATEADD(MI,30,GETDATE()) < v.looptijdeinde  AND v.inactief = 0
 	GROUP BY
 		v.voorwerpnummer,
 		v.titel,
@@ -184,7 +184,7 @@ $populairItemsQuery->execute();
     <div class="carousel-inner">
     <div class="item active banner">
         <center class="bannercontent">
-          Veil nu snel al uw oude spullen, en vang er nog een leuk bedrag voor!
+          Veilen en bieden op de beste veilingsite van Nederland!
         </center>
 
     </div>
@@ -262,7 +262,7 @@ $populairItemsQuery->execute();
                 <h3></h3>
                 <ul class="menubar">
                   <li class="toggle-sub active">
-                    <a href="">Rubrieken</a>
+                    <a href="rubriek.php">Rubrieken</a>
                   </li>
                   <ul class="sub">
                     <?php

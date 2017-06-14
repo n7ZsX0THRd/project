@@ -34,12 +34,12 @@ function time_elapsed_string($datetime, $full = false) {
         's' => 'seconde',
     );
     $stringMV = array(
-        'y' => 'jaren',
-        'm' => 'maanden',
-        'w' => 'weken',
-        'd' => 'dagen',
-        'h' => 'uren',
-        'i' => 'minuten',
+        'y' => 'jaar',
+        'm' => 'maand',
+        'w' => 'week',
+        'd' => 'dag',
+        'h' => 'uur',
+        'i' => 'minuut',
         's' => 'seconden',
     );
     foreach ($string as $k => &$v) {

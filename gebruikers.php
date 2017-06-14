@@ -17,7 +17,7 @@ pdo_connect();
 // Include database, and include user functions.
 // Connect to database
 
-// If user is not loggedIn or administrator redirect to homepage
+// If user is not loggedIn AND administrator redirect to homepage
 if(isUserBeheerder($db) == false){
   header("Location: index.php");
 }
@@ -248,7 +248,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         <div class="col-md-9 col-lg-10 col-sm-8">
           <div class="container-fluid content_col">
             <div class="row navigation-row fix">
-                <h1 style="margin-bottom: 10px" >Gebruikers</h1>
+                <h1 style="margin-bottom: 10px" >Gebruikers   <a style="float:right;" class="btn btn-orange" href="gewonnen_veilingen.php">Stuur mails gewonnen veilingen</a></h1>
                 <p>
                   <a href="index.php">
                     <span class="glyphicon glyphicon-home "></span>
@@ -262,6 +262,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             <div class="row content_top_offset">
               <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
                 <div class="container-fixed">
+                  <?php if (isset($_GET['mail'])) {
+                    ?>
+                    <div class="row content_top_offset">
+                      <p class="bg-success" style="padding:5px;">Er is een email gestuurd naar alle winnaars.</p>
+                    </div>
+                    <?php
+                  }?>
                   <div class="row">
                     <div class="inner-addon left-addon">
                         <i class="glyphicon glyphicon-search"></i>

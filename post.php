@@ -1,5 +1,5 @@
 <?php
-require('fpdf.php');
+require('pdf/pdf/fpdf.php');
 include_once ('php/database.php');
 pdo_connect();
 
@@ -75,9 +75,9 @@ global $db;
 
         $data = $db->prepare("  UPDATE Verkopers
                                 SET activatiecode = ?, startdatum = GETDATE()
-                                WHERE gebruikersnaam= ?; 
+                                WHERE gebruikersnaam= ?;
                             ");
-                              
+
         $data->execute(array($activatiecode, $gebruikersnaam));
 
 $pdf = new PDF();
