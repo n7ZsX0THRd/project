@@ -250,15 +250,9 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                           <li role="separator" class="divider"></li>
                             <li><a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer']; ?>&page=<?php echo $pageNumber; ?>&filter=time_asc&search=<?php echo $search_Value; ?>">Resterende tijd <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
                             <li><a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer']; ?>&page=<?php echo $pageNumber; ?>&filter=time_desc&search=<?php echo $search_Value; ?>">Resterende tijd <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
-                            <!--
-                              <li role="separator" class="divider"></li>
-                              <li><a href="#">Beoordeling verkoper <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
-                              <li><a href="#">Beoordeling verkoper <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
-                            -->
                           <li role="separator" class="divider"></li>
                             <li><a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer']; ?>&page=<?php echo $pageNumber; ?>&filter=count_asc&search=<?php echo $search_Value; ?>">Aantal biedingen <span class="glyphicon glyphicon-sort-by-attributes"></span></a></li>
                             <li><a href="rubriek.php?rubriek=<?php echo $rubriek['rubrieknummer']; ?>&page=<?php echo $pageNumber; ?>&filter=count_desc&search=<?php echo $search_Value; ?>">Aantal biedingen <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></a></li>
-
                         </ul>
                       </div>
                   </p>
@@ -267,6 +261,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
               </div>
             </div>
              <div  id="zoeken_overzicht">
+                <!-- CLOCK -->
                <div class='uil-clock-css' style='transform:scale(0.4); margin-left:auto;margin-right:auto;margin-top:10vh;'><div class="clock"></div><div class="ptr1"></div><div class="ptr2"></div></div>
              </div>
           </div>
@@ -313,8 +308,9 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
 
   $('.dropdown-toggle').dropdown();
 
+  // Load auctions from "zoeken_overzicht.php" with given gets from this page
+  // Fade in new html from request 
   $(document).ready(function(){
-    //$( "#zoeken_overzicht" ).load( "php/includes/zoeken_overzicht.php?rubriek=<?php echo $rubriek['rubrieknummer']; ?>&page=<?php echo $pageNumber; ?>&filter=price_asc&search=<?php echo $search_Value; ?>" );
     var link =  "php/includes/zoeken_overzicht.php?rubriek=<?php echo $rubriek['rubrieknummer']; ?>&page=<?php echo $pageNumber; ?>&filter=<?php echo $filter; ?>&search=<?php echo $search_Value; ?>";
     $.get(
         link,

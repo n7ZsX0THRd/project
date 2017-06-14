@@ -1,4 +1,13 @@
 <?php
+/*
+  iProject Groep 2
+  07-06-2017
+
+  file: gewonnnen_veilingen.php
+  purpose:
+    Send mail to all auction winners and auction owners
+*/
+session_start();
 
 function endsWith($haystack, $needle)
 {
@@ -10,7 +19,6 @@ function endsWith($haystack, $needle)
     return (substr($haystack, -$length) === $needle);
 }
 
-session_start();
 $_SESSION['menu']['sub'] = 'bp';
 // Set session for sidebar, this will make sure the title = 'Beheerpanel' is highlighted
 include_once ('php/database.php');
@@ -25,15 +33,15 @@ if(isUserBeheerder($db) == false){
   header("Location: index.php");
 }
 
-$data = $db->query("  SELECT Voorwerp.titel , Bod.bodbedrag, Bod.gebruiker, Gebruikers.emailadres AS koperMail, Gebruikers.gebruikersnaam as koper, (select emailadres from Gebruikers where gebruikersnaam=Voorwerp.verkoper) AS verkoperMail
+$data = $db->query("SELECT Voorwerp.titel , Bod.bodbedrag, Bod.gebruiker, Gebruikers.emailadres AS koperMail, Gebruikers.gebruikersnaam as koper, (select emailadres from Gebruikers where gebruikersnaam=Voorwerp.verkoper) AS verkoperMail
                         FROM Voorwerp
                         INNER JOIN Bod
                         ON Voorwerp.voorwerpnummer = Bod.voorwerpnummer
                         INNER JOIN Gebruikers
                             ON Gebruikers.gebruikersnaam= Bod.gebruiker
                         WHERE veilinggesloten=1 and gemaild = 0 and bodbedrag = (SELECT MAX(bodbedrag) FROM Bod
-                                WHERE  Voorwerp.voorwerpnummer=voorwerpnummer );
-                        ");
+                                WHERE  Voorwerp.voorwerpnummer=voorwerpnummer );");
+
 while ($row = $data->fetch()){
     $koper= "$row[koper]";
     $koperMail = "$row[koperMail]";

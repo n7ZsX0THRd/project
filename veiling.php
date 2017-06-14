@@ -681,9 +681,9 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
   <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
   <script>
   // Stop carousel
-    $('.carousel').carousel({
-      interval: false
-    });
+  $('.carousel').carousel({
+    interval: false
+  });
   </script>
   <script>
   var countDownDate = new Date('<?php echo ($resultVoorwerp != null) ? $resultVoorwerp['looptijdeinde'] : ''; ?>').getTime();

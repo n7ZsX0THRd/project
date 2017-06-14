@@ -1,4 +1,12 @@
 <?php
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: zoeken_overzicht.php
+  purpose:
+  Load auctions 
+*/
 session_start();
 
 include_once ('../../php/database.php');

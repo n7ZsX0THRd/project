@@ -60,6 +60,7 @@ function time_elapsed_string($datetime, $full = false) {
     if (!$full) $string = array_slice($string, 0, 1);
     return $string ? implode(', ', $string) . ' geleden' : 'zojuist';
 }
+// Function to check if image found
 function URL_exists($url){
    $headers=get_headers($url);
    return stripos($headers[0],"200 OK")?true:false;
@@ -93,12 +94,7 @@ else {
     // Geen voorwerpnummer opgegeven, redirect index.php
     header("Location: ../../index.php");
 }
-
-
-
-
 ?>
-
          <ul class="chat">
             <?php
 

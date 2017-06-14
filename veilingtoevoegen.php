@@ -3,9 +3,9 @@
   iProject Groep 2
   30-05-2017
 
-  file: account.php
+  file: veilingtoevoegen.php
   purpose:
-  Show shortcuts for user
+  Page to create new auction
 */
 session_start();
 // Start Session
@@ -15,7 +15,9 @@ include_once('php/user.php');
 pdo_connect();
 // Connect with database
 
+// Define the maximum size of an image
 define ("MAX_SIZE","9000");
+// Function to get the file extension of an uploaded image
 function getExtension($str)
 {
          $i = strrpos($str,".");
@@ -31,63 +33,72 @@ if(isUserLoggedIn($db) == false)
 
 $result = getLoggedInUser($db);
 
+// If logged in user is not a seller or a pending seller account.
+// Redirect to register as seller page
 if($result['typegebruiker'] == 1 || $result['typegebruiker'] == 4)
 {
   header("Location: verkoper_worden.php");
   exit();
 }
 
-
 $_SESSION['menu']['sub'] = 'dr';
 // Set session for sidebar menu,
 // dr -> Direct Regelen
 //set the image extentions
 $valid_formats = array("jpg", "png", "bmp","jpeg");
+// Allowed file formats
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
   //var_dump($_POST);
   $_POST['vt_seller'] = getLoggedInUser($db)['gebruikersnaam'];
+  // Add seller to post values;
 
   $uploaddir = "uploads/"; //image upload directory
-
 
   $index = 0;
   $succesfullUploadedPhotos = false;
 
   if(isset($_FILES['vt_images']) == false)
-  {
+  { // Check if there are images to uploaded, if not set session for notification
     $_SESSION['warning']['no_images'] = true;
   }
   else {
+    // Looop over images to upload,
     foreach ($_FILES['vt_images']['name'] as $name => $value)
     {
       $_POST['vt_images'][$index] = NULL;
 
       if(strlen($value) > 3)
       {
-
+        // Check if image name with extension is longert than 3 characters
         $filename = stripslashes($_FILES['vt_images']['name'][$name]);
         $size=filesize($_FILES['vt_images']['tmp_name'][$name]);
         //get the extension of the file in a lower case format
           $ext = getExtension($filename);
           $ext = strtolower($ext);
 
+          // Check if uploaded file extension is list of valid formats
          if(in_array($ext,$valid_formats))
          {
+             // Check if the size of uploaded file is less than max size
              if ($size < (MAX_SIZE*1024))
              {
                $image_name=time().$filename;
                $newname=$uploaddir.$image_name;
+               // create the name for the image
 
+               // Upload file to directory on the server
                if (move_uploaded_file($_FILES['vt_images']['tmp_name'][$name], $newname))
                {
                   $time=time();
                   $_POST['vt_images'][$index] = $uploaddir.$image_name;
+                  // Set the list of images in the post var which will be inserted into the database
                   $succesfullUploadedPhotos = true;
                }
                else
                {
                   $_SESSION['warning']['uploadFailed'] = $filename;
+                  // Set session for upload failed
                   $succesfullUploadedPhotos = false;
                }
 
@@ -95,6 +106,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
              else
              {
               $_SESSION['warning']['filesize'] = $filename;
+              // Set session for incorrect filesize
               $succesfullUploadedPhotos = false;
              }
 
@@ -102,6 +114,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
           else
           {
              $_SESSION['warning']['formaterror'] = $filename;
+             // Set session for incorrect fileformat
              $succesfullUploadedPhotos = false;
            }
       }
@@ -113,6 +126,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
  $didCreateAuction = false;
  if($succesfullUploadedPhotos)
  {
+   // Check if fields match contraints else set session for specific warning
    if(empty($_POST['vt_title']) || strlen(trim($_POST['vt_title'])) < 2 || strlen(trim($_POST['vt_title'])) > 70 || preg_match('/[!\'^£$%&*()}{@#~?><>,|=_+¬-]/', $_POST['vt_paymentInstruction']))
    {
      $_SESSION['warning']['titel_invalid'] = true;
@@ -155,22 +169,29 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
       $_POST['vt_paymentInstruction'] = null;
      if(empty($_POST['vt_sendInstructions']))
        $_POST['vt_sendInstructions'] = null;
+     // Set paymentInstruction and sendInstruction to null
+     // if empty, to match database constraints
 
+     // Call functions from database.php to create auction
      $result = create_auction($_POST,$db);
 
+     // Check if result code is SUCCES
      if($result->getCode() == 'IMSSP')
      {
+       // Redirect to auctions with succes
        header("Location: veilingen.php?succes");
      }
      else
      {
+       // Unknown error session
        $_SESSION['warning']['unknown_invalid'] = true;
      }
 
      $didCreateAuction = true;
-     echo var_dump($result);
+     //echo var_dump($result);
    }
 
+   // If auction not succesfull created, remove uploaded images
    if($didCreateAuction === false)
    {
       foreach($_POST['vt_images'] as $row)
@@ -184,6 +205,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 $queryPaymentMethods = $db->query("SELECT ID,betalingswijze FROM Betalingswijzen ORDER BY ID ASC");
 $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
+// Queries to select paymentMethods and Countries for dropdowns
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -191,6 +213,9 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
       <?php include 'php/includes/default_header.php'; ?>
       <link href="css/veiling.css" rel="stylesheet">
       <title>Verkopen - Eenmaal Andermaal</title>
+      <!--
+        Textarea editor
+      -->
       <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=wlrugg59nxdn2ku32w3x2xbk5mwz4brnjb78npzy9y6xcpm2"></script>
       <script>tinymce.init({ selector:'textarea' });</script>
       <style>
@@ -232,6 +257,7 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
           <div class="row content_top_offset">
             <div class="col-lg-12">
             <?php
+            // Show notifcations for creating auction
             if(isset($_SESSION['warning']['no_images']) && $_SESSION['warning']['no_images'] == true)
             {
               echo '<p class="bg-danger" style="padding:5px;">Upload een afbeelding</p>';
@@ -385,6 +411,7 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
                       <option disabled selected>Betalingswijze</p>
                       <?php
                         $index = 0;
+                        // Show payment Methods in dropdown
                         foreach($queryPaymentMethods as $row)
                         {
                       ?>
@@ -408,6 +435,7 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
                     <select class="form-control" id="vt_country" name="vt_country">
                       <option disabled selected>Land</p>
                       <?php
+                        // Show countries Methods in dropdown
                         foreach($queryCountries as $row)
                         {
                       ?>
@@ -442,6 +470,7 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
       </div>
       <!-- CONTAINER END -->
     </div>
+    <!-- Modal to search for rubriek  -->
     <div id="rubriek_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
       <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
@@ -465,6 +494,7 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
+    <!-- END Modal to search for rubriek  -->
 
     <?php
       include 'php/includes/footer.php';
@@ -480,6 +510,8 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
     <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
     <script>
     jQuery.fn.exists = function(){ return this.length > 0; }
+
+    // search Actions for searching a rubriek
 
     $( "#searchButton" ).click(function(event){
           var search = $("#rubriekSearchInput").val();
@@ -544,6 +576,7 @@ $queryCountries = $db->query("SELECT lnd_Code,lnd_Landnaam FROM Landen");
            reader.readAsDataURL(input.files[0]);
        }
    }
+    // Functions for loading image live when choosen local
     </script>
   </body>
 </html>

@@ -1,14 +1,24 @@
 <?php
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: search_rubriek.php
+  purpose:
+    Search rubriek, used in 'veilingtoevoegen.php' to search for a rubriek
+*/
 session_start();
 
 include_once ('../../php/database.php');
 include_once ('../../php/user.php');
 pdo_connect();
+// Connect to database
 
-
+// Check if search isset,
 if (isset($_GET['search'])) {
   $searchInput = $_GET['search'];
 
+  // Query to search rubriek
   $searchRubriekQuery = $db->prepare("SELECT
 	r4.rubrieknaam AS parentparent,
 	r3.rubrieknaam AS parent,
@@ -49,9 +59,11 @@ ORDER BY
 else {
     exit();
 }
+
   echo '<p></p>';
   echo '<ul class="rubriek_search">';
   $countedResults = 0;
+  // Loop over found rubrieken
   foreach($result as $row)
   {
     if(isset($row['parentparent']) && $row['parentparent']  == 'Root')
@@ -76,6 +88,7 @@ else {
     $countedResults++;
   }
   echo '</ul>';
+  // Check if rubriek found, otherwise show notifcation
   if($countedResults == 0)
   {
     echo '<p class="bg-warning" style="padding:5px;margin-top:10px;">Geen rubrieken gevonden</p>';

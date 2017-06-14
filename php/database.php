@@ -329,43 +329,6 @@ function unique_mail($mail,$db) {
   }
 }
 
-
-function change_rubrieknaam($rubriek_naam, $rubriek_nummer){
-            global $db;
-
-            $data = $db->prepare("  UPDATE Rubriek
-                                    SET rubrieknaam = ?
-                                    WHERE rubrieknummer = ?;
-                                                            ");
-            $data->execute(array($rubriek_naam, $rubriek_nummer));
-}
-
-function change_rubriek_status($rubriek_status, $rubriek_nummer){
-            global $db;
-
-            $rubriek_status != $rubriek_status; // true to false and false to true
-
-            $data = $db->prepare("  UPDATE Rubriek
-                                    SET inactief = ?
-                                    WHERE rubrieknummer = ?;
-                                                                                            ");
-            $data->execute(array($rubriek_status, $rubriek_nummer));
-}
-
-function swap_rubriek_volgnr($volgnr_A, $volgnr_B, $rubriek_nummer_A, $rubriek_nummer_B){
-
-            $data = $db->prepare("  UPDATE Rubriek
-                                    SET  volgnr = ?
-                                    WHERE rubrieknummer = ?;
-                                                            ");
-            $data->execute(array($volgnr_B, $rubriek_nummer_A));
-
-            $data = $db->prepare("  UPDATE Rubriek
-                                    SET  volgnr = ?
-                                    WHERE rubrieknummer = ?;
-                                                            ");
-            $data->execute(array($volgnr_A, $rubriek_nummer_B));
-}
 function create_auction($data,$db){  //db is global!!
   //var_dump($data);
   try {
