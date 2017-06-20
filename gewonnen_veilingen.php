@@ -33,7 +33,7 @@ if(isUserBeheerder($db) == false){
   header("Location: index.php");
 }
 
-$data = $db->query("SELECT Voorwerp.titel , Bod.bodbedrag, Bod.gebruiker, Gebruikers.emailadres AS koperMail, Gebruikers.gebruikersnaam as koper, (select emailadres from Gebruikers where gebruikersnaam=Voorwerp.verkoper) AS verkoperMail
+$data = $db->query("SELECT Voorwerp.titel , Voorwerp.verkoper, Bod.bodbedrag, Bod.gebruiker, Gebruikers.emailadres AS koperMail, Gebruikers.gebruikersnaam as koper, (select emailadres from Gebruikers where gebruikersnaam=Voorwerp.verkoper) AS verkoperMail
                         FROM Voorwerp
                         INNER JOIN Bod
                         ON Voorwerp.voorwerpnummer = Bod.voorwerpnummer
@@ -50,9 +50,55 @@ while ($row = $data->fetch()){
     $verkoperMail  = "$row[verkoperMail]";
     $verkoperSubject = "Veiling ". $veiling ." is beëindigd";
     $koperSubject = "Veiling ". $veiling ."  heeft u gewonnen!";
-    $verkoperContent = "Beste verkoper, <br> Uw veiling is succesvol beëindigd. Het is verkocht aan: ".$koper.". Voor € ".$bedrag." ! <br> Groeten van de beste veilingsite :)";
-    $koperContent = "Beste ".$koper.", <br> U heeft succesvol de veiling: " . $veiling . ". Voor &euro; ".$bedrag." gewonnen! <br> Groeten van de beste veilingsite :)";
-
+	$verkoperContent = '
+	                          <tr>
+                              <td align="center" bgcolor="#FFFFFF" style="padding: 40px 30px 40px 30px;">
+                                  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
+                                      <tr>
+                                          <td style="color:#023042">
+                                              Beste '.$verkoper.',
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td style="padding: 20px 0 0 0; color:#023042">
+                                              <p>Uw veiling is succesvol beëindigd en verkocht aan: ".$koper."</p>
+                                              <p>De veiling is verkocht voor: '.$bedrag.'</p>
+                                              <p>U kunt de koper benaderen via het volgende emailadres: <a href="mailto:'.$koperMail.'" target="_top">'.$koperMail.'</a></p>
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td style="padding: 10px 0 20px 0; color:#023042">
+                                              <p>Met vriendelijke groeten,</p>
+                                              <p>Team EenmaalAndermaal</p>
+                                          </td>
+                                      </tr>
+                                  </table>
+                              </td>
+                          </tr> ';
+    $koperContent = '
+	                          <tr>
+                              <td align="center" bgcolor="#FFFFFF" style="padding: 40px 30px 40px 30px;">
+                                  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: '.'Varela Round'.', sans-serif;">
+                                      <tr>
+                                          <td style="color:#023042">
+                                              Beste '.$koper.',
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td style="padding: 20px 0 0 0; color:#023042">
+                                              <p>U heeft de veiling: '$voorwerp.' gewonnen voor '.$bedrag.'</p>
+                                              <p>U kunt de verkoper benaderen via het volgende emailadres: <a href="mailto:'.$verkoperMail.'" target="_top">'.$verkoperMail.'</a></p>
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td style="padding: 10px 0 20px 0; color:#023042">
+                                              <p>Met vriendelijke groeten,</p>
+                                              <p>Team EenmaalAndermaal</p>
+                                          </td>
+                                      </tr>
+                                  </table>
+                              </td>
+                          </tr> ';
     sendMail($koperMail,$koperSubject,$koperContent);
     if (!endsWith($verkoperMail, 'mail.mail')){
         sendMail($verkoperMail,$verkoperSubject,$verkoperContent);
