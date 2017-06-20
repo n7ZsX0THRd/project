@@ -50,7 +50,7 @@ while ($row = $data->fetch()){
 	$verkoper= "$row[verkoper]";
     $verkoperMail  = "$row[verkoperMail]";
 	$nummer = "$row[voorwerpnummer]";
-    $verkoperSubject = "Veiling ". $veiling ." is beëindigd";
+    $verkoperSubject = "Veiling ". $veiling ." is be&#235;indigd";
     $koperSubject = "Veiling ". $veiling ."  heeft u gewonnen!";
 	$verkoperContent = '
 	                          <tr>
