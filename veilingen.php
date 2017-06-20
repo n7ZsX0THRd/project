@@ -1,11 +1,11 @@
 <?php
 /*
   iProject Groep 2
-  30-05-2017
+  02-06-2017
 
-  file: account.php
+  file: veilingen.php
   purpose:
-  Show shortcuts for user
+  Showing users auctions
 */
 session_start();
 // Start Session
@@ -26,8 +26,9 @@ $_SESSION['menu']['sub'] = 'ma';
 // Set session for sidebar menu,
 // ma -> my account
 
-
+// Get username
 $username = getLoggedInUser($db)['gebruikersnaam'];
+
 $dataquery= $db->prepare("SELECT	titel,
 											MAX(bodbedrag) as bodbedragMAX,
 											V.looptijdeinde,
@@ -57,6 +58,7 @@ $dataquery= $db->prepare("SELECT	titel,
 								ORDER BY V.looptijdbegin DESC");
 $dataquery->execute(array($username));
 
+//Query for getting al the users closed auctions
 $dataqueryverlopen= $db->prepare("SELECT V.titel,
                                    V.voorwerpnummer,
                                    V.looptijdeinde,
@@ -83,13 +85,11 @@ $dataqueryverlopen= $db->prepare("SELECT V.titel,
                                      foto.bestandsnaam");
 $dataqueryverlopen->execute(array($username));
 
-
+//Getting the query results
 $dataqueryresult = $dataquery->fetchAll();
 $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
 
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -115,7 +115,7 @@ $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
         ?>
       </div>
 
-
+      <!-- Content -->
       <div class="col-md-9 col-lg-10 col-sm-8">
         <div class="container-fluid content_col">
           <div class="row navigation-row fix">
@@ -133,6 +133,7 @@ $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
 
               <div class="row content_top_offset">
                 <?php
+                  // Notification when an auction is succesfully placed
                   if(isset($_GET['succes']) || isset($_GET['success']))
                   {
                     ?>
@@ -147,10 +148,11 @@ $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
                       <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Gesloten veilingen (<?php echo count($dataqueryverlopenresult) ?>)</a></li>
                     </ul>
 
-                    <!-- HUIDIGE BIEDINGEN -->
+                    <!-- HUIDIGE VEILINGEN -->
                     <div class="tab-content">
                       <div role="tabpanel" class="tab-pane active" id="home">
                           <?php
+                          // Load in all the auctions
                           $indexhuidig=0;
                           foreach($dataqueryresult as $row){
                             $indexhuidig ++;
@@ -174,6 +176,7 @@ $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
                             </div>
                           </div>
                           <?php }
+                          // If no auctions show notification
                           if($indexhuidig==0){
                               ?>
                               <p class="bg-warning" style="padding:5px;margin-top:15px;">
@@ -183,10 +186,12 @@ $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
                           }
                           ?>
                         </div>
+                      <!-- END ACTIVE AUCTIONS -->
 
-                      <!-- OVERBODEN BIEDINGEN -->
+                      <!-- NONACTIVE AUCTIONS -->
                       <div role="tabpanel" class="tab-pane" id="profile">
                         <?php
+                        // Load in all the auctions
                         $indexverlopen=0;
                           foreach($dataqueryverlopenresult as $row){
                             $indexverlopen ++;
@@ -209,6 +214,7 @@ $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
                               </div>
                             </div>
                             <?php }
+                            // if no actions show notifications
                             if($indexverlopen==0){
                                 ?>
                                 <p class="bg-warning" style="padding:5px;margin-top:15px;">
@@ -218,17 +224,10 @@ $dataqueryverlopenresult = $dataqueryverlopen->fetchAll();
                             }
                             ?>
                           </div>
+                          <!-- END NONACTIVE AUCTIONS  -->
                     </div>
-
                   </div>
-
-
-
-
-
              </div>
-
-
       </div>
       <!-- CONTAINER END -->
     </div>

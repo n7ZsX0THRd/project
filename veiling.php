@@ -681,9 +681,9 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
   <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
   <script>
   // Stop carousel
-    $('.carousel').carousel({
-      interval: false
-    });
+  $('.carousel').carousel({
+    interval: false
+  });
   </script>
   <script>
   var countDownDate = new Date('<?php echo ($resultVoorwerp != null) ? $resultVoorwerp['looptijdeinde'] : ''; ?>').getTime();
@@ -709,10 +709,14 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
   $('#bied_refresh').click(function(){
     $( "#bieden_content" ).load( "php/includes/bied_geschiedenis.php?voorwerpnummer=<?php echo $resultVoorwerp['voorwerpnummer'];?>" );
   });
-  $(document).ready(function(){
-    $( "#bieden_content" ).load( "php/includes/bied_geschiedenis.php?voorwerpnummer=<?php echo $resultVoorwerp['voorwerpnummer'];?>" );
-  });
+  function loadlink(){
+          $( "#bieden_content" ).load( "php/includes/bied_geschiedenis.php?voorwerpnummer=<?php echo $resultVoorwerp['voorwerpnummer'];?>" );
+    }
 
+    loadlink(); // This will run on page load
+    setInterval(function(){
+        loadlink() // this will run after every 5 seconds
+    }, 5000);
   </script>
 </body>
 </html>

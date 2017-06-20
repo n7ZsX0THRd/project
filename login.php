@@ -84,11 +84,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
           // Send email with new key to user.
 
           // Set warning invalidanswer session to false. Show Message if answer is correct
-          $_SESSION['warning']['invalidanswer'] = false;
+          $_SESSION['warning']['invalidanswer'] = 5;
+          $_SESSION['warning']['invalidmail'] = 5;
+          header("Location: login.php");
+          exit();
         }
         else {
           // Set warning invalidanswer session to true. Show Error if answer is incorrect
-          $_SESSION['warning']['invalidanswer'] = true;
+          $_SESSION['warning']['invalidanswer'] = 4;
+          $_SESSION['warning']['invalidmail'] = 3;
         }
 
   }else if($_POST['form_name'] == 'login'){
@@ -106,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
    $result = $data->fetchAll();
    $Totaal = count($result);
-   echo $Totaal;
+   //echo $Totaal;
    if($Totaal == 1) // If user found, verify password...
    {
      if(password_verify($wachtwoord, $result[0]['wachtwoord'])) // Check if password is valid
@@ -156,11 +160,11 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
    if(count($emailcheck) == 1)
    {
      // Set session invalidmail to true, and show warning with invalid mail
-     $_SESSION['warning']['invalidmail'] = true;
+     $_SESSION['warning']['invalidmail'] = 3;
    }else{
      // Set session invalidmail to false, and show popup with an input field to give the answer for
      // secret question.
-     $_SESSION['warning']['invalidmail'] = false;
+     $_SESSION['warning']['invalidmail'] = 4;
    }
  }
 
@@ -209,7 +213,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
               <?php }else if(isset($_SESSION['warning']['user_blocked'])) {?>
                 <p class="bg-danger">Gebruiker is geblokkeerd</p>
               <?php }
-              if(isset($_SESSION['warning']['invalidanswer']) && $_SESSION['warning']['invalidanswer'] == false)
+              if(isset($_SESSION['warning']['invalidanswer']) && $_SESSION['warning']['invalidanswer'] == 5)
               {
               ?>
                 <p class="bg-success" style="padding: 5px;">Nieuwe wachtwoord is verstuurd</p>
@@ -221,7 +225,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
             </div>
             <div class="input-group">
               <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
-                <input type="password" class="form-control" id="inputPassword" placeholder="Password" name="l_wachtwoord" value="">
+                <input type="password" class="form-control" id="inputPassword" placeholder="Wachtwoord" name="l_wachtwoord" value="">
             </div>
           </div>
           <!-- Einde login gegevens -->
@@ -256,12 +260,12 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Nieuwe wachtwoord aanvragen</h4>
+                <h4 class="modal-title">Nieuw wachtwoord aanvragen</h4>
               </div>
               <div class="modal-body">
                 <?php
                 // If session email invalid show warning
-                if(isset($_SESSION['warning']['invalidmail']) && $_SESSION['warning']['invalidmail'] == false)
+                if(isset($_SESSION['warning']['invalidmail']) && $_SESSION['warning']['invalidmail'] == 4)
                 {
                 ?>
                   <p class="bg-danger" style="padding: 5px;">Dit emailadres bestaat niet</p>
@@ -301,7 +305,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
               <div class="modal-body">
                 <?php
                 // If session invalidanswer show warning
-                if(isset($_SESSION['warning']['invalidanswer']) && $_SESSION['warning']['invalidanswer'] == true)
+                if(isset($_SESSION['warning']['invalidanswer']) && $_SESSION['warning']['invalidanswer'] == 4)
                 {
                 ?>
                   <p class="bg-danger" style="padding: 5px;">Antwoord onjuist</p>
@@ -347,10 +351,8 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
 
 <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
 <?php
-if(isset($_GET['email']) || (isset($_SESSION['warning']['invalidmail'])  && $_SESSION['warning']['invalidmail'] == true)){
+if(isset($_GET['email']) && isset($_SESSION['warning']['invalidmail'])  && $_SESSION['warning']['invalidmail'] == 3){
   // Check if email is valid
-  if(isset($_SESSION['warning']['invalidanswer'])==false || $_SESSION['warning']['invalidanswer'] ==true){
-  // Show popup with question + answer + notifcation for wrong answer
 ?>
     <script type="text/javascript">
              $(window).load(function(){
@@ -358,8 +360,7 @@ if(isset($_GET['email']) || (isset($_SESSION['warning']['invalidmail'])  && $_SE
              });
     </script>
   <?php
-  }
-}else if(isset($_GET['email']) && isset($_SESSION['warning']['invalidmail'])){
+}else if(isset($_GET['email']) && isset($_SESSION['warning']['invalidmail'])  && $_SESSION['warning']['invalidmail'] == 4){
   // If email is invalid, show popup with wrong email
 ?>
   <script type="text/javascript">

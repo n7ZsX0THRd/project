@@ -1,4 +1,12 @@
 <?php
+/*
+  iProject Groep 2
+  30-05-2017
+
+  file: zoeken_overzicht.php
+  purpose:
+  Load auctions 
+*/
 session_start();
 
 include_once ('../../php/database.php');
@@ -72,14 +80,12 @@ switch ($filter) {
         break;
 }
 // Set sql part for specific filter
-$voorwerpCountQuery = $db->prepare("SELECT
-  v.voorwerpnummer,
-  v.titel,
-  v.startprijs,
-  vir.rubrieknummer,
-  r.parentRubriek,
-  v.looptijdeinde,
-  Foto.bestandsnaam
+$voorwerpCountQuery = $db->prepare("SELECT DISTINCT
+	  v.voorwerpnummer,
+	  v.titel,
+	  v.startprijs,
+	  v.looptijdeinde,
+	  Foto.bestandsnaam
 FROM Voorwerp v
 	JOIN
 		VoorwerpInRubriek vir
@@ -103,7 +109,7 @@ FROM Voorwerp v
      WHERE (dbo.fnRubriekIsAfstammelingVan(rubrieknummer,?) = 1 OR rubrieknummer = ?)
 	   AND vir.rubrieknummer = rubriek.rubrieknummer
 	)
-".$search_SQL."  AND v.looptijdeinde > GETDATE()
+".$search_SQL."  AND v.looptijdeinde > GETDATE() AND v.inactief = 0
 GROUP BY
 	v.voorwerpnummer,
 	v.titel,
@@ -131,14 +137,12 @@ if(isset($_GET['page'])){
   }
 }
 // Select auctions from database based on filters
-$voorwerpSelectSQL = "SELECT
-  v.voorwerpnummer,
-  v.titel,
-  v.startprijs,
-  vir.rubrieknummer,
-  r.parentRubriek,
-  v.looptijdeinde,
-  Foto.bestandsnaam,
+$voorwerpSelectSQL = "SELECT DISTINCT
+	  v.voorwerpnummer,
+	  v.titel,
+	  v.startprijs,
+	  v.looptijdeinde,
+	  Foto.bestandsnaam,
   dbo.fnGetHoogsteBod(v.voorwerpnummer) AS hoogsteBod,
   COUNT(b.voorwerpnummer) AS aantalBiedingen
 FROM Voorwerp v
@@ -164,7 +168,7 @@ FROM Voorwerp v
      WHERE (dbo.fnRubriekIsAfstammelingVan(rubrieknummer,?) = 1 OR rubrieknummer = ?)
 	   AND vir.rubrieknummer = rubriek.rubrieknummer
 	)
-".$search_SQL."  AND v.looptijdeinde > GETDATE()
+".$search_SQL."  AND v.looptijdeinde > GETDATE() AND v.inactief = 0
 GROUP BY
 	v.voorwerpnummer,
 	v.titel,
