@@ -47,6 +47,7 @@ while ($row = $data->fetch()){
     $koperMail = "$row[koperMail]";
     $veiling = "$row[titel]";
     $bedrag = "$row[bodbedrag]";
+	$verkoper= "$row[verkoper]";
     $verkoperMail  = "$row[verkoperMail]";
     $verkoperSubject = "Veiling ". $veiling ." is beëindigd";
     $koperSubject = "Veiling ". $veiling ."  heeft u gewonnen!";
