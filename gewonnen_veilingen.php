@@ -63,7 +63,7 @@ while ($row = $data->fetch()){
                                       </tr>
                                       <tr>
                                           <td style="padding: 20px 0 0 0; color:#023042">
-                                              <p>Uw veiling <a href="http://iproject2.icasites.nl/veiling.php?voorwerpnummer=.'.$nummer.'" target="_top">'.$voorwerp.'</a> is succesvol beëindigd en verkocht aan: ".$koper."</p>
+                                              <p>Uw veiling <a href="http://iproject2.icasites.nl/veiling.php?voorwerpnummer='.$nummer.'" target="_top">'.$veiling.'</a> is succesvol be&#234;indigd en verkocht aan: '.$koper.'</p>
                                               <p>De veiling is verkocht voor: '.$bedrag.'</p>
                                               <p>U kunt de koper benaderen via het volgende emailadres: <a href="mailto:'.$koperMail.'" target="_top">'.$koperMail.'</a></p>
                                           </td>
@@ -88,7 +88,7 @@ while ($row = $data->fetch()){
                                       </tr>
                                       <tr>
                                           <td style="padding: 20px 0 0 0; color:#023042">
-                                              <p>U heeft de veiling: <a href="http://iproject2.icasites.nl/veiling.php?voorwerpnummer=.'.$nummer.'" target="_top">'.$voorwerp.' gewonnen voor '.$bedrag.'</p>
+                                              <p>U heeft de veiling: <a href="http://iproject2.icasites.nl/veiling.php?voorwerpnummer=.'.$nummer.'" target="_top">'.$veiling.'</a> gewonnen voor '.$bedrag.'</p>
                                               <p>U kunt de verkoper benaderen via het volgende emailadres: <a href="mailto:'.$verkoperMail.'" target="_top">'.$verkoperMail.'</a></p>
                                           </td>
                                       </tr>
