@@ -26,7 +26,7 @@ if(isUserLoggedIn($db) == false){
 }
 
 // Select countries from database, to show in dropdown
-$landcodes = $db->query("SELECT lnd_code FROM Landen ORDER BY lnd_code ASC");
+$landcodes = $db->query("SELECT lnd_code,lnd_Landnaam FROM Landen ORDER BY lnd_code ASC");
 $email = $_SESSION['email'];
 $result = getLoggedInUser($db);
 // Get loggedIn user info
@@ -511,14 +511,14 @@ if(isset($_GET['foto'])){
                     <?php } ?>
                   </div>
                   <div class="col-lg-4">
-                    <label for="exampleInputEmail1">Landcode<?php if(isset($_GET['wijzig'])){echo '*';}?></label>
+                    <label for="exampleInputEmail1">Land<?php if(isset($_GET['wijzig'])){echo '*';}?></label>
                     <?php if (isset($_GET['wijzig'])==true){  ?>
                     <select class="form-control" name="p_land">
                       <option disabled>Land</option>
                       <?php
                         while ($row = $landcodes->fetch()){
                       ?>
-                        <option value="<?php echo $row['lnd_code'];?>" <?php if(($result['land']) == $row['lnd_code']){  echo 'selected'; } ?>><?php echo $row['lnd_code'];?></option>
+                        <option value="<?php echo $row['lnd_code'];?>" <?php if(($result['land']) == $row['lnd_code']){  echo 'selected'; } ?>><?php echo $row['lnd_Landnaam'];?></option>
                       <?php
                         }
                       ?>
@@ -565,7 +565,7 @@ if(isset($_GET['foto'])){
 
                           ?>
                           <div class="form-group input-group">
-                            <input type="number" value="<?php echo $row['telefoonnummer']; ?>" name="p_phonenumbers[]" class="form-control">
+                            <input type="text" value="<?php echo $row['telefoonnummer']; ?>" name="p_phonenumbers[]" class="form-control">
                               <span class="input-group-btn"><button type="button" class="btn btn-danger btn-remove" style="margin-top: 0px;">–</button></span>
                           </div>
                           <?php
