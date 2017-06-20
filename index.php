@@ -99,7 +99,7 @@ $lastChanceQuery = $db->prepare("SELECT TOP 3 * FROM
 			WHERE   Bestand.voorwerpnummer = v.voorwerpnummer
 		)
 		Foto
-	WHERE DATEADD(MI,30,GETDATE()) < v.looptijdeinde  AND v.inactief = 0
+	WHERE DATEADD(MI,5,GETDATE()) < v.looptijdeinde  AND v.inactief = 0
 ) AS s
 ORDER BY looptijdeinde ASC");
 $lastChanceQuery->execute();
