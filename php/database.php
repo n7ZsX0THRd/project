@@ -149,7 +149,7 @@ function unBlock_user($gebruikersnaam) {
 function create_user($data,$db){ //db is global!!
     global $db;
   try {
-      $dbs = $db->prepare("INSERT INTO Gebruikers (gebruikersnaam,voornaam,achternaam,adresregel1,adresregel2,postcode,plaatsnaam,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst)
+      $dbs = $db->prepare("INSERT INTO Gebruikers (gebruikersnaam,voornaam,achternaam,adresregel1,adresregel2,postcode,plaatsnaam,land,geboortedatum,emailadres,wachtwoord,vraag,antwoordtekst)
       VALUES (?,?,?,?,?,?,?,?,?,?,?,?); INSERT INTO Gebruikerstelefoon (gebruikersnaam,telefoonnummer) VALUES (?,?)");
 
       $dbs->execute(array(
@@ -160,6 +160,7 @@ function create_user($data,$db){ //db is global!!
           ($data['adresregel2'] !== null) ? htmlspecialchars($data['r_adressregel2']) : null ,
           htmlspecialchars($data['r_zipcode']),
           htmlspecialchars($data['r_city']),
+          htmlspecialchars($data['r_country']),
           htmlspecialchars($data['r_birthmonth']).'-'.htmlspecialchars($data['r_birthday']).'-'.htmlspecialchars($data['r_birthyear']),
           htmlspecialchars($data['r_email']),
           password_hash($data['r_password'], PASSWORD_DEFAULT),
