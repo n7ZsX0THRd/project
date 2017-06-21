@@ -114,10 +114,16 @@ if ($result['typegebruiker'] == 2){ // If user is seller set $page for seller
               $page='bevestigd';
               // Set page to confirm
             }
+            else {
+              $page='onjuiste-code';
+            }
           }else{
             $page='onjuiste-code';
             // Set page to incorrect code
           }
+        }else{
+          $page='onjuiste-code';
+          // Set page to incorrect code
         }
       }
   }
@@ -275,12 +281,12 @@ if ($result['typegebruiker'] == 2){ // If user is seller set $page for seller
             // Show incorrect code page
             case 'onjuiste-code':
               ?>
-              <h3>Oops!</h3>
+              <h3>Onjuiste code!</h3>
               <p>De code klopt niet, probeer het opnieuw<br>
               <form action="" method="POST" id="my_form">
               <!-- Your Form -->
               <input type="hidden" name="page" value="activeren">
-              <a href="javascript:{}" onclick="document.getElementById('my_form').submit(); return false;">probeer het opnieuw</a>
+              <a href="javascript:{}" onclick="document.getElementById('my_form').submit(); return false;">Probeer het opnieuw</a>
               </form>
               <br></p>
 
