@@ -300,7 +300,7 @@ $populairItemsQuery->execute();
                             <h3 style="padding-left: 10px;word-wrap: break-word;overflow: hidden;height:24px;"><?php echo $row['titel']; ?></h3>
                           </a>
                           <a alt="<?php echo $row['titel']; ?>" href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
-                            <div class="thumb_image" style="background-image:url(<?php echo $row['bestandsnaam']; ?>);"></div>
+                            <div class="thumb_image" style="background-image:url('<?php echo $row['bestandsnaam']; ?>');"></div>
                           </a>
                           <div class="caption captionfix">
                             <h3><span id="countdown" data-looptijd="<?php echo $row['looptijdeinde'];?>">&nbsp;</span></h3>
@@ -341,7 +341,7 @@ $populairItemsQuery->execute();
                           <h3 style="padding-left: 10px;word-wrap: break-word;overflow: hidden;height:24px;"><?php echo $row['titel']; ?></h3>
                         </a>
                         <a alt="<?php echo $row['titel']; ?>" href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>">
-                          <div class="thumb_image" style="background-image:url(<?php echo $row['bestandsnaam']; ?>);"></div>
+                          <div class="thumb_image" style="background-image:url('<?php echo $row['bestandsnaam']; ?>');"></div>
                         </a>
                         <div class="caption captionfix">
                           <h3><span id="countdown" data-looptijd="<?php echo $row['looptijdeinde'];?>">&nbsp;</span></h3>

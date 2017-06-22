@@ -15,7 +15,7 @@ pdo_connect();
 // Include database, user functions
 // Connect to database
 
-//Create variables for rootRubriek,rubriek and
+// Create variables for rootRubriek,rubriek and
 // resultVoorwerp
 // With resultImages
 // resulted by GET parameter voorwerpnummer
@@ -344,7 +344,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                           foreach($resultImages as $row){
                                             ?>
                                             <div class="item <?php echo ($first) ? 'active' : '' ;?>">
-                                              <img alt="" title="" style="background-image:url(<?php echo $row['bestandsnaam'];?>);">
+                                              <img alt="" title="" style="background-image:url('<?php echo $row['bestandsnaam'];?>');">
                                             </div>
                                             <?php
                                             $first = false;
@@ -361,7 +361,7 @@ $breadCrumb = $breadCrumbQuery->fetchAll();
                                           foreach($resultImages as $row){
                                             ?>
                                             <li class="<?php echo ($first) ? 'active' : '' ;?>" data-slide-to="<?php echo $index; ?>" data-target="#article-photo-carousel">
-                                              <img alt="" style="background-image:url(<?php echo $row['bestandsnaam'];?>);">
+                                              <img alt="" style="background-image:url('<?php echo $row['bestandsnaam'];?>');">
                                             </li>
                                             <?php
                                             $first = false;

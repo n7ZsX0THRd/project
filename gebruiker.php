@@ -463,7 +463,6 @@
                               <p>Startprijs: <strong>&euro;<?php echo $row['startprijs']?></strong></p>
                               <p>Hoogste bod: <strong><?php echo ($row['hoogsteBod'] != null) ? '&euro;'.number_format($row['hoogsteBod'], 2, ',', '.'): 'Er is nog niet geboden';?></strong></p>
                               <div style="position:absolute; bottom:0px;right:0px;width:250px;">
-                                <a href="gebruiker.php?gebruikersnaam=<?php echo $gebruikersnaam?>&voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>&action=blokkeer" class="btn btn-niagara"  style="margin-top:0px;"role="button">Sluit veiling</a>
                                 <a href="veiling.php?voorwerpnummer=<?php echo $row['voorwerpnummer']; ?>" class="btn btn-orange " role="button">Bekijken</a>
                               </div>
                             </div>

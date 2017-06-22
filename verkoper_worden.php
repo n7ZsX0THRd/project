@@ -162,6 +162,7 @@ if ($result['typegebruiker'] == 2){ // If user is seller set $page for seller
                 $inputs.not(this).prop('required', !$(this).val().length);
             });
         });
+        
         </script>
 
   </head>
